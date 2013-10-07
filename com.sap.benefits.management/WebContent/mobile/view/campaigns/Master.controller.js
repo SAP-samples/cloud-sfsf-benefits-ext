@@ -1,9 +1,10 @@
-sap.ui.controller("com.sap.benefits.management.view.CampaignsMaster", {
+sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
     onInit: function() {
 
     },
     onAfterRendering: function() {
-
+        var list = this.byId("campaignsList");
+        appController.selectListItem(list, 0);
     },
     onNavPressed: function() {
         appController.goHome();
@@ -21,7 +22,7 @@ sap.ui.controller("com.sap.benefits.management.view.CampaignsMaster", {
             content: this.newCampaignInput
         });
 
-        var list = this.byId("CampaignsList");
+        var list = this.byId("campaignsList");
         list.setMode(sap.m.ListMode.None);
         list.addItem(this.newCampaignListItem);
 
@@ -37,9 +38,10 @@ sap.ui.controller("com.sap.benefits.management.view.CampaignsMaster", {
 
         sap.ui.getCore().getModel("campaignModel").setData(data);
 
-        var list = this.byId("CampaignsList");
+        var list = this.byId("campaignsList");
         list.setMode(sap.m.ListMode.SingleSelectMaster);
         list.removeItem(this.newCampaignListItem);
+        appController.selectListItem(list, 0);
 
         this.byId("addButton").setEnabled(true);
         this.byId("saveButton").setVisible(false);

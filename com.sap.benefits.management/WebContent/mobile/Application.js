@@ -18,21 +18,35 @@ sap.ui.app.Application.extend("Application", {
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignDetailsModel");
     },
-    showDetails: function(evt) {
+    employeeItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
         var bindingCtx = listItem.getBindingContext("employeesModel");
+
         sap.ui.getCore().byId("EmployeesDetails").byId("EmployeesDetailsPage").setTitle(bindingCtx.getObject().id + " Details")
         sap.ui.getCore().getModel("employeeDetailsModel")
                 .setData({
             current: bindingCtx.getObject().orders.current,
             history: bindingCtx.getObject().orders.history});
+
+        this._toDetailsPage("EmployeesDetails");
     },
     campaignItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
         var bindingCtx = listItem.getBindingContext("campaignModel");
         sap.ui.getCore().getModel("campaignDetailsModel")
                 .setData({
-            campaign: bindingCtx.getObject()});
+            campaign: bindingCtx.getObject(),
+            bindingPath: bindingCtx.getPath()
+        });
+
+        this._toDetailsPage("CampaignDetails");
+    },
+    selectListItem: function(list, itemIndex) {
+        var items = list.getItems();
+        if (items[itemIndex]) {
+            items[itemIndex].setSelected(true);
+            list.fireSelect({listItem: items[itemIndex], id: list.getId()});
+        }
     },
     benefitItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
@@ -40,6 +54,8 @@ sap.ui.app.Application.extend("Application", {
         var model = new sap.ui.model.json.JSONModel(bindingCtx.getObject());
 
         sap.ui.getCore().byId("BenefitsDetails").setModel(model);
+
+        this._toDetailsPage("BenefitsDetails");
     },
     goHome: function() {
         var homePage = sap.ui.getCore().byId("HomePage");
@@ -47,7 +63,6 @@ sap.ui.app.Application.extend("Application", {
     },
     main: function() {
         var root = this.getRoot();
-
 
         var tileContainer = new sap.m.TileContainer("HomePage", {
             tiles: [
@@ -78,16 +93,14 @@ sap.ui.app.Application.extend("Application", {
             ]
         });
 
-
-        var emplMasterView = sap.ui.xmlview("EmployeesMaster", "com.sap.benefits.management.view.EmployeesMaster");
-        var emplDetailsView = sap.ui.xmlview("EmployeesDetails", "com.sap.benefits.management.view.EmployeesDetails");
-
-        var benefitsMasterView = sap.ui.xmlview("BenefitsMaster", "com.sap.benefits.management.view.BenefitsMaster");
-        var benefitsDetailsView = sap.ui.xmlview("BenefitsDetails", "com.sap.benefits.management.view.BenefitsDetails");
-
-        var campaignMasterView = sap.ui.xmlview("CampaignMaster", "com.sap.benefits.management.view.CampaignsMaster");
-        var campaignDetailsView = sap.ui.xmlview("CampaignDetails", "com.sap.benefits.management.view.CampaignsDetails");
-
+        var emplMasterView = sap.ui.xmlview("EmployeesMaster", "com.sap.benefits.management.view.employees.Master");
+        var emplDetailsView = sap.ui.xmlview("EmployeesDetails", "com.sap.benefits.management.view.employees.Details");
+        var benefitsMasterView = sap.ui.xmlview("BenefitsMaster", "com.sap.benefits.management.view.benefits.Master");
+        var benefitsDetailsView = sap.ui.xmlview("BenefitsDetails", "com.sap.benefits.management.view.benefits.Details");
+        var campaignMasterView = sap.ui.xmlview("CampaignMaster", "com.sap.benefits.management.view.campaigns.Master");
+        var campaignDetailsView = sap.ui.xmlview("CampaignDetails", "com.sap.benefits.management.view.campaigns.Details");
+        var defaultDetailsView = sap.ui.xmlview("DefaultDetails", "com.sap.benefits.management.view.DefaultDetails");
+        
         var splitApp = new sap.m.SplitApp("SplitAppControl");
         splitApp.addMasterPage(emplMasterView);
         splitApp.addDetailPage(emplDetailsView);
@@ -97,6 +110,8 @@ sap.ui.app.Application.extend("Application", {
 
         splitApp.addMasterPage(campaignMasterView);
         splitApp.addDetailPage(campaignDetailsView);
+
+        splitApp.addDetailPage(defaultDetailsView);
 
         var oShell = new sap.m.Shell("ShellControl", {
             title: "SAP Benefits App",
@@ -114,21 +129,27 @@ sap.ui.app.Application.extend("Application", {
         switch (evt.getParameters().id) {
             case "Employees":
                 splitApp.toMaster("EmployeesMaster");
-                splitApp.toDetail("EmployeesDetails");
+
+                splitApp.toDetail(sap.ui.getCore().byId("DefaultDetails"), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Benefits":
                 splitApp.toMaster("BenefitsMaster");
-                splitApp.toDetail("BenefitsDetails");
+                splitApp.toDetail(sap.ui.getCore().byId("DefaultDetails"), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Campaigns":
                 splitApp.hideMaster();
                 splitApp.toMaster("CampaignMaster");
-                splitApp.toDetail("CampaignDetails");
+                splitApp.toDetail(sap.ui.getCore().byId("DefaultDetails"), "show");
                 this._getShell().setApp(splitApp);
                 break;
             default:
         }
+    },
+    _toDetailsPage: function(pageId) {
+        var splitApp = sap.ui.getCore().byId("SplitAppControl");
+        splitApp.toDetail(sap.ui.getCore().byId(pageId), "show");
     }
+
 });

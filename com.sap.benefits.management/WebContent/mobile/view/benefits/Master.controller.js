@@ -1,9 +1,10 @@
-sap.ui.controller("com.sap.benefits.management.view.BenefitsMaster", {
+sap.ui.controller("com.sap.benefits.management.view.benefits.Master", {
     onInit: function() {
 
     },
     onAfterRendering: function() {
-
+        var list = this.byId("benefitsList");
+        appController.selectListItem(list, 0);
     },
     onItemSelected: function(oEvent) {
         appController.benefitItemSelected(oEvent);

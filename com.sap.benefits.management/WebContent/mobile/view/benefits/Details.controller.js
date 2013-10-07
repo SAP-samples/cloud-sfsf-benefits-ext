@@ -1,4 +1,4 @@
-sap.ui.controller("com.sap.benefits.management.view.BenefitsDetails", {
+sap.ui.controller("com.sap.benefits.management.view.benefits.Details", {
     
     onInit: function() {
 

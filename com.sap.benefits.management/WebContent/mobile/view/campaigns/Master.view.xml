@@ -1,13 +1,13 @@
 <core:View xmlns:core="sap.ui.core" 
            xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-           controllerName="com.sap.benefits.management.view.CampaignsMaster" 
+           controllerName="com.sap.benefits.management.view.campaigns.Master" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
     <Page id="CampaignMasterPage" title="Campaigns" showNavButton="true" navButtonTap="onNavPressed">
         <content>
-            <List id="CampaignsList" items="{campaignModel>/campaigns}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelect">
+            <List id="campaignsList" items="{campaignModel>/campaigns}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelect">
                 <items>
-                    <ObjectListItem title="{campaignModel>name}" selected="true" />
+                    <ObjectListItem title="{campaignModel>name}"/>
                 </items>
             </List>
             
