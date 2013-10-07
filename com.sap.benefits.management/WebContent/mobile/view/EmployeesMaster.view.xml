@@ -1,0 +1,22 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+           controllerName="com.sap.benefits.management.view.EmployeesMaster" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="EmployeesMasterPage" title="Employees" showNavButton="true" navButtonTap="onNavPressed">
+        <content>
+            <List items="{employeesModel>/employees}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+                <items>
+                    <ObjectListItem title="{employeesModel>firstName} {employeesModel>lastName}" number="{employeesModel>availablePoints}">
+                        <attributes>
+                            <ObjectAttribute text="{employeesModel>id}"/>                            
+                        </attributes>
+                     </ObjectListItem>                  
+                </items>
+            </List>
+            
+        </content>
+    </Page>
+    
+         
+</core:View>

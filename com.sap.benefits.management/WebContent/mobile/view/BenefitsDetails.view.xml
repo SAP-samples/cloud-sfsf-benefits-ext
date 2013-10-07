@@ -1,0 +1,20 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+           controllerName="com.sap.benefits.management.view.BenefitsDetails" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="BenefitsDetailsPage" title="Details" showNavButton="false">
+        <content>
+            <ObjectHeader icon="sap-icon://{/icon}" title="{/name}" number="{/points}" numberUnit="points" class="benefitItem">
+                <attributes>
+                    <ObjectAttribute text="{/info}"/>
+                    <ObjectAttribute text="{/linkText}" active="true" press="linkPressed"/>
+                </attributes>
+                <firstStatus>
+                    <ObjectStatus text="Available" state="Success"/>
+                </firstStatus>
+            </ObjectHeader>
+        </content>   
+    </Page>
+         
+</core:View>

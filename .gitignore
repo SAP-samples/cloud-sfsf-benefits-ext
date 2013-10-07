@@ -1,0 +1,9 @@
+
+# Binary folders
+
+*/bin/
+*/.settings
+*/lib/
+*/target/
+*/war/
+

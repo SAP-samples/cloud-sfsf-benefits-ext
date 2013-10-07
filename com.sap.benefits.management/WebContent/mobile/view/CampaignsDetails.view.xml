@@ -1,0 +1,29 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
+           controllerName="com.sap.benefits.management.view.CampaignsDetails" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="CampainMasterPage" title="Details" showNavButton="false">
+        <content>
+            <form:SimpleForm id="inputForm" minWidth="1024" maxContainerCols="2" editable="false">
+                <form:content>
+                    <common:Title text="Campaign Information"/>
+                    <Label text="Name"/>
+                    <Input type="Text" placeholder="Enter Name ..." value="{campaignDetailsModel>/campaign/name}"/>
+                    <Label text="Start Date"/>
+                    <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['campaignDetailsModel>/campaign/startDate'], formatter: '.formatDate' }"/>
+                    <Label text="End Date"/>
+                    <DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['campaignDetailsModel>/campaign/endDate'], formatter: '.formatDate' }"/>
+                </form:content>
+            </form:SimpleForm>
+        </content> 
+        <footer>
+            <Bar>
+                <contentRight>
+                    <Button text="Save" press="saveButtonPressed"/>
+                </contentRight>
+            </Bar>
+        </footer>
+    </Page>
+    
+</core:View>

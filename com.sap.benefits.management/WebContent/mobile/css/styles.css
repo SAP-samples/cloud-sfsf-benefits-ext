@@ -1,0 +1,11 @@
+.benefitItem .sapMOHTopRow .sapMOHTitleDiv{
+    line-height: 3rem;
+}
+
+.benefitListItem .sapMObjLTopRow .sapMObjLTitle {
+    line-height: 3rem;
+}
+
+.visible{
+    display: none;
+}

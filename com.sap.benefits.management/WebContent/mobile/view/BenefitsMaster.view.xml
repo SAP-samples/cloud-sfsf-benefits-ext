@@ -1,0 +1,18 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+           controllerName="com.sap.benefits.management.view.BenefitsMaster" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="BenefitsMasterPage" title="Benefits" showNavButton="true" navButtonTap="onNavPressed">
+        <content>
+            <List items="{benefitsModel>/benefits}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+                <items>
+                    <ObjectListItem icon="sap-icon://{benefitsModel>icon}" title="{benefitsModel>name}" class="benefitListItem"/>
+                </items>
+            </List>
+            
+        </content>
+    </Page>
+    
+         
+</core:View>

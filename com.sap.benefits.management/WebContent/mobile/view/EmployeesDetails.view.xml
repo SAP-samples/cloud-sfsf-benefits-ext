@@ -1,0 +1,29 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+           controllerName="com.sap.benefits.management.view.EmployeesDetails" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="EmployeesDetailsPage" title="Employee Details" showNavButton="false">
+        <content>
+            <List items="{path:'employeeDetailsModel>/current'}" inset="true" headerText="Current Orders">
+                <items>
+                    <ObjectListItem icon="sap-icon://{employeeDetailsModel>icon}" title="{employeeDetailsModel>item}" number="{employeeDetailsModel>total}" class="benefitListItem">
+                        <firstStatus>
+                            <ObjectStatus text="{path:'employeeDetailsModel>types', formatter:'.formatTypes'}"/>
+                        </firstStatus>
+                    </ObjectListItem>
+                </items>
+            </List>
+            <List items="{path:'employeeDetailsModel>/history', sorter: [{path: 'employeeDetailsModel>date', group: '.groupBenefits'}]}" inset="true" headerText="History">
+                <items>
+                    <ObjectListItem icon="sap-icon://{employeeDetailsModel>icon}" title="{employeeDetailsModel>item}" number="{employeeDetailsModel>total}" class="benefitListItem">
+                        <firstStatus>
+                            <ObjectStatus text="{path:'employeeDetailsModel>types', formatter:'.formatTypes'}"/>
+                        </firstStatus>
+                    </ObjectListItem>
+                </items>
+            </List>
+        </content>
+    </Page>
+         
+</core:View>

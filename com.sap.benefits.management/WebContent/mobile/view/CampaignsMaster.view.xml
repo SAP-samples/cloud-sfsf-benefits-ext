@@ -1,0 +1,26 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+           controllerName="com.sap.benefits.management.view.CampaignsMaster" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="CampaignMasterPage" title="Campaigns" showNavButton="true" navButtonTap="onNavPressed">
+        <content>
+            <List id="CampaignsList" items="{campaignModel>/campaigns}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelect">
+                <items>
+                    <ObjectListItem title="{campaignModel>name}" selected="true" />
+                </items>
+            </List>
+            
+        </content>
+        <footer>
+            <Bar>
+                <contentRight>
+                    <Button id="saveButton" text="Save" press="saveButtonPressed" visible="false"/>
+                    <Button id="addButton" text="Add" press="addButtonPressed"/>
+                </contentRight>
+            </Bar>
+        </footer>
+    </Page>
+    
+         
+</core:View>
