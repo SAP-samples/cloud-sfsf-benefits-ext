@@ -8,14 +8,15 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 
+import com.sap.benefits.management.persistance.model.Person;
 import com.sap.benefits.management.persistance.util.DataSourceProvider;
 import com.sap.benefits.management.persistance.util.EntityManagerFactoryProvider;
 
-public class PersonBean {
+public class PersonDAO {
 	
     private EntityManagerFactory factory;
     
-    public PersonBean() throws NamingException {
+    public PersonDAO() throws NamingException {
     	this.factory = EntityManagerFactoryProvider.getInstance().createEntityManagerFactory(DataSourceProvider.getInstance().getDefault());
 	}
     
@@ -23,12 +24,27 @@ public class PersonBean {
     	final EntityManager entityManager = factory.createEntityManager();
     	List<Person> resut = new ArrayList<>();
     	try{
-    		resut = entityManager.createNamedQuery("AllPersons", Person.class).getResultList();
+    		resut = entityManager.createNamedQuery(DBQueries.GET_ALL_PERSONS, Person.class).getResultList();
     	}finally{
     		entityManager.close();
     	}
     	
         return resut;
+    }
+    
+    public void deleteAll(){
+    	final EntityManager entityManager = factory.createEntityManager();
+    	try{
+    		final EntityTransaction transaction = entityManager.getTransaction();
+			transaction.begin();
+			
+    		entityManager.createNamedQuery(DBQueries.DELETE_ALL_PERSONS).executeUpdate();
+    		
+    		transaction.commit();
+    	}finally{
+    		entityManager.close();
+    	}
+    	
     }
 
     public void addPerson(Person person) {
