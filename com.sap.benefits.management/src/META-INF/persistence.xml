@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-	<persistence-unit name="com.sap.benefits.management" transaction-type="JTA">
+	<persistence-unit name="com.sap.benefits.management">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-        <jta-data-source>jdbc/DefaultDB</jta-data-source>
         <class>com.sap.benefits.management.persistance.Person</class>
 		<properties>
-			<property name="eclipselink.ddl-generation" value="create-tables"/>
-			<property name="eclipselink.logging.level" value="SEVERE"/>
+			<property name="eclipselink.deploy-on-startup" value="True" />
+			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+			<property name="eclipselink.logging.level" value="SEVERE" />
+			<property name="eclipselink.target-database" value="com.sap.persistence.platform.database.HDBPlatform"/>
 		</properties>
 	</persistence-unit>
 </persistence>

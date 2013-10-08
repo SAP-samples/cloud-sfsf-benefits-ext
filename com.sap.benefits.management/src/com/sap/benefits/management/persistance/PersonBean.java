@@ -1,34 +1,49 @@
 package com.sap.benefits.management.persistance;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 
-/**
- * Bean encapsulating all operations for a person.
- */
-@Stateless
-@LocalBean
+import com.sap.benefits.management.persistance.util.DataSourceProvider;
+import com.sap.benefits.management.persistance.util.EntityManagerFactoryProvider;
+
 public class PersonBean {
 	
-    @PersistenceContext
-    private EntityManager em;
-
-    /**
-     * Get all persons from the table.
-     */
+    private EntityManagerFactory factory;
+    
+    public PersonBean() throws NamingException {
+    	this.factory = EntityManagerFactoryProvider.getInstance().createEntityManagerFactory(DataSourceProvider.getInstance().getDefault());
+	}
+    
     public List<Person> getAllPersons() {
-        return em.createNamedQuery("AllPersons", Person.class).getResultList();
+    	final EntityManager entityManager = factory.createEntityManager();
+    	List<Person> resut = new ArrayList<>();
+    	try{
+    		resut = entityManager.createNamedQuery("AllPersons", Person.class).getResultList();
+    	}finally{
+    		entityManager.close();
+    	}
+    	
+        return resut;
     }
 
-    /**
-     * Add a person to the table.
-     */
     public void addPerson(Person person) {
-        em.persist(person);
-        em.flush();
+    	final EntityManager entityManager = factory.createEntityManager();
+    	try{
+    		final EntityTransaction transaction = entityManager.getTransaction();
+			transaction.begin();
+			
+    		entityManager.persist(person);
+    		entityManager.flush();
+    		
+    		transaction.commit();
+    	}finally{
+    		entityManager.close();
+    	}
     }
 }
+

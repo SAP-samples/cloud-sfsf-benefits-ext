@@ -12,7 +12,7 @@
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<sap.cloud.sdk.path>${project.basedir}/../..</sap.cloud.sdk.path>
+		<sap.cloud.sdk.location>C:/work/hana_cloud_sdk/neo-sdk-2.16.10.2</sap.cloud.sdk.location>
 		<sap.cloud.sdk.version>2.16.10.2</sap.cloud.sdk.version>
 
 		<apache.cxf.version>2.7.3</apache.cxf.version>
@@ -32,6 +32,11 @@
 			<name>Maven central Repository</name>
 			<url>http://repo1.maven.org/maven2</url>
 		</repository>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -41,6 +46,31 @@
 			<version>6.0</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>javax.persistence</artifactId>
+			<version>2.0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.4.2</version>
+			<exclusions>
+				<exclusion>
+					<groupId>*</groupId>
+					<artifactId>*</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<!-- <dependency>
+			<groupId>com.sap.core.persistence.osgi</groupId>
+			<artifactId>com.sap.core.persistence.osgi.hdb.platform</artifactId>
+			<version>0.6.21</version>
+			<scope>system</scope>
+			<systemPath>${sap.cloud.sdk.location}/repository/plugins/com.sap.core.persistence.osgi.hdb.platform_0.6.21.jar</systemPath>
+		</dependency>
+		 -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

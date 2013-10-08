@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>com.sap.benefits.management</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-  </welcome-file-list>
-  <servlet>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	id="WebApp_ID" version="3.0">
+	<display-name>com.sap.benefits.management</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+	<servlet>
 		<display-name>CXF Servlet</display-name>
 		<servlet-name>CXFServlet</servlet-name>
 		<servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
@@ -18,7 +21,7 @@
 		<servlet-name>CXFServlet</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>ResourceServlet</servlet-name>
 		<servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
@@ -39,4 +42,19 @@
 		<param-name>com.sap.ui5.resource.DEV_MODE</param-name>
 		<param-value>false</param-value>
 	</context-param>
+
+	<!-- ============================================================== -->
+	<!-- JNDI resource definition of DestinationFactory -->
+	<!-- ============================================================== -->
+
+	<resource-ref>
+		<res-ref-name>jdbc/DefaultDB</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+	</resource-ref>
+
+	<resource-ref>
+		<res-ref-name>connectivity/DestinationFactory</res-ref-name>
+		<res-type>com.sap.core.connectivity.api.DestinationFactory</res-type>
+	</resource-ref>
+
 </web-app>
