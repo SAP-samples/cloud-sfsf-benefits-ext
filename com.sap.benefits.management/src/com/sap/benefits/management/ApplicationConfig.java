@@ -7,6 +7,8 @@ import javax.ws.rs.core.Application;
 
 import com.sap.benefits.management.api.SystemService;
 import com.sap.benefits.management.api.TestService;
+import com.sap.benefits.management.api.UserService;
+import com.sap.benefits.management.api.utils.GsonMessageBodyHandler;
 
 
 public class ApplicationConfig extends Application {
@@ -14,6 +16,8 @@ public class ApplicationConfig extends Application {
     private Set<Object> singletons = new HashSet<Object>();
 
     public ApplicationConfig() {
+    	singletons.add(new GsonMessageBodyHandler<>());
+		singletons.add(new UserService());
     	singletons.add(new SystemService());
         singletons.add(new TestService());
     }

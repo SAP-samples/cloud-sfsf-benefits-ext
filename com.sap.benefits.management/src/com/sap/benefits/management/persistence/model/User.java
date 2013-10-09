@@ -19,33 +19,32 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "USERS", uniqueConstraints={@UniqueConstraint(columnNames={"USER_ID"})})
-@NamedQueries({ 
-	@NamedQuery(name = GET_ALL_USERS, query = "select e from User e")})
+@Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_ID" }) })
+@NamedQueries({ @NamedQuery(name = GET_ALL_USERS, query = "select e from User e") })
 public class User implements IDBEntity {
 	@Id
 	@GeneratedValue
-	@Column(name="ID")
+	@Column(name = "ID")
 	private Long id;
-	
+
 	@Basic
 	@Column(name = "FIRST_NAME")
 	private String firstName;
-	
+
 	@Basic
 	@Column(name = "LAST_NAME")
 	private String lastName;
-	
+
 	@Basic
 	@Column(name = "USER_ID")
 	private String userId;
-	
+
 	@Basic
 	private String email;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)
 	private Collection<Order> orders;
-	
+
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
 	private Collection<UserPoints> userPoints;
 
@@ -91,7 +90,7 @@ public class User implements IDBEntity {
 	}
 
 	public Collection<Order> getOrders() {
-		if(orders == null){
+		if (orders == null) {
 			orders = new ArrayList<>();
 		}
 		return orders;
@@ -100,16 +99,16 @@ public class User implements IDBEntity {
 	public void setOrders(Collection<Order> orders) {
 		this.orders = orders;
 	}
-	
-	public void addOrder(Order order){
+
+	public void addOrder(Order order) {
 		getOrders().add(order);
-		if(order.getUser() != this){
+		if (order.getUser() != this) {
 			order.setUser(this);
 		}
 	}
 
 	public Collection<UserPoints> getUserPoints() {
-		if(this.userPoints == null){
+		if (this.userPoints == null) {
 			this.userPoints = new ArrayList<>();
 		}
 		return userPoints;
@@ -118,10 +117,10 @@ public class User implements IDBEntity {
 	public void setUserPoints(Collection<UserPoints> userPoints) {
 		this.userPoints = userPoints;
 	}
-	
-	public void addUserPoints(UserPoints points){
+
+	public void addUserPoints(UserPoints points) {
 		getUserPoints().add(points);
-		if(points.getUser() != this){
+		if (points.getUser() != this) {
 			points.setUser(this);
 		}
 	}

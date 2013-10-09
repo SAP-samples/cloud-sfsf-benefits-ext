@@ -1,6 +1,5 @@
 package com.sap.benefits.management.api;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Date;
 
@@ -10,7 +9,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.sap.benefits.management.csv.dataimport.BenefitsDataImporter;
 import com.sap.benefits.management.persistence.BenefitDAO;
 import com.sap.benefits.management.persistence.BenefitTypeDAO;
 import com.sap.benefits.management.persistence.CampaignDAO;
@@ -30,7 +28,9 @@ import com.sap.benefits.management.persistence.model.UserPoints;
 @Produces(MediaType.APPLICATION_JSON)
 public class TestService {
 
-	private void cleanDB(){
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public String test() throws NamingException {
 		final CampaignDAO campaignDAO = new CampaignDAO();
 		final UserDAO userDAO = new UserDAO();
 		final OrderDAO ordersDAO = new OrderDAO();
@@ -46,18 +46,6 @@ public class TestService {
 		benefitTypeDAO.deleteAll();
 		orderDetailDAO.deleteAll();
 		userPointsDAO.deleteAll();
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public String test() throws NamingException {
-		cleanDB();
-		
-		final CampaignDAO campaignDAO = new CampaignDAO();
-		final UserDAO userDAO = new UserDAO();
-		final OrderDAO ordersDAO = new OrderDAO();
-		final BenefitDAO benefitDAO = new BenefitDAO();
-		final UserPointsDAO userPointsDAO = new UserPointsDAO();
 		
 		final Benefit benefit = new Benefit();
 		benefit.setName("Trapeza pass");
@@ -105,21 +93,6 @@ public class TestService {
 		userPoints.setCampaign(campaign);
 		
 		userPointsDAO.saveNew(userPoints);
-		
-		final Benefit b = benefitDAO.getByName("Trapeza pass");
-		
-		return b.getDescription();
-	}
-	
-	
-	@GET
-	@Path("csv")
-	@Produces(MediaType.APPLICATION_JSON)
-	public String importDataTest() throws IOException {
-//		cleanDB();
-		
-		final BenefitsDataImporter importer = new BenefitsDataImporter();
-		importer.importData("/benefits.csv");
 		
 		return "ok";
 	}
