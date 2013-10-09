@@ -3,6 +3,7 @@ package com.sap.benefits.management.persistence.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
@@ -17,8 +18,12 @@ import com.sap.benefits.management.persistence.model.keys.UserPointsPrimaryKey;
 @Table(name = "USER_POINTS")
 @NamedQueries({ 
 	})
-public class UserPoints {
+public class UserPoints implements IDBEntity {
 	
+	@GeneratedValue
+	@Column(name="ID")
+	private Long id;
+
 	@ManyToOne
 	@Id
     @JoinColumn(name="USER_ID", referencedColumnName="ID")
@@ -35,6 +40,15 @@ public class UserPoints {
 	@Basic
 	@Column(name="AVAILABLE_POINTS")
 	private Long availablePoints;
+	
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public User getUser() {
 		return user;

@@ -21,7 +21,7 @@ import javax.persistence.Table;
 @Table(name = "ORDERS")
 @NamedQueries({ 
 	})
-public class Order {
+public class Order implements IDBEntity {
 	
 	@Id
 	@GeneratedValue
@@ -43,6 +43,7 @@ public class Order {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
 	private Collection<OrderDetails> orderDetails;
 
+	@Override
 	public Long getId() {
 		return id;
 	}

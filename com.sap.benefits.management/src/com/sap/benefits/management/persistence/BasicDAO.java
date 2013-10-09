@@ -2,20 +2,55 @@ package com.sap.benefits.management.persistence;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sap.benefits.management.persistence.model.IDBEntity;
 import com.sap.benefits.management.persistence.util.DataSourceProvider;
 import com.sap.benefits.management.persistence.util.EntityManagerFactoryProvider;
 
-public class BasicDAO<T> {
+public class BasicDAO<T extends IDBEntity> {
+
+	private final Logger logger = LoggerFactory.getLogger("BasicDAO.class");
+
 	protected EntityManagerFactory factory;
 
-	public BasicDAO() throws NamingException {
-		this.factory = EntityManagerFactoryProvider.getInstance().createEntityManagerFactory(DataSourceProvider.getInstance().getDefault());
+	public BasicDAO() {
+		try {
+			DataSource dataSource = DataSourceProvider.getInstance().getDefault();
+			this.factory = EntityManagerFactoryProvider.getInstance().createEntityManagerFactory(dataSource);
+		} catch (NamingException e) {
+			logger.error("Could not get defaoult data source", e);
+			throw new RuntimeException();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<T> getAll() {
+		final List<T> result = new ArrayList<>();
+		final EntityManager em = factory.createEntityManager();
+		try {
+			em.getTransaction().begin();
+			result.addAll((Collection<? extends T>) em.createQuery("select t from " + getTableName() + " t",
+					this.getClass().getGenericSuperclass().getClass()).getResultList());
+
+			em.getTransaction().commit();
+		} finally {
+			em.close();
+		}
+
+		return result;
 	}
 
 	public T save(T entity) {
@@ -32,7 +67,7 @@ public class BasicDAO<T> {
 		}
 
 	}
-	
+
 	public T saveNew(T entity) {
 		final EntityManager em = factory.createEntityManager();
 		try {
@@ -47,17 +82,45 @@ public class BasicDAO<T> {
 	}
 
 	public void deleteAll() {
+		final List<T> all = getAll();
 		final EntityManager em = factory.createEntityManager();
+
 		try {
 			em.getTransaction().begin();
 
-			Query query = em.createQuery("delete from " + getTableName() + " t ");
-			query.executeUpdate();
+			for (T t : all) {
+				final T managedObject = getById(t.getId(), em);
+				em.remove(managedObject);
+			}
 
 			em.getTransaction().commit();
 		} finally {
 			em.close();
 		}
+	}
+
+	public T getById(long id) {
+		final EntityManager em = factory.createEntityManager();
+		try {
+			return getById(id, em);
+		} finally {
+			em.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private T getById(long id, EntityManager em) {
+		T t = null;
+
+		try {
+			Query query = em.createQuery("select u from " + getTableName() + " u where u.id = :id"); //$NON-NLS-1$ //$NON-NLS-2$
+			query.setParameter("id", id); //$NON-NLS-1$
+			t = (T) query.getSingleResult();
+		} catch (NoResultException e) {
+			logger.error("Could not retrieve entity {} from table {}.", id, getTableName()); //$NON-NLS-1$
+		}
+
+		return t;
 	}
 
 	private Type getActualType() {
@@ -70,8 +133,8 @@ public class BasicDAO<T> {
 
 	private String getTableName() {
 		String actualType = getActualType().toString();
-		return actualType.substring(actualType.lastIndexOf('.')+1);
-		
+		return actualType.substring(actualType.lastIndexOf('.') + 1);
+
 	}
 
 }

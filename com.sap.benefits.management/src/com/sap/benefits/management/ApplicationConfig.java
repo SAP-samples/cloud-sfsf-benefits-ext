@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.sap.benefits.management.api.SystemService;
 import com.sap.benefits.management.api.TestService;
 
 
@@ -13,6 +14,7 @@ public class ApplicationConfig extends Application {
     private Set<Object> singletons = new HashSet<Object>();
 
     public ApplicationConfig() {
+    	singletons.add(new SystemService());
         singletons.add(new TestService());
     }
 

@@ -41,6 +41,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.googlecode.jcsv</groupId>
+			<artifactId>jcsv</artifactId>
+			<version>1.4.0</version>
+		</dependency>
+		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>
@@ -62,15 +67,10 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
-		<!-- <dependency>
-			<groupId>com.sap.core.persistence.osgi</groupId>
-			<artifactId>com.sap.core.persistence.osgi.hdb.platform</artifactId>
-			<version>0.6.21</version>
-			<scope>system</scope>
-			<systemPath>${sap.cloud.sdk.location}/repository/plugins/com.sap.core.persistence.osgi.hdb.platform_0.6.21.jar</systemPath>
-		</dependency>
-		 -->
+
+		<!-- <dependency> <groupId>com.sap.core.persistence.osgi</groupId> <artifactId>com.sap.core.persistence.osgi.hdb.platform</artifactId> 
+			<version>0.6.21</version> <scope>system</scope> <systemPath>${sap.cloud.sdk.location}/repository/plugins/com.sap.core.persistence.osgi.hdb.platform_0.6.21.jar</systemPath> 
+			</dependency> -->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>

@@ -22,7 +22,7 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "USERS", uniqueConstraints={@UniqueConstraint(columnNames={"USER_ID"})})
 @NamedQueries({ 
 	@NamedQuery(name = GET_ALL_USERS, query = "select e from User e")})
-public class User {
+public class User implements IDBEntity {
 	@Id
 	@GeneratedValue
 	@Column(name="ID")
@@ -49,6 +49,7 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
 	private Collection<UserPoints> userPoints;
 
+	@Override
 	public Long getId() {
 		return id;
 	}

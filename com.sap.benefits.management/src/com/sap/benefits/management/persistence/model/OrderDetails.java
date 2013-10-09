@@ -13,7 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ORDERS_DETAILS")
-public class OrderDetails {
+public class OrderDetails implements IDBEntity {
 	@Id
 	@GeneratedValue
 	private Long id;
@@ -33,6 +33,7 @@ public class OrderDetails {
 	@JoinColumn(name = "BENEFIT_TYPE_ID", referencedColumnName = "TYPE_ID", insertable=false, updatable=false)
 	private BenefitType benefitType;
 
+	@Override
 	public Long getId() {
 		return id;
 	}

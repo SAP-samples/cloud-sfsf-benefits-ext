@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "BENEFITS", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
-public class Benefit {
+public class Benefit implements IDBEntity{
 	
 	@Id
 	@GeneratedValue
@@ -35,6 +35,7 @@ public class Benefit {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "benefit", fetch = FetchType.LAZY, targetEntity = BenefitType.class)
 	private Collection<BenefitType> types;
 
+	@Override
 	public Long getId() {
 		return id;
 	}
