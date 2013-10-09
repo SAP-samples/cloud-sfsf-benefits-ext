@@ -1,4 +1,4 @@
-package com.sap.benefits.management.persistance.util;
+package com.sap.benefits.management.persistence.util;
 
 import java.util.HashMap;
 import java.util.Map;
