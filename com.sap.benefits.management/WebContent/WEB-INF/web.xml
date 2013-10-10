@@ -42,6 +42,21 @@
 		<param-value>false</param-value>
 	</context-param>
 
+	<filter>
+		<display-name>SessionCreateFilter</display-name>
+		<filter-name>SessionCreateFilter</filter-name>
+		<filter-class>com.sap.benefits.management.services.SessionCreateFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>SessionCreateFilter</filter-name>
+		<url-pattern>/api/*</url-pattern>
+	</filter-mapping>
+    <listener>
+    <description>sessionListener</description>
+    <listener-class>
+        com.sap.benefits.management.services.SessionListener
+    </listener-class>
+    </listener>
 	<login-config>
 		<auth-method>SAML2</auth-method>
 	</login-config>

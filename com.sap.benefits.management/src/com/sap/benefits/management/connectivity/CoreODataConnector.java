@@ -17,7 +17,7 @@ public class CoreODataConnector extends ODataConnector {
 	private static final String UTF_8 = "UTF-8";
 	private static CoreODataConnector INSTANCE = null;
 	private static final String MANAGED_EMPLOYEES_QUERY = "User?$select=userId,firstName,lastName,email&$filter=hr/userId%20eq%20'#'";
-	private static final String PROFILE_QUERY = "User('#')";
+	private static final String PROFILE_QUERY = "User('#')?$select=userId,firstName,lastName,email,hr/userId,hr/firstName,hr/lastName,hr/email&$expand=hr";
 
 	public static synchronized CoreODataConnector getInstance() {
 		if (INSTANCE == null) {
@@ -42,33 +42,16 @@ public class CoreODataConnector extends ODataConnector {
 		return URLEncoder.encode(text, UTF_8);
 	}
 
-	public List<User> getManagedEmployees(String hrSFUserName) throws IOException {
+	public List<SFUser> getManagedEmployees(String hrSFUserName) throws IOException {
 		String userListJson = getODataResponse(getMangedEmployeesQuery(hrSFUserName));
 		CoreODataParser parser = CoreODataParser.getInstance();
-		return createUserList(parser.loadSFUserProfileListFromJsom(userListJson));
+		return parser.loadSFUserProfileListFromJsom(userListJson);
 	}
 
-	public User getUserProfile(String userName) throws IOException {
+	public SFUser getUserProfile(String userName) throws IOException {
 		String userJson = getODataResponse(getProfileQuery(userName));
 		CoreODataParser parser = CoreODataParser.getInstance();
-		return createUser(parser.loadSFUserProfileFromJsom(userJson));
-	}
-
-	private List<User> createUserList(List<SFUser> sfUserList) {
-		List<User> result = new ArrayList<>(sfUserList.size());
-		for (SFUser sfUser : sfUserList) {
-			result.add(createUser(sfUser));
-		}
-		return result;
-	}
-
-	private User createUser(SFUser sfUser) {
-		User user = new User();
-		user.setEmail(sfUser.email);
-		user.setFirstName(sfUser.firstName);
-		user.setLastName(sfUser.lastName);
-		user.setUserId(sfUser.userId);
-		return user;
+		return parser.loadSFUserProfileFromJsom(userJson);
 	}
 
 }
