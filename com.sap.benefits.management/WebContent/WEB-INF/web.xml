@@ -21,7 +21,6 @@
 		<servlet-name>CXFServlet</servlet-name>
 		<url-pattern>/api/*</url-pattern>
 	</servlet-mapping>
-
 	<servlet>
 		<servlet-name>ResourceServlet</servlet-name>
 		<servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
@@ -43,6 +42,23 @@
 		<param-value>false</param-value>
 	</context-param>
 
+	<login-config>
+		<auth-method>SAML2</auth-method>
+	</login-config>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Protected Area</web-resource-name>
+			<url-pattern>/*</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>Everyone</role-name>
+			<role-name>Administrator</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-role>
+		<description>HR Administrator</description>
+		<role-name>Administrator</role-name>
+	</security-role>
 	<!-- ============================================================== -->
 	<!-- JNDI resource definition of DestinationFactory -->
 	<!-- ============================================================== -->
@@ -55,6 +71,11 @@
 	<resource-ref>
 		<res-ref-name>connectivity/DestinationFactory</res-ref-name>
 		<res-type>com.sap.core.connectivity.api.DestinationFactory</res-type>
+	</resource-ref>
+
+	<resource-ref>
+		<res-ref-name>sap_hcmcloud_core_odata</res-ref-name>
+		<res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
 	</resource-ref>
 
 </web-app>

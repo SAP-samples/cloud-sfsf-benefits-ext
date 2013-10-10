@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_ID" }) })
 @NamedQueries({ @NamedQuery(name = GET_ALL_USERS, query = "select e from User e") })
@@ -29,17 +31,21 @@ public class User implements IDBEntity {
 
 	@Basic
 	@Column(name = "FIRST_NAME")
+	@Expose
 	private String firstName;
 
 	@Basic
 	@Column(name = "LAST_NAME")
+	@Expose
 	private String lastName;
 
 	@Basic
 	@Column(name = "USER_ID")
+	@Expose
 	private String userId;
 
 	@Basic
+	@Expose
 	private String email;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)

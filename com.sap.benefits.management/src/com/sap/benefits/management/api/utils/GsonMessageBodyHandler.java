@@ -8,7 +8,6 @@ import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -23,23 +22,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @Provider
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+@SuppressWarnings("nls")
 public class GsonMessageBodyHandler<T> implements MessageBodyWriter<T>, MessageBodyReader<T> {
 
 	private final Logger logger = LoggerFactory.getLogger(GsonMessageBodyHandler.class);
 
-	// Gson object is thread safe.
-	private Gson gson;
-
 	public GsonMessageBodyHandler() {
-		GsonBuilder gsonBuilder = new GsonBuilder();
-		gsonBuilder.registerTypeAdapter(Date.class, new DateTimeAdapter());
-		gsonBuilder.setPrettyPrinting();
-		this.gson = gsonBuilder.create();
 	}
 
 	@Override
@@ -69,6 +61,7 @@ public class GsonMessageBodyHandler<T> implements MessageBodyWriter<T>, MessageB
 			targetType = type;
 		}
 
+		Gson gson = GsonFactory.getInstance().getGson();
 		return gson.fromJson(entityReader, targetType);
 	}
 
@@ -78,6 +71,7 @@ public class GsonMessageBodyHandler<T> implements MessageBodyWriter<T>, MessageB
 
 		try {
 			if (!String.class.isAssignableFrom(type)) {
+				Gson gson = GsonFactory.getInstance().getGson();
 				entityStream.write(gson.toJson(t).getBytes("UTF-8"));
 			} else {
 				// Do not convert strings.
