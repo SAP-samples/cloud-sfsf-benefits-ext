@@ -35,17 +35,23 @@ public class BasicDAO<T extends IDBEntity> {
 			throw new RuntimeException();
 		}
 	}
+	
+	public void refresh(T object){
+		final EntityManager em = factory.createEntityManager();
+		try {
+			em.refresh(object);
+		} finally {
+			em.close();
+		}
+	}
 
 	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
 		final List<T> result = new ArrayList<>();
 		final EntityManager em = factory.createEntityManager();
 		try {
-			em.getTransaction().begin();
 			result.addAll((Collection<? extends T>) em.createQuery("select t from " + getTableName() + " t",
 					this.getClass().getGenericSuperclass().getClass()).getResultList());
-
-			em.getTransaction().commit();
 		} finally {
 			em.close();
 		}
@@ -80,7 +86,7 @@ public class BasicDAO<T extends IDBEntity> {
 			em.close();
 		}
 	}
-
+	
 	public void deleteAll() {
 		final List<T> all = getAll();
 		final EntityManager em = factory.createEntityManager();

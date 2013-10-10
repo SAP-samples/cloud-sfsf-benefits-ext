@@ -20,7 +20,7 @@ import com.sap.benefits.management.persistence.UserDAO;
 import com.sap.benefits.management.persistence.UserPointsDAO;
 
 @Path("/system")
-public class SystemService {
+public class SystemService extends BaseService{
 	
 	private final Logger logger = LoggerFactory.getLogger(SystemService.class);
 	

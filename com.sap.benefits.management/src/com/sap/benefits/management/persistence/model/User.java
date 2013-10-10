@@ -65,7 +65,7 @@ public class User implements IDBEntity {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
 	private Collection<UserPoints> userPoints;
 	
-	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, targetEntity = Campaign.class)
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.LAZY, targetEntity = Campaign.class)
 	private Collection<Campaign> campaigns;
 
 	@Override

@@ -9,11 +9,14 @@
                 <form:content>
                     <common:Title text="Campaign Information"/>
                     <Label text="Name" class="labelHeight"/>
-                    <Input id="nameCtr" type="Text" placeholder="Enter Name ..." value="{campaignDetailsModel>/campaign/name}"/>
+                    <Input id="nameCtr" type="Text" placeholder="Enter Name ..." value="{name}"/>
                     <Label text="Start Date" class="labelHeight"/>
-                    <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['campaignDetailsModel>/campaign/startDate'], formatter: '.formatDate' }"/>
+                    <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['startDate'], formatter: '.formatDate' }"/>
                     <Label text="End Date" class="labelHeight"/>
-                    <DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['campaignDetailsModel>/campaign/endDate'], formatter: '.formatDate' }"/>
+                    <DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['endDate'], formatter: '.formatDate' }"/>
+                    <Label text="Active" class="labelHeight"/>
+                    <CheckBox id="stateCtr" selected="{active}"/>
+                    
                 </form:content>
             </form:SimpleForm>
         </content> 

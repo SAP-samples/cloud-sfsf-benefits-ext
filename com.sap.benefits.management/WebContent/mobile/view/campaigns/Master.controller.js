@@ -29,23 +29,16 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
         this.byId("saveButton").setVisible(true);
     },
     saveButtonPressed: function(evt) {
-//        var data = sap.ui.getCore().getModel("campaignModel").getData();
-//        data.push({
-//            name: this.newCampaignInput.getValue(),
-//        });
-        
         jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/post',
+            url: '/com.sap.benefits.management/api/campaigns/admin',
             type: 'post',
             dataType: 'json',
             success: function (data) {
                 appController.reloadCampaignModel();
             },
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({name : "test", startDate : null, endDate: null})
+            data: JSON.stringify({name : this.newCampaignInput.getValue(), startDate : null, endDate: null})
         });
-
-//        sap.ui.getCore().getModel("campaignModel").setData(data);
 
         var list = this.byId("campaignsList");
         list.setMode(sap.m.ListMode.SingleSelectMaster);

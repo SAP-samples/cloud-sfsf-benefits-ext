@@ -1,8 +1,11 @@
 package com.sap.benefits.management.persistence.model;
 
-import java.sql.Date;
+import static com.sap.benefits.management.persistence.model.DBQueries.GET_ACTIVE_CAMPAIGNS;
+import static com.sap.benefits.management.persistence.model.DBQueries.GET_CAMPAIGN_BY_NAME;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -13,14 +16,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 import com.google.gson.annotations.Expose;
 
 @Entity
 @Table(name = "CAMPAIGNS", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
+@NamedQueries({ 
+	@NamedQuery(name = GET_CAMPAIGN_BY_NAME, query = "select c from Campaign c where c.name = :name and c.owner = :owner"),
+	@NamedQuery(name = GET_ACTIVE_CAMPAIGNS, query = "select c from Campaign c where c.active = 1 and c.owner = :owner")
+	})
 public class Campaign implements IDBEntity {
 	
 	@Expose
@@ -35,11 +46,13 @@ public class Campaign implements IDBEntity {
 	
 	@Expose
 	@Basic
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "START_DATE")
 	private Date startDate;
 	
 	@Expose
 	@Basic
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "END_DATE")
 	private Date endDate;
 	
@@ -47,7 +60,7 @@ public class Campaign implements IDBEntity {
 	@Basic
 	private boolean active;
 	
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="OWNER_ID")
 	private User owner;
 	

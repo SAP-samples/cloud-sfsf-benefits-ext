@@ -30,7 +30,7 @@ public class DateTimeAdapter implements JsonSerializer<Date>, JsonDeserializer<D
 		dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT, Locale.US);
 		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
-
+	
 	@Override
 	public JsonElement serialize(Date date, Type type, JsonSerializationContext jsonSerializationContext) {
 		synchronized (dateFormat) {

@@ -1,7 +1,7 @@
 package com.sap.benefits.management.persistence;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import com.sap.benefits.management.persistence.model.DBQueries;
 import com.sap.benefits.management.persistence.model.User;
@@ -15,9 +15,10 @@ public class UserDAO extends BasicDAO<User> {
 	public User getByUserId(String userId) {
 		final EntityManager em = factory.createEntityManager();
 		try {
-			final Query query = em.createNamedQuery(DBQueries.GET_USER_BY_USER_ID, User.class);
+			final TypedQuery<User> query = em.createNamedQuery(DBQueries.GET_USER_BY_USER_ID, User.class);
 			query.setParameter("userId", userId);
-			final User user = (User) query.getSingleResult();
+			User user = em.getReference(User.class, query.getSingleResult().getId());
+			em.refresh(user);
 			return user;
 		} catch (javax.persistence.NoResultException x) {
 			return null;

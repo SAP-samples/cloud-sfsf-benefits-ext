@@ -19,18 +19,15 @@ import com.sap.benefits.management.persistence.UserPointsDAO;
 import com.sap.benefits.management.persistence.model.Benefit;
 import com.sap.benefits.management.persistence.model.BenefitType;
 import com.sap.benefits.management.persistence.model.Campaign;
-import com.sap.benefits.management.persistence.model.Order;
-import com.sap.benefits.management.persistence.model.OrderDetails;
 import com.sap.benefits.management.persistence.model.User;
-import com.sap.benefits.management.persistence.model.UserPoints;
 
 @Path("/test")
 @Produces(MediaType.APPLICATION_JSON)
-public class TestService {
+public class TestService extends BaseService{
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public User test() throws NamingException {
+	public String test() throws NamingException {
 		final CampaignDAO campaignDAO = new CampaignDAO();
 		final UserDAO userDAO = new UserDAO();
 		final OrderDAO ordersDAO = new OrderDAO();
@@ -40,7 +37,7 @@ public class TestService {
 		final UserPointsDAO userPointsDAO = new UserPointsDAO();
 		
 		campaignDAO.deleteAll();
-		userDAO.deleteAll();
+//		userDAO.deleteAll();
 		ordersDAO.deleteAll();
 		benefitDAO.deleteAll();
 		benefitTypeDAO.deleteAll();
@@ -60,11 +57,11 @@ public class TestService {
 		
 		benefitDAO.saveNew(benefit);
 		
-		final User marin = new User();
-		marin.setFirstName("Marin");
-		marin.setLastName("Hadzhiev");
-		
-		userDAO.saveNew(marin);
+//		final User marin = new User();
+//		marin.setFirstName("Marin");
+//		marin.setLastName("Hadzhiev");
+//		
+//		userDAO.saveNew(marin);
 
 		Campaign campaign = new Campaign();
 		campaign.setActive(true);
@@ -76,30 +73,38 @@ public class TestService {
 		campaign.setStartDate(new Date(startDate.getTime()));
 		campaign.setEndDate(new Date(endDate.getTime()));
 		campaign.setName("March");
+		
+		final User campaignOwner = userDAO.getByUserId(getLoggedInUserId());
+		if(campaignOwner == null){
+			return getLoggedInUserId();
+		}
+		
+		campaign.setOwner(campaignOwner);
 		campaignDAO.saveNew(campaign);
 		
-		Order order = new Order();
-		order.setTotal(BigDecimal.valueOf(100));
-		order.setCampaign(campaign);
-		order.setUser(marin);
 		
-		final OrderDetails orderDetails = new OrderDetails();
-		orderDetails.setBenefitType(benefitType);
-		orderDetails.setLastUpdateTime(new Date(new java.util.Date().getTime()));
-		orderDetails.setOrder(order);
-		orderDetails.setQuantity(Long.valueOf(3));
+//		Order order = new Order();
+//		order.setTotal(BigDecimal.valueOf(100));
+//		order.setCampaign(campaign);
+//		order.setUser(marin);
+//		
+//		final OrderDetails orderDetails = new OrderDetails();
+//		orderDetails.setBenefitType(benefitType);
+//		orderDetails.setLastUpdateTime(new Date(new java.util.Date().getTime()));
+//		orderDetails.setOrder(order);
+//		orderDetails.setQuantity(Long.valueOf(3));
+//		
+//		ordersDAO.saveNew(order);
+//		
+//		final UserPoints userPoints = new UserPoints();
+//		userPoints.setAvailablePoints(Long.valueOf(100));
+//		userPoints.setPoints(Long.valueOf(300));
+//		userPoints.setUser(marin);
+//		userPoints.setCampaign(campaign);
+//		
+//		userPointsDAO.saveNew(userPoints);
 		
-		ordersDAO.saveNew(order);
-		
-		final UserPoints userPoints = new UserPoints();
-		userPoints.setAvailablePoints(Long.valueOf(100));
-		userPoints.setPoints(Long.valueOf(300));
-		userPoints.setUser(marin);
-		userPoints.setCampaign(campaign);
-		
-		userPointsDAO.saveNew(userPoints);
-		
-		return marin;
+		return "ok";
 	}
 	
 	
