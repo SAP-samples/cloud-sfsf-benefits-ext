@@ -9,3 +9,7 @@
 .visible{
     display: none;
 }
+
+.labelHeight{
+    line-height: 3rem;
+}

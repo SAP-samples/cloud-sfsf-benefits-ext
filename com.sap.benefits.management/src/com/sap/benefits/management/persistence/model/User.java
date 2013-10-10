@@ -1,6 +1,6 @@
 package com.sap.benefits.management.persistence.model;
 
-import static com.sap.benefits.management.persistence.model.DBQueries.GET_ALL_USERS;
+import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_BY_USER_ID;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -22,37 +24,49 @@ import com.google.gson.annotations.Expose;
 
 @Entity
 @Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_ID" }) })
-@NamedQueries({ @NamedQuery(name = GET_ALL_USERS, query = "select e from User e") })
+@NamedQueries({ 
+	@NamedQuery(name = GET_USER_BY_USER_ID, query = "select u from User u where u.userId = :userId")
+	})
 public class User implements IDBEntity {
 	@Id
 	@GeneratedValue
 	@Column(name = "ID")
 	private Long id;
 
+	@Expose
 	@Basic
 	@Column(name = "FIRST_NAME")
-	@Expose
 	private String firstName;
 
+	@Expose
 	@Basic
 	@Column(name = "LAST_NAME")
-	@Expose
 	private String lastName;
 
+	@Expose
 	@Basic
 	@Column(name = "USER_ID")
-	@Expose
 	private String userId;
 
-	@Basic
 	@Expose
+	@Basic
 	private String email;
+	
+	@ManyToOne
+	@JoinColumn(name="HR_USER_ID")
+	private User hrManager;
+	
+	@OneToMany(mappedBy = "hrManager", fetch = FetchType.LAZY, targetEntity = User.class)
+	private Collection<User> employees;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)
 	private Collection<Order> orders;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
 	private Collection<UserPoints> userPoints;
+	
+	@OneToMany(mappedBy = "owner", fetch = FetchType.LAZY, targetEntity = Campaign.class)
+	private Collection<Campaign> campaigns;
 
 	@Override
 	public Long getId() {
@@ -129,6 +143,53 @@ public class User implements IDBEntity {
 		if (points.getUser() != this) {
 			points.setUser(this);
 		}
+	}
+
+	public User getHrManager() {
+		return hrManager;
+	}
+
+	public void setHrManager(User hrManager) {
+		this.hrManager = hrManager;
+		if(!hrManager.getEmployees().contains(this)){
+			hrManager.addEmployee(this);
+		}
+	}
+
+	public Collection<User> getEmployees() {
+		if(this.employees == null){
+			this.employees = new ArrayList<>();
+		}
+		return employees;
+	}
+	
+	public void addEmployee(User employee){
+		getEmployees().add(employee);
+		if(employee.getHrManager() != this){
+			employee.setHrManager(this);
+		}
+	}
+
+	public void setEmployees(Collection<User> employees) {
+		this.employees = employees;
+	}
+
+	public Collection<Campaign> getCampaigns() {
+		if(this.campaigns == null){
+			this.campaigns = new ArrayList<>();
+		}
+		return campaigns;
+	}
+	
+	public void addCampaign(Campaign campaign){
+		getCampaigns().add(campaign);
+		if(campaign.getOwner() != this){
+			campaign.setOwner(this);
+		}
+	}
+
+	public void setCampaigns(Collection<Campaign> campaigns) {
+		this.campaigns = campaigns;
 	}
 
 }

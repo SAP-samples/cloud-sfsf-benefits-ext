@@ -10,14 +10,20 @@ sap.ui.app.Application.extend("Application", {
         benefitsModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testDataBenefits.json", null, false);
 
         var campaignModel = new sap.ui.model.json.JSONModel();
-        campaignModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testDataCampaigns.json", null, false);
 
         sap.ui.getCore().setModel(employeesModel, "employeesModel");
         sap.ui.getCore().setModel(benefitsModel, "benefitsModel");
         sap.ui.getCore().setModel(campaignModel, "campaignModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignDetailsModel");
+        
+        this.reloadCampaignModel();
     },
+            
+    reloadCampaignModel : function(){
+        sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/campaigns", null, false);
+    },
+            
     employeeItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
         var bindingCtx = listItem.getBindingContext("employeesModel");
@@ -38,6 +44,8 @@ sap.ui.app.Application.extend("Application", {
             campaign: bindingCtx.getObject(),
             bindingPath: bindingCtx.getPath()
         });
+        
+        sap.ui.getCore().byId("CampaignDetails").getController().clear();
 
         this._toDetailsPage("CampaignDetails");
     },
@@ -85,11 +93,11 @@ sap.ui.app.Application.extend("Application", {
                     infoState: "Success",
                     press: jQuery.proxy(this._handleTilePressed, this)
                 }),
-                new sap.m.StandardTile("Reports", {
-                    icon: "sap-icon://travel-expense-report",
-                    title: "Reports",
-                    press: jQuery.proxy(this._handleTilePressed, this)
-                })
+//                new sap.m.StandardTile("Reports", {
+//                    icon: "sap-icon://travel-expense-report",
+//                    title: "Reports",
+//                    press: jQuery.proxy(this._handleTilePressed, this)
+//                })
             ]
         });
 

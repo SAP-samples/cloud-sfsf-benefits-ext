@@ -8,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
 import javax.persistence.Table;
 
 import com.sap.benefits.management.persistence.model.keys.UserPointsPrimaryKey;
@@ -16,8 +15,6 @@ import com.sap.benefits.management.persistence.model.keys.UserPointsPrimaryKey;
 @Entity
 @IdClass(UserPointsPrimaryKey.class)
 @Table(name = "USER_POINTS")
-@NamedQueries({ 
-	})
 public class UserPoints implements IDBEntity {
 	
 	@GeneratedValue

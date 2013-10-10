@@ -1,6 +1,5 @@
 sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
     onInit: function() {
-
     },
     onAfterRendering: function() {
         var list = this.byId("campaignsList");
@@ -30,13 +29,23 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
         this.byId("saveButton").setVisible(true);
     },
     saveButtonPressed: function(evt) {
-        var data = sap.ui.getCore().getModel("campaignModel").getData();
-        data.campaigns.push({
-            name: this.newCampaignInput.getValue(),
-            startDate: '',
-            endDate: ''});
+//        var data = sap.ui.getCore().getModel("campaignModel").getData();
+//        data.push({
+//            name: this.newCampaignInput.getValue(),
+//        });
+        
+        jQuery.ajax({
+            url: '/com.sap.benefits.management/api/campaigns/post',
+            type: 'post',
+            dataType: 'json',
+            success: function (data) {
+                appController.reloadCampaignModel();
+            },
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({name : "test", startDate : null, endDate: null})
+        });
 
-        sap.ui.getCore().getModel("campaignModel").setData(data);
+//        sap.ui.getCore().getModel("campaignModel").setData(data);
 
         var list = this.byId("campaignsList");
         list.setMode(sap.m.ListMode.SingleSelectMaster);
@@ -45,5 +54,10 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
 
         this.byId("addButton").setEnabled(true);
         this.byId("saveButton").setVisible(false);
+        
+        var newItemIndex = list.getItems().length - 1;
+        appController.selectListItem(list, newItemIndex);
+        
     }
+
 });

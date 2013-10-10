@@ -30,7 +30,7 @@ public class TestService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public String test() throws NamingException {
+	public User test() throws NamingException {
 		final CampaignDAO campaignDAO = new CampaignDAO();
 		final UserDAO userDAO = new UserDAO();
 		final OrderDAO ordersDAO = new OrderDAO();
@@ -68,9 +68,14 @@ public class TestService {
 
 		Campaign campaign = new Campaign();
 		campaign.setActive(true);
-		campaign.setStartDate(new Date(new java.util.Date().getTime()));
-		campaign.setEndDate(new Date(new java.util.Date().getTime()));
-		campaign.setName("Test Campaign");
+		
+		java.util.Date startDate = new java.util.Date();
+		java.util.Date endDate = new java.util.Date();
+		startDate.setDate(9);
+		endDate.setDate(13);
+		campaign.setStartDate(new Date(startDate.getTime()));
+		campaign.setEndDate(new Date(endDate.getTime()));
+		campaign.setName("March");
 		campaignDAO.saveNew(campaign);
 		
 		Order order = new Order();
@@ -94,7 +99,7 @@ public class TestService {
 		
 		userPointsDAO.saveNew(userPoints);
 		
-		return "ok";
+		return marin;
 	}
 	
 	

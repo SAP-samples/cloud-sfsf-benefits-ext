@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
+import com.sap.benefits.management.api.CampaignService;
 import com.sap.benefits.management.api.SystemService;
 import com.sap.benefits.management.api.TestService;
 import com.sap.benefits.management.api.UserService;
@@ -19,6 +20,7 @@ public class ApplicationConfig extends Application {
     	singletons.add(new GsonMessageBodyHandler<>());
 		singletons.add(new UserService());
     	singletons.add(new SystemService());
+    	singletons.add(new CampaignService());
         singletons.add(new TestService());
     }
 
