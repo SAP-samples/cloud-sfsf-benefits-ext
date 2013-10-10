@@ -1,0 +1,22 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+           controllerName="com.sap.benefits.management.view.orders.Master" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="EmployeeOrdersMasterPage" title="Employee Orders" showNavButton="true" navButtonTap="onNavPressed">
+        <content>
+            <List id="campaignsList" items="{campaignModel>/campaigns}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+                <items>
+                    <ObjectListItem title="{campaignModel>name}" number="{employeesModel>availablePoints}">
+                        <attributes>
+                            <ObjectAttribute text="{campaignModel>id}"/>                            
+                        </attributes>
+                     </ObjectListItem>                  
+                </items>
+            </List>
+            
+        </content>
+    </Page>
+    
+         
+</core:View>

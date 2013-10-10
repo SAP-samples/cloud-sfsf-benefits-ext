@@ -8,6 +8,7 @@
             "orders": {
                 "current": [{
                         "item": "trapeza pass",
+                        "campId" : "campaign01",
                         "quantity": 35,
                         "total": 120,
                         "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
@@ -29,6 +30,7 @@
                             }]
                     }, {
                         "item": "podarak pass",
+                        "campId" : "campaign01",
                         "quantity": 56,
                         "total": 34,
                         "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
@@ -51,6 +53,7 @@
                     }],
                 "history": [{
                         "item": "trapeza pass",
+                        "campId" : "campaign02",
                         "quantity": 35,
                         "total": 120,
                         "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
@@ -72,6 +75,7 @@
                             }]
                     }, {
                         "item": "podarak pass",
+                        "campId" : "campaign02",
                         "quantity": 56,
                         "total": 34,
                         "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
@@ -94,6 +98,7 @@
                     },
                     {
                         "item": "trapeza pass",
+                        "campId" : "campaign02",
                         "quantity": 35,
                         "total": 120,
                         "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",
@@ -115,6 +120,7 @@
                             }]
                     }, {
                         "item": "podarak pass",
+                        "campId" : "campaign02",
                         "quantity": 56,
                         "total": 34,
                         "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",

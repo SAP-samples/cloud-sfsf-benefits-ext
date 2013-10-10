@@ -1,10 +1,12 @@
 {
     "campaigns": [{
+    		"id" : "campaign01",
             "name": "May",
             "startDate": "Fri Oct 04 2013 13:21:02 GMT+0300",
             "endDate": "Sat Oct 05 2013 13:21:02 GMT+0300"
         },
         {
+        	"id" : "campaign02",
             "name": "March",
             "startDate": "Fri Oct 04 2013 13:21:02 GMT+0300",
             "endDate": "Sat Oct 05 2013 13:21:02 GMT+0300"

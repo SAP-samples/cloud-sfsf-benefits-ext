@@ -1,0 +1,77 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:column="sap.m.Column"
+           controllerName="com.sap.benefits.management.view.orders.Details" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="EmployeeOrdersPage" title="Employee Orders" showNavButton="false">
+        <content>        
+        	<VBox>
+        		<items>
+        			<ObjectHeader title="Available points" number="{ordersModel>/employee/availablePoints}">        			
+        				<attributes>
+        					<ObjectAttribute text="Total points {ordersModel>/employee/totalPoints}"></ObjectAttribute>
+        					<ObjectAttribute text="Used points ,,,"></ObjectAttribute>
+        				</attributes>
+        				<firstStatus>
+        					<ObjectStatus text="Item added" state="Success"></ObjectStatus>
+        				</firstStatus>
+        				<secondStatus >
+        					<ObjectStatus text="Wrong quantity" icon="sap-icon://error" state="Error"></ObjectStatus>
+        				</secondStatus >        				
+        			</ObjectHeader>
+        		</items>
+        	</VBox>
+        
+	        <List items="{path:'ordersModel>/employee/orders', sorter: [{path: 'ordersModel>itemId', group: '.itemGrouping'}]}" inset="true" headerText="Orders for Campaign" footerText="Whole value">
+	        	<items>
+	        		<ObjectListItem icon="sap-icon://{ordersModel>icon}" title="{ordersModel>type}" number="{ordersModel>quantity}">	        		
+	        			<firstStatus>
+	                           <ObjectStatus text="value: {path:'ordersModel>quantity'}*{path:'ordersModel>value'}"/>
+	                    </firstStatus>
+	        		</ObjectListItem>
+	        	</items>        	
+	        </List>
+	        
+	        <Bar>
+	        	<contentRight>
+	        		<Button text="Add Item" icon="sap-icon://add" press=".addItem"></Button>
+	        	</contentRight>
+	        </Bar>
+	        
+	        <!-- 
+	        <List items="{path:'ordersModel>/employee/orders', sorter: [{path: 'ordersModel>itemId', group: '.itemGrouping'}]}" inset="true" headerText="Orders for Campaign">	        	
+        		<columns>
+        			<column width="3em" header=""></column>        			
+        			<column width="6em">
+        				<header>
+	        				<Label text="type"/>
+        				</header>
+        			</column>        			
+        			<column width="6em">
+        				<header>
+	        				<Label text="value"/>
+        				</header>
+        			</column>        			
+        			<column width="6em">
+        				<header>
+	        				<Label text="general"/>
+        				</header>
+        			</column>	        			
+        		</columns>
+	        	<items>
+	        		<ColumnListItem>
+	        			<cells>
+	        				<image icon="sap-icon://{ordersModel>icon}"></image>
+	        				<Label text="{ordersModel>type}"></Label>
+	        				<Label text="{ordersModel>value}"></Label>
+	        				<Label text="{path:'ordersModel>quantity'}*{path:'ordersModel>value'}"></Label>
+	        			</cells>
+	        		</ColumnListItem>	        		
+	        	</items>        	
+	        </List>
+	        -->
+
+        </content>
+    </Page>
+         
+</core:View>

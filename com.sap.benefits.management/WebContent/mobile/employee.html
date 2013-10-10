@@ -1,11 +1,9 @@
-<!--<%@page contentType="text/html"%>
-<%@page pageEncoding="UTF-8"%>-->
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>SAP Benefits Management Tool</title>
+        <title>SAP Employee Benefits Management Tool</title>
         <script src="../resources/sap-ui-core.js" type="text/javascript" id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
                 data-sap-ui-theme="sap_bluecrystal" data-sap-ui-xx-bindingSyntax="complex">
 
@@ -24,13 +22,13 @@
                 sap.ui.localResources("view/benefits");
                 sap.ui.localResources("view/campaigns");
                 
-                jQuery.sap.registerModulePath('Application', '/com.sap.benefits.management/mobile/Application');
+                jQuery.sap.registerModulePath('EmployeeController', '/com.sap.benefits.management/mobile/EmployeeController');
                 
                 jQuery.sap.registerModulePath("com.sap.benefits.management", "/com.sap.benefits.management/mobile");
                                 
 
                 // launch application
-                jQuery.sap.require("Application");
+                jQuery.sap.require("EmployeeController");
                 appController = new Application({
                     root: "sapUiBody"
                 });
