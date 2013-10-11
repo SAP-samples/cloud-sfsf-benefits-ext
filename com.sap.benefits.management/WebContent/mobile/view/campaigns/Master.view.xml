@@ -20,4 +20,13 @@
             </Bar>
         </footer>
     </Page>
+    <Dialog id="newcampaignDialog" title="Add New Campaign">
+        <content>
+            <VBox>
+                <items>
+                    <Input id="nameCtr" type="Text" placeholder="Enter Name ..."/>
+                </items>
+            </VBox>
+        </content>
+    </Dialog>
 </core:View>

@@ -12,44 +12,37 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
         appController.campaignItemSelected(evt);
     },
     addButtonPressed: function(evt) {
-        this.newCampaignInput = new sap.m.Input({
-            type: sap.m.InputType.Text,
-            placeholder: 'Enter Name ...'
-        });
+        var newCampDialog = this.byId("newcampaignDialog");
+        this.byId("nameCtr").setValue(null);
+        newCampDialog.setLeftButton(new sap.m.Button({
+            text: "Ok",
+            press: jQuery.proxy(function() {
+                var newCampaignName = this.byId("nameCtr").getValue();
+                jQuery.ajax({
+                    url: '/com.sap.benefits.management/api/campaigns/admin',
+                    type: 'post',
+                    dataType: 'json',
+                    success: jQuery.proxy(function(data) {
+                        appController.reloadCampaignModel();
+                        var list = this.byId("campaignsList");
+                        var newItemIndex = list.getItems().length - 1;
+                        appController.selectListItem(list, newItemIndex);
+                    }, this),
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify({name: newCampaignName, startDate: null, endDate: null})
+                });
+                newCampDialog.close();
+            }, this)
+        }));
+        newCampDialog.setRightButton(new sap.m.Button({
+            text: "Cancel",
+            press: function() {
+                newCampDialog.close();
+            }
+        }));
 
-        this.newCampaignListItem = new sap.m.InputListItem({
-            content: this.newCampaignInput
-        });
+        sap.ui.getCore().getEventBus().publish("nav", "virtual");
+        newCampDialog.open();
 
-        var list = this.byId("campaignsList");
-        list.setMode(sap.m.ListMode.None);
-        list.addItem(this.newCampaignListItem);
-
-        this.byId("addButton").setEnabled(false);
-        this.byId("saveButton").setVisible(true);
     },
-    saveButtonPressed: function(evt) {
-        var list = this.byId("campaignsList");
-        list.setMode(sap.m.ListMode.SingleSelectMaster);
-        list.removeItem(this.newCampaignListItem);
-        appController.selectListItem(list, 0);
-
-        this.byId("addButton").setEnabled(true);
-        this.byId("saveButton").setVisible(false);
-
-        jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/admin',
-            type: 'post',
-            dataType: 'json',
-            success: function(data) {
-                appController.reloadCampaignModel();
-                var newItemIndex = list.getItems().length - 1;
-                appController.selectListItem(list, newItemIndex);
-            },
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({name: this.newCampaignInput.getValue(), startDate: null, endDate: null})
-        });
-
-    }
-
 });
