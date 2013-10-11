@@ -18,14 +18,17 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "ORDERS_DETAILS")
 public class OrderDetails implements IDBEntity {
+	
 	@Expose
 	@Id
 	@GeneratedValue
 	private Long id;
+	
 	@Expose
 	@Basic
 	private Long quantity;
 	
+	@Expose
 	@Basic
 	@Column(name = "LAST_UPDATE_TIME")
 	@Temporal(TemporalType.TIMESTAMP)

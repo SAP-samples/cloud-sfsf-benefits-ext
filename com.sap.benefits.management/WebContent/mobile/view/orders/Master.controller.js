@@ -11,5 +11,12 @@ sap.ui.controller("com.sap.benefits.management.view.orders.Master", {
     },
     onNavPressed: function() {
         appController.goHome();
-    }
+    },
+	isActiveCampaign : function(isActive){
+		if(isActive) {
+			return "active";
+		} else {
+			return "inactive";
+		}
+	}
 });

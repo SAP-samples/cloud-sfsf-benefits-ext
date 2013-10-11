@@ -7,16 +7,27 @@ sap.ui.app.Application.extend("Application", {
         employeesModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testData.json", null, false);
         
         var ordersModel = new sap.ui.model.json.JSONModel();
-        ordersModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/employeeOrders.json", null, false);                
+        ordersModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/employeeOrders.json", null, false);    
+        
+        var benefitsModel = new sap.ui.model.json.JSONModel();
+        benefitsModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testDataBenefits.json", null, false);
 
         var campaignModel = new sap.ui.model.json.JSONModel();
-        campaignModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testDataCampaigns.json", null, false);
 
         sap.ui.getCore().setModel(ordersModel, "ordersModel");
         sap.ui.getCore().setModel(employeesModel, "employeesModel");
+        sap.ui.getCore().setModel(benefitsModel, "benefitsModel");
         sap.ui.getCore().setModel(campaignModel, "campaignModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignDetailsModel");
+        
+        this.reloadCampaignModel();
+    },
+    reloadCampaignModel: function() {
+        sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/user/userCampaigns", null, false);
+    },
+    reloadOrdersModel : function(){
+    	
     },
     employeeItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
@@ -28,7 +39,7 @@ sap.ui.app.Application.extend("Application", {
             current: bindingCtx.getObject().orders.current,
             history: bindingCtx.getObject().orders.history});
 
-        this._toDetailsPage("EmployeesDetails");
+        this._toDetailsPage("EmployeeOrdersDetails");
     },
     campaignItemSelected: function(evt) {
     	var listItem = evt.getParameters().listItem;
@@ -39,6 +50,7 @@ sap.ui.app.Application.extend("Application", {
 		    current: employeeCtx.orders.current});
     	this._toDetailsPage("EmployeeOrdersDetails");
     },
+    
     selectListItem: function(list, itemIndex) {
         var items = list.getItems();
         if (items[itemIndex]) {

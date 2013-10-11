@@ -40,6 +40,7 @@ public class Order implements IDBEntity {
 	@Column(precision = 25, scale = 2)
 	private BigDecimal total;
 
+	@Expose
 	@ManyToOne
 	@JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
 	private Campaign campaign;

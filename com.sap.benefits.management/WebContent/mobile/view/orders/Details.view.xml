@@ -1,5 +1,5 @@
 <core:View xmlns:core="sap.ui.core" 
-           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:column="sap.m.Column"
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
            controllerName="com.sap.benefits.management.view.orders.Details" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
@@ -10,68 +10,57 @@
         			<ObjectHeader title="Available points" number="{ordersModel>/employee/availablePoints}">        			
         				<attributes>
         					<ObjectAttribute text="Total points {ordersModel>/employee/totalPoints}"></ObjectAttribute>
-        					<ObjectAttribute text="Used points ,,,"></ObjectAttribute>
-        				</attributes>
-        				<firstStatus>
-        					<ObjectStatus text="Item added" state="Success"></ObjectStatus>
-        				</firstStatus>
-        				<secondStatus >
-        					<ObjectStatus text="Wrong quantity" icon="sap-icon://error" state="Error"></ObjectStatus>
-        				</secondStatus >        				
+        					<ObjectAttribute text="{parts:[{path:'ordersModel>/employee/availablePoints'}, {path:'ordersModel>/employee/totalPoints'}], formatter:'.usedPoints'}"></ObjectAttribute>
+        				</attributes>	
         			</ObjectHeader>
         		</items>
         	</VBox>
         
 	        <List items="{path:'ordersModel>/employee/orders', sorter: [{path: 'ordersModel>itemId', group: '.itemGrouping'}]}" inset="true" headerText="Orders for Campaign" footerText="Whole value">
 	        	<items>
-	        		<ObjectListItem icon="sap-icon://{ordersModel>icon}" title="{ordersModel>type}" number="{ordersModel>quantity}">	        		
+	        		<ObjectListItem icon="sap-icon://{ordersModel>icon}" title="{ordersModel>type}" number="{ordersModel>quantity}" numberUnit="quantity">	        		
 	        			<firstStatus>
-	                           <ObjectStatus text="value: {path:'ordersModel>quantity'}*{path:'ordersModel>value'}"/>
+	                           <ObjectStatus text="{parts:[{path:'ordersModel>quantity'}, {path:'ordersModel>type'}], formatter:'.wholeValue'}"/>	                                   
 	                    </firstStatus>
 	        		</ObjectListItem>
 	        	</items>        	
 	        </List>
-	        
+        </content>
+        
+        <footer>
 	        <Bar>
 	        	<contentRight>
-	        		<Button text="Add Item" icon="sap-icon://add" press=".addItem"></Button>
+	        		<Button text="Add Item" icon="sap-icon://add" press="addItem"></Button>
 	        	</contentRight>
-	        </Bar>
-	        
-	        <!-- 
-	        <List items="{path:'ordersModel>/employee/orders', sorter: [{path: 'ordersModel>itemId', group: '.itemGrouping'}]}" inset="true" headerText="Orders for Campaign">	        	
-        		<columns>
-        			<column width="3em" header=""></column>        			
-        			<column width="6em">
-        				<header>
-	        				<Label text="type"/>
-        				</header>
-        			</column>        			
-        			<column width="6em">
-        				<header>
-	        				<Label text="value"/>
-        				</header>
-        			</column>        			
-        			<column width="6em">
-        				<header>
-	        				<Label text="general"/>
-        				</header>
-        			</column>	        			
-        		</columns>
-	        	<items>
-	        		<ColumnListItem>
-	        			<cells>
-	        				<image icon="sap-icon://{ordersModel>icon}"></image>
-	        				<Label text="{ordersModel>type}"></Label>
-	        				<Label text="{ordersModel>value}"></Label>
-	        				<Label text="{path:'ordersModel>quantity'}*{path:'ordersModel>value'}"></Label>
-	        			</cells>
-	        		</ColumnListItem>	        		
-	        	</items>        	
-	        </List>
-	        -->
-
-        </content>
+	        </Bar>        
+        </footer>
     </Page>
          
+    <Dialog id="addItemCtrl" title="Add New Item">
+    	<content>
+    		<form:SimpleForm id="inputForm" minWidth="1024" maxContainerCols="2" editable="false">
+                <form:content>
+                    <!-- <common:Title text="Campaign Information"/>  -->
+                    <Label text="benefit type"/>
+                    <Select id="benefitTypeSelect" type="sap.m.InputType.Text"> <!--  items="{path:'benefitsModel>/benefits'}" selectedItemId="1" -->
+	    					<items>
+	    						<core:Item id="benItem1" key="SXP" text="Sodexo Pass"/>
+	    						<core:Item id="benItem2" key="TRP" text="Trapeza Pass"/>
+	    					</items>
+	    			</Select>
+                    <Label text="quantity type"/>
+    				<Select id="quantityTypeSelect" type="sap.m.InputType.Text">
+    					<items>
+    						<core:Item id="quantItem1" key="2lv" text="2 lv"/>
+    						<core:Item id="quantItem2" key="5lv" text="5 lv"/>
+    						<core:Item id="quantItem3" key="10lv" text="10 lv"/>
+    						<core:Item id="quantItem4" key="20lv" text="20 lv"/>
+    					</items>
+    				</Select>
+	    			<Label text="quantity"/>
+	    			<Input id="quantityTypeTxt" type="Number" placeholder="Enter amount"></Input>
+                </form:content>
+            </form:SimpleForm>
+    </content>
+    </Dialog>
 </core:View>

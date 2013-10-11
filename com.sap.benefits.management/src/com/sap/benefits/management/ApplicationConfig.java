@@ -7,6 +7,7 @@ import javax.ws.rs.core.Application;
 
 import com.sap.benefits.management.api.BenefitsService;
 import com.sap.benefits.management.api.CampaignService;
+import com.sap.benefits.management.api.OrderService;
 import com.sap.benefits.management.api.SystemService;
 import com.sap.benefits.management.api.TestService;
 import com.sap.benefits.management.api.UserService;
@@ -24,6 +25,7 @@ public class ApplicationConfig extends Application {
     	singletons.add(new CampaignService());
         singletons.add(new TestService());
         singletons.add(new BenefitsService());
+        singletons.add(new OrderService());
     }
 
     @Override

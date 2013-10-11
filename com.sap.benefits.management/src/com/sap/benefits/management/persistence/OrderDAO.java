@@ -36,5 +36,12 @@ public class OrderDAO extends BasicDAO<Order> {
 			em.close();
 		}
 	}
+	
+	public void saveOrder(User user, Order order){
+		if(order != null){
+			order.setUser(user);
+			saveNew(order);
+		}
+	}
 
 }

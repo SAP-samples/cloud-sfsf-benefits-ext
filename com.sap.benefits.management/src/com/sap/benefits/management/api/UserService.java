@@ -80,5 +80,14 @@ public class UserService extends BaseService {
 	}
 	
 	
+	
+	@GET
+	@Path("/userCampaigns")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Campaign> getUserCampaigns() throws IOException {
+		UserDAO userDAO = new UserDAO();
+		final com.sap.benefits.management.persistence.model.User user = userDAO.getByUserId(getLoggedInUserId());
+		return user.getHrManager().getCampaigns();		
+	}
 
 }
