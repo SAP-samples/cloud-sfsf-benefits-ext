@@ -1,5 +1,7 @@
 package com.sap.benefits.management.persistence.model;
 
+import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_ORDERS_FOR_CAMPAIGN;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,11 +15,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "ORDERS")
+@NamedQueries({ 
+	@NamedQuery(name = GET_USER_ORDERS_FOR_CAMPAIGN, query = "select o from Order o where o.user = :user and o.campaign = :campaign")
+	})
 public class Order implements IDBEntity {
 	
 	@Id

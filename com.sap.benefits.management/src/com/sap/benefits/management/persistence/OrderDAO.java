@@ -1,12 +1,40 @@
 package com.sap.benefits.management.persistence;
 
-import com.sap.benefits.management.persistence.model.Order;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class OrderDAO extends BasicDAO<Order>{
-	
-    public OrderDAO() {
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+
+import com.sap.benefits.management.persistence.model.Campaign;
+import com.sap.benefits.management.persistence.model.DBQueries;
+import com.sap.benefits.management.persistence.model.Order;
+import com.sap.benefits.management.persistence.model.User;
+
+public class OrderDAO extends BasicDAO<Order> {
+
+	public OrderDAO() {
 		super();
 	}
 
-}
+	public Collection<Order> getOrdersForUser(User user, Campaign campaign) {
+		final List<Order> result = new ArrayList<>();
+		final EntityManager em = factory.createEntityManager();
+		try {
+			final TypedQuery<Order> query = em.createNamedQuery(DBQueries.GET_USER_ORDERS_FOR_CAMPAIGN, Order.class);
+			query.setParameter("user", user);
+			query.setParameter("campaign", campaign);
+			for (Order order : query.getResultList()) {
+				final Order managedOrder = em.find(Order.class, order.getId());
+				em.refresh(managedOrder);
+				result.add(managedOrder);
+			}
 
+			return result;
+		} finally {
+			em.close();
+		}
+	}
+
+}
