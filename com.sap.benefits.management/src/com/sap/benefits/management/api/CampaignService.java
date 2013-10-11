@@ -77,5 +77,4 @@ public class CampaignService extends BaseService{
 		campaignDAO.save(camp);
 		return Response.ok().build();
 	}
-	
 }

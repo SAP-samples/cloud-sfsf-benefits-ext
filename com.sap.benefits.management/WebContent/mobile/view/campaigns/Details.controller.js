@@ -34,6 +34,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
             },
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({name: this.byId("nameCtr").getValue(),
+                                  id: ctx.id,
                                   startDate: dateFormat.format(this.byId("startDateCtr").getDateValue()),
                                   endDate: dateFormat.format(this.byId("endDateCtr").getDateValue()),
                                   points: this.byId("pointsCtr").getValue(),

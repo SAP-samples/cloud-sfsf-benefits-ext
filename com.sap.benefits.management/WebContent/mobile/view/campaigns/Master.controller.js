@@ -29,17 +29,6 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
         this.byId("saveButton").setVisible(true);
     },
     saveButtonPressed: function(evt) {
-        jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/admin',
-            type: 'post',
-            dataType: 'json',
-            success: function (data) {
-                appController.reloadCampaignModel();
-            },
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({name : this.newCampaignInput.getValue(), startDate : null, endDate: null})
-        });
-
         var list = this.byId("campaignsList");
         list.setMode(sap.m.ListMode.SingleSelectMaster);
         list.removeItem(this.newCampaignListItem);
@@ -47,10 +36,20 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
 
         this.byId("addButton").setEnabled(true);
         this.byId("saveButton").setVisible(false);
-        
-        var newItemIndex = list.getItems().length - 1;
-        appController.selectListItem(list, newItemIndex);
-        
+
+        jQuery.ajax({
+            url: '/com.sap.benefits.management/api/campaigns/admin',
+            type: 'post',
+            dataType: 'json',
+            success: function(data) {
+                appController.reloadCampaignModel();
+                var newItemIndex = list.getItems().length - 1;
+                appController.selectListItem(list, newItemIndex);
+            },
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({name: this.newCampaignInput.getValue(), startDate: null, endDate: null})
+        });
+
     }
 
 });
