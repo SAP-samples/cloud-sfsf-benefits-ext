@@ -36,6 +36,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
             data: JSON.stringify({name: this.byId("nameCtr").getValue(),
                                   startDate: dateFormat.format(this.byId("startDateCtr").getDateValue()),
                                   endDate: dateFormat.format(this.byId("endDateCtr").getDateValue()),
+                                  points: this.byId("pointsCtr").getValue(),
                                   active: this.byId("stateCtr").getSelected()
             }),
             error: function(xhr, error) {

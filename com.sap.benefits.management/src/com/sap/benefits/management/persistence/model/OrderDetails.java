@@ -1,6 +1,6 @@
 package com.sap.benefits.management.persistence.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "ORDERS_DETAILS")
@@ -23,6 +25,7 @@ public class OrderDetails implements IDBEntity {
 	
 	@Basic
 	@Column(name = "LAST_UPDATE_TIME")
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date lastUpdateTime;
 
 	@ManyToOne

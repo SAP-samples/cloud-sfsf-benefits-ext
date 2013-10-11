@@ -9,6 +9,8 @@ import javax.persistence.TypedQuery;
 import com.sap.benefits.management.persistence.model.Campaign;
 import com.sap.benefits.management.persistence.model.DBQueries;
 import com.sap.benefits.management.persistence.model.User;
+import com.sap.benefits.management.persistence.model.UserPoints;
+import com.sap.benefits.management.persistence.model.keys.UserPointsPrimaryKey;
 
 public class CampaignDAO extends BasicDAO<Campaign> {
 
@@ -22,8 +24,10 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 			final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_CAMPAIGN_BY_NAME, Campaign.class);
 			query.setParameter("name", name);
 			query.setParameter("owner", user);
-			final Campaign campaign = em.getReference(Campaign.class, query.getSingleResult().getId());
-			em.refresh(campaign);
+			final Campaign campaign = em.find(Campaign.class, query.getSingleResult().getId());
+			if (campaign != null) {
+				em.refresh(campaign);
+			}
 			return campaign;
 		} catch (javax.persistence.NoResultException x) {
 			return null;
@@ -39,29 +43,48 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 			campaign.setName(name);
 			campaign.setOwner(user);
 			saveNew(campaign);
+
+			setPointsToUsers(campaign);
 		}
 		return campaign;
 	}
-	
-	public boolean canBeActive(Campaign campaign, User user){
+
+	public boolean canBeActive(Campaign campaign, User user) {
 		final Collection<Campaign> activeCampaigns = getActiveCampaigns(user);
-		 final Iterator<Campaign> iterator = activeCampaigns.iterator();
-		if(!activeCampaigns.isEmpty() && !iterator.next().getId().equals(campaign.getId())){
+		final Iterator<Campaign> iterator = activeCampaigns.iterator();
+		if (!activeCampaigns.isEmpty() && !iterator.next().getId().equals(campaign.getId())) {
 			return false;
 		}
-		
+
 		return true;
 	}
-	
-	public Collection<Campaign> getActiveCampaigns(User user){
+
+	public Collection<Campaign> getActiveCampaigns(User user) {
 		final EntityManager em = factory.createEntityManager();
 		try {
 			final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_ACTIVE_CAMPAIGNS, Campaign.class);
 			query.setParameter("owner", user);
-			
+
 			return query.getResultList();
 		} finally {
 			em.close();
+		}
+	}
+
+	public void setPointsToUsers(Campaign campaign) {
+		final UserPointsDAO userPointsDAO = new UserPointsDAO();
+		if (campaign.getOwner() != null) {
+			final Collection<User> employees = campaign.getOwner().getEmployees();
+			for (User user : employees) {
+				UserPoints points = userPointsDAO.getByPrimaryKey(new UserPointsPrimaryKey(user.getId(), campaign.getId()));
+				if (points == null) {
+					points = new UserPoints();
+					points.setCampaign(campaign);
+					points.setUser(user);
+
+					userPointsDAO.saveNew(points);
+				}
+			}
 		}
 	}
 }

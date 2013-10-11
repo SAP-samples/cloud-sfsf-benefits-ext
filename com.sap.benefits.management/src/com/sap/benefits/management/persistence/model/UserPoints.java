@@ -32,9 +32,6 @@ public class UserPoints implements IDBEntity {
 	private Campaign campaign;
 	
 	@Basic
-	private Long points;
-	
-	@Basic
 	@Column(name="AVAILABLE_POINTS")
 	private Long availablePoints;
 	
@@ -67,14 +64,6 @@ public class UserPoints implements IDBEntity {
 		if(!campaign.getUserPoints().contains(this)){
 			campaign.addUserPoints(this);
 		}
-	}
-
-	public Long getPoints() {
-		return points;
-	}
-
-	public void setPoints(Long points) {
-		this.points = points;
 	}
 
 	public Long getAvailablePoints() {

@@ -31,7 +31,7 @@ public class BasicDAO<T extends IDBEntity> {
 			DataSource dataSource = DataSourceProvider.getInstance().getDefault();
 			this.factory = EntityManagerFactoryProvider.getInstance().createEntityManagerFactory(dataSource);
 		} catch (NamingException e) {
-			logger.error("Could not get defaoult data source", e);
+			logger.error("Could not get default data source", e);
 			throw new RuntimeException();
 		}
 	}

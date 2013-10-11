@@ -58,9 +58,13 @@ public class Campaign implements IDBEntity {
 	
 	@Expose
 	@Basic
+	private long points;
+	
+	@Expose
+	@Basic
 	private boolean active;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name="OWNER_ID")
 	private User owner;
 	
@@ -159,4 +163,12 @@ public class Campaign implements IDBEntity {
 		}
 	}
 
+	public long getPoints() {
+		return points;
+	}
+
+	public void setPoints(long points) {
+		this.points = points;
+	}
+	
 }

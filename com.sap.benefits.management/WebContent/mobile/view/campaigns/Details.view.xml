@@ -14,6 +14,8 @@
                     <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['startDate'], formatter: '.formatDate' }"/>
                     <Label text="End Date" class="labelHeight"/>
                     <DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['endDate'], formatter: '.formatDate' }"/>
+                    <Label text="Points per User" class="labelHeight"/>
+                    <Input id="pointsCtr" type="Number" placeholder="Enter Points ..." value="{points}"/>
                     <Label text="Active" class="labelHeight"/>
                     <CheckBox id="stateCtr" selected="{active}"/>
                     

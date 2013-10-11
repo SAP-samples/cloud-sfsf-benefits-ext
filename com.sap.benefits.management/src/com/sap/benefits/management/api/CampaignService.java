@@ -49,14 +49,9 @@ public class CampaignService extends BaseService{
 			return Response.status(Status.BAD_REQUEST).entity("Another campaign is set as active").build();
 		}
 		
-		final Campaign newCampaign = new Campaign();
-		newCampaign.setName(campaign.getName());
-		newCampaign.setStartDate(campaign.getStartDate());
-		newCampaign.setStartDate(campaign.getEndDate());
-		newCampaign.setOwner(user);
-		newCampaign.setActive(campaign.isActive());
-		
-		campaignDAO.save(newCampaign);
+		campaign.setOwner(user);
+		campaignDAO.saveNew(campaign);
+		campaignDAO.setPointsToUsers(campaign);
 		
 		return Response.ok().build();
 	}
@@ -77,6 +72,7 @@ public class CampaignService extends BaseService{
 		camp.setStartDate(campaign.getStartDate());
 		camp.setEndDate(campaign.getEndDate());
 		camp.setActive(campaign.isActive());
+		camp.setPoints(campaign.getPoints());
 		
 		campaignDAO.save(camp);
 		return Response.ok().build();
