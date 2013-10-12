@@ -23,6 +23,7 @@ import com.google.gson.annotations.Expose;
 @Table(name = "BENEFIT_TYPE", uniqueConstraints={@UniqueConstraint(columnNames={"name", "BENEFIT_ID"})})
 public class BenefitType implements IDBEntity{
 	
+	@Expose
 	@Id
 	@GeneratedValue
 	@Column(name = "TYPE_ID")

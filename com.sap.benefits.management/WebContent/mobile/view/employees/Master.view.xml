@@ -3,7 +3,7 @@
            controllerName="com.sap.benefits.management.view.employees.Master" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
-    <Page id="EmployeesMasterPage" title="Employees" showNavButton="true" navButtonTap="onNavPressed">
+    <Page id="EmployeesMasterPage" title="Managed employees" showNavButton="true" navButtonTap="onNavPressed">
         <content>
             <List id="employeesList" items="{managedEmployees>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>

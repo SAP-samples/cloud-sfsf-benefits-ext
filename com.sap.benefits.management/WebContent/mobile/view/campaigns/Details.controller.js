@@ -28,9 +28,9 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
             url: '/com.sap.benefits.management/api/campaigns/admin/' + ctx.id,
             type: 'post',
             dataType: 'json',
-            success: function(data) {
-                appController.reloadCampaignModel();
+            success: function(data) {          
                 sap.m.MessageToast.show("Data Saved Successfully.");
+                appController.reloadCampaignModel();
             },
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({name: this.byId("nameCtr").getValue(),

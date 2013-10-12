@@ -3,7 +3,7 @@
            controllerName="com.sap.benefits.management.view.employees.Details" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
-    <Page id="EmployeesDetailsPage" title="Employee Details" showNavButton="false">
+    <Page id="EmployeesDetailsPage" title="{/employee/firstName} {/employee/lastName} benefits order" showNavButton="false">
         <content>
             <List items="{path:'employeeDetailsModel>/current'}" inset="true" headerText="Current Orders">
                 <items>

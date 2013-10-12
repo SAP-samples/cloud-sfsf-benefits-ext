@@ -36,8 +36,8 @@ public class UserService extends BaseService {
 	
 	@GET
 	@Path("/orders/{campain_id}/{user_id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Order> getUserOrders(@PathParam("id") long campaign_id, @PathParam("id") String user_id) {
+	@Produces(MediaType.APPLICATION_JSON) 
+	public Collection<Order> getUserOrders(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
 		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign campaign = campaignDAO.getById(campaign_id);
 		com.sap.benefits.management.persistence.model.User user = (new UserDAO()).getByUserId(user_id);
@@ -56,6 +56,7 @@ public class UserService extends BaseService {
 		Campaign activeCampaign = campaignDAO.getActiveCampaign(currentUser);
 		UserPointsDAO userPontsDAO = new UserPointsDAO();
 		List<User> result = new ArrayList<>();
+		int counter = 0;
 		for (com.sap.benefits.management.persistence.model.User employee: currentUser.getEmployees()) {
 			User newUser = new User(employee);
 			if (activeCampaign != null) {
@@ -65,9 +66,14 @@ public class UserService extends BaseService {
 				userPoints.setAvailablePoints(userPontBackend.getAvailablePoints());
 				userPoints.setCampaignName(activeCampaign.getName());
 				userPoints.setUserId(employee.getUserId());
+				userPoints.setCampaingId(activeCampaign.getId());
 				newUser.setActiveCampaignBalance(userPoints);
 			}			
 			result.add(newUser);
+			counter++;
+			if (counter > 10) {
+				break;
+			}
 		}
 		
 		return result;		

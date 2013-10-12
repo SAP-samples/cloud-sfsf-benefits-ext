@@ -19,6 +19,8 @@ import com.sap.benefits.management.persistence.UserPointsDAO;
 import com.sap.benefits.management.persistence.model.Benefit;
 import com.sap.benefits.management.persistence.model.BenefitType;
 import com.sap.benefits.management.persistence.model.Campaign;
+import com.sap.benefits.management.persistence.model.Order;
+import com.sap.benefits.management.persistence.model.OrderDetails;
 import com.sap.benefits.management.persistence.model.User;
 
 @Path("/test")
@@ -35,6 +37,20 @@ public class TestService extends BaseService{
 		final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
 		final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
 		final UserPointsDAO userPointsDAO = new UserPointsDAO();
+		Order order = new Order();
+		order.setTotal(BigDecimal.valueOf(100));
+		order.setCampaign(campaignDAO.getActiveCampaign(userDAO.getByUserId("nnnn")));
+		order.setUser(userDAO.getByUserId("admin"));
+		
+		final OrderDetails orderDetails = new OrderDetails();
+		orderDetails.setBenefitType(benefitTypeDAO.getById(1152));
+		orderDetails.setLastUpdateTime(new Date(new java.util.Date().getTime()));
+		orderDetails.setOrder(order);
+		orderDetails.setQuantity(Long.valueOf(3));
+		
+		ordersDAO.saveNew(order);
+		/*
+
 		
 		campaignDAO.deleteAll();
 //		userDAO.deleteAll();
@@ -103,7 +119,7 @@ public class TestService extends BaseService{
 //		userPoints.setCampaign(campaign);
 //		
 //		userPointsDAO.saveNew(userPoints);
-		
+		*/
 		return "ok";
 	}
 	

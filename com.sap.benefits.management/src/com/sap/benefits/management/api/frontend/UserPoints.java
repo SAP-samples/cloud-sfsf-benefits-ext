@@ -5,6 +5,9 @@ import com.google.gson.annotations.Expose;
 public class UserPoints {
 	
 	@Expose
+	private long campaingId;
+	
+	@Expose
 	private String campaignName;
 	
 	@Expose
@@ -36,5 +39,15 @@ public class UserPoints {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
+
+	public long getCampaingId() {
+		return campaingId;
+	}
+
+	public void setCampaingId(long campaingId) {
+		this.campaingId = campaingId;
+	}
+	
+	
 
 }
