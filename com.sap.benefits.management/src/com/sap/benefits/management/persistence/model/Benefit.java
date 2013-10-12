@@ -38,6 +38,7 @@ public class Benefit implements IDBEntity{
 	@Basic
 	private String link;
 	
+	@Expose
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "benefit", fetch = FetchType.LAZY, targetEntity = BenefitType.class)
 	private Collection<BenefitType> types;
 

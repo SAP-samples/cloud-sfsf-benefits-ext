@@ -3,30 +3,38 @@ jQuery.sap.require("sap.ui.app.Application");
 
 sap.ui.app.Application.extend("Application", {
     init: function() {
-        var employeesModel = new sap.ui.model.json.JSONModel();
-        employeesModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testData.json", null, false);
 
-        var benefitsModel = new sap.ui.model.json.JSONModel();
-        benefitsModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testDataBenefits.json", null, false);
+        //var benefitsModel = new sap.ui.model.json.JSONModel();
+        //benefitsModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management") + "/model/testDataBenefits.json", null, false);
 
         var campaignModel = new sap.ui.model.json.JSONModel();
 
-        sap.ui.getCore().setModel(employeesModel, "employeesModel");
-        sap.ui.getCore().setModel(benefitsModel, "benefitsModel");
+        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
         sap.ui.getCore().setModel(campaignModel, "campaignModel");
+        
+        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "managedEmployees");        
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignDetailsModel");
 
         this.reloadCampaignModel();
+        this.reloadManagedEmployeesModel();
+        this.reloadBenefitsModel();
     },
+    reloadBenefitsModel: function() {
+        sap.ui.getCore().getModel("benefitsModel").loadData("/com.sap.benefits.management/api/benefits/all", null, false);
+    },    
     reloadCampaignModel: function() {
         sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/campaigns/admin", null, false);
     },
+    reloadManagedEmployeesModel: function() {
+        sap.ui.getCore().getModel("managedEmployees").loadData("/com.sap.benefits.management/api/user/managed", null, false);        
+    },
+    
     employeeItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
-        var bindingCtx = listItem.getBindingContext("employeesModel");
+        var bindingCtx = listItem.getBindingContext("managedEmployees");
 
-        sap.ui.getCore().byId("EmployeesDetails").byId("EmployeesDetailsPage").setTitle(bindingCtx.getObject().id + " Details")
+        sap.ui.getCore().byId("EmployeesDetails").byId("EmployeesDetailsPage").setTitle(bindingCtx.getObject().id + " Details");
         sap.ui.getCore().getModel("employeeDetailsModel")
                 .setData({
             current: bindingCtx.getObject().orders.current,
@@ -76,7 +84,6 @@ sap.ui.app.Application.extend("Application", {
                 }),
                 new sap.m.StandardTile("Benefits", {
                     icon: "sap-icon://competitor",
-                    number: "39",
                     title: "Benefits",
                     press: jQuery.proxy(this._handleTilePressed, this)
                 }),

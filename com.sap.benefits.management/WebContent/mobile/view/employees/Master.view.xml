@@ -5,11 +5,11 @@
            setDisplayBlock="true">
     <Page id="EmployeesMasterPage" title="Employees" showNavButton="true" navButtonTap="onNavPressed">
         <content>
-            <List id="employeesList" items="{employeesModel>/employees}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+            <List id="employeesList" items="{managedEmployees>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
-                    <ObjectListItem title="{employeesModel>firstName} {employeesModel>lastName}" number="{employeesModel>availablePoints}">
+                    <ObjectListItem title="{managedEmployees>firstName} {managedEmployees>lastName}" number="{managedEmployees>activeCampaignBalance/availablePoints}" numberUnit="Available Points">
                         <attributes>
-                            <ObjectAttribute text="{employeesModel>id}"/>                            
+                            <ObjectAttribute text="{managedEmployees>email}"/>  
                         </attributes>
                      </ObjectListItem>                  
                 </items>

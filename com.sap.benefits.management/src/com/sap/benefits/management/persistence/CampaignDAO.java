@@ -2,6 +2,7 @@ package com.sap.benefits.management.persistence;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -50,22 +51,25 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 	}
 
 	public boolean canBeActive(Campaign campaign, User user) {
-		final Collection<Campaign> activeCampaigns = getActiveCampaigns(user);
-		final Iterator<Campaign> iterator = activeCampaigns.iterator();
-		if (!activeCampaigns.isEmpty() && !iterator.next().getId().equals(campaign.getId())) {
+		final Campaign activeCampaign = getActiveCampaign(user);
+		if (activeCampaign != null && !activeCampaign.getId().equals(campaign.getId())) {
 			return false;
+		} else {
+			return true;
 		}
-
-		return true;
 	}
 
-	public Collection<Campaign> getActiveCampaigns(User user) {
+	public Campaign getActiveCampaign(User user) {
 		final EntityManager em = factory.createEntityManager();
 		try {
 			final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_ACTIVE_CAMPAIGNS, Campaign.class);
 			query.setParameter("owner", user);
-
-			return query.getResultList();
+			List<Campaign> result = query.getResultList();
+			if (result.size() == 1) {
+				return result.get(0);
+			} else {
+				return null;
+			}
 		} finally {
 			em.close();
 		}
@@ -81,7 +85,7 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 					points = new UserPoints();
 					points.setCampaign(campaign);
 					points.setUser(user);
-
+					points.setAvailablePoints(campaign.getPoints());
 					userPointsDAO.saveNew(points);
 				}
 			}

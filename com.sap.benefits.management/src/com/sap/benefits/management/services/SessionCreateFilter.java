@@ -48,7 +48,7 @@ public class SessionCreateFilter implements Filter {
 				UserDAO userDAO = getUserDAO();
 				User user = initSingleUserProfile(loggedInUser, userDAO);
 				if (request.isUserInRole("Administrator") && user != null) {
-					initManagedUsers(user, userDAO);
+					//initManagedUsers(user, userDAO);
 				}
 				request.getSession().removeAttribute(SessionListener.INITIAL_FLAG);
 			}
