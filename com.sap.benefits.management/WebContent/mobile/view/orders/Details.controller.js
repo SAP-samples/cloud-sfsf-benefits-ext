@@ -1,6 +1,5 @@
 sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
-	monthNames : [ "January", "February", "March", "April", "May", "June",
-			"July", "August", "September", "October", "November", "December" ],
+	monthNames : [ "January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December" ],
 	onInit : function() {
 		this.byId("addItemCtrl").addEventDelegate({
             onInit : function() {
@@ -51,17 +50,20 @@ sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
 	},
 
 	itemGrouping : function(oContext) {
-		var itemId = oContext.getProperty("itemId");
+		var benefitTypeId = oContext.getProperty("id");
 		return {
-			key : itemId,
-			text : oContext.getProperty("item")
+			key : benefitTypeId,
+			text : benefitTypeId//oContext.getProperty("item")
 		};
 	},
 
 	wholeValue : function(quantity, type) {
-		var typeValue = type.split(" ")[0];
-		var typeCurr = type.split(" ")[1];
-		return "total value: " + quantity * typeValue + " " + typeCurr;
+		if(type && quantity){
+			var typeValue = type.split(" ")[0];
+			var typeCurr = type.split(" ")[1];
+			return "total value: " + quantity * typeValue + " " + typeCurr;	
+		}
+		return "";
 	},
 	
 	addItem : function() {

@@ -37,6 +37,17 @@ public class OrderService extends BaseService{
 		return orderDAO.getOrdersForUser(user, campaign);
 	}
 	
+	@GET
+	@Path("/ordersForUser/{userId}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Collection<Order> getUserAllOrders(@PathParam("userId") String userId) throws IOException {
+		UserDAO userDAO = new UserDAO();
+		final User user = userDAO.getByUserId(userId);
+		
+		OrderDAO orderDAO = new OrderDAO();
+		return orderDAO.getAllOrdersForUser(user);
+	}
+	
 	@POST
 	@Path("/addOrder")
 	@Consumes(MediaType.APPLICATION_JSON)

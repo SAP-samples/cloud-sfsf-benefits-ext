@@ -1,6 +1,7 @@
 package com.sap.benefits.management.persistence.model;
 
 import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_ORDERS_FOR_CAMPAIGN;
+import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_ALL_ORDERS;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -25,7 +26,8 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "ORDERS")
 @NamedQueries({ 
-	@NamedQuery(name = GET_USER_ORDERS_FOR_CAMPAIGN, query = "select o from Order o where o.user = :user and o.campaign = :campaign")
+	@NamedQuery(name = GET_USER_ORDERS_FOR_CAMPAIGN, query = "select o from Order o where o.user = :user and o.campaign = :campaign"),
+	@NamedQuery(name = GET_USER_ALL_ORDERS, query = "select o from Order o where o.user = :user")
 	})
 public class Order implements IDBEntity {
 	

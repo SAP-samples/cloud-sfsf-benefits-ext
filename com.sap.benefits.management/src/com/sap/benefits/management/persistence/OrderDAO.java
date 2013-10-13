@@ -37,6 +37,24 @@ public class OrderDAO extends BasicDAO<Order> {
 		}
 	}
 	
+	public Collection<Order> getAllOrdersForUser(User user) {
+		final List<Order> result = new ArrayList<>();
+		final EntityManager em = factory.createEntityManager();
+		try {
+			final TypedQuery<Order> query = em.createNamedQuery(DBQueries.GET_USER_ALL_ORDERS, Order.class);
+			query.setParameter("user", user);
+			for (Order order : query.getResultList()) {
+				final Order managedOrder = em.find(Order.class, order.getId());
+				em.refresh(managedOrder);
+				result.add(managedOrder);
+			}
+
+			return result;
+		} finally {
+			em.close();
+		}
+	}
+	
 	public void saveOrder(User user, Order order){
 		if(order != null){
 			order.setUser(user);

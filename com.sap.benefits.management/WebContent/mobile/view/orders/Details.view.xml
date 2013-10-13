@@ -7,20 +7,20 @@
         <content>        
         	<VBox>
         		<items>
-        			<ObjectHeader title="Available points" number="{ordersModel>/employee/availablePoints}">        			
+        			<ObjectHeader title="Available points" number="{orderDetailsModel>/employee/availablePoints}">        			
         				<attributes>
-        					<ObjectAttribute text="Total points {ordersModel>/employee/totalPoints}"></ObjectAttribute>
-        					<ObjectAttribute text="{parts:[{path:'ordersModel>/employee/availablePoints'}, {path:'ordersModel>/employee/totalPoints'}], formatter:'.usedPoints'}"></ObjectAttribute>
+        					<ObjectAttribute text="Total points {orderDetailsModel>/employee/totalPoints}"></ObjectAttribute>
+        					<ObjectAttribute text="{parts:[{path:'orderDetailsModel>/employee/availablePoints'}, {path:'orderDetailsModel>/employee/totalPoints'}], formatter:'.usedPoints'}"></ObjectAttribute>
         				</attributes>	
         			</ObjectHeader>
         		</items>
         	</VBox>
         
-	        <List items="{path:'ordersModel>/employee/orders', sorter: [{path: 'ordersModel>itemId', group: '.itemGrouping'}]}" inset="true" headerText="Orders for Campaign" footerText="Whole value">
+	        <List items="{path:'orderDetailsModel>/employee/orders', sorter: [{path: 'orderDetailsModel>itemId', group: '.itemGrouping'}]}" inset="true" headerText="Orders for Campaign" footerText="Whole value">
 	        	<items>
-	        		<ObjectListItem icon="sap-icon://{ordersModel>icon}" title="{ordersModel>type}" number="{ordersModel>quantity}" numberUnit="quantity">	        		
+	        		<ObjectListItem icon="sap-icon://{ordersModel>icon}" title="{orderDetailsModel>type}" number="{orderDetailsModel>quantity}" numberUnit="quantity">	        		
 	        			<firstStatus>
-	                           <ObjectStatus text="{parts:[{path:'ordersModel>quantity'}, {path:'ordersModel>type'}], formatter:'.wholeValue'}"/>	                                   
+	                           <ObjectStatus text="{parts:[{path:'orderDetailsModel>quantity'}, {path:'orderDetailsModel>type'}], formatter:'.wholeValue'}"/>	                                   
 	                    </firstStatus>
 	        		</ObjectListItem>
 	        	</items>        	
