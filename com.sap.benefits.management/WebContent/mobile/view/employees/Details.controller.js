@@ -5,18 +5,29 @@ sap.ui.controller("com.sap.benefits.management.view.employees.Details", {
     },
     onAfterRendering: function() {
     },
-    formatTypes: function(types) {
-        var text = "";
-        for (type in types) {
-            text += types[type].quantity + 'x' + types[type].name + ", ";
+    formatBenefitItemsSum: function(benefitItems) {
+        var result = 0;
+        for (benefitItem in benefitItems) {
+            result += benefitItems[benefitItem].quantity * benefitItems[benefitItem].itemValue;
         }
-        return text.slice(0, -2);
+        return result;
     },
-    groupBenefits: function(oContext) {
-        var date = new Date(oContext.getProperty("date"));
-        return {
-            key: date.getMonth() + 1,
-            text: this.monthNames[date.getMonth()]
-        }
+    formatAvailablePoints: function(campaignPoints,usedPoints) {
+        var result = campaignPoints - usedPoints;     
+        return result.toString(10) + " Points";
+    },
+//    groupBenefits: function(oContext) {
+//        var date = new Date(oContext.getProperty("date"));
+//        return {
+//            key: date.getMonth() + 1,
+//            text: this.monthNames[date.getMonth()]
+//        };
+//    },
+    linkPressed : function(evt){
+        var sourceControl = evt.getSource();
+        var model = sourceControl.getModel();
+        var contextPath = sourceControl.getBindingContext().sPath+"/benefitDetails/infoLink";
+        var link = model.getProperty(contextPath);
+        sap.m.URLHelper.redirect(link, true);
     }
 });

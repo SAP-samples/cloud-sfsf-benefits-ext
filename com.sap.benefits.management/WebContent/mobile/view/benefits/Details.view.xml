@@ -10,7 +10,7 @@
 						press="linkPressed" />
 				</attributes>
 			</ObjectHeader>
-			<List items="{/types}">
+			<List items="{/types}" inset="true" class="benefitList">
 				<items>
 					<StandardListItem title="{name}" description="price:"
 						info="{value} Points" infoState="Success">

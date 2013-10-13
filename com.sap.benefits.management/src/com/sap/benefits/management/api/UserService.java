@@ -11,6 +11,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.sap.benefits.management.api.frontend.IBenefitsOrder;
+import com.sap.benefits.management.api.frontend.ICampaign;
 import com.sap.benefits.management.api.frontend.User;
 import com.sap.benefits.management.api.frontend.UserPoints;
 import com.sap.benefits.management.connectivity.CoreODataConnector;
@@ -32,20 +34,25 @@ public class UserService extends BaseService {
 	public SFUser getUserProfile() throws IOException {
 		return CoreODataConnector.getInstance().getUserProfile("nnnn");
 	}
-	
-	
+
 	@GET
 	@Path("/orders/{campain_id}/{user_id}")
-	@Produces(MediaType.APPLICATION_JSON) 
-	public Collection<Order> getUserOrders(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
+	@Produces(MediaType.APPLICATION_JSON)
+	public IBenefitsOrder getUserBenefitsOrder(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
+		IBenefitsOrder result = new IBenefitsOrder();
 		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign campaign = campaignDAO.getById(campaign_id);
 		com.sap.benefits.management.persistence.model.User user = (new UserDAO()).getByUserId(user_id);
 		Collection<Order> orders = (new OrderDAO()).getOrdersForUser(user, campaign);
-		return orders;
+		if (orders.size() > 0) {
+			result.init(orders.iterator().next());
+		} else {
+			result.campaign = new ICampaign();
+			result.campaign.init(campaign);
+		}
+		return result;
 	}
-	
-	
+
 	@GET
 	@Path("/managed")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -57,7 +64,7 @@ public class UserService extends BaseService {
 		UserPointsDAO userPontsDAO = new UserPointsDAO();
 		List<User> result = new ArrayList<>();
 		int counter = 0;
-		for (com.sap.benefits.management.persistence.model.User employee: currentUser.getEmployees()) {
+		for (com.sap.benefits.management.persistence.model.User employee : currentUser.getEmployees()) {
 			User newUser = new User(employee);
 			if (activeCampaign != null) {
 				UserPointsPrimaryKey primKey = new UserPointsPrimaryKey(employee.getId(), activeCampaign.getId());
@@ -68,26 +75,24 @@ public class UserService extends BaseService {
 				userPoints.setUserId(employee.getUserId());
 				userPoints.setCampaingId(activeCampaign.getId());
 				newUser.setActiveCampaignBalance(userPoints);
-			}			
+			}
 			result.add(newUser);
 			counter++;
-			if (counter > 10) {
+			if (counter > 5) {
 				break;
 			}
 		}
-		
-		return result;		
+
+		return result;
 	}
-	
-	
-	
+
 	@GET
 	@Path("/userCampaigns")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Campaign> getUserCampaigns() throws IOException {
 		UserDAO userDAO = new UserDAO();
 		final com.sap.benefits.management.persistence.model.User user = userDAO.getByUserId(getLoggedInUserId());
-		return user.getHrManager().getCampaigns();		
+		return user.getHrManager().getCampaigns();
 	}
 
 }

@@ -6,6 +6,10 @@
     line-height: 3rem;
 }
 
+.benefitList {
+	padding-top: 0rem;
+}
+
 .visible{
     display: none;
 }

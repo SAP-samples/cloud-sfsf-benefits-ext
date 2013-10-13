@@ -4,12 +4,9 @@ jQuery.sap.require("sap.ui.app.Application");
 sap.ui.app.Application.extend("Application", {
     init : function() {
 
-        // var benefitsModel = new sap.ui.model.json.JSONModel();
-        // benefitsModel.loadData(jQuery.sap.getModulePath("com.sap.benefits.management")
-        // + "/model/testDataBenefits.json", null, false);
-
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignModel");
+        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "activeCampaignModel");
 
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "managedEmployees");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
@@ -22,11 +19,24 @@ sap.ui.app.Application.extend("Application", {
     reloadBenefitsModel : function() {
         sap.ui.getCore().getModel("benefitsModel").loadData("/com.sap.benefits.management/api/benefits/all", null, false);
     },
+    reloadActiveCampaign : function() {
+        var campaigns = sap.ui.getCore().getModel("campaignModel").getData();
+        for ( var i = 0; i < campaigns.length; i++) {
+            if (campaigns[i].active == true) {
+                sap.ui.getCore().getModel("activeCampaignModel").setData(campaigns[i]);
+            }
+        }
+    },
     reloadCampaignModel : function() {
         sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/campaigns/admin", null, false);
+        this.reloadActiveCampaign();
     },
     reloadManagedEmployeesModel : function() {
         sap.ui.getCore().getModel("managedEmployees").loadData("/com.sap.benefits.management/api/user/managed", null, false);
+        var employeesTile = sap.ui.getCore().byId("Employees");
+        if (employeesTile !== undefined) {
+            employeesTile.setNumber(sap.ui.getCore().getModel("managedEmployees").getData().length);
+        }
     },
 
     employeeItemSelected : function(evt) {
@@ -42,7 +52,7 @@ sap.ui.app.Application.extend("Application", {
                 url : "../api/user/orders/" + campaignId + "/" + userId,
                 type : 'GET',
                 success : function(data) {
-                    model.setProperty("/currentOrders",data);
+                    model.setProperty("/currentOrder", data);
                 }
             });
         }
@@ -85,11 +95,15 @@ sap.ui.app.Application.extend("Application", {
     },
     main : function() {
         var root = this.getRoot();
-
+        var managedEmployees = 0;
+        var managedEmployeesModel = sap.ui.getCore().getModel("managedEmployees");
+        if (managedEmployeesModel !== undefined) {
+            managedEmployees = managedEmployeesModel.getData().length;
+        }
         var tileContainer = new sap.m.TileContainer("HomePage", {
             tiles : [ new sap.m.StandardTile("Employees", {
                 icon : "sap-icon://employee",
-                number : "39",
+                number : managedEmployees,
                 title : "Employees",
                 press : jQuery.proxy(this._handleTilePressed, this)
             }), new sap.m.StandardTile("Benefits", {

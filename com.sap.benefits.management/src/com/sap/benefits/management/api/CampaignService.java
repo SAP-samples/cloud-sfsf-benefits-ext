@@ -29,6 +29,14 @@ public class CampaignService extends BaseService{
 	private UserDAO userDAO = new UserDAO();
 
 	@GET
+	@Path("/active")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Campaign getActiveCampaignForCurrentUser(){
+		final User currentUser = userDAO.getByUserId(getLoggedInUserId());
+		return campaignDAO.getActiveCampaign(currentUser);
+	}	
+	
+	@GET
 	@Path("/admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Campaign> getCampaigns(){
