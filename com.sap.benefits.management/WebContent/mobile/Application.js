@@ -29,7 +29,10 @@ sap.ui.app.Application.extend("Application", {
     },
     reloadCampaignModel : function() {
         sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/campaigns/admin", null, false);
+        // Set active campaign
         this.reloadActiveCampaign();
+        // Reload available points of managed employees
+        this.reloadManagedEmployeesModel(); 
     },
     reloadManagedEmployeesModel : function() {
         sap.ui.getCore().getModel("managedEmployees").loadData("/com.sap.benefits.management/api/user/managed", null, false);
@@ -45,20 +48,20 @@ sap.ui.app.Application.extend("Application", {
         var model = new sap.ui.model.json.JSONModel({
             employee : bindingCtx.getObject()
         });
-        var campaignId = model.getProperty("/employee/activeCampaignBalance/campaingId");
+        var campaignId = sap.ui.getCore().getModel("activeCampaignModel").getProperty("/id"); 
         var userId = model.getProperty("/employee/userId");
         if (campaignId) {
             jQuery.ajax({
+                async: false,
                 url : "../api/user/orders/" + campaignId + "/" + userId,
                 type : 'GET',
                 success : function(data) {
-                    model.setProperty("/currentOrder", data);
+                    model.setProperty("/currentOrder", data);                    
                 }
             });
         }
 
         sap.ui.getCore().byId("EmployeesDetails").setModel(model);
-
         this._toDetailsPage("EmployeesDetails");
     },
     campaignItemSelected : function(evt) {
@@ -113,16 +116,8 @@ sap.ui.app.Application.extend("Application", {
             }), new sap.m.StandardTile("Campaigns", {
                 icon : "sap-icon://marketing-campaign",
                 title : "Campaigns",
-                info : "7 Days Left",
-                infoState : "Success",
                 press : jQuery.proxy(this._handleTilePressed, this)
-            }),
-            // new sap.m.StandardTile("Reports", {
-            // icon: "sap-icon://travel-expense-report",
-            // title: "Reports",
-            // press: jQuery.proxy(this._handleTilePressed, this)
-            // })
-            ]
+            })]
         });
 
         var emplMasterView = sap.ui.xmlview("EmployeesMaster", "com.sap.benefits.management.view.employees.Master");

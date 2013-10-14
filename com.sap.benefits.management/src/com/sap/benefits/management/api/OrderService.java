@@ -24,64 +24,67 @@ import com.sap.benefits.management.persistence.model.OrderDetails;
 import com.sap.benefits.management.persistence.model.User;
 
 @Path("/orders")
-public class OrderService extends BaseService{
-	
+public class OrderService extends BaseService {
+
 	@GET
 	@Path("/ordersForUser/{campName}/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Order> getUserOrders(@PathParam("campName") String campName, @PathParam("userId") String userId) throws IOException {
 		UserDAO userDAO = new UserDAO();
 		final User user = userDAO.getByUserId(userId);
+<<<<<<< Upstream, based on origin/master
 		
+=======
+
+>>>>>>> 23c04a1 Fix for hr manager view , when new campaign is created.
 		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign campaign = campaignDAO.getByName(campName, user.getHrManager());
-		
+
 		OrderDAO orderDAO = new OrderDAO();
 		return orderDAO.getOrdersForUser(user, campaign);
 	}
-	
+
 	@GET
 	@Path("/ordersForUser/{userId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Order> getUserAllOrders(@PathParam("userId") String userId) throws IOException {
 		UserDAO userDAO = new UserDAO();
 		final User user = userDAO.getByUserId(userId);
-		
+
 		OrderDAO orderDAO = new OrderDAO();
 		return orderDAO.getAllOrdersForUser(user);
 	}
-	
+
 	@POST
 	@Path("/add/{campaignId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addOrder(@PathParam("campaignId") long campaignId, OrderBean request){
+	public Response addOrder(@PathParam("campaignId") long campaignId, OrderBean request) {
 		final User user = getLoggedInUser();
 		final Campaign campaign = new CampaignDAO().getById(campaignId);
-		
-		if(campaign == null){
+
+		if (campaign == null) {
 			return createBadRequestResponse("Incorrect campaign id");
 		}
-		
+
 		final OrderDAO orderDAO = new OrderDAO();
 		final Order userOrder = getOrCreateUserOrder(user, campaign, orderDAO);
 		final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
 		final BenefitType benefitType = benefitTypeDAO.getById(request.benefitTypeId);
-		if(benefitType == null){
+		if (benefitType == null) {
 			return createBadRequestResponse("Incorrect benefit type id");
 		}
-		
 		final OrderDetails orderDetails = createOrderDetails(request, benefitType);
-		
+
 		userOrder.addOrderDetails(orderDetails);
 		orderDAO.save(userOrder);
-		
-		return createOkResponse();	
+
+		return createOkResponse();
 	}
 
 	private Order getOrCreateUserOrder(final User user, final Campaign campaign, final OrderDAO orderDAO) {
 		Order userOrder = null;
 		final Collection<Order> ordersOfUser = orderDAO.getOrdersForUser(user, campaign);
-		if(ordersOfUser.isEmpty()){
+		if (ordersOfUser.isEmpty()) {
 			userOrder = orderDAO.createOrderForUser(user, campaign);
 		} else {
 			userOrder = ordersOfUser.iterator().next();
@@ -95,7 +98,5 @@ public class OrderService extends BaseService{
 		orderDetails.setQuantity(request.quantity);
 		return orderDetails;
 	}
-	
-	
 
 }

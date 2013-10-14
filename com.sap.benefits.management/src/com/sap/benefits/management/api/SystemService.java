@@ -27,8 +27,7 @@ public class SystemService extends BaseService{
 	@POST
 	@Path("reset-db")
 	public Response resetDatabase() {
-		cleanDB();
-		
+		cleanDB();		
 		final BenefitsDataImporter benefitImporter = new BenefitsDataImporter();
 		try {
 			benefitImporter.importData("/benefits.csv");
