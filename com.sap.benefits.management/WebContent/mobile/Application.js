@@ -47,7 +47,7 @@ sap.ui.app.Application.extend("Application", {
         });
         var campaignId = model.getProperty("/employee/activeCampaignBalance/campaingId");
         var userId = model.getProperty("/employee/userId");
-        if (campaignId !== undefined) {
+        if (campaignId) {
             jQuery.ajax({
                 url : "../api/user/orders/" + campaignId + "/" + userId,
                 type : 'GET',

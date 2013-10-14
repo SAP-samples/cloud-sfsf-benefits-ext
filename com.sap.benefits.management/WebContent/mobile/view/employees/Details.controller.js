@@ -16,13 +16,6 @@ sap.ui.controller("com.sap.benefits.management.view.employees.Details", {
         var result = campaignPoints - usedPoints;     
         return result.toString(10) + " Points";
     },
-//    groupBenefits: function(oContext) {
-//        var date = new Date(oContext.getProperty("date"));
-//        return {
-//            key: date.getMonth() + 1,
-//            text: this.monthNames[date.getMonth()]
-//        };
-//    },
     linkPressed : function(evt){
         var sourceControl = evt.getSource();
         var model = sourceControl.getModel();

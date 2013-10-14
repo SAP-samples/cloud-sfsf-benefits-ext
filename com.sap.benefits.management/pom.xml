@@ -11,9 +11,9 @@
 		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-		<sap.cloud.sdk.location>C:\develop\neo-sdk-javaweb-1.37.16.2</sap.cloud.sdk.location>
-		<sap.cloud.sdk.version>1.37.16.2</sap.cloud.sdk.version>
+		
+		<sap.cloud.sdk.location>C:/IO/CLOUD/neo-sdk-javaee6-wp-2.16.10.2</sap.cloud.sdk.location>
+		<sap.cloud.sdk.version>2.16.10.2</sap.cloud.sdk.version>
 
 		<apache.cxf.version>2.7.3</apache.cxf.version>
 		<ui5.version>1.12.7</ui5.version>

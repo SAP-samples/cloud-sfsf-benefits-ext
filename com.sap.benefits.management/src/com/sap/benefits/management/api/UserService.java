@@ -46,6 +46,14 @@ public class UserService extends BaseService {
 			return BenefitsOrderBean.getEmpty(campaign);
 		}
 	}
+	
+	@GET
+	@Path("/orders/{campain_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public BenefitsOrderBean getUserBenefitsOrderForLoggedUser(@PathParam("campain_id") long campaign_id) {
+		
+		return getUserBenefitsOrder(campaign_id, getLoggedInUserId());
+	}
 
 	@GET
 	@Path("/managed")

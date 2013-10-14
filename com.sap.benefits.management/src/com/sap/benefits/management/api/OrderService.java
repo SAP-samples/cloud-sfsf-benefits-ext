@@ -33,7 +33,6 @@ public class OrderService extends BaseService{
 		UserDAO userDAO = new UserDAO();
 		final User user = userDAO.getByUserId(userId);
 		
-		
 		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign campaign = campaignDAO.getByName(campName, user.getHrManager());
 		
