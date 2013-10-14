@@ -1,6 +1,5 @@
 sap.ui.controller("com.sap.benefits.management.view.orders.Master", {
     onInit: function() {
-
     },
     onAfterRendering: function() {
         var list = this.byId("campaignsList");

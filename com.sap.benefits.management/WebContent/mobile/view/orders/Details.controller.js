@@ -3,9 +3,9 @@ sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
 	onInit : function() {
 		this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
-            	if(evt.data){
-            		this.setBindingContext(evt.data.isActive);                		
-//            		this.byId("addButton").setEnabled(evt.data.isActive);            		
+            	this.setBindingContext(evt.data.context);                		
+            	if(evt.data.context){
+            		this.byId("addButton").setEnabled(evt.data.context.getObject().active);            		
             	}
             }
         }, this.getView());
@@ -21,7 +21,7 @@ sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
 		
 		dialog.setLeftButton(new sap.m.Button({
 			text : "Ok",
-			press : function() {				
+			press : function() {			
 				jQuery.ajax({
 		            url: '/com.sap.benefits.management/api/orders/add/' + appController.getCampaignId(),
 		            type: 'post',
@@ -33,7 +33,7 @@ sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
 		            },
 		            contentType: "application/json; charset=utf-8",
 		            data: JSON.stringify({campaignId: appController.getCampaignId(),
-		            					  benefitTypeId : that.byId("quantityTypeSelect").getSelectedKey(),
+		            					  benefitTypeId : that.byId("quantityTypeSelect").getSelectedItem().getKey(),
 		            					  quantity : that.byId("quantityTypeTxt").getValue()
 		            }),
 		            error: function(xhr, error) {
@@ -49,7 +49,7 @@ sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
 				dialog.close();
 				sap.m.MessageToast.show("Item was canceled");
 			}
-		}));	
+		}));
 		
 		dialog.open();
 	},
