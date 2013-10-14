@@ -3,7 +3,7 @@ package com.sap.benefits.management.api.frontend;
 import com.google.gson.annotations.Expose;
 import com.sap.benefits.management.persistence.model.Campaign;
 
-public class ICampaign {
+public class CampaignBean {
 	
 	@Expose
 	public long id;

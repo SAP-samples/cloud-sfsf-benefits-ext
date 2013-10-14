@@ -1,9 +1,12 @@
 package com.sap.benefits.management.api.frontend;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.sap.benefits.management.persistence.model.Benefit;
 
-public class IBenefitDetails {
+public class BenefitDetailsBean {
 	
 	@Expose
 	public long id;
@@ -16,6 +19,9 @@ public class IBenefitDetails {
 	
 	@Expose
 	public String infoLink;
+	
+	@Expose
+	public List<BenefitTypeBean> benefitTypes = new ArrayList<>();
 
 	public void init(Benefit benefit) {
 		this.id = benefit.getId();

@@ -12,7 +12,7 @@ import com.sap.benefits.management.persistence.model.Campaign;
 import com.sap.benefits.management.persistence.model.Order;
 import com.sap.benefits.management.persistence.model.OrderDetails;
 
-public class IBenefitsOrder {
+public class BenefitsOrderBean {
 
 	@Expose
 	public long id;
@@ -21,22 +21,22 @@ public class IBenefitsOrder {
 	public BigDecimal orderPrice = BigDecimal.ZERO;
 	
 	@Expose
-	public ICampaign campaign;
+	public CampaignBean campaign;
 	
 	@Expose
-	List<IBenefitsOrderItem> orderItems = new ArrayList<>();
+	List<BenefitsOrderItemBean> orderItems = new ArrayList<>();
 
 	public void init(Order order) {
 		this.id = order.getId();
 		this.orderPrice = order.getTotal();
-		this.campaign = new ICampaign();
+		this.campaign = new CampaignBean();
 		this.campaign.init(order.getCampaign());
-		final Map<Long,IBenefitsOrderItem> benefitsMap = new HashMap<Long, IBenefitsOrderItem>();
+		final Map<Long,BenefitsOrderItemBean> benefitsMap = new HashMap<Long, BenefitsOrderItemBean>();
 		for (OrderDetails orderItem: order.getOrderDetails()) {
 			Benefit benefit = orderItem.getBenefitType().getBenefit();
-			IBenefitsOrderItem benefitOrderItem = benefitsMap.get(benefit.getId());
+			BenefitsOrderItemBean benefitOrderItem = benefitsMap.get(benefit.getId());
 			if (benefitOrderItem == null) {
-				benefitOrderItem = new IBenefitsOrderItem();
+				benefitOrderItem = new BenefitsOrderItemBean();
 				benefitOrderItem.initBenefitDetails(orderItem.getBenefitType().getBenefit());
 				benefitsMap.put(benefit.getId(), benefitOrderItem);
 			}

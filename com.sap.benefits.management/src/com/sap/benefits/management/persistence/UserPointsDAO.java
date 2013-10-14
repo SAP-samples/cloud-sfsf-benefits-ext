@@ -15,9 +15,6 @@ public class UserPointsDAO extends BasicDAO<UserPoints> {
 		final EntityManager em = factory.createEntityManager();
 		try {
 			UserPoints points = em.find(UserPoints.class, key);
-			if (points != null) {
-				em.refresh(points);
-			}
 			return points;
 		} finally {
 			em.close();

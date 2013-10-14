@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import com.google.gson.annotations.Expose;
 import com.sap.benefits.management.persistence.model.OrderDetails;
 
-public class IBenefitItem {
+public class BenefitItemBean {
 	
 	@Expose
 	public String name;

@@ -11,10 +11,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import com.sap.benefits.management.api.frontend.IBenefitsOrder;
-import com.sap.benefits.management.api.frontend.ICampaign;
-import com.sap.benefits.management.api.frontend.User;
-import com.sap.benefits.management.api.frontend.UserPoints;
+import com.sap.benefits.management.api.frontend.BenefitsOrderBean;
+import com.sap.benefits.management.api.frontend.CampaignBean;
+import com.sap.benefits.management.api.frontend.UserBean;
+import com.sap.benefits.management.api.frontend.UserPointsBean;
 import com.sap.benefits.management.connectivity.CoreODataConnector;
 import com.sap.benefits.management.connectivity.helper.SFUser;
 import com.sap.benefits.management.persistence.CampaignDAO;
@@ -38,8 +38,8 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/orders/{campain_id}/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public IBenefitsOrder getUserBenefitsOrder(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
-		IBenefitsOrder result = new IBenefitsOrder();
+	public BenefitsOrderBean getUserBenefitsOrder(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
+		BenefitsOrderBean result = new BenefitsOrderBean();
 		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign campaign = campaignDAO.getById(campaign_id);
 		com.sap.benefits.management.persistence.model.User user = (new UserDAO()).getByUserId(user_id);
@@ -47,7 +47,7 @@ public class UserService extends BaseService {
 		if (orders.size() > 0) {
 			result.init(orders.iterator().next());
 		} else {
-			result.campaign = new ICampaign();
+			result.campaign = new CampaignBean();
 			result.campaign.init(campaign);
 		}
 		return result;
@@ -56,25 +56,21 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/managed")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<User> getManagedUsers() throws IOException {
+	public List<UserBean> getManagedUsers() throws IOException {
 		UserDAO userDAO = new UserDAO();
 		com.sap.benefits.management.persistence.model.User currentUser = userDAO.getByUserId(getLoggedInUserId());
 		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign activeCampaign = campaignDAO.getActiveCampaign(currentUser);
 		UserPointsDAO userPontsDAO = new UserPointsDAO();
-		List<User> result = new ArrayList<>();
+		List<UserBean> result = new ArrayList<>();
 		for (com.sap.benefits.management.persistence.model.User employee : currentUser.getEmployees()) {
-			User newUser = new User(employee);
+			UserBean newUser = new UserBean();
+			newUser.init(employee);
 			if (activeCampaign != null) {
 				UserPointsPrimaryKey primKey = new UserPointsPrimaryKey(employee.getId(), activeCampaign.getId());
-				com.sap.benefits.management.persistence.model.UserPoints userPontBackend = userPontsDAO.getByPrimaryKey(primKey);
-				if (userPontBackend != null) {
-					UserPoints userPoints = new UserPoints();
-					userPoints.setAvailablePoints(userPontBackend.getAvailablePoints());
-					userPoints.setCampaignName(activeCampaign.getName());
-					userPoints.setUserId(employee.getUserId());
-					userPoints.setCampaingId(activeCampaign.getId());
-					newUser.setActiveCampaignBalance(userPoints);
+				com.sap.benefits.management.persistence.model.UserPoints userPointBackend = userPontsDAO.getByPrimaryKey(primKey);
+				if (userPointBackend != null) {					
+					newUser.setActiveCampaignBalance(userPointBackend);
 				}				
 			}
 			result.add(newUser);

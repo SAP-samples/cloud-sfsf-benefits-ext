@@ -7,21 +7,21 @@ import com.google.gson.annotations.Expose;
 import com.sap.benefits.management.persistence.model.Benefit;
 import com.sap.benefits.management.persistence.model.OrderDetails;
 
-public class IBenefitsOrderItem {
+public class BenefitsOrderItemBean {
 	
 	@Expose
-	public IBenefitDetails benefitDetails;
+	public BenefitDetailsBean benefitDetails;
 	
 	@Expose
-	public List<IBenefitItem> benefitItems = new ArrayList<>();
+	public List<BenefitItemBean> benefitItems = new ArrayList<>();
 
 	public void initBenefitDetails(Benefit benefit) {
-		this.benefitDetails = new IBenefitDetails();
+		this.benefitDetails = new BenefitDetailsBean();
 		this.benefitDetails.init(benefit);	
 	}
 
 	public void addBenefitItem(OrderDetails orderItem) {
-		IBenefitItem item = new IBenefitItem();
+		BenefitItemBean item = new BenefitItemBean();
 		item.init(orderItem);
 		this.benefitItems.add(item);
 	}
