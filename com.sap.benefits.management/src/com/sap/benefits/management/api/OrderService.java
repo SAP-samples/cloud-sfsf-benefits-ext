@@ -32,11 +32,6 @@ public class OrderService extends BaseService {
 	public Collection<Order> getUserOrders(@PathParam("campName") String campName, @PathParam("userId") String userId) throws IOException {
 		UserDAO userDAO = new UserDAO();
 		final User user = userDAO.getByUserId(userId);
-<<<<<<< Upstream, based on origin/master
-		
-=======
-
->>>>>>> 23c04a1 Fix for hr manager view , when new campaign is created.
 		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign campaign = campaignDAO.getByName(campName, user.getHrManager());
 
