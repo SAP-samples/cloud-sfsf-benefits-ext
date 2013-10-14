@@ -17,3 +17,7 @@
 .labelHeight{
     line-height: 3rem;
 }
+
+.bold {
+    font-weight: bold;
+}

@@ -59,7 +59,7 @@ public class OrderDetails implements IDBEntity {
 			benefitType.addOrder(this);
 		}
 	}
-
+	
 	public Order getOrder() {
 		return order;
 	}

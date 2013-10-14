@@ -67,7 +67,7 @@ sap.ui.app.Application.extend("Application", {
     campaignItemSelected : function(evt) {
         var listItem = evt.getParameters().listItem;
         var bindingCtx = listItem.getBindingContext("campaignModel");
-        sap.ui.getCore().byId("CampaignDetails").byId("inputForm").setModel(bindingCtx.getModel());
+        sap.ui.getCore().byId("CampaignDetails").setModel(bindingCtx.getModel());
         this._toDetailsPage("DefaultDetails");
         this._toDetailsPage("CampaignDetails", {
             context : bindingCtx

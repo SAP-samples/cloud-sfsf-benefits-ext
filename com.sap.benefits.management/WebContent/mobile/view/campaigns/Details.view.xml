@@ -8,27 +8,40 @@
             <form:SimpleForm id="inputForm" minWidth="1024" maxContainerCols="2" editable="false">
                 <form:content>
                     <common:Title text="Campaign Information"/>
-                    <Label text="Name" class="labelHeight"/>
-                    <Input id="nameCtr" type="Text" placeholder="Enter Name ..." value="{name}"/>
-                    <Label text="Start Date" class="labelHeight"/>
-                    <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['startDate'], formatter: '.formatDate' }"/>
-                    <Label text="End Date" class="labelHeight"/>
-                    <DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..." value="{parts:['endDate'], formatter: '.formatDate' }"/>
-                    <Label text="Points per User" class="labelHeight"/>
-                    <Input id="pointsCtr" type="Number" placeholder="Enter Points ..." value="{points}"/>
-                    <Label text="Active" class="labelHeight"/>
-                    <CheckBox id="stateCtr" selected="{active}"/>
-                    
+                    <Label text="Name:" class="labelHeight"/>
+                    <Text class="labelHeight" text="{name}"/>
+                    <Label text="Start Date:" class="labelHeight"/>
+                    <Text id="startDateTextCtr" text="{path:'startDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'yyyy-MM-dd\'T\'HH:mm:ss\'Z\''}}}" class="labelHeight"/>
+                    <Label text="End Date:" class="labelHeight"/>
+                    <Text id="endDateTextCtr" text="{path:'endDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'yyyy-MM-dd\'T\'HH:mm:ss\'Z\''}}}" class="labelHeight"/>
+                    <Label text="Points per User:" class="labelHeight"/>
+                    <Text id="pointsCtr" text="{points}" class="labelHeight" />
+                    <Label text="State:" class="labelHeight"/>
+                    <ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:['active'], formatter: '.setStateText' }" class="labelHeight"/>
                 </form:content>
             </form:SimpleForm>
         </content> 
         <footer>
             <Bar>
                 <contentRight>
-                    <Button text="Save" press="saveButtonPressed"/>
+                    <Button id="startStopButton" text="{parts:['active'], formatter: '.setStartStopButtonText' }" press="startStopButtonPressed"/>
+                    <Button id="editButton" text="Edit" press="editButtonPressed"/>
                 </contentRight>
             </Bar>
         </footer>
     </Page>
+    
+    <Dialog id="editCampaignDialog" title="Edit Campaign">
+        <content>
+            <VBox>
+                <items>
+                    <Label text="Start Date:" class="labelHeight"/>
+                    <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..."/>
+                    <Label text="End Date:" class="labelHeight"/>
+                    <DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..."/>
+                </items>
+            </VBox>
+        </content>
+    </Dialog>
     
 </core:View>
