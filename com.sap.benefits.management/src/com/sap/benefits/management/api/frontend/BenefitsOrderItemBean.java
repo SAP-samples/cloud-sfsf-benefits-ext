@@ -16,14 +16,11 @@ public class BenefitsOrderItemBean {
 	public List<BenefitItemBean> benefitItems = new ArrayList<>();
 
 	public void initBenefitDetails(Benefit benefit) {
-		this.benefitDetails = new BenefitDetailsBean();
-		this.benefitDetails.init(benefit);	
+		this.benefitDetails = BenefitDetailsBean.get(benefit);
 	}
 
 	public void addBenefitItem(OrderDetails orderItem) {
-		BenefitItemBean item = new BenefitItemBean();
-		item.init(orderItem);
-		this.benefitItems.add(item);
+		this.benefitItems.add(BenefitItemBean.get(orderItem));
 	}
 
 }

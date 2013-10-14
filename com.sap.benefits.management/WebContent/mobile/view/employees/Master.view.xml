@@ -7,7 +7,7 @@
         <content>
             <List id="employeesList" items="{managedEmployees>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
-                    <ObjectListItem title="{managedEmployees>firstName} {managedEmployees>lastName}" number="{managedEmployees>activeCampaignBalance/availablePoints}" numberUnit="Available Points">
+                    <ObjectListItem title="{managedEmployees>firstName} {managedEmployees>lastName}" number="{managedEmployees>activeCampaignBalance/availablePoints}" numberUnit="Unused Points">
                         <attributes>
                             <ObjectAttribute text="{managedEmployees>email}"/>  
                         </attributes>

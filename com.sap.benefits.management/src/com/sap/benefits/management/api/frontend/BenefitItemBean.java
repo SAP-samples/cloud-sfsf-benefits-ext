@@ -22,4 +22,10 @@ public class BenefitItemBean {
 		this.quantity = orderItem.getQuantity();	
 	}
 	
+	public static BenefitItemBean get(OrderDetails orderItem) {
+		BenefitItemBean result = new BenefitItemBean();
+		result.init(orderItem);
+		return result;
+	}
+	
 }

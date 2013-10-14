@@ -15,11 +15,12 @@ import com.sap.benefits.management.persistence.model.Benefit;
 @Path("/benefits")
 public class BenefitsService extends BaseService {
 	
+	final BenefitDAO benefitDAO = new BenefitDAO();
+	
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Benefit> getAllBenefits(){
-		final BenefitDAO benefitDAO = new BenefitDAO();
 		return benefitDAO.getAll();
 	}
 	
@@ -27,12 +28,10 @@ public class BenefitsService extends BaseService {
 	@Path("/allNew")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BenefitDetailsBean> getAllBnefitsNew(){
-		final BenefitDAO benefitDAO = new BenefitDAO();
 		List<Benefit> benfits = benefitDAO.getAll();
 		List<BenefitDetailsBean> result = new ArrayList<>();
 		for (Benefit benefit: benfits) {
-			BenefitDetailsBean benefitDetails = new BenefitDetailsBean();
-			benefitDetails.init(benefit);
+			BenefitDetailsBean benefitDetails = BenefitDetailsBean.get(benefit);
 			benefitDetails.initBenefitTypes(benefit);
 			result.add(benefitDetails);
 		}

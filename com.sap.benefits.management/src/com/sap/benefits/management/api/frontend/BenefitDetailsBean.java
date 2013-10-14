@@ -34,10 +34,15 @@ public class BenefitDetailsBean {
 	public void initBenefitTypes(Benefit benefit) {
 		this.benefitTypes.clear();
 		for (BenefitType benefitType: benefit.getTypes()) {
-			BenefitTypeBean benefitTypeBean = new BenefitTypeBean();
-			benefitTypeBean.init(benefitType);
+			BenefitTypeBean benefitTypeBean = BenefitTypeBean.get(benefitType);
 			this.benefitTypes.add(benefitTypeBean);
 		}		
+	}
+	
+	public static BenefitDetailsBean get(Benefit benefit) {
+		BenefitDetailsBean result = new BenefitDetailsBean();
+		result.init(benefit);
+		return result;
 	}
 	
 }

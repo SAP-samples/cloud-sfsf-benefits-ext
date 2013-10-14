@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import com.sap.benefits.management.api.frontend.BenefitsOrderBean;
 import com.sap.benefits.management.api.frontend.CampaignBean;
 import com.sap.benefits.management.api.frontend.UserBean;
+import com.sap.benefits.management.api.frontend.UserPointsBean;
 import com.sap.benefits.management.connectivity.CoreODataConnector;
 import com.sap.benefits.management.connectivity.helper.SFUser;
 import com.sap.benefits.management.persistence.CampaignDAO;
@@ -29,29 +30,21 @@ import com.sap.benefits.management.persistence.model.keys.UserPointsPrimaryKey;
 @Path("/user")
 public class UserService extends BaseService {
 
-	@GET
-	@Path("/profile")
-	@Produces(MediaType.APPLICATION_JSON)
-	public SFUser getUserProfile() throws IOException {
-		return CoreODataConnector.getInstance().getUserProfile("nnnn");
-	}
+	private CampaignDAO campaignDAO = new CampaignDAO();
+	private UserPointsDAO userPontsDAO = new UserPointsDAO();
 
 	@GET
 	@Path("/orders/{campain_id}/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public BenefitsOrderBean getUserBenefitsOrder(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
-		BenefitsOrderBean result = new BenefitsOrderBean();
-		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign campaign = campaignDAO.getById(campaign_id);
 		User user = (new UserDAO()).getByUserId(user_id);
 		Collection<Order> orders = (new OrderDAO()).getOrdersForUser(user, campaign);
 		if (orders.size() > 0) {
-			result.init(orders.iterator().next());
+			return BenefitsOrderBean.get(orders.iterator().next());
 		} else {
-			result.campaign = new CampaignBean();
-			result.campaign.init(campaign);
+			return BenefitsOrderBean.getEmpty(campaign);
 		}
-		return result;
 	}
 
 	@GET
@@ -59,24 +52,21 @@ public class UserService extends BaseService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<UserBean> getManagedUsers() throws IOException {
 		User currentUser = getLoggedInUser();
-		CampaignDAO campaignDAO = new CampaignDAO();
 		Campaign activeCampaign = campaignDAO.getActiveCampaign(currentUser);
-		UserPointsDAO userPontsDAO = new UserPointsDAO();
 		List<UserBean> result = new ArrayList<>();
 		for (User employee : currentUser.getEmployees()) {
-			UserBean newUser = new UserBean();
-			newUser.init(employee);
+			UserBean userInfo = UserBean.get(employee);
 			if (activeCampaign != null) {
-				UserPointsPrimaryKey primKey = new UserPointsPrimaryKey(employee.getId(), activeCampaign.getId());
-				UserPoints userPointBackend = userPontsDAO.getByPrimaryKey(primKey);
-				if (userPointBackend != null) {					
-					newUser.setActiveCampaignBalance(userPointBackend);
-				}				
+				userInfo.setActiveCampaignBalance(getUserPoints(employee, activeCampaign));
 			}
-			result.add(newUser);
+			result.add(userInfo);
 		}
-
 		return result;
+	}
+
+	private UserPoints getUserPoints(User employee, Campaign campaign) {
+		UserPointsPrimaryKey primaryKey = new UserPointsPrimaryKey(employee.getId(), campaign.getId());
+		return userPontsDAO.getByPrimaryKey(primaryKey);
 	}
 
 	@GET

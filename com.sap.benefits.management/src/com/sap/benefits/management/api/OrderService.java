@@ -66,7 +66,7 @@ public class OrderService extends BaseService{
 		final OrderDAO orderDAO = new OrderDAO();
 		final Order userOrder = getOrCreateUserOrder(user, campaign, orderDAO);
 		final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
-		final BenefitType benefitType = benefitTypeDAO.getById(request.getBenefitTypeId());
+		final BenefitType benefitType = benefitTypeDAO.getById(request.benefitTypeId);
 		if(benefitType == null){
 			return createBadRequestResponse("Incorrect benefit type id");
 		}
@@ -93,7 +93,7 @@ public class OrderService extends BaseService{
 	private OrderDetails createOrderDetails(OrderBean request, final BenefitType benefitType) {
 		final OrderDetails orderDetails = new OrderDetails();
 		orderDetails.setBenefitType(benefitType);
-		orderDetails.setQuantity(request.getQuantity());
+		orderDetails.setQuantity(request.quantity);
 		return orderDetails;
 	}
 	

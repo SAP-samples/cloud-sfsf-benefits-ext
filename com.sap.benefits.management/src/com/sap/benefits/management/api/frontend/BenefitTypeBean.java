@@ -22,4 +22,10 @@ public class BenefitTypeBean {
 		this.value = benefitType.getValue();
 	}
 	
+	public static BenefitTypeBean get(BenefitType benefitType) {
+		BenefitTypeBean result = new BenefitTypeBean();
+		result.init(benefitType);
+		return result;
+	}
+	
 }
