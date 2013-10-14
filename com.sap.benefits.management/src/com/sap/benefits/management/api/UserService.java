@@ -82,9 +82,9 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/userCampaigns")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Campaign> getUserCampaigns() throws IOException {
+	public List<CampaignBean> getUserCampaigns() throws IOException {
 		final User user = getLoggedInUser();
-		return user.getHrManager().getCampaigns();
+		return CampaignBean.getList(user.getHrManager().getCampaigns());
 	}
 
 }

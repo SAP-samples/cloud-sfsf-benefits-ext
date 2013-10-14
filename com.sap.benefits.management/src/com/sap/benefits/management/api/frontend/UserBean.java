@@ -32,5 +32,4 @@ public class UserBean {
 		this.activeCampaignBalance.init(userPoints);
 	}
 	
-
 }

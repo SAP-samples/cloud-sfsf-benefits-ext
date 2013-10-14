@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.sap.benefits.management.persistence.model.Benefit;
+import com.sap.benefits.management.persistence.model.BenefitType;
 
 public class BenefitDetailsBean {
 	
@@ -28,6 +29,15 @@ public class BenefitDetailsBean {
 		this.name = benefit.getName();
 		this.description = benefit.getDescription();
 		this.infoLink = benefit.getLink();
+	}
+	
+	public void initBenefitTypes(Benefit benefit) {
+		this.benefitTypes.clear();
+		for (BenefitType benefitType: benefit.getTypes()) {
+			BenefitTypeBean benefitTypeBean = new BenefitTypeBean();
+			benefitTypeBean.init(benefitType);
+			this.benefitTypes.add(benefitTypeBean);
+		}		
 	}
 	
 }
