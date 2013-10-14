@@ -63,24 +63,21 @@ public class UserService extends BaseService {
 		Campaign activeCampaign = campaignDAO.getActiveCampaign(currentUser);
 		UserPointsDAO userPontsDAO = new UserPointsDAO();
 		List<User> result = new ArrayList<>();
-		int counter = 0;
 		for (com.sap.benefits.management.persistence.model.User employee : currentUser.getEmployees()) {
 			User newUser = new User(employee);
 			if (activeCampaign != null) {
 				UserPointsPrimaryKey primKey = new UserPointsPrimaryKey(employee.getId(), activeCampaign.getId());
 				com.sap.benefits.management.persistence.model.UserPoints userPontBackend = userPontsDAO.getByPrimaryKey(primKey);
-				UserPoints userPoints = new UserPoints();
-				userPoints.setAvailablePoints(userPontBackend.getAvailablePoints());
-				userPoints.setCampaignName(activeCampaign.getName());
-				userPoints.setUserId(employee.getUserId());
-				userPoints.setCampaingId(activeCampaign.getId());
-				newUser.setActiveCampaignBalance(userPoints);
+				if (userPontBackend != null) {
+					UserPoints userPoints = new UserPoints();
+					userPoints.setAvailablePoints(userPontBackend.getAvailablePoints());
+					userPoints.setCampaignName(activeCampaign.getName());
+					userPoints.setUserId(employee.getUserId());
+					userPoints.setCampaingId(activeCampaign.getId());
+					newUser.setActiveCampaignBalance(userPoints);
+				}				
 			}
 			result.add(newUser);
-			counter++;
-			if (counter > 5) {
-				break;
-			}
 		}
 
 		return result;

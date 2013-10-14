@@ -48,7 +48,7 @@ public class SessionCreateFilter implements Filter {
 				UserDAO userDAO = getUserDAO();
 				User user = initSingleUserProfile(loggedInUser, userDAO);
 				if (request.isUserInRole("Administrator") && user != null) {
-					//initManagedUsers(user, userDAO);
+					initManagedUsers(user, userDAO);
 				}
 				request.getSession().removeAttribute(SessionListener.INITIAL_FLAG);
 			}
@@ -58,7 +58,8 @@ public class SessionCreateFilter implements Filter {
 	private void initManagedUsers(User hrUser, UserDAO userDAO) {
 		try {
 			List<SFUser> managedSFUsers = CoreODataConnector.getInstance().getManagedEmployees(hrUser.getUserId());
-			// Check if users exists in database and create their profiles
+			// Check if users exists in database and create their profiles if it
+			// does not
 			for (SFUser managedSFUser : managedSFUsers) {
 				User appUser = userDAO.getByUserId(managedSFUser.userId);
 				if (appUser == null) { // Create new user profile
@@ -66,11 +67,11 @@ public class SessionCreateFilter implements Filter {
 					managedSFUser.write(appUser);
 					appUser.setHrManager(hrUser);
 					userDAO.saveNew(appUser);
-				}/* else {
+				} else {
 					managedSFUser.write(appUser);
 					appUser.setHrManager(hrUser);
 					userDAO.save(appUser);
-				}*/
+				}
 			}
 		} catch (IOException e) {
 			logger.error("User '{}' managed users could not be obtained from Success Factors.", hrUser.getUserId(), e);
