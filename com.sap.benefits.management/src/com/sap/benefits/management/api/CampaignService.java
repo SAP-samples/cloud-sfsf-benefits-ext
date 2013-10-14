@@ -1,5 +1,7 @@
 package com.sap.benefits.management.api;
 
+import static java.text.MessageFormat.format;
+
 import java.util.Collection;
 
 import javax.ws.rs.Consumes;
@@ -10,29 +12,21 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sap.benefits.management.persistence.CampaignDAO;
-import com.sap.benefits.management.persistence.UserDAO;
 import com.sap.benefits.management.persistence.model.Campaign;
 import com.sap.benefits.management.persistence.model.User;
 
 @Path("/campaigns")
 public class CampaignService extends BaseService{
 	
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
 	private CampaignDAO campaignDAO = new CampaignDAO();
-	private UserDAO userDAO = new UserDAO();
 
 	@GET
 	@Path("/active")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Campaign getActiveCampaignForCurrentUser(){
-		final User currentUser = userDAO.getByUserId(getLoggedInUserId());
+		final User currentUser = getLoggedInUser();
 		return campaignDAO.getActiveCampaign(currentUser);
 	}	
 	
@@ -40,7 +34,7 @@ public class CampaignService extends BaseService{
 	@Path("/admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Collection<Campaign> getCampaigns(){
-		final User user = userDAO.getByUserId(getLoggedInUserId());
+		final User user = getLoggedInUser();
 		final Collection<Campaign> campaigns = user.getCampaigns();
 		
 		return campaigns;
@@ -50,30 +44,30 @@ public class CampaignService extends BaseService{
 	@Path("/admin")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addCampaign(Campaign campaign){
-		final User user = userDAO.getByUserId(getLoggedInUserId());
+		final User user = getLoggedInUser();
 		if(campaignDAO.getByName(campaign.getName(), user) != null){
-			return Response.status(Status.BAD_REQUEST).entity("Campaign with name \"" + campaign.getName() + "\" already exist").build();
+			return createBadRequestResponse(format("Campaign with name \"{0}\" already exist", campaign.getName()));
 		}else if(campaign.isActive() && !campaignDAO.canBeActive(campaign, user)){
-			return Response.status(Status.BAD_REQUEST).entity("Another campaign is set as active").build();
+			return createBadRequestResponse("Another campaign is set as active");
 		}
 		
 		campaign.setOwner(user);
 		campaignDAO.saveNew(campaign);
 		campaignDAO.setPointsToUsers(campaign);
 		
-		return Response.ok().build();
+		return createOkResponse();
 	}
 	
 	@POST
 	@Path("/admin/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editCampaign(@PathParam("id") long id, Campaign campaign){
-		final User user = userDAO.getByUserId(getLoggedInUserId());
+		final User user = getLoggedInUser();
 		final Campaign camp = campaignDAO.getById(id);
 		if(camp == null){
-			return Response.status(Status.BAD_REQUEST).entity("Campaign does not exist").build();
+			return createBadRequestResponse("Campaign does not exist");
 		}else if(campaign.isActive() && !campaignDAO.canBeActive(campaign, user)){
-			return Response.status(Status.BAD_REQUEST).entity("Another campaign is set as active").build();
+			return createBadRequestResponse("Another campaign is set as active");
 		}
 		
 		camp.setName(campaign.getName());
@@ -83,7 +77,7 @@ public class CampaignService extends BaseService{
 		camp.setPoints(campaign.getPoints());
 		
 		campaignDAO.save(camp);
-		return Response.ok().build();
+		return createOkResponse();
 	}
 	
 }

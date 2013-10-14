@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 import com.sap.benefits.management.persistence.model.Benefit;
-import com.sap.benefits.management.persistence.model.Campaign;
 import com.sap.benefits.management.persistence.model.Order;
 import com.sap.benefits.management.persistence.model.OrderDetails;
 

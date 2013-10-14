@@ -9,10 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.sap.benefits.management.persistence.UserDAO;
+import com.sap.benefits.management.persistence.model.User;
+
 public class BaseService {
-    
-    protected static final Response RESPONSE_OK = Response.ok("ok").build(); //$NON-NLS-1$
-    protected static final Response RESPONSE_BAD = Response.status(Status.BAD_REQUEST).build();
     
     @Resource
     protected HttpServletRequest request;
@@ -23,7 +23,9 @@ public class BaseService {
     @Resource
     protected ServletContext context;
     
-    public String getLoggedInUserId() {
+    protected UserDAO userDAO = new UserDAO();
+    
+    protected String getLoggedInUserId() {
         if (request == null) {
             throw new IllegalArgumentException("Request must not be null.");
         }
@@ -37,6 +39,18 @@ public class BaseService {
         }
 
         return userId;
+    }
+    
+    protected User getLoggedInUser(){
+    	return userDAO.getByUserId(getLoggedInUserId());
+    }
+    
+    protected Response createBadRequestResponse(String reponseText){
+    	return Response.status(Status.BAD_REQUEST).entity(reponseText).build();
+    }
+    
+    protected Response createOkResponse(){
+    	return Response.ok().build();
     }
 
 }

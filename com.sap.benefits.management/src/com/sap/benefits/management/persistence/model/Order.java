@@ -1,7 +1,7 @@
 package com.sap.benefits.management.persistence.model;
 
-import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_ORDERS_FOR_CAMPAIGN;
 import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_ALL_ORDERS;
+import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_ORDERS_FOR_CAMPAIGN;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -68,10 +68,6 @@ public class Order implements IDBEntity {
 		return total;
 	}
 
-	public void setTotal(BigDecimal total) {
-		this.total = total;
-	}
-
 	public void setCampaign(Campaign campaign) {
 		this.campaign = campaign;
 		if(!campaign.getOrders().contains(this)){
@@ -103,6 +99,9 @@ public class Order implements IDBEntity {
 	
 	public void addOrderDetails(OrderDetails details){
 		getOrderDetails().add(details);
+		final BigDecimal quantity = BigDecimal.valueOf(details.getQuantity());
+		final BigDecimal value = details.getBenefitType().getValue();
+		addToTotal(value.multiply(quantity));
 		if(details.getOrder() != this){
 			details.setOrder(this);
 		}
@@ -111,5 +110,13 @@ public class Order implements IDBEntity {
 	public void setOrderDetails(Collection<OrderDetails> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
+	
+	private void addToTotal(BigDecimal value){
+		if(this.total == null){
+			this.total = new BigDecimal(0);
+		}
+		this.total = this.total.add(value);
+	}
 
+	
 }

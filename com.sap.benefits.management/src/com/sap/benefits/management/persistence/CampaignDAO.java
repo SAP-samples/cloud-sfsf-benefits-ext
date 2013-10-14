@@ -1,7 +1,6 @@
 package com.sap.benefits.management.persistence;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;

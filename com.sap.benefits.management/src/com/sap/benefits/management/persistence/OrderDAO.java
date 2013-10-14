@@ -17,7 +17,16 @@ public class OrderDAO extends BasicDAO<Order> {
 	public OrderDAO() {
 		super();
 	}
-
+	
+	public Order createOrderForUser(User user, Campaign campaign){
+		final Order order = new Order();
+		order.setUser(user);
+		order.setCampaign(campaign);
+		
+		saveNew(order);
+		return order;
+	}
+	
 	public Collection<Order> getOrdersForUser(User user, Campaign campaign) {
 		final List<Order> result = new ArrayList<>();
 		final EntityManager em = factory.createEntityManager();

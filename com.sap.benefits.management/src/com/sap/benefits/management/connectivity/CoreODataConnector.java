@@ -3,13 +3,11 @@ package com.sap.benefits.management.connectivity;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.sap.benefits.management.connectivity.base.ODataConnector;
 import com.sap.benefits.management.connectivity.helper.CoreODataParser;
 import com.sap.benefits.management.connectivity.helper.SFUser;
-import com.sap.benefits.management.persistence.model.User;
 
 @SuppressWarnings("nls")
 public class CoreODataConnector extends ODataConnector {

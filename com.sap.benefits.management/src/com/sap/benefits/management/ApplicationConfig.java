@@ -9,7 +9,6 @@ import com.sap.benefits.management.api.BenefitsService;
 import com.sap.benefits.management.api.CampaignService;
 import com.sap.benefits.management.api.OrderService;
 import com.sap.benefits.management.api.SystemService;
-import com.sap.benefits.management.api.TestService;
 import com.sap.benefits.management.api.UserService;
 import com.sap.benefits.management.api.utils.GsonMessageBodyHandler;
 
@@ -23,7 +22,6 @@ public class ApplicationConfig extends Application {
 		singletons.add(new UserService());
     	singletons.add(new SystemService());
     	singletons.add(new CampaignService());
-        singletons.add(new TestService());
         singletons.add(new BenefitsService());
         singletons.add(new OrderService());
     }

@@ -1,17 +1,12 @@
 package com.sap.benefits.management.persistence.model;
 
-import java.util.Date;
-
 import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.google.gson.annotations.Expose;
 
@@ -28,19 +23,13 @@ public class OrderDetails implements IDBEntity {
 	@Basic
 	private Long quantity;
 	
-	@Expose
-	@Basic
-	@Column(name = "LAST_UPDATE_TIME")
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date lastUpdateTime;
-
 	@ManyToOne
 	@JoinColumn(name = "ORDER_ID", referencedColumnName = "ORDER_ID")
 	private Order order;
 
 	@Expose
 	@ManyToOne
-	@JoinColumn(name = "BENEFIT_TYPE_ID", referencedColumnName = "TYPE_ID", insertable=false, updatable=false)
+	@JoinColumn(name = "BENEFIT_TYPE_ID", referencedColumnName = "TYPE_ID")
 	private BenefitType benefitType;
 
 	@Override
@@ -58,14 +47,6 @@ public class OrderDetails implements IDBEntity {
 
 	public void setQuantity(Long quantity) {
 		this.quantity = quantity;
-	}
-
-	public Date getLastUpdateTime() {
-		return lastUpdateTime;
-	}
-
-	public void setLastUpdateTime(Date lastUpdateTime) {
-		this.lastUpdateTime = lastUpdateTime;
 	}
 
 	public BenefitType getBenefitType() {

@@ -22,8 +22,8 @@ import com.sap.benefits.management.persistence.util.EntityManagerFactoryProvider
 
 public class BasicDAO<T extends IDBEntity> {
 
-	private final Logger logger = LoggerFactory.getLogger("BasicDAO.class");
-
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	
 	protected EntityManagerFactory factory;
 
 	public BasicDAO() {

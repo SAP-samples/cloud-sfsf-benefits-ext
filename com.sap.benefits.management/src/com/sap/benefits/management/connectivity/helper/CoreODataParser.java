@@ -2,7 +2,6 @@ package com.sap.benefits.management.connectivity.helper;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
