@@ -10,7 +10,7 @@
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
     <init-param>
       <param-name>javax.ws.rs.Application</param-name>
-      <param-value>com.sap.benefits.management.ApplicationConfig</param-value>
+      <param-value>com.sap.benefits.management.services.ApplicationConfig</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -56,6 +56,10 @@
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
   <listener>
+      <listener-class>com.sap.benefits.management.services.AppServletContextListener</listener-class>
+  </listener>
+	
+  <listener>  
     <description>sessionListener</description>
     <listener-class>
         com.sap.benefits.management.services.SessionListener

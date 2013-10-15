@@ -1,4 +1,4 @@
-package com.sap.benefits.management;
+package com.sap.benefits.management.services;
 
 import java.util.HashSet;
 import java.util.Set;
