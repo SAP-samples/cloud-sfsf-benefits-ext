@@ -1,101 +1,107 @@
-SAP HANA Cloud Samples - PaulPredicts
+SAP Employee Benefits Management
 ==========================================
 
-Paul Predicts is a real-life, productively used app showing how to create a server back-end serving multiple front-end technologies. It is showing all currently available SAP HANA Cloud services. 
+SAP Employee Benefits Management is a sample extension application to the SuccessFactors Employee Central, showing how to create an extension to the SuccessFactors EC. Simultaneously it can be used as a desktop application as well as a mobile application.
 
 Quick start
 -----------
 
-Clone the repo, `git clone https://github.com/sap/cloud-paulpredicts.git`, or [download the latest release](https://github.com/sap/cloud-paulpredicts/zipball/master).
-
-Read the how-to blog: http://scn.sap.com/community/developer-center/cloud-platform/blog/2012/12/21/get-ready-for-your-paul-position
+Clone the repo, `git clone https://github.com/sap/***.git`, or [download the latest release](https://github.com/sap/***/zipball/master).
 
 Project Overview
 ----------------
 
-Here is a basic description of the project. The structure is as follows:
+Here is a basic description of the project. 
+Basicly the project contains two main modules - backend and frontend modules. 
 
-com.sap.pto - the main package that holds all other
-	adapters - classes for accessing the SAP HANA Cloud Platform's services
-	dao - methods for storing, updating and retrieving data from the database
-		entities - JPA entities describing the data schema and relations
-	importers - classes used for retrieving information from the data provider, which provides XML files
-	jobs - background jobs that are being executed repeatedly
-	paul - logic for Paul's betting behavior based on a crowd-sourced approach
-	services - REST services
-		util - code for marshalling and JSON manipulation
-	startup - classes related to the initialization of the application
-	util - commonly used utility functionalities like constants, user utilities, file uploading utilities etc
-		configuration - classes that are used for configuring properties
-	
-	
+The backend module consists of:
+
+  - com.sap.hana.cloud.sample.benefits - the main package of the backend 
+  - com.sap.hana.cloud.sample.benefits.persistence - contains persistency logic where JPA technology is used
+  - com.sap.hana.cloud.sample.benefits.connectivity - SuccessFactors connectivity - HTTP destinations provided by SAP HANA Cloud Platform consume Success Factors OData API
+  - com.sap.hana.cloud.sample.benefits.api - backend services implementation � JAX-RS Services (Apache CXF & Google Gson for JSON serialization/deserialization)
+  - com.sap.hana.cloud.sample.benefits.api.frontend - datatype structures suitable for frontend usage
+
+The frontend module consists of:
+
+  - mobile/view - the main directory available at WebContent of the application. It holds the User Interface logic. Used UI technology - UI5 (sap.m) libraries
+  - mobile/css - Cascading Style Sheets
+  - mobile/img - images
+
 Application startup
 -------------------
 
-You can run PaulPredicts either locally, or on the Cloud.
+You can run SAP Employee Benefits Management either locally, or on the Cloud.
+
+Prerequisites: 
+An user should have an account to SuccessFactors Employee Central. This means he/she has an user and password for accessing SF OData API
+
+
 
 1) Running locally
- - go to your computer’s properties, Advanced System Settings, Environment variables and create a new system variable named “NW_CLOUD_SDK_PATH” and 
- enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK to
- - you have to create a new local server
- - double-click on it, Connectivity tab, create a new Destination, named "opta" and paste the following URL to the URL field:
- https://octopuspaul.hana.ondemand.com/ptodata/
- - if you work behind a proxy server, then you should configure your proxy settings (host and port). Double click on the server,
+
+  - go to pom.xml of the application. At properties node find (or add if missing) the element <sap.cloud.sdk.location> and set the path to the directory where you have the downloaded the SAP HANA Cloud SDK to. The same way find or add the property sap.cloud.sdk.version and set the version of downloaded SAP HANA Cloud SDK. Finally the properties sholuld look something like this: 
+		
+	    <sap.cloud.sdk.location>_local_path_to_HANA_Clould_SDK_</sap.cloud.sdk.location>
+		<sap.cloud.sdk.version>_version_</sap.cloud.sdk.version>
+	
+  - you have to create a new local SAP HANA Cloud server. In order to do that you have the downloaded the SAP HANA Cloud SDK.
+  - double-click on it, Connectivity tab, create a new Destination, named "[sap_hcmcloud_core_odata] and paste the following URL to the URL field:
+  
+https://SF host name/odata/v2 ; 
+
+Setup the username and password. The username is constructed from username of your account and the company name:
+username@company name .
+
+  - if you work behind a proxy server, then you should configure your proxy settings (host and port). Double click on the server,
  go to Overview tab and press the Open launch configuration. In the tab (x)= Arguments, VM Arguments copy this:
  -Dhttp.proxyHost=<yourproxyHost> -Dhttp.proxyPort=<yourProxyPort> -Dhttps.proxyHost=<yourproxyHost> -Dhttps.proxyPort=<yourProxyPort> 
  and set your proxy hosts and ports 
- - create Local users - double-click on the created server, go to User tab and create new users with the properties required. Set a role for every of your users.
+  - create Local users - The users you create should have the same names as the ones persistent on the Employee Central. Double-click on the created server, go to User tab and create new users with the properties required. Set a role for every of your users. 
  Role with name "Everyone" is mandatory and if you want to use the admin UI, then add one more role, named "admin".
- - run MongoDB - it is used for the SAP HANA Cloud's Document Service when running it locally. Download MongoDB from here: http://www.mongodb.org/downloads,
- save the archive, unpack and execute the following command: mongod --dbpath C:\mongodb_data, where "C:\mongodb_data" is an empty directory
  
- Note: when running locally you will receive the mails on your local file system. In your local server's folder/work/mailservice/
- - Run the application
+  - Run the application:
+
+For HR user go to http://<localhost:port>com.sap.hana.cloud.sample.benefits/mobile/index.html
+
+For Employee user go to http://<localhost:port>com.sap.hana.cloud.sample.benefits/mobile/employee.html
  
  2) Running on the Cloud
- - go to your computer’s properties, Advanced System Settings, Environment variables and create a new system variable named “NW_CLOUD_SDK_PATH” and 
- enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK to.
- - create a server on the SAP HANA Cloud Platform
- - double-click on it, Connectivity tab, create a new Destination, named "opta" and paste the following URL to the URL field:
- https://octopuspaul.hana.ondemand.com/ptodata/
- - for using the Mail Service you have got to complete a put-destination operation with a specially prepared file (you can find one in the current directory,
- named Session.template). Remove the .template extension(!) and fill in data regarding SMTP, username, password etc for you email account.
- The put-destination operation can be completed with the Console Client and with a special properties file, containing information about your SAP HANA Cloud account 
- (you can also find this template in the same folder). Fill in the template and enter the following command in the Console Client: neo put-destination <path to the file with properties>
- - assign your user a specific role - go to the accounts page, Authorizations tab, select application from the combo box and the available roles will appear on the right.
+ 
+  - go to pom.xml of the application. At properties node find (or add if missing) the element <sap.cloud.sdk.location> and set the path to the directory where you have the downloaded the SAP HANA Cloud SDK to. The same way find or add the property sap.cloud.sdk.version and set the version of downloaded SAP HANA Cloud SDK. Finally the properties sholuld look something like this:
+  	
+	    <sap.cloud.sdk.location>_local_path_to_HANA_Clould_SDK_</sap.cloud.sdk.location>
+		<sap.cloud.sdk.version>_version_</sap.cloud.sdk.version>
+	
+  - create a server on the SAP HANA Cloud Platform
+  - deploy the application
+  - double-click on it, Connectivity tab, create a new Destination, named "sap_hcmcloud_core_odata" and paste the following URL to the URL field:
+https://SF host name/odata/v2 ; Setup the username and password. The username is constructed from username of your account and the company name: username@company name .
+  - assign your user a specific role - go to the accounts page, Authorizations tab, select application from the combo box and the available roles will appear on the right.
  Choose Users from the combo box below and assign the desired role.
- - Run the application
+  - Run the application
 
-Versioning
-----------
 
-For transparency and insight into our release cycle, and for striving to maintain backward compatibility, the SAP HANA Cloud - Samples project will be maintained under the Semantic Versioning guidelines as much as possible.
+Explore the Application
+-----------------------
+ The application can be used by employees to make orders in specific benefits campaigns or by HR managers to manage employees� benefits and set up new benefits campaigns. 
+ Each campaign grants the employees with a certain amount of points that they can use to make orders for benefits from the benefits portfolio for the campaign. 
+ Different benefits are worth different amount of points.
 
-Releases will be numbered with the following format:
+ For instance you can use Carla Grant's username: cgrant1 as an employee, and Nancy Nash's username: nnnn as Carla's HR manager. 
 
-`<major>.<minor>.<patch>`
+Note: the users(usernames) that you create on you local/cloud environment should exists on the SuccessFactors Employee Central, so you could connect successfully to the EC.
 
-And constructed with the following guidelines:
-
-* Breaking backward compatibility bumps the major (and resets the minor and patch)
-* New additions without breaking backward compatibility bumps the minor (and resets the patch)
-* Bug fixes and misc changes bumps the patch
-
-For more information on SemVer, please visit http://semver.org/
+ When you login for the first time, you should use the HR Manager username. One could goes to "Benefit" page and find out what benefits are available. Next you should go to "Campaign" page and create an active campaign to be used by the employees.
+ As an employee one has an access only to "Employee" page. From there the user can creates orders for the active campaign.
+  
 
 Authors
 -------
 
-**John Astill**
-**Kiril Dayradzhiev**
-**Manjunath Gudisi**
-**Petar Ivanov**
-**Siyu Liu**
-**Tushar Rakesh Saxena**
-**Robert Wetzold**
-
-+ http://twitter.com/rwetzold
-+ http://github.com/rwetzold
+**Chavdar Baikov**,
+**Marin Hadzhiev**,
+**Tsvetelina Marinova**
 
 Copyright and license
 ---------------------
