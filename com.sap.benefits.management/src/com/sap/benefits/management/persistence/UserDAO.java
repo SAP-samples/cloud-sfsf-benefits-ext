@@ -18,9 +18,6 @@ public class UserDAO extends BasicDAO<User> {
 			final TypedQuery<User> query = em.createNamedQuery(DBQueries.GET_USER_BY_USER_ID, User.class);
 			query.setParameter("userId", userId);
 			User user = em.find(User.class, query.getSingleResult().getId());
-			if (user != null) {
-				em.refresh(user);
-			}
 			return user;
 		} catch (javax.persistence.NoResultException x) {
 			return null;
