@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.sap.benefits.management.api.frontend.CampaignBean;
+import com.sap.benefits.management.api.frontend.CampaignNameAvailabilityCheckResponseBean;
 import com.sap.benefits.management.api.frontend.StartCampaignResponseBean;
 import com.sap.benefits.management.persistence.CampaignDAO;
 import com.sap.benefits.management.persistence.model.Campaign;
@@ -115,5 +116,20 @@ public class CampaignService extends BaseService {
 		campaignDAO.save(campaign);
 		
 		return createOkResponse();
+	}
+	
+	@GET
+	@Path("/admin/check-name-availability/{name}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CampaignNameAvailabilityCheckResponseBean checkNameAvailability(@PathParam("name") String name) {
+		final CampaignNameAvailabilityCheckResponseBean response = new CampaignNameAvailabilityCheckResponseBean();
+		final Campaign campaign = campaignDAO.getByName(name, getLoggedInUser());
+		if(campaign == null){
+			response.setAvailable(true);
+		} else {
+			response.setAvailable(false);
+		}
+		
+		return response;
 	}
 }

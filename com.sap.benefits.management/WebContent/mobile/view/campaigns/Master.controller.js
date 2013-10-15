@@ -1,6 +1,23 @@
+jQuery.sap.require("sap.ui.core.ValueState");
+
 sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
     onInit: function() {
         this.busyDialog = new sap.m.BusyDialog({showCancelButton: false});
+
+        this.dialogOkBtn = new sap.m.Button({
+            text: "Ok",
+            press: jQuery.proxy(this.okButtonPressed, this)
+        });
+
+        this.dialogCancelBtn = new sap.m.Button({
+            text: "Cancel",
+            press: jQuery.proxy(function() {
+                this.byId("newcampaignDialog").close();
+            }, this)
+        });
+
+        this.byId("nameCtr").attachChange(jQuery.proxy(this._validateNewCampaignName, this), this);
+        this.byId("pointsCtr").attachLiveChange(jQuery.proxy(this._validateNewCampaignPoints, this), this);
     },
     onAfterRendering: function() {
         var list = this.byId("campaignsList");
@@ -15,57 +32,105 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
     addButtonPressed: function(evt) {
         var newCampDialog = this.byId("newcampaignDialog");
         this.byId("nameCtr").setValue(null);
-        newCampDialog.setLeftButton(new sap.m.Button({
-            text: "Ok",
-            press: jQuery.proxy(this.okButtonPressed, this)
-        }));
-        newCampDialog.setRightButton(new sap.m.Button({
-            text: "Cancel",
-            press: function() {
-                newCampDialog.close();
-            }
-        }));
+        this.byId("pointsCtr").setValue(null);
+        this.byId("nameCtr").setValueState(sap.ui.core.ValueState.None);
+        this.byId("pointsCtr").setValueState(sap.ui.core.ValueState.None);
+        this._changeOkButtonState(true);
+        newCampDialog.setLeftButton(this.dialogOkBtn);
+        newCampDialog.setRightButton(this.dialogCancelBtn);
 
         sap.ui.getCore().getEventBus().publish("nav", "virtual");
         newCampDialog.open();
 
     },
     setState: function(active) {
-        jQuery.sap.require("sap.ui.core.ValueState");
-        if (active) {
-            return sap.ui.core.ValueState.Success;
-        } else {
-            return sap.ui.core.ValueState.Error;
-        }
+        return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
     },
     setStateText: function(active) {
-        if (active) {
-            return "Active";
-        } else {
-            return "Inactive";
-        }
+        return active ? "Active" : "Inactive";
     },
     okButtonPressed: function(evt) {
-        this.byId("newcampaignDialog").close();
-        var newCampaignName = this.byId("nameCtr").getValue();
-        var newCampaignPoints = this.byId("pointsCtr").getValue();
-        this.busyDialog.open();
-        jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/admin',
-            type: 'post',
-            dataType: 'json',
-            success: jQuery.proxy(function(data) {
-                appController.reloadCampaignModel();
-                this.busyDialog.close();
-                var list = this.byId("campaignsList");
-                var newItemIndex = list.getItems().length - 1;
-                appController.selectListItem(list, newItemIndex);
-            }, this),
-            error: jQuery.proxy(function() {
-                this.busyDialog.close();
-            }, this),
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({name: newCampaignName, startDate: null, endDate: null, points: newCampaignPoints})
-        });
+        this._validateNewCampaignName();
+        this._validateNewCampaignPoints();
+        var isValidName = this.byId("nameCtr").getValueState();
+        var isValidPoints = this.byId("pointsCtr").getValueState();
+        if ((isValidName === sap.ui.core.ValueState.None) && (isValidPoints === sap.ui.core.ValueState.None)) {
+            this.byId("newcampaignDialog").close();
+            var newCampaignName = this.byId("nameCtr").getValue();
+            var newCampaignPoints = this.byId("pointsCtr").getValue();
+            this.busyDialog.open();
+            jQuery.ajax({
+                url: '../api/campaigns/admin',
+                type: 'post',
+                dataType: 'json',
+                success: jQuery.proxy(function(data) {
+                    appController.reloadCampaignModel();
+                    var list = this.byId("campaignsList");
+                    var newItemIndex = list.getItems().length - 1;
+                    appController.selectListItem(list, newItemIndex);
+                }, this),
+                complete: jQuery.proxy(function() {
+                    this.busyDialog.close();
+                }, this),
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({name: newCampaignName, startDate: null, endDate: null, points: newCampaignPoints})
+            });
+        }
+    },
+    _validateNewCampaignName: function() {
+        var newCampDialog = this.byId("newcampaignDialog");
+        var nameCtr = this.byId("nameCtr");
+        var name = nameCtr.getValue();
+        if (name.length > 0) {
+            newCampDialog.setBusy(true);
+            jQuery.ajax({
+                url: '../api/campaigns/admin/check-name-availability/' + name,
+                type: 'get',
+                dataType: 'json',
+                success: jQuery.proxy(function(data) {
+                    if (!data.isAvailable) {
+                        nameCtr.setValueStateText("Already have a campaign with that name");
+                        nameCtr.setValueState(sap.ui.core.ValueState.Error);
+                        this._changeOkButtonState(false);
+                    } else {
+                        nameCtr.setValueState(sap.ui.core.ValueState.None);
+                        this._changeOkButtonState(true);
+                    }
+                }, this),
+                complete: function() {
+                    newCampDialog.setBusy(false);
+                },
+                contentType: "application/json; charset=utf-8",
+            });
+        } else {
+            nameCtr.setValueStateText("Valid name is required");
+            nameCtr.setValueState(sap.ui.core.ValueState.Error);
+            this._changeOkButtonState(false);
+        }
+    },
+    _validateNewCampaignPoints: function() {
+        var pointsCtr = this.byId("pointsCtr");
+        var points = pointsCtr.getValue();
+        if (jQuery.isNumeric(points)) {
+            pointsCtr.setValueState(sap.ui.core.ValueState.None);
+            this._changeOkButtonState(true);
+        } else if (points.length === 0) {
+            pointsCtr.setValueStateText("Valid Points is required");
+            pointsCtr.setValueState(sap.ui.core.ValueState.Error);
+            this._changeOkButtonState(false);
+        } else {
+            pointsCtr.setValueStateText("Not a valid number");
+            pointsCtr.setValueState(sap.ui.core.ValueState.Error);
+            this._changeOkButtonState(false);
+        }
+    },
+    _changeOkButtonState: function(enabled) {
+        var isValidName = this.byId("nameCtr").getValueState();
+        var isValidPoints = this.byId("pointsCtr").getValueState();
+        if (enabled && (isValidName === sap.ui.core.ValueState.None) && (isValidPoints === sap.ui.core.ValueState.None)) {
+            this.dialogOkBtn.setEnabled(true);
+        } else {
+            this.dialogOkBtn.setEnabled(false);
+        }
     }
 });

@@ -11,12 +11,9 @@
                         <attributes>
                             <ObjectAttribute text="{managedEmployees>email}"/>  
                         </attributes>
-                     </ObjectListItem>                  
+                    </ObjectListItem>                  
                 </items>
             </List>
-            
         </content>
     </Page>
-    
-         
 </core:View>

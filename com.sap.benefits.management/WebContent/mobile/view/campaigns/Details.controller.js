@@ -1,3 +1,4 @@
+jQuery.sap.require("sap.ui.core.ValueState");
 sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
     onInit: function() {
         this.getView().addEventDelegate({
@@ -38,7 +39,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({style: "full", pattern: "yyyy-MM-dd'T'HH:mm:ss'Z'"});
         jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/admin/' + ctx.id,
+            url: '../api/campaigns/admin/' + ctx.id,
             type: 'post',
             dataType: 'json',
             success: function(data) {
@@ -58,7 +59,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
             }
         });
     },
-            startStopButtonPressed: function(evt) {
+    startStopButtonPressed: function(evt) {
         if (evt.getSource().state === 'stop') {
             this._requestStopCampaign();
         } else {
@@ -71,34 +72,27 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         this.busyDialog.open();
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/admin/start/' + ctx.id,
+            url: '../api/campaigns/admin/start/' + ctx.id,
             type: 'get',
             dataType: 'json',
             success: jQuery.proxy(function(data) {
-                this.busyDialog.close();
                 if (data.canBeStarted) {
                     this._requestStartCampaign();
                 } else {
-                    sap.m.MessageBox.alert("Cannot start campaign. Reason: Only one campaign at time can be started. Currently started campaign :\"" + data.startedCampaignName + "\"");
+                    sap.m.MessageBox.alert("Only one campaign can be active. Currently active campaign is \"" + data.startedCampaignName + "\"");
                 }
+            }, this),
+            complete: jQuery.proxy(function() {
+                this.busyDialog.close();
             }, this),
             contentType: "application/json; charset=utf-8",
         });
     },
     setState: function(active) {
-        jQuery.sap.require("sap.ui.core.ValueState");
-        if (active) {
-            return sap.ui.core.ValueState.Success;
-        } else {
-            return sap.ui.core.ValueState.Error;
-        }
+        return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
     },
     setStateText: function(active) {
-        if (active) {
-            return "Active";
-        } else {
-            return "Inactive";
-        }
+        return active ? "Active" : "Inactive";
     },
     setStartStopButtonText: function(active) {
         return active ? "Stop" : "Start";
@@ -117,7 +111,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         jQuery.sap.require("sap.m.MessageToast");
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/admin/stop/' + ctx.id,
+            url: '../api/campaigns/admin/stop/' + ctx.id,
             type: 'post',
             dataType: 'json',
             success: jQuery.proxy(function(data) {
@@ -132,7 +126,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         jQuery.sap.require("sap.m.MessageToast");
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
-            url: '/com.sap.benefits.management/api/campaigns/admin/start/' + ctx.id,
+            url: '../api/campaigns/admin/start/' + ctx.id,
             type: 'post',
             dataType: 'json',
             success: jQuery.proxy(function(data) {

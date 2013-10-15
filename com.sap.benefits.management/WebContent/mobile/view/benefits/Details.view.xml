@@ -1,23 +1,20 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="com.sap.benefits.management.view.benefits.Details"
-	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="BenefitsDetailsPage" title="Benefit details" showNavButton="false">
-		<content>
-			<ObjectHeader title="{/name}">
-				<attributes>
-					<ObjectAttribute text="{/description}" />
-					<ObjectAttribute text="More information" active="true"
-						press="linkPressed" />
-				</attributes>
-			</ObjectHeader>
-			<List items="{/types}" inset="true" class="benefitList">
-				<items>
-					<StandardListItem title="{name}" description="price:"
-						info="{value} Points" infoState="Success">
-					</StandardListItem>
-				</items>
-			</List>
-		</content>
-	</Page>
+           xmlns="sap.m" controllerName="com.sap.benefits.management.view.benefits.Details"
+           xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
+    <Page id="BenefitsDetailsPage" title="Benefit details" showNavButton="false">
+        <content>
+            <ObjectHeader title="{/name}">
+                <attributes>
+                    <ObjectAttribute text="{/description}" />
+                    <ObjectAttribute text="More information" active="true" press="linkPressed" />
+                </attributes>
+            </ObjectHeader>
+            <List items="{/types}" inset="true" class="benefitList">
+                <items>
+                    <StandardListItem title="{name}" description="price:" info="{value} Points" infoState="Success" />
+                </items>
+            </List>
+        </content>
+    </Page>
 
 </core:View>

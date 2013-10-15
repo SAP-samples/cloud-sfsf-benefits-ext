@@ -29,7 +29,7 @@
             <VBox>
                 <items>
                     <Input id="nameCtr" type="Text" placeholder="Enter Name ..."/>
-                    <Input id="pointsCtr" type="Number" placeholder="Enter Points ..."/>
+                    <Input id="pointsCtr" type="Text" placeholder="Enter Points ..."/>
                 </items>
             </VBox>
         </content>
