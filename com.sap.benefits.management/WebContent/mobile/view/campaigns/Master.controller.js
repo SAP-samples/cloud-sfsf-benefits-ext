@@ -91,10 +91,8 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
                     if (!data.isAvailable) {
                         nameCtr.setValueStateText("Already have a campaign with that name");
                         nameCtr.setValueState(sap.ui.core.ValueState.Error);
-                        this._changeOkButtonState(false);
                     } else {
                         nameCtr.setValueState(sap.ui.core.ValueState.None);
-                        this._changeOkButtonState(true);
                     }
                 }, this),
                 complete: function() {
@@ -113,15 +111,12 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
         var points = pointsCtr.getValue();
         if (jQuery.isNumeric(points)) {
             pointsCtr.setValueState(sap.ui.core.ValueState.None);
-            this._changeOkButtonState(true);
         } else if (points.length === 0) {
             pointsCtr.setValueStateText("Valid Points is required");
             pointsCtr.setValueState(sap.ui.core.ValueState.Error);
-            this._changeOkButtonState(false);
         } else {
             pointsCtr.setValueStateText("Not a valid number");
             pointsCtr.setValueState(sap.ui.core.ValueState.Error);
-            this._changeOkButtonState(false);
         }
     },
     _changeOkButtonState: function(enabled) {
