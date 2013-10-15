@@ -1,0 +1,87 @@
+This program references the following third party open source or other free download components.
+The third party licensors of these components may provide additional license rights,
+terms and conditions and/or require certain notices as described below.
+
+Apache Commons BeanUtils (http://commons.apache.org/beanutils/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache Commons Digester (http://commons.apache.org/digester/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache Commons File Upload (http://ebr.springsource.com/repository/app/bundle/version/detail?name=com.springsource.org.apache.commons.fileupload&version=1.2.1)
+Licensed under Apache License, Version 2.0 - http://ebr.springsource.com/repository/app/bundle/version/download?name=com.springsource.org.apache.commons.fileupload&version=1.2.1&type=license
+
+Apache Commons IO (http://commons.apache.org/io/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache Commons Lang (http://commons.apache.org/lang/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache Commons Logging (http://commons.apache.org/logging/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache Commons Validator (http://commons.apache.org/validator/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache CXF (http://cxf.apache.org/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache log4j (http://logging.apache.org/log4j/1.2/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache Shiro (http://shiro.apache.org/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+DateJS (http://www.datejs.com/)
+Licensed under MIT License - http://www.datejs.com/license/
+
+EclipseLink (http://www.eclipse.org/eclipselink/)
+Licensed under Eclipse Public License - v 1.0 - http://www.eclipse.org/legal/epl-v10.html
+
+FamFamFam Silk Icons (http://www.famfamfam.com/lab/icons/silk/)
+Licensed under Creative Commons Attribution 3.0 License - http://creativecommons.org/licenses/by/3.0/
+
+Gson (http://code.google.com/p/google-gson/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+JAXB (http://jaxb.java.net/)
+Licensed under Common Development and Distribution License, Version 1.1 - http://glassfish.java.net/public/CDDL+GPL_1_1.html
+
+Jersey (http://jersey.java.net/)
+Licensed under Common Development and Distribution License, Version 1.1 - http://glassfish.java.net/public/CDDL+GPL_1_1.html
+
+Joda Time (http://joda-time.sourceforge.net/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+jQuery (http://jquery.com/)
+Licensed under MIT - https://github.com/jquery/jquery/blob/master/MIT-LICENSE.txt
+
+JSoup (http://jsoup.org/)
+Licensed under MIT License - http://jsoup.org/license
+
+JSR 311 (http://jsr311.java.net/)
+Licensed under Common Development and Distribution License, Version 1.0 - http://opensource.org/licenses/cddl1.php
+
+JUnit (http://www.junit.org/)
+Licensed under Common Public License - v 1.0 - http://junit.sourceforge.net/cpl-v10.html
+
+Liquibase (http://www.liquibase.org/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Quartz (http://quartz-scheduler.org/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+SLF4J (http://www.slf4j.org/)
+Licensed under MIT - http://www.slf4j.org/license.html
+
+Stax2 (http://docs.codehaus.org/display/WSTX/StAX2/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Woodstox (http://docs.codehaus.org/display/WSTX/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Wdsl4j (http://sourceforge.net/projects/wsdl4j/)
+Licensed under Common Public License - v 1.0 - http://www.eclipse.org/legal/cpl-v10.html
+
+XmlSchema (http://ws.apache.org/commons/xmlschema20/xmlschema-core/)
+Licensed under Apache License, Version 2.0 - http://ws.apache.org/commons/xmlschema20/xmlschema-core/license.html
