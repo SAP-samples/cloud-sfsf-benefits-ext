@@ -33,7 +33,8 @@ public class AuthorizationFilter implements Filter {
 					protectedPath += "/";
 				}
 				
-				if(path.indexOf(protectedPath) == 0 || path.append('/').toString().equalsIgnoreCase(protectedPath)){
+				final String tempPath = path + "/";
+				if(path.indexOf(protectedPath) == 0 || tempPath.equalsIgnoreCase(protectedPath)){
 					for (String role : webResource.getRoles()) {
 						if (!httpRequest.isUserInRole(role)) {
 							((HttpServletResponse) response).sendError(403);
