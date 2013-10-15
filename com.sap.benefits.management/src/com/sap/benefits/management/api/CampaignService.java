@@ -26,7 +26,6 @@ public class CampaignService extends BaseService {
 	private CampaignDAO campaignDAO = new CampaignDAO();
 
 	@GET
-	@Path("/admin")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<CampaignBean> getCampaigns() {
 		final User user = getLoggedInUser();
@@ -34,7 +33,6 @@ public class CampaignService extends BaseService {
 	}
 
 	@POST
-	@Path("/admin")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addCampaign(Campaign campaign) {
 		final User user = getLoggedInUser();
@@ -53,7 +51,7 @@ public class CampaignService extends BaseService {
 	}
 
 	@POST
-	@Path("/admin/{id}")
+	@Path("/edit/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editCampaign(@PathParam("id") long id, Campaign campaign) {
 		final User user = getLoggedInUser();
@@ -72,7 +70,7 @@ public class CampaignService extends BaseService {
 	}
 
 	@GET
-	@Path("/admin/start/{campaignId}")
+	@Path("/start-possible/{campaignId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public StartCampaignResponseBean canStartCampaign(@PathParam("campaignId") long campaignId) {
 		final StartCampaignResponseBean response = new StartCampaignResponseBean();
@@ -90,7 +88,7 @@ public class CampaignService extends BaseService {
 	}
 
 	@POST
-	@Path("/admin/start/{campaignId}")
+	@Path("/start/{campaignId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response startCampaign(@PathParam("campaignId") long campaignId) {
 		final StartCampaignResponseBean canStartCampaign = this.canStartCampaign(campaignId);
@@ -104,7 +102,7 @@ public class CampaignService extends BaseService {
 	}
 	
 	@POST
-	@Path("/admin/stop/{campaignId}")
+	@Path("/stop/{campaignId}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response stopCampaign(@PathParam("campaignId") long campaignId) {
 		final Campaign campaign = campaignDAO.getById(campaignId);
@@ -119,7 +117,7 @@ public class CampaignService extends BaseService {
 	}
 	
 	@GET
-	@Path("/admin/check-name-availability/{name}")
+	@Path("/check-name-availability/{name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public CampaignNameAvailabilityCheckResponseBean checkNameAvailability(@PathParam("name") String name) {
 		final CampaignNameAvailabilityCheckResponseBean response = new CampaignNameAvailabilityCheckResponseBean();

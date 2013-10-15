@@ -15,7 +15,7 @@ sap.ui.app.Application.extend("Application", {
         this.reloadBenefitsModel();
     },
     reloadCampaignModel: function() {
-        sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/user/userCampaigns", null, false);
+        sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/user/campaigns", null, false);
     },    
     reloadBenefitsModel : function() {
         sap.ui.getCore().getModel("benefitsModel").loadData("/com.sap.benefits.management/api/benefits/all", null, false);

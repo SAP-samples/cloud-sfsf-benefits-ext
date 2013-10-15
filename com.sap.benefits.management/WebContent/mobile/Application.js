@@ -28,7 +28,7 @@ sap.ui.app.Application.extend("Application", {
         }
     },
     reloadCampaignModel: function() {
-        sap.ui.getCore().getModel("campaignModel").loadData("../api/campaigns/admin", null, false);
+        sap.ui.getCore().getModel("campaignModel").loadData("../api/campaigns/", null, false);
         // Set active campaign
         this.reloadActiveCampaign();
         // Reload available points of managed employees
@@ -52,7 +52,7 @@ sap.ui.app.Application.extend("Application", {
         if (campaignId) {
             jQuery.ajax({
                 async: false,
-                url: "../api/user/orders/" + campaignId + "/" + userId,
+                url: "../api/orders/for-user/" + campaignId + "/" + userId,
                 type: 'GET',
                 success: function(data) {
                     model.setProperty("/currentOrder", data);

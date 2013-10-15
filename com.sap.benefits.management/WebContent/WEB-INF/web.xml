@@ -1,96 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	id="WebApp_ID" version="3.0">
-	<display-name>com.sap.benefits.management</display-name>
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
-	<servlet>
-		<display-name>CXF Servlet</display-name>
-		<servlet-name>CXFServlet</servlet-name>
-		<servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
-		<init-param>
-			<param-name>javax.ws.rs.Application</param-name>
-			<param-value>com.sap.benefits.management.ApplicationConfig</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>CXFServlet</servlet-name>
-		<url-pattern>/api/*</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>ResourceServlet</servlet-name>
-		<servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>ResourceServlet</servlet-name>
-		<url-pattern>/resources/*</url-pattern>
-	</servlet-mapping>
-	<context-param>
-		<param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
-		<param-value>https://sapui5.hana.ondemand.com</param-value>
-	</context-param>
-	<context-param>
-		<param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
-		<param-value>true</param-value>
-	</context-param>
-	<context-param>
-		<param-name>com.sap.ui5.resource.DEV_MODE</param-name>
-		<param-value>false</param-value>
-	</context-param>
-
-	<filter>
-		<display-name>SessionCreateFilter</display-name>
-		<filter-name>SessionCreateFilter</filter-name>
-		<filter-class>com.sap.benefits.management.services.SessionCreateFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>SessionCreateFilter</filter-name>
-		<url-pattern>/api/*</url-pattern>
-	</filter-mapping>
-    <listener>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>com.sap.benefits.management</display-name>
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+  <servlet>
+    <display-name>CXF Servlet</display-name>
+    <servlet-name>CXFServlet</servlet-name>
+    <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
+    <init-param>
+      <param-name>javax.ws.rs.Application</param-name>
+      <param-value>com.sap.benefits.management.ApplicationConfig</param-value>
+    </init-param>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CXFServlet</servlet-name>
+    <url-pattern>/api/*</url-pattern>
+  </servlet-mapping>
+   <servlet>
+    <servlet-name>DispatcherServlet</servlet-name>
+    <servlet-class>com.sap.benefits.management.DispatcherServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DispatcherServlet</servlet-name>
+    <url-pattern>/index.html</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <servlet-name>ResourceServlet</servlet-name>
+    <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResourceServlet</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
+  <context-param>
+    <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
+    <param-value>https://sapui5.hana.ondemand.com</param-value>
+  </context-param>
+  <context-param>
+    <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>com.sap.ui5.resource.DEV_MODE</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <filter>
+    <display-name>SessionCreateFilter</display-name>
+    <filter-name>SessionCreateFilter</filter-name>
+    <filter-class>com.sap.benefits.management.services.SessionCreateFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SessionCreateFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
+  <listener>
     <description>sessionListener</description>
     <listener-class>
         com.sap.benefits.management.services.SessionListener
     </listener-class>
-    </listener>
-	<login-config>
-		<auth-method>SAML2</auth-method>
-	</login-config>
-	<security-constraint>
-		<web-resource-collection>
-			<web-resource-name>Protected Area</web-resource-name>
-			<url-pattern>/*</url-pattern>
-		</web-resource-collection>
-		<auth-constraint>
-			<role-name>Everyone</role-name>
-			<role-name>Administrator</role-name>
-		</auth-constraint>
-	</security-constraint>
-	<security-role>
-		<description>HR Administrator</description>
-		<role-name>Administrator</role-name>
-	</security-role>
-	<!-- ============================================================== -->
-	<!-- JNDI resource definition of DestinationFactory -->
-	<!-- ============================================================== -->
-
-	<resource-ref>
-		<res-ref-name>jdbc/DefaultDB</res-ref-name>
-		<res-type>javax.sql.DataSource</res-type>
-	</resource-ref>
-
-	<resource-ref>
-		<res-ref-name>connectivity/DestinationFactory</res-ref-name>
-		<res-type>com.sap.core.connectivity.api.DestinationFactory</res-type>
-	</resource-ref>
-
-	<resource-ref>
-		<res-ref-name>sap_hcmcloud_core_odata</res-ref-name>
-		<res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
-	</resource-ref>
-
+  </listener>
+  <login-config>
+    <auth-method>SAML2</auth-method>
+  </login-config>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Protected Area</web-resource-name>
+      <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>Everyone</role-name>
+      <role-name>Administrator</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Admin area</web-resource-name>
+      <url-pattern>/mobile/admin.html</url-pattern>
+      <url-pattern>/mobile/Application.js</url-pattern>
+      <url-pattern>/mobile/view/benefits/*</url-pattern>
+      <url-pattern>/mobile/view/campaigns/*</url-pattern>
+      <url-pattern>/mobile/view/employees/*</url-pattern>
+      <url-pattern>/mobile/view/DefaultDetails.controller.js</url-pattern>
+      <url-pattern>/mobile/view/DefaultDetails.view.xml</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>Administrator</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-role>
+    <description>HR Administrator</description>
+    <role-name>Administrator</role-name>
+  </security-role>
+  <resource-ref>
+    <res-ref-name>jdbc/DefaultDB</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>connectivity/DestinationFactory</res-ref-name>
+    <res-type>com.sap.core.connectivity.api.DestinationFactory</res-type>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>sap_hcmcloud_core_odata</res-ref-name>
+    <res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
+  </resource-ref>
+  <filter>
+    <display-name>APIFilter</display-name>
+    <filter-name>APIFilter</filter-name>
+    <filter-class>com.sap.benefits.management.services.AuthorizationFilter</filter-class>
+    <init-param>
+    	<param-name>auth.constraints</param-name>
+    	<param-value>[
+    		{path: "/api/benefits/", roles: ["Everyone"]},
+    		{path: "/api/campaigns/", roles: ["Administrator"]},
+    		{path: "/api/orders/add/", roles: ["Everyone"]},
+    		{path: "/api/orders/for-user/", roles: ["Administrator"]},
+    		{path: "/api/system/", roles: ["Administrator"]},
+    		{path: "/api/user/managed/", roles: ["Administrator"]},
+    		{path: "/api/user/orders/", roles: ["Everyone"]},
+    		{path: "/api/user/campaigns/", roles: ["Everyone"]}
+    	]
+    	</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>APIFilter</filter-name>
+    <url-pattern>/api/*</url-pattern>
+  </filter-mapping>
 </web-app>

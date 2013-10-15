@@ -60,7 +60,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
             var newCampaignPoints = this.byId("pointsCtr").getValue();
             this.busyDialog.open();
             jQuery.ajax({
-                url: '../api/campaigns/admin',
+                url: '../api/campaigns/',
                 type: 'post',
                 dataType: 'json',
                 success: jQuery.proxy(function(data) {
@@ -84,7 +84,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
         if (name.length > 0) {
             newCampDialog.setBusy(true);
             jQuery.ajax({
-                url: '../api/campaigns/admin/check-name-availability/' + name,
+                url: '../api/campaigns/check-name-availability/' + name,
                 type: 'get',
                 dataType: 'json',
                 success: jQuery.proxy(function(data) {

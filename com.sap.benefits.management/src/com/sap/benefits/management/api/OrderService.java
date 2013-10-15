@@ -1,6 +1,5 @@
 package com.sap.benefits.management.api;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import javax.ws.rs.Consumes;
@@ -12,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.sap.benefits.management.api.frontend.BenefitsOrderBean;
 import com.sap.benefits.management.api.frontend.OrderBean;
 import com.sap.benefits.management.persistence.BenefitTypeDAO;
 import com.sap.benefits.management.persistence.CampaignDAO;
@@ -26,36 +26,28 @@ import com.sap.benefits.management.persistence.model.User;
 @Path("/orders")
 public class OrderService extends BaseService {
 
+	private CampaignDAO campaignDAO = new CampaignDAO();
+	
 	@GET
-	@Path("/ordersForUser/{campName}/{userId}")
+	@Path("/for-user/{campain_id}/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Order> getUserOrders(@PathParam("campName") String campName, @PathParam("userId") String userId) throws IOException {
-		UserDAO userDAO = new UserDAO();
-		final User user = userDAO.getByUserId(userId);
-		CampaignDAO campaignDAO = new CampaignDAO();
-		Campaign campaign = campaignDAO.getByName(campName, user.getHrManager());
-
-		OrderDAO orderDAO = new OrderDAO();
-		return orderDAO.getOrdersForUser(user, campaign);
+	public BenefitsOrderBean getUserBenefitsOrder(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
+		Campaign campaign = campaignDAO.getById(campaign_id);
+		User user = (new UserDAO()).getByUserId(user_id);
+		Collection<Order> orders = (new OrderDAO()).getOrdersForUser(user, campaign);
+		if (orders.size() > 0) {
+			return BenefitsOrderBean.get(orders.iterator().next());
+		} else {
+			return BenefitsOrderBean.getEmpty(campaign);
+		}
 	}
-
-	@GET
-	@Path("/ordersForUser/{userId}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Collection<Order> getUserAllOrders(@PathParam("userId") String userId) throws IOException {
-		UserDAO userDAO = new UserDAO();
-		final User user = userDAO.getByUserId(userId);
-
-		OrderDAO orderDAO = new OrderDAO();
-		return orderDAO.getAllOrdersForUser(user);
-	}
-
+	
 	@POST
 	@Path("/add/{campaignId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addOrder(@PathParam("campaignId") long campaignId, OrderBean request) {
 		final User user = getLoggedInUser();
-		final Campaign campaign = new CampaignDAO().getById(campaignId);
+		final Campaign campaign = campaignDAO.getById(campaignId);
 
 		if (campaign == null) {
 			return createBadRequestResponse("Incorrect campaign id");

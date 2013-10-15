@@ -39,7 +39,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({style: "full", pattern: "yyyy-MM-dd'T'HH:mm:ss'Z'"});
         jQuery.ajax({
-            url: '../api/campaigns/admin/' + ctx.id,
+            url: '../api/campaigns/edit/' + ctx.id,
             type: 'post',
             dataType: 'json',
             success: function(data) {
@@ -72,7 +72,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         this.busyDialog.open();
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
-            url: '../api/campaigns/admin/start/' + ctx.id,
+            url: '../api/campaigns/start-possible/' + ctx.id,
             type: 'get',
             dataType: 'json',
             success: jQuery.proxy(function(data) {
@@ -111,7 +111,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         jQuery.sap.require("sap.m.MessageToast");
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
-            url: '../api/campaigns/admin/stop/' + ctx.id,
+            url: '../api/campaigns/stop/' + ctx.id,
             type: 'post',
             dataType: 'json',
             success: jQuery.proxy(function(data) {
@@ -126,7 +126,7 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
         jQuery.sap.require("sap.m.MessageToast");
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
-            url: '../api/campaigns/admin/start/' + ctx.id,
+            url: '../api/campaigns/start/' + ctx.id,
             type: 'post',
             dataType: 'json',
             success: jQuery.proxy(function(data) {
