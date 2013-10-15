@@ -57,7 +57,7 @@ sap.ui.app.Application.extend("Application", {
                 id : list.getId()
             });
         }
-    },
+    },    
     goHome: function() {
         var homePage = sap.ui.getCore().byId("HomePage");
         this._getShell().setApp(homePage);

@@ -1,51 +1,60 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-           xmlns="sap.m" controllerName="com.sap.benefits.management.view.employees.Details"
-           xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-    <Page id="EmployeesDetailsPage"
-          title="Benefit orders of {/employee/firstName} {/employee/lastName}"
-          showNavButton="false">
-        <content>
-            <ObjectHeader title="{/currentOrder/campaign/name} campaign orders" number="{/currentOrder/orderPrice}" numberUnit="Used Points">
-                <attributes>
-                    <ObjectAttribute text="Unused Points:" />
-                    <ObjectAttribute text="Entitlement:" />
-                </attributes>
-                <firstStatus>
-                    <ObjectStatus text="{parts: [{path:'/currentOrder/campaign/points'},{path:'/currentOrder/orderPrice'}], formatter:'.formatAvailablePoints'}" state="Success" />
-                </firstStatus>
-                <secondStatus>
-                    <ObjectStatus text="{/currentOrder/campaign/points} Points" state="Success" />
-                </secondStatus>
-            </ObjectHeader>
-            <List items="{/currentOrder/orderItems}" inset="true" class="benefitList" headerText="order details">
-                <items>
-                    <CustomListItem>
-                        <content>
-                            <List>
-                                <items>
-                                    <ObjectListItem title="{benefitDetails/name}">
-                                        <attributes>
-                                            <ObjectAttribute text="{benefitDetails/description}" />
-                                            <ObjectAttribute text="More information" active="true" press="linkPressed" />
-                                        </attributes>
-                                    </ObjectListItem>
-                                    <CustomListItem>
-                                        <content>
-                                            <List items="{benefitItems}">
-                                                <items>
-                                                    <StandardListItem title="{name}" description="quantity:" info="{quantity} x {itemValue} Points" infoState="Success" />
-                                                </items>
-                                            </List>
-                                        </content>
-                                    </CustomListItem>
-                                    <ObjectListItem title="{benefitDetails/name} total" number="{path:'benefitItems', formatter:'.formatBenefitItemsSum',useRawValues : true}" numberUnit="Points" />
-                                </items>
-                            </List>
-                        </content>
-                    </CustomListItem>
-                </items>
-            </List>
-        </content>
-    </Page>
+	xmlns="sap.m" controllerName="com.sap.benefits.management.view.employees.Details"
+	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
+	<Page id="EmployeesDetailsPage"
+		title="Benefit orders of {/employee/firstName} {/employee/lastName}"
+		showNavButton="false">
+		<content>
+			<ObjectHeader title="{/currentOrder/campaign/name} campaign orders"
+				number="{/currentOrder/orderPrice}" numberUnit="Used Points">
+				<attributes>
+					<ObjectAttribute text="Unused Points:" />
+					<ObjectAttribute text="Entitlement:" />
+				</attributes>
+				<firstStatus>
+					<ObjectStatus
+						text="{parts: [{path:'/currentOrder/campaign/points'},{path:'/currentOrder/orderPrice'}], formatter:'.formatAvailablePoints'}"
+						state="Success" />
+				</firstStatus>
+				<secondStatus>
+					<ObjectStatus text="{/currentOrder/campaign/points} Points"
+						state="Success" />
+				</secondStatus>
+			</ObjectHeader>
+			<List items="{/currentOrder/orderItems}" inset="true" class="benefitList"
+				headerText="order details">
+				<items>
+					<CustomListItem>
+						<content>
+							<List>
+								<items>
+									<ObjectListItem title="{benefitDetails/name}"
+										number="{path:'benefitItems', formatter:'.formatBenefitItemsSum',useRawValues : true}"
+										numberUnit="Points">
+										<attributes>
+											<ObjectAttribute text="{benefitDetails/description}" />
+											<ObjectAttribute text="More information"
+												active="true" press="linkPressed" />
+										</attributes>
+									</ObjectListItem>
+									<CustomListItem>
+										<content>
+											<List items="{benefitItems}">
+												<items>
+													<StandardListItem title="{name}"
+														description="quantity:" info="{quantity} x {itemValue} Points"
+														infoState="Success" />
+												</items>
+											</List>
+										</content>
+									</CustomListItem>
+								</items>
+							</List>
+						</content>
+					</CustomListItem>
+				</items>
+			</List>
+		</content>
+	</Page>
 
 </core:View>

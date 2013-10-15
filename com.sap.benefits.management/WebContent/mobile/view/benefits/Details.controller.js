@@ -5,8 +5,10 @@ sap.ui.controller("com.sap.benefits.management.view.benefits.Details", {
     },
     linkPressed: function(evt) {
         var control = sap.ui.getCore().byId(evt.getParameters().id);
-        var link = control.getModel().getData().link;
-        sap.m.URLHelper.redirect(link, true);
+        var link = control.getModel().getData().infoLink;
+        if (link) {
+            sap.m.URLHelper.redirect(link, true);    
+        }        
     }
 
 });

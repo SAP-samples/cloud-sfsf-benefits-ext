@@ -16,16 +16,16 @@ import com.sap.benefits.management.persistence.model.Benefit;
 public class BenefitsService extends BaseService {
 	
 	final BenefitDAO benefitDAO = new BenefitDAO();
-	
+	/*
 	@GET
 	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Benefit> getAllBenefits(){
 		return benefitDAO.getAll();
-	}
+	}*/
 	
 	@GET
-	@Path("/allNew")
+	@Path("/all")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<BenefitDetailsBean> getAllBnefitsNew(){
 		List<Benefit> benfits = benefitDAO.getAll();
