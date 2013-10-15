@@ -11,20 +11,20 @@
                     <Label text="Name:" class="labelHeight"/>
                     <Text class="labelHeight" text="{name}"/>
                     <Label text="Start Date:" class="labelHeight"/>
-                    <Text id="startDateTextCtr" text="{path:'startDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'yyyy-MM-dd\'T\'HH:mm:ss\'Z\''}}}" class="labelHeight"/>
+                    <Text id="startDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight"/>
                     <Label text="End Date:" class="labelHeight"/>
-                    <Text id="endDateTextCtr" text="{path:'endDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'yyyy-MM-dd\'T\'HH:mm:ss\'Z\''}}}" class="labelHeight"/>
+                    <Text id="endDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight"/>
                     <Label text="Points per User:" class="labelHeight"/>
                     <Text id="pointsCtr" text="{points}" class="labelHeight" />
                     <Label text="State:" class="labelHeight"/>
-                    <ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:['active'], formatter: '.setStateText' }" class="labelHeight"/>
+                    <ObjectStatus state="{parts:['active'], formatter: '.formatState' }" text="{parts:['active'], formatter: '.formatStateText' }" class="labelHeight"/>
                 </form:content>
             </form:SimpleForm>
         </content> 
         <footer>
             <Bar>
                 <contentRight>
-                    <Button id="startStopButton" text="{parts:['active'], formatter: '.setStartStopButtonText' }" press="startStopButtonPressed"/>
+                    <Button id="startStopButton" text="{parts:['active'], formatter: '.formatStartStopButtonText' }" press="startStopButtonPressed"/>
                     <Button id="editButton" text="Edit" press="editButtonPressed"/>
                 </contentRight>
             </Bar>

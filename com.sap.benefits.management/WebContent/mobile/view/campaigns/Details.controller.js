@@ -1,4 +1,5 @@
 jQuery.sap.require("sap.ui.core.ValueState");
+jQuery.sap.require("sap.ui.core.format.DateFormat");
 sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
     onInit: function() {
         this.getView().addEventDelegate({
@@ -27,8 +28,8 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
             }, this)
         }));
 
-        this.byId("startDateCtr").setValue(this.byId("startDateTextCtr").getText());
-        this.byId("endDateCtr").setValue(this.byId("endDateTextCtr").getText());
+        this.byId("startDateCtr").setValue(this.byId("startDateTextCtr").getText() === "not set" ? "" : this.byId("startDateTextCtr").getText());
+        this.byId("endDateCtr").setValue(this.byId("endDateTextCtr").getText() === "not set" ? "" : this.byId("endDateTextCtr").getText());
         sap.ui.getCore().getEventBus().publish("nav", "virtual");
         editCampDialog.open();
     },
@@ -88,14 +89,23 @@ sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
             contentType: "application/json; charset=utf-8",
         });
     },
-    setState: function(active) {
+    formatState: function(active) {
         return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
     },
-    setStateText: function(active) {
+    formatStateText: function(active) {
         return active ? "Active" : "Inactive";
     },
-    setStartStopButtonText: function(active) {
+    formatStartStopButtonText: function(active) {
         return active ? "Stop" : "Start";
+    },
+    formatDate: function(date) {
+        if (date) {
+            var formatter = sap.ui.core.format.DateFormat;
+            var dateObject = formatter.getDateInstance({style: "full", pattern: "yyyy-MM-dd\'T\'HH:mm:ss\'Z\'"}).parse(date);
+            return formatter.getDateInstance({style: "full", pattern: "MMM d, y"}).format(dateObject);
+        } else {
+            return "not set";
+        }
     },
     refreshStartStopBtnState: function(isCampaignStarted) {
         var isCampaignStarted = this.getView().getBindingContext().getObject().active;
