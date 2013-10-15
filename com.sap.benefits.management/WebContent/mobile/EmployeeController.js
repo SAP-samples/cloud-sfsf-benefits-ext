@@ -6,13 +6,9 @@ sap.ui.app.Application.extend("Application", {
 
     	campId = "";
         var campaignModel = new sap.ui.model.json.JSONModel();
-        var ordersModel = new sap.ui.model.json.JSONModel();
 
-        sap.ui.getCore().setModel(ordersModel, "ordersModel");
         sap.ui.getCore().setModel(campaignModel, "campaignModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
-        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "orderDetailsModel");
-        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "orderByCampaignModel");
         
         this.reloadCampaignModel();
@@ -23,7 +19,6 @@ sap.ui.app.Application.extend("Application", {
     },    
     reloadBenefitsModel : function() {
         sap.ui.getCore().getModel("benefitsModel").loadData("/com.sap.benefits.management/api/benefits/all", null, false);
-        var testCtx = sap.ui.getCore().getModel("benefitsModel").getData();
     },
     reloadOrdersModel : function(campaignId){
     	var model = new sap.ui.model.json.JSONModel();
@@ -74,7 +69,7 @@ sap.ui.app.Application.extend("Application", {
             tiles: [               
                 new sap.m.StandardTile("Orders", {
                     icon: "sap-icon://new-order",
-                    number: "12",
+//                    number: "12",
                     title: "Orders",
                     press: jQuery.proxy(this._handleTilePressed, this)
                 }),
