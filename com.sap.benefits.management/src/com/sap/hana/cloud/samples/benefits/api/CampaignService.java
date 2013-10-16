@@ -34,18 +34,20 @@ public class CampaignService extends BaseService {
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addCampaign(Campaign campaign) {
+	public Response addCampaign(CampaignBean campaign) {
 		final User user = getLoggedInUser();
-		if (campaignDAO.getByName(campaign.getName(), user) != null) {
-			return createBadRequestResponse(format("Campaign with name \"{0}\" already exist", campaign.getName()));
-		} else if (campaign.isActive() && !campaignDAO.canBeActive(campaign, user)) {
+		if (campaignDAO.getByName(campaign.name, user) != null) {
+			return createBadRequestResponse(format("Campaign with name \"{0}\" already exist", campaign.name));
+		} else if (campaign.active && !campaignDAO.canBeActive(campaign.id, user)) {
 			return createBadRequestResponse("Another campaign is set as active");
 		}
 
-		campaign.setOwner(user);
-		campaign.setPoints(campaign.getPoints());
-		campaignDAO.saveNew(campaign);
-		campaignDAO.setPointsToUsers(campaign);
+		final Campaign newCampaign = new Campaign();
+		newCampaign.setName(campaign.name);
+		newCampaign.setOwner(user);
+		newCampaign.setPoints(campaign.points);
+		campaignDAO.saveNew(newCampaign);
+		campaignDAO.setPointsToUsers(newCampaign);
 
 		return createOkResponse();
 	}
@@ -53,17 +55,17 @@ public class CampaignService extends BaseService {
 	@POST
 	@Path("/edit/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response editCampaign(@PathParam("id") long id, Campaign campaign) {
+	public Response editCampaign(@PathParam("id") long id, CampaignBean campaign) {
 		final User user = getLoggedInUser();
 		final Campaign camp = campaignDAO.getById(id);
 		if (camp == null) {
 			return createBadRequestResponse("Campaign does not exist");
-		} else if (campaign.isActive() && !campaignDAO.canBeActive(campaign, user)) {
+		} else if (campaign.active && !campaignDAO.canBeActive(campaign.id, user)) {
 			return createBadRequestResponse("Another campaign is set as active");
 		}
 
-		camp.setStartDate(campaign.getStartDate());
-		camp.setEndDate(campaign.getEndDate());
+		camp.setStartDate(campaign.startDate);
+		camp.setEndDate(campaign.endDate);
 
 		campaignDAO.save(camp);
 		return createOkResponse();

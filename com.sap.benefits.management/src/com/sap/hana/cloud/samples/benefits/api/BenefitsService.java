@@ -16,13 +16,6 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.Benefit;
 public class BenefitsService extends BaseService {
 	
 	final BenefitDAO benefitDAO = new BenefitDAO();
-	/*
-	@GET
-	@Path("/all")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Benefit> getAllBenefits(){
-		return benefitDAO.getAll();
-	}*/
 	
 	@GET
 	@Path("/all")
@@ -37,5 +30,4 @@ public class BenefitsService extends BaseService {
 		}
 		return result;
 	}
-
 }

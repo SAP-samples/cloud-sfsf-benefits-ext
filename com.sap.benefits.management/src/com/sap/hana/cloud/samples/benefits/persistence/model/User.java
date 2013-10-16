@@ -23,7 +23,7 @@ import javax.persistence.UniqueConstraint;
 @Entity
 @Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_ID" }) })
 @NamedQueries({ 
-	@NamedQuery(name = GET_USER_PK_BY_USER_ID, query = "select u.id from User u where u.userId = :userId")
+	@NamedQuery(name = GET_USER_PK_BY_USER_ID, query = "select u from User u where u.userId = :userId")
 	})
 public class User implements IDBEntity {
 	@Id

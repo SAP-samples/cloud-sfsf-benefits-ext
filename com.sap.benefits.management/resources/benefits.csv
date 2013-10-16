@@ -1,3 +1,12 @@
-"name","description","link","type","value","active"
-"Trapeza pass","Trapeza pass vaucher","http://google.com/","2 lv.","2","true"
-"Podarak pass","Podarak pass vaucher","http://yahoo.com/","5 lv.","2","true"
+name,description,link,type,value,active
+Amazon Gigt Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$20 ,20,TRUE
+Amazon Gigt Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$40 ,40,TRUE
+Amazon Gigt Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$50 ,50,TRUE
+Charity Donations ,,,Church construction,10,TRUE
+Charity Donations ,,,Sofia University St. Kl. Ohridski,10,TRUE
+Charity Donations ,,,Community Hospitals,10,TRUE
+Liverpool FC,Buy tickets for liverpool FC matches,http://www.liverpoolfc.com/tickets/latest-ticket-news,Liverpool V Fulham,150,TRUE
+Liverpool FC,Buy tickets for liverpool FC matches,http://www.liverpoolfc.com/tickets/latest-ticket-news,Arsenal V Liverpool,200,TRUE
+Health Center ,,http://www.cpliverpool.com/,Fitness card,50,TRUE
+Health Center ,,http://www.cpliverpool.com/,Swimming card,50,TRUE
+Health Center ,,http://www.cpliverpool.com/,Massage,50,TRUE

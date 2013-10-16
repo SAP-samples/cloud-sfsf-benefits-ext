@@ -13,6 +13,7 @@
 			<property name="eclipselink.deploy-on-startup" value="True" />
 			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
 			<property name="eclipselink.logging.level" value="SEVERE" />
+			<property name="eclipselink.cache.shared.default" value="false"/>
 			<property name="eclipselink.target-database" value="com.sap.persistence.platform.database.HDBPlatform"/>
 		</properties>
 	</persistence-unit>

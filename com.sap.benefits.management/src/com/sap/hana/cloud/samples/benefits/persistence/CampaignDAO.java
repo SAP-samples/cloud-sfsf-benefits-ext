@@ -24,11 +24,12 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 			final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_CAMPAIGN_BY_NAME, Campaign.class);
 			query.setParameter("name", name);
 			query.setParameter("owner", user);
-			final Campaign campaign = em.find(Campaign.class, query.getSingleResult().getId());
-			if (campaign != null) {
-				em.refresh(campaign);
-			}
-			return campaign;
+//			final Campaign campaign = em.find(Campaign.class, query.getSingleResult().getId());
+//			if (campaign != null) {
+//				em.refresh(campaign);
+//			}
+			
+			return query.getSingleResult();
 		} catch (javax.persistence.NoResultException x) {
 			return null;
 		} finally {
@@ -49,9 +50,9 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		return campaign;
 	}
 
-	public boolean canBeActive(Campaign campaign, User user) {
+	public boolean canBeActive(Long campaignId, User user) {
 		final Campaign activeCampaign = getActiveCampaign(user);
-		if (activeCampaign != null && !activeCampaign.getId().equals(campaign.getId())) {
+		if (activeCampaign != null && !activeCampaign.getId().equals(campaignId)) {
 			return false;
 		} else {
 			return true;
