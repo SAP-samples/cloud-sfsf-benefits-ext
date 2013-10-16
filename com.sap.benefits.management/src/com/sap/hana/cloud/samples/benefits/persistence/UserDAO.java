@@ -17,18 +17,15 @@ public class UserDAO extends BasicDAO<User> {
 	public User getByUserId(String userId) {
 		final EntityManager em = factory.createEntityManager();
 		try {
-			final TypedQuery<User> query = em.createNamedQuery(DBQueries.GET_USER_PK_BY_USER_ID, User.class);
+			final TypedQuery<User> query = em.createNamedQuery(DBQueries.GET_USER_BY_USER_ID, User.class);
 			query.setParameter("userId", userId);
-			final User user = query.getSingleResult();
-//			if (userPrimaryKey != null) {
-//				User user = em.find(User.class, userPrimaryKey);
-//				em.refresh(user);
-//				return user;
-//			}
+			User user = query.getSingleResult();
 			return user;
-		} catch (NoResultException | NonUniqueResultException x) {
+		} catch (NoResultException x) {
 			return null;
-		}finally {
+		} catch (NonUniqueResultException e) {
+			return null;
+		} finally {
 			em.close();
 		}
 	}

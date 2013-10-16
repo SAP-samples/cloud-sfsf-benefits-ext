@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.TypedQuery;
 
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
@@ -24,15 +26,12 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 			final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_CAMPAIGN_BY_NAME, Campaign.class);
 			query.setParameter("name", name);
 			query.setParameter("owner", user);
-//			final Campaign campaign = em.find(Campaign.class, query.getSingleResult().getId());
-//			if (campaign != null) {
-//				em.refresh(campaign);
-//			}
-			
 			return query.getSingleResult();
-		} catch (javax.persistence.NoResultException x) {
+		} catch (NoResultException x) {
 			return null;
-		} finally {
+		} catch (NonUniqueResultException e) {
+			return null;
+		}finally {
 			em.close();
 		}
 	}
