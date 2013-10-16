@@ -1,6 +1,6 @@
 package com.sap.benefits.management.persistence.model;
 
-import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_BY_USER_ID;
+import static com.sap.benefits.management.persistence.model.DBQueries.GET_USER_PK_BY_USER_ID;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,7 +25,7 @@ import com.google.gson.annotations.Expose;
 @Entity
 @Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_ID" }) })
 @NamedQueries({ 
-	@NamedQuery(name = GET_USER_BY_USER_ID, query = "select u from User u where u.userId = :userId")
+	@NamedQuery(name = GET_USER_PK_BY_USER_ID, query = "select u.id from User u where u.userId = :userId")
 	})
 public class User implements IDBEntity {
 	@Id
