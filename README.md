@@ -1,107 +1,161 @@
-SAP Employee Benefits Management
-==========================================
+SAP HANA cloud platform extension package 
+=========================================
 
-SAP Employee Benefits Management is a sample extension application to the SuccessFactors Employee Central, showing how to create an extension to the SuccessFactors EC. Simultaneously it can be used as a desktop application as well as a mobile application.
+Employee Benefits Management sample application
+-----------------------------------------------
 
-Quick start
------------
+The *SAP HANA cloud platform extension package* makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.
 
-Clone the repo, `git clone https://github.com/sap/***.git`, or [download the latest release](https://github.com/sap/***/zipball/master).
+*SAP Employee Benefits Management* is a sample extension application for *SuccessFactors Employee Central*. The application can be used by employees to make orders in specific benefits campaigns and by HR managers to manage employees’ benefits and set up new benefits campaigns.
 
-Project Overview
-----------------
+The purpose of the application is to showcase the advantages of *SAP HANA cloud platform extension package* offering as cloud development and hosting platform for applications that extend the Success Factors capabilities.
 
-Here is a basic description of the project. 
-Basicly the project contains two main modules - backend and frontend modules. 
+The sample application relies on and integrates the following SAP HANA Cloud Platform capabilities:
 
-The backend module consists of:
+* *SAP HANA Cloud Platform extension package* which provides Success Factors connectivity  on top of standard based OData API 
+* Persistency – JPA on top of [SAP HANA Database technology](http://www.saphana.com/welcome)
+* User interface technology – SAP UI5 (sap.m) libraries [Details](https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/explored/index.html)
+*	Backend logic is implemented using JAX-RS Services (Apache CXF & Google Gson for JSON serialization/deserialization)
 
-  - com.sap.hana.cloud.sample.benefits - the main package of the backend 
-  - com.sap.hana.cloud.sample.benefits.persistence - contains persistency logic where JPA technology is used
-  - com.sap.hana.cloud.sample.benefits.connectivity - SuccessFactors connectivity - HTTP destinations provided by SAP HANA Cloud Platform consume Success Factors OData API
-  - com.sap.hana.cloud.sample.benefits.api - backend services implementation � JAX-RS Services (Apache CXF & Google Gson for JSON serialization/deserialization)
-  - com.sap.hana.cloud.sample.benefits.api.frontend - datatype structures suitable for frontend usage
-
-The frontend module consists of:
-
-  - mobile/view - the main directory available at WebContent of the application. It holds the User Interface logic. Used UI technology - UI5 (sap.m) libraries
-  - mobile/css - Cascading Style Sheets
-  - mobile/img - images
-
-Application startup
+Get the Source Code
 -------------------
 
-You can run SAP Employee Benefits Management either locally, or on the Cloud.
+Clone the Git repository `git clone https://github.com/sap/successfactors-benefits-extension.git`, or [download the latest release](https://github.com/sap/successfactors-benefits-extension/zipball/master).
 
-Prerequisites: 
-An user should have an account to SuccessFactors Employee Central. This means he/she has an user and password for accessing SF OData API
+Architecture Overview
+---------------------
 
+The "cloud-sf-benefits" application is split in two main components - backend and frontend. 
 
+The backend is implemented in the following packages:
 
-1) Running locally
+  - *com.sap.hana.cloud.sample.benefits.services.** - REST backend services and model for the user inteface
+  - *com.sap.hana.cloud.sample.benefits.connectivity.** - OData connectivity to SuccessFactors  
+  - *com.sap.hana.cloud.sample.benefits.persistence.** - contains JPA entities and DAO objects.
+  - *com.sap.hana.cloud.sample.benefits.web.** - web integration logic
 
-  - go to pom.xml of the application. At properties node find (or add if missing) the element <sap.cloud.sdk.location> and set the path to the directory where you have the downloaded the SAP HANA Cloud SDK to. The same way find or add the property sap.cloud.sdk.version and set the version of downloaded SAP HANA Cloud SDK. Finally the properties sholuld look something like this: 
-		
-	    <sap.cloud.sdk.location>_local_path_to_HANA_Clould_SDK_</sap.cloud.sdk.location>
-		<sap.cloud.sdk.version>_version_</sap.cloud.sdk.version>
-	
-  - you have to create a new local SAP HANA Cloud server. In order to do that you have the downloaded the SAP HANA Cloud SDK.
-  - double-click on it, Connectivity tab, create a new Destination, named "[sap_hcmcloud_core_odata] and paste the following URL to the URL field:
+The frontend is located in WebContent folder. The structure is the following:
+
+  - *mobile/view* - UI logic implemented using XML views following MVC pattern
+  - *mobile/css* - application theming
+  - *mobile/img* - images
   
-https://SF host name/odata/v2 ; 
+The application have two roles:
 
-Setup the username and password. The username is constructed from username of your account and the company name:
-username@company name .
+- *Administrator* - is the company HR manager which administers the benefits. Users administering benefits need this role.
+- *Everyone* - is mapped to the company employees. It is not required to assign this role explicitely
 
-  - if you work behind a proxy server, then you should configure your proxy settings (host and port). Double click on the server,
- go to Overview tab and press the Open launch configuration. In the tab (x)= Arguments, VM Arguments copy this:
- -Dhttp.proxyHost=<yourproxyHost> -Dhttp.proxyPort=<yourProxyPort> -Dhttps.proxyHost=<yourproxyHost> -Dhttps.proxyPort=<yourProxyPort> 
- and set your proxy hosts and ports 
-  - create Local users - The users you create should have the same names as the ones persistent on the Employee Central. Double-click on the created server, go to User tab and create new users with the properties required. Set a role for every of your users. 
- Role with name "Everyone" is mandatory and if you want to use the admin UI, then add one more role, named "admin".
+When configuring application security, assigne the proper role for the users accessing the application.
+
+Project Setup
+-----------------
+
+SAP Employee Benefits Management application can be run either locally or on *SAP HANA cloud platform extension package* account.
+
+1. Prerequisites
+
+ * Access to *SAP HANA cloud platform extension package* account
+ * *SAP HANA Cloud Platform* development enviroment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
+
+2. Configure the project build
+
+ Set the following properties in project *pom.xml*:
+
+  - *sap.cloud.sdk.location* - set the path to the directory where you have the downloaded the SAP HANA Cloud SDK
+  - *sap.cloud.sdk.version* - set the version of downloaded SAP HANA Cloud SDK
+
+For example:
+
+    <sap.cloud.sdk.location>
+      C:\develop\neo-sdk-javaweb-1.37.16.2
+    </sap.cloud.sdk.location>   
+    <sap.cloud.sdk.version>
+      1.37.16.2
+    </sap.cloud.sdk.version>
+
+Run on local server
+-------------------
+
+**Configure connectivity to Employee Central**
+
+ 1. Download the SuccessFactors OData access destination *sap_hcmcloud_core_odata* from  *SAP HANA cloud platform extension package* account to a local file. Follow the process described [here](https://help.hana.ondemand.com/help/frameset.htm?f02a359183c74429a9d82b23feb15243.html)
+ 2. Import the destination in the local server [Details](https://help.hana.ondemand.com/help/frameset.htm?0334aa5dbb304deb83a30503967b6f8d.html)
+ 3. Proxy server setup (optional) - If you work behind a proxy server, configure the proxy settings of the local server. [Details](https://help.hana.ondemand.com/help/frameset.htm?e592cf6cbb57101495d3c28507d20f1b.html)
+
+**Create local users**
+
+In order to access the application you would need to have proper users created in local user store. The users you create should have the same user ids as existing users in Employee Central. This is required in order to match to existing Employee Central user profiles.
+
+For example:
+
+- "*cgrant1*" - is the user id of Carla Grant, which is regular employee in Employee Central
+- "*nnnn*" - is the user id of Nancy Nash, which is the HR manager of Carla Grant
+
+To create local users, follow the procedure described in the official documentation. [Details](https://help.hana.ondemand.com/help/frameset.htm?fe47e02fd9514ab889c37250ed771c0c.html).
+
+Assign the *Administrator* role to the proper HR manager (e.g. "*nnnn*").
+
+**JPA Configuration for local server**
+
+By default application is configured to run on top of SAP HANA database. Local server runs with derby so you need to comment out the following line in *persistence.xml*
+
+    <!-- 
+    <property 
+    name="eclipselink.target-database" 
+    value="com.sap.persistence.platform.database.HDBPlatform"/> 
+    -->
+
+Run on SAP HANA cloud platform extension package account
+----------------------------------------------------------
+
+Deploy the application on your SAP HANA Cloud extension package account. [Details](https://help.hana.ondemand.com/help/frameset.htm?e5dfbc6cbb5710149279f67fb43d4e5d.html)
+
+Configure the application role assigments from cloud cockit. [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html)
+
+
+Access the application 
+----------------------
+
+After deployment the applciation is accessible on the following urls:
+
+* For managing benefits and campaigns
+
+`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/admin.html`
+
+* Simplified UI for benefit orders
+
+`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/employee.html`
  
-  - Run the application:
-
-For HR user go to http://<localhost:port>com.sap.hana.cloud.sample.benefits/mobile/index.html
-
-For Employee user go to http://<localhost:port>com.sap.hana.cloud.sample.benefits/mobile/employee.html
- 
- 2) Running on the Cloud
- 
-  - go to pom.xml of the application. At properties node find (or add if missing) the element <sap.cloud.sdk.location> and set the path to the directory where you have the downloaded the SAP HANA Cloud SDK to. The same way find or add the property sap.cloud.sdk.version and set the version of downloaded SAP HANA Cloud SDK. Finally the properties sholuld look something like this:
-  	
-	    <sap.cloud.sdk.location>_local_path_to_HANA_Clould_SDK_</sap.cloud.sdk.location>
-		<sap.cloud.sdk.version>_version_</sap.cloud.sdk.version>
-	
-  - create a server on the SAP HANA Cloud Platform
-  - deploy the application
-  - double-click on it, Connectivity tab, create a new Destination, named "sap_hcmcloud_core_odata" and paste the following URL to the URL field:
-https://SF host name/odata/v2 ; Setup the username and password. The username is constructed from username of your account and the company name: username@company name .
-  - assign your user a specific role - go to the accounts page, Authorizations tab, select application from the combo box and the available roles will appear on the right.
- Choose Users from the combo box below and assign the desired role.
-  - Run the application
-
-
 Explore the Application
 -----------------------
- The application can be used by employees to make orders in specific benefits campaigns or by HR managers to manage employees� benefits and set up new benefits campaigns. 
- Each campaign grants the employees with a certain amount of points that they can use to make orders for benefits from the benefits portfolio for the campaign. 
- Different benefits are worth different amount of points.
 
- For instance you can use Carla Grant's username: cgrant1 as an employee, and Nancy Nash's username: nnnn as Carla's HR manager. 
+In the core of the application is the ability to reward employees with different non monetary benefits e.g concert tickets, food vouchers and alike. The application uses abstract *"currency"* called *benefit points* to value the benefits. According to the company policy each employee is entitled particular ammount of benefit point for certain period of time. Each rewarding period is caleed *"campaign"* and is having specific start, end date and benefit points. HR manager is responsible for managing the campaigns and provide the ordered rewards to the employees.
 
-Note: the users(usernames) that you create on you local/cloud environment should exists on the SuccessFactors Employee Central, so you could connect successfully to the EC.
+As *HR manager*, you can manage benefits from three panes:
 
- When you login for the first time, you should use the HR Manager username. One could goes to "Benefit" page and find out what benefits are available. Next you should go to "Campaign" page and create an active campaign to be used by the employees.
- As an employee one has an access only to "Employee" page. From there the user can creates orders for the active campaign.
-  
+* Employees
+
+  View all managed employees and details about each employee’s used and total benefit points for the current campaign. In addition, you can see order history of the employee for previous campaigns.
+
+* Benefits
+ 
+  Benefits portfolio is managed here.
+
+* Campaigns
+
+  You can see and manage campaign details.
+
+As *employee*, you can edit your active campaign benefit orders and view your past orders.
+
+By default the application has hardcoded benefits list and no campaigns. It is advisable to login with HR Manager user first *("nnnn")* and create some campaign, from the campaign menu. Then login as some managed employee *("cgrant")* to add benefits to your order.  
 
 Authors
 -------
 
 **Chavdar Baikov**,
 **Marin Hadzhiev**,
-**Tsvetelina Marinova**
+**Tsvetelina Marinova**,
+**Petra Lazarova**
 
 Copyright and license
 ---------------------
