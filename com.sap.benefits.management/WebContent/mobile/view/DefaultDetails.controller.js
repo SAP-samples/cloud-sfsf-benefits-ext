@@ -1,4 +1,4 @@
-sap.ui.controller("com.sap.benefits.management.view.DefaultDetails", {
+sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.DefaultDetails", {
     onInit: function() {
 
     },

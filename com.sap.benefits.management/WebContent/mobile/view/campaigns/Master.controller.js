@@ -1,6 +1,6 @@
 jQuery.sap.require("sap.ui.core.ValueState");
 
-sap.ui.controller("com.sap.benefits.management.view.campaigns.Master", {
+sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     onInit: function() {
         this.busyDialog = new sap.m.BusyDialog({showCancelButton: false});
 

@@ -15,10 +15,10 @@ sap.ui.app.Application.extend("Application", {
         this.reloadBenefitsModel();
     },
     reloadCampaignModel: function() {
-        sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.benefits.management/api/user/campaigns", null, false);
+        sap.ui.getCore().getModel("campaignModel").loadData("/com.sap.hana.cloud.samples.benefits/api/user/campaigns", null, false);
     },    
     reloadBenefitsModel : function() {
-        sap.ui.getCore().getModel("benefitsModel").loadData("/com.sap.benefits.management/api/benefits/all", null, false);
+        sap.ui.getCore().getModel("benefitsModel").loadData("/com.sap.hana.cloud.samples.benefits/api/benefits/all", null, false);
     },
     reloadOrdersModel : function(campaignId){
     	var model = new sap.ui.model.json.JSONModel();
@@ -76,8 +76,8 @@ sap.ui.app.Application.extend("Application", {
             ]
         });
 
-        var emplOrdersMasterView =  sap.ui.xmlview("EmployeeOrdersMaster", "com.sap.benefits.management.view.orders.Master");
-        var emplOrdersDetailsView =  sap.ui.xmlview("EmployeeOrdersDetails", "com.sap.benefits.management.view.orders.Details");
+        var emplOrdersMasterView =  sap.ui.xmlview("EmployeeOrdersMaster", "com.sap.hana.cloud.samples.benefits.view.orders.Master");
+        var emplOrdersDetailsView =  sap.ui.xmlview("EmployeeOrdersDetails", "com.sap.hana.cloud.samples.benefits.view.orders.Details");
         
         var splitApp = new sap.m.SplitApp("SplitAppControl");
   

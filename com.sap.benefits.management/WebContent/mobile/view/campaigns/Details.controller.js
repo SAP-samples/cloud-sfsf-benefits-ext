@@ -1,6 +1,6 @@
 jQuery.sap.require("sap.ui.core.ValueState");
 jQuery.sap.require("sap.ui.core.format.DateFormat");
-sap.ui.controller("com.sap.benefits.management.view.campaigns.Details", {
+sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", {
     onInit: function() {
         this.getView().addEventDelegate({
             onBeforeShow: function(evt) {

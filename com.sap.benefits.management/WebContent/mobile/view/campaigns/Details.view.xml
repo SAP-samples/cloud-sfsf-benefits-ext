@@ -1,6 +1,6 @@
 <core:View xmlns:core="sap.ui.core" 
            xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
-           controllerName="com.sap.benefits.management.view.campaigns.Details" 
+           controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Details" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
     <Page id="CampainMasterPage" title="Details" showNavButton="false">

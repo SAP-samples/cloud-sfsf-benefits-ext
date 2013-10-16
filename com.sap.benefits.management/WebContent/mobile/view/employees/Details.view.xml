@@ -1,5 +1,5 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
-	xmlns="sap.m" controllerName="com.sap.benefits.management.view.employees.Details"
+	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.employees.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 	<Page id="EmployeesDetailsPage"
 		title="Benefit orders of {/employee/firstName} {/employee/lastName}"

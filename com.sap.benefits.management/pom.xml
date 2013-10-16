@@ -12,8 +12,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.sap.benefits.management</groupId>
-	<artifactId>com.sap.benefits.management</artifactId>
+	<groupId>com.sap.hana.cloud.samples.benefits</groupId>
+	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<version>1.0.1</version>
 	<packaging>war</packaging>
     <description>Success Factors extension sample application.</description>

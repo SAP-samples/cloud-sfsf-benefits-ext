@@ -1,0 +1,111 @@
+package com.sap.hana.cloud.samples.benefits.persistence.model;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import com.google.gson.annotations.Expose;
+
+@Entity
+@Table(name = "BENEFIT_TYPE", uniqueConstraints={@UniqueConstraint(columnNames={"name", "BENEFIT_ID"})})
+public class BenefitType implements IDBEntity{
+	@Expose
+	@Id
+	@GeneratedValue
+	@Column(name = "TYPE_ID")
+	private Long id;
+	
+	@Expose
+	@Basic
+	private String name;
+	
+	@Expose
+	@Basic
+	@Column(precision = 25, scale = 2)
+	private BigDecimal value;
+	
+	@Expose
+	@Basic
+	private boolean active;
+
+	@ManyToOne
+	@JoinColumn(name = "BENEFIT_ID", referencedColumnName = "BENEFIT_ID")
+	private Benefit benefit;
+	
+	@OneToMany(mappedBy = "benefitType", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
+	private Collection<OrderDetails> orders;
+
+	@Override
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public BigDecimal getValue() {
+		return value;
+	}
+
+	public void setValue(BigDecimal value) {
+		this.value = value;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public Benefit getBenefit() {
+		return benefit;
+	}
+
+	public void setBenefit(Benefit benefit) {
+		this.benefit = benefit;
+		if(!benefit.getTypes().contains(this)){
+			benefit.addType(this);
+		}
+	}
+
+	public Collection<OrderDetails> getOrders() {
+		if(this.orders == null){
+			this.orders = new ArrayList<>();
+		}
+		return orders;
+	}
+	
+	public void addOrder(OrderDetails order){
+		getOrders().add(order);
+		if(order.getBenefitType() != this){
+			order.setBenefitType(this);
+		}
+	}
+
+	public void setOrders(Collection<OrderDetails> orders) {
+		this.orders = orders;
+	}
+}

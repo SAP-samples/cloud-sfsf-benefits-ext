@@ -1,4 +1,4 @@
-sap.ui.controller("com.sap.benefits.management.view.orders.Master", {
+sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
     onInit: function() {
     },
     onAfterRendering: function() {

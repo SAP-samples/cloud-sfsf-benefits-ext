@@ -1,4 +1,4 @@
-sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
+sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 	
 	onInit : function() {
 		this.getView().addEventDelegate({
@@ -23,7 +23,7 @@ sap.ui.controller("com.sap.benefits.management.view.orders.Details", {
 			text : "Ok",
 			press : function() {			
 				jQuery.ajax({
-		            url: '/com.sap.benefits.management/api/orders/add/' + appController.getCampaignId(),
+		            url: '/com.sap.hana.cloud.samples.benefits/api/orders/add/' + appController.getCampaignId(),
 		            type: 'post',
 		            dataType: 'json',
 		            success: function(data) {          

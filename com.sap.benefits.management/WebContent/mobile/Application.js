@@ -119,13 +119,13 @@ sap.ui.app.Application.extend("Application", {
                 })]
         });
 
-        var emplMasterView = sap.ui.xmlview("EmployeesMaster", "com.sap.benefits.management.view.employees.Master");
-        var emplDetailsView = sap.ui.xmlview("EmployeesDetails", "com.sap.benefits.management.view.employees.Details");
-        var benefitsMasterView = sap.ui.xmlview("BenefitsMaster", "com.sap.benefits.management.view.benefits.Master");
-        var benefitsDetailsView = sap.ui.xmlview("BenefitsDetails", "com.sap.benefits.management.view.benefits.Details");
-        var campaignMasterView = sap.ui.xmlview("CampaignMaster", "com.sap.benefits.management.view.campaigns.Master");
-        var campaignDetailsView = sap.ui.xmlview("CampaignDetails", "com.sap.benefits.management.view.campaigns.Details");
-        var defaultDetailsView = sap.ui.xmlview("DefaultDetails", "com.sap.benefits.management.view.DefaultDetails");
+        var emplMasterView = sap.ui.xmlview("EmployeesMaster", "com.sap.hana.cloud.samples.benefits.view.employees.Master");
+        var emplDetailsView = sap.ui.xmlview("EmployeesDetails", "com.sap.hana.cloud.samples.benefits.view.employees.Details");
+        var benefitsMasterView = sap.ui.xmlview("BenefitsMaster", "com.sap.hana.cloud.samples.benefits.view.benefits.Master");
+        var benefitsDetailsView = sap.ui.xmlview("BenefitsDetails", "com.sap.hana.cloud.samples.benefits.view.benefits.Details");
+        var campaignMasterView = sap.ui.xmlview("CampaignMaster", "com.sap.hana.cloud.samples.benefits.view.campaigns.Master");
+        var campaignDetailsView = sap.ui.xmlview("CampaignDetails", "com.sap.hana.cloud.samples.benefits.view.campaigns.Details");
+        var defaultDetailsView = sap.ui.xmlview("DefaultDetails", "com.sap.hana.cloud.samples.benefits.view.DefaultDetails");
 
         var splitApp = new sap.m.SplitApp("SplitAppControl");
         splitApp.addMasterPage(emplMasterView);

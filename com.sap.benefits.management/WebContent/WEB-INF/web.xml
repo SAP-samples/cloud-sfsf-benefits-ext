@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
-  <display-name>com.sap.benefits.management</display-name>
+  <display-name>com.sap.hana.cloud.samples.benefits</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
@@ -10,7 +10,7 @@
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
     <init-param>
       <param-name>javax.ws.rs.Application</param-name>
-      <param-value>com.sap.benefits.management.services.ApplicationConfig</param-value>
+      <param-value>com.sap.hana.cloud.samples.benefits.service.ApplicationConfig</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -20,7 +20,7 @@
   </servlet-mapping>
    <servlet>
     <servlet-name>DispatcherServlet</servlet-name>
-    <servlet-class>com.sap.benefits.management.DispatcherServlet</servlet-class>
+    <servlet-class>com.sap.hana.cloud.samples.benefits.DispatcherServlet</servlet-class>
   </servlet>
   <servlet-mapping>
     <servlet-name>DispatcherServlet</servlet-name>
@@ -49,20 +49,20 @@
   <filter>
     <display-name>SessionCreateFilter</display-name>
     <filter-name>SessionCreateFilter</filter-name>
-    <filter-class>com.sap.benefits.management.services.SessionCreateFilter</filter-class>
+    <filter-class>com.sap.hana.cloud.samples.benefits.service.SessionCreateFilter</filter-class>
   </filter>
   <filter-mapping>
     <filter-name>SessionCreateFilter</filter-name>
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
   <listener>
-      <listener-class>com.sap.benefits.management.services.AppServletContextListener</listener-class>
+      <listener-class>com.sap.hana.cloud.samples.benefits.service.AppServletContextListener</listener-class>
   </listener>
 	
   <listener>  
     <description>sessionListener</description>
     <listener-class>
-        com.sap.benefits.management.services.SessionListener
+        com.sap.hana.cloud.samples.benefits.service.SessionListener
     </listener-class>
   </listener>
   <login-config>
@@ -112,7 +112,7 @@
   <filter>
     <display-name>APIFilter</display-name>
     <filter-name>APIFilter</filter-name>
-    <filter-class>com.sap.benefits.management.services.AuthorizationFilter</filter-class>
+    <filter-class>com.sap.hana.cloud.samples.benefits.service.AuthorizationFilter</filter-class>
     <init-param>
     	<param-name>auth.constraints</param-name>
     	<param-value>[
