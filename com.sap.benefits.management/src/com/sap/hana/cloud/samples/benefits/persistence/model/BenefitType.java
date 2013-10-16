@@ -16,27 +16,21 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.google.gson.annotations.Expose;
-
 @Entity
 @Table(name = "BENEFIT_TYPE", uniqueConstraints={@UniqueConstraint(columnNames={"name", "BENEFIT_ID"})})
 public class BenefitType implements IDBEntity{
-	@Expose
 	@Id
 	@GeneratedValue
 	@Column(name = "TYPE_ID")
 	private Long id;
 	
-	@Expose
 	@Basic
 	private String name;
 	
-	@Expose
 	@Basic
 	@Column(precision = 25, scale = 2)
 	private BigDecimal value;
 	
-	@Expose
 	@Basic
 	private boolean active;
 

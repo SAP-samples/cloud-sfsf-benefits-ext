@@ -8,18 +8,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.google.gson.annotations.Expose;
-
 @Entity
 @Table(name = "ORDERS_DETAILS")
 public class OrderDetails implements IDBEntity {
 	
-	@Expose
 	@Id
 	@GeneratedValue
 	private Long id;
 	
-	@Expose
 	@Basic
 	private Long quantity;
 	
@@ -27,7 +23,6 @@ public class OrderDetails implements IDBEntity {
 	@JoinColumn(name = "ORDER_ID", referencedColumnName = "ORDER_ID")
 	private Order order;
 
-	@Expose
 	@ManyToOne
 	@JoinColumn(name = "BENEFIT_TYPE_ID", referencedColumnName = "TYPE_ID")
 	private BenefitType benefitType;

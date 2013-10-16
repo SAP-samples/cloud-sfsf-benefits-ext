@@ -21,8 +21,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.google.gson.annotations.Expose;
-
 @Entity
 @Table(name = "ORDERS")
 @NamedQueries({ 
@@ -31,18 +29,15 @@ import com.google.gson.annotations.Expose;
 	})
 public class Order implements IDBEntity {
 	
-	@Expose
 	@Id
 	@GeneratedValue
 	@Column(name = "ORDER_ID")
 	private Long id;
 	
-	@Expose
 	@Basic
 	@Column(precision = 25, scale = 2)
 	private BigDecimal total;
 
-	@Expose
 	@ManyToOne
 	@JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
 	private Campaign campaign;
@@ -51,7 +46,6 @@ public class Order implements IDBEntity {
     @JoinColumn(name="USER_ID", referencedColumnName="ID")
 	private User user;
 	
-	@Expose
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
 	private Collection<OrderDetails> orderDetails;
 

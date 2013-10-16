@@ -24,8 +24,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
-import com.google.gson.annotations.Expose;
-
 @Entity
 @Table(name = "CAMPAIGNS", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
 @NamedQueries({ 
@@ -34,33 +32,27 @@ import com.google.gson.annotations.Expose;
 	})
 public class Campaign implements IDBEntity {
 	
-	@Expose
 	@Id
 	@GeneratedValue
 	@Column(name = "CAMPAIGN_ID")
 	private Long id;
 	
-	@Expose
 	@Basic
 	private String name;
 	
-	@Expose
 	@Basic
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "START_DATE")
 	private Date startDate;
 	
-	@Expose
 	@Basic
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "END_DATE")
 	private Date endDate;
 	
-	@Expose
 	@Basic
 	private long points;
 	
-	@Expose
 	@Basic
 	private boolean active;
 	

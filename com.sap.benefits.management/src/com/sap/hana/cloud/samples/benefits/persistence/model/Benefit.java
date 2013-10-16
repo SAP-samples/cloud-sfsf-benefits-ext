@@ -14,31 +14,24 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.google.gson.annotations.Expose;
-
 @Entity
 @Table(name = "BENEFITS", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
 public class Benefit implements IDBEntity{
 	
-	@Expose
 	@Id
 	@GeneratedValue
 	@Column(name = "BENEFIT_ID")
 	private Long id;
 	
-	@Expose
 	@Basic
 	private String name;
 	
-	@Expose
 	@Basic
 	private String description;
 	
-	@Expose
 	@Basic
 	private String link;
 	
-	@Expose
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "benefit", fetch = FetchType.LAZY, targetEntity = BenefitType.class)
 	private Collection<BenefitType> types;
 
