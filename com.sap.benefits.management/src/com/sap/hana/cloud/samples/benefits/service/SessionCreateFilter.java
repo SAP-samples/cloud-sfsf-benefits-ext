@@ -32,9 +32,11 @@ public class SessionCreateFilter implements Filter {
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) throws IOException, ServletException {
 		HttpServletRequest httpRequest = (HttpServletRequest) request;
 		String loggedInUser = httpRequest.getRemoteUser();
+		
 		if (loggedInUser != null) {
 			initUserSession(loggedInUser, httpRequest);
 		}
+		
 		filterChain.doFilter(request, response);
 	}
 

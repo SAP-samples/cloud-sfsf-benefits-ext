@@ -18,7 +18,16 @@
     <servlet-name>CXFServlet</servlet-name>
     <url-pattern>/api/*</url-pattern>
   </servlet-mapping>
-   <servlet>
+  <filter>
+  <filter-name>EntityManagerInterseptor</filter-name>
+  <filter-class>com.sap.hana.cloud.samples.benefits.service.EntityManagerInterceptor</filter-class>
+</filter>
+
+<filter-mapping>
+  <filter-name>EntityManagerInterseptor</filter-name>
+  <url-pattern>/api/*</url-pattern>
+</filter-mapping>
+  <servlet>
     <servlet-name>DispatcherServlet</servlet-name>
     <servlet-class>com.sap.hana.cloud.samples.benefits.DispatcherServlet</servlet-class>
   </servlet>
@@ -56,10 +65,9 @@
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
   <listener>
-      <listener-class>com.sap.hana.cloud.samples.benefits.service.AppServletContextListener</listener-class>
+    <listener-class>com.sap.hana.cloud.samples.benefits.service.AppServletContextListener</listener-class>
   </listener>
-	
-  <listener>  
+  <listener>
     <description>sessionListener</description>
     <listener-class>
         com.sap.hana.cloud.samples.benefits.service.SessionListener
@@ -114,16 +122,16 @@
     <filter-name>APIFilter</filter-name>
     <filter-class>com.sap.hana.cloud.samples.benefits.service.AuthorizationFilter</filter-class>
     <init-param>
-    	<param-name>auth.constraints</param-name>
-    	<param-value>[
-    		{path: "/api/benefits/", roles: ["Everyone"]},
-    		{path: "/api/campaigns/", roles: ["Administrator"]},
-    		{path: "/api/orders/add/", roles: ["Everyone"]},
-    		{path: "/api/orders/for-user/", roles: ["Administrator"]},
-    		{path: "/api/system/", roles: ["Administrator"]},
-    		{path: "/api/user/managed/", roles: ["Administrator"]},
-    		{path: "/api/user/orders/", roles: ["Everyone"]},
-    		{path: "/api/user/campaigns/", roles: ["Everyone"]}
+      <param-name>auth.constraints</param-name>
+      <param-value>[
+    		{path: &quot;/api/benefits/&quot;, roles: [&quot;Everyone&quot;]},
+    		{path: &quot;/api/campaigns/&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/orders/add/&quot;, roles: [&quot;Everyone&quot;]},
+    		{path: &quot;/api/orders/for-user/&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/system/&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/user/managed/&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/user/orders/&quot;, roles: [&quot;Everyone&quot;]},
+    		{path: &quot;/api/user/campaigns/&quot;, roles: [&quot;Everyone&quot;]}
     	]
     	</param-value>
     </init-param>
@@ -132,4 +140,5 @@
     <filter-name>APIFilter</filter-name>
     <url-pattern>/api/*</url-pattern>
   </filter-mapping>
+  
 </web-app>

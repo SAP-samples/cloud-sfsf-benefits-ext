@@ -8,6 +8,10 @@ import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.TypedQuery;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sap.hana.cloud.samples.benefits.persistence.common.PersistenceManager;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
@@ -16,24 +20,26 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.keys.UserPointsPrim
 
 public class CampaignDAO extends BasicDAO<Campaign> {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	public CampaignDAO() {
-		super();
+		super(PersistenceManager.getInstance().getEntityManagerProvider());
 	}
 
 	public Campaign getByName(String name, User user) {
-		final EntityManager em = factory.createEntityManager();
+		final EntityManager em = emProvider.get();
 		try {
 			final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_CAMPAIGN_BY_NAME, Campaign.class);
 			query.setParameter("name", name);
 			query.setParameter("owner", user);
 			return query.getSingleResult();
 		} catch (NoResultException x) {
-			return null;
+			logger.error("Could not retrieve entity {} for userId {} from table {}.", name, user.getUserId(), "Campaign");
 		} catch (NonUniqueResultException e) {
-			return null;
-		}finally {
-			em.close();
+			logger.error("More than one entity {} for userId {} from table {}.", name, user.getUserId(), "Campaign");
 		}
+
+		return null;
 	}
 
 	public Campaign getOrCreateCampaign(String name, User user) {
@@ -59,18 +65,14 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 	}
 
 	public Campaign getActiveCampaign(User user) {
-		final EntityManager em = factory.createEntityManager();
-		try {
-			final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_ACTIVE_CAMPAIGNS, Campaign.class);
-			query.setParameter("owner", user);
-			List<Campaign> result = query.getResultList();
-			if (result.size() == 1) {
-				return result.get(0);
-			} else {
-				return null;
-			}
-		} finally {
-			em.close();
+		final EntityManager em = emProvider.get();
+		final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_ACTIVE_CAMPAIGNS, Campaign.class);
+		query.setParameter("owner", user);
+		List<Campaign> result = query.getResultList();
+		if (result.size() == 1) {
+			return result.get(0);
+		} else {
+			return null;
 		}
 	}
 

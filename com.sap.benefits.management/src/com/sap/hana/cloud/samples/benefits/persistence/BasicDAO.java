@@ -6,112 +6,74 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.sap.hana.cloud.samples.benefits.persistence.model.IDBEntity;
-import com.sap.hana.cloud.samples.benefits.persistence.util.DataSourceProvider;
-import com.sap.hana.cloud.samples.benefits.persistence.util.EntityManagerFactoryProvider;
 
 public class BasicDAO<T extends IDBEntity> {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-	protected EntityManagerFactory factory;
 
-	public BasicDAO() {
-		try {
-			DataSource dataSource = DataSourceProvider.getInstance().getDefault();
-			this.factory = EntityManagerFactoryProvider.getInstance().createEntityManagerFactory(dataSource);
-		} catch (NamingException e) {
-			logger.error("Could not get default data source", e);
-			throw new RuntimeException();
-		}
+	protected EntityManagerProvider emProvider;
+
+	public BasicDAO(EntityManagerProvider emProvider) {
+		this.emProvider = emProvider;
 	}
-	
-	public void refresh(T object){
-		final EntityManager em = factory.createEntityManager();
-		try {
-			em.refresh(object);
-		} finally {
-			em.close();
-		}
+
+	public void refresh(T object) {
+		final EntityManager em = emProvider.get();
+		em.refresh(object);
 	}
 
 	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
 		final List<T> result = new ArrayList<>();
-		final EntityManager em = factory.createEntityManager();
-		try {
-			result.addAll((Collection<? extends T>) em.createQuery("select t from " + getTableName() + " t",
-					this.getClass().getGenericSuperclass().getClass()).getResultList());
-		} finally {
-			em.close();
-		}
-
+		final EntityManager em = emProvider.get();
+		result.addAll((Collection<? extends T>) em.createQuery("select t from " + getTableName() + " t",
+				this.getClass().getGenericSuperclass().getClass()).getResultList());
 		return result;
 	}
 
 	public T save(T entity) {
-		final EntityManager em = factory.createEntityManager();
-		try {
-			em.getTransaction().begin();
+		final EntityManager em = emProvider.get();
+		em.getTransaction().begin();
 
-			final T merge = em.merge(entity);
+		final T merge = em.merge(entity);
 
-			em.getTransaction().commit();
-			return merge;
-		} finally {
-			em.close();
-		}
-
+		em.getTransaction().commit();
+		return merge;
 	}
 
 	public T saveNew(T entity) {
-		final EntityManager em = factory.createEntityManager();
-		try {
-			em.getTransaction().begin();
-			em.persist(entity);
+		final EntityManager em = emProvider.get();
+		em.getTransaction().begin();
+		em.persist(entity);
 
-			em.getTransaction().commit();
-			return entity;
-		} finally {
-			em.close();
-		}
+		em.getTransaction().commit();
+		return entity;
 	}
-	
+
 	public void deleteAll() {
 		final List<T> all = getAll();
-		final EntityManager em = factory.createEntityManager();
+		final EntityManager em = emProvider.get();
+		em.getTransaction().begin();
 
-		try {
-			em.getTransaction().begin();
-
-			for (T t : all) {
-				final T managedObject = getById(t.getId(), em);
-				em.remove(managedObject);
-			}
-
-			em.getTransaction().commit();
-		} finally {
-			em.close();
+		for (T t : all) {
+			final T managedObject = getById(t.getId(), em);
+			em.remove(managedObject);
 		}
+
+		em.getTransaction().commit();
 	}
 
 	public T getById(long id) {
-		final EntityManager em = factory.createEntityManager();
-		try {
-			return getById(id, em);
-		} finally {
-			em.close();
-		}
+		final EntityManager em = emProvider.get();
+		return getById(id, em);
 	}
 
 	@SuppressWarnings("unchecked")

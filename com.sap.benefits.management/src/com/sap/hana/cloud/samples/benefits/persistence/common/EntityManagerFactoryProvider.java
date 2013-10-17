@@ -1,4 +1,4 @@
-package com.sap.hana.cloud.samples.benefits.persistence.util;
+package com.sap.hana.cloud.samples.benefits.persistence.common;
 
 import java.util.HashMap;
 import java.util.Map;
