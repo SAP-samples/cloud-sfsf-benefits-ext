@@ -16,7 +16,7 @@
 	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<version>1.0.1</version>
 	<packaging>war</packaging>
-    <description>Success Factors extension sample application.</description>
+	<description>Success Factors extension sample application.</description>
 
 	<organization>
 		<name>SAP AG</name>
@@ -48,11 +48,7 @@
 
 		<sap.cloud.sdk.location>${env.NW_CLOUD_SDK_PATH}</sap.cloud.sdk.location>
 		<sap.cloud.sdk.version>${env.NW_CLOUD_SDK_VERSION}</sap.cloud.sdk.version>
-
 		<apache.cxf.version>2.7.3</apache.cxf.version>
-		<ui5.version>1.12.7</ui5.version>
-		<ui5.bluecrystal.version>1.13.0</ui5.bluecrystal.version>
-		<ui5.classifier>opt</ui5.classifier>
 	</properties>
 
 	<repositories>
@@ -100,13 +96,6 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.2</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sap.security.core.server</groupId>
-			<artifactId>csi</artifactId>
-			<version>1.0.1</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/WebContent/WEB-INF/lib/com.sap.security.core.server.csi_1.0.1.jar</systemPath>
 		</dependency>
 
 		<!-- CXF Resful services -->
@@ -162,14 +151,6 @@
 			<artifactId>junit</artifactId>
 			<version>4.10</version>
 			<scope>test</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>com.sap.ui5</groupId>
-			<artifactId>resource</artifactId>
-			<version>1.12.7</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/WebContent/WEB-INF/lib/resource-1.12.7.jar</systemPath>
 		</dependency>
 
 	</dependencies>

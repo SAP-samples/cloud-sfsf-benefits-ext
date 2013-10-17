@@ -35,14 +35,6 @@
     <servlet-name>DispatcherServlet</servlet-name>
     <url-pattern>/index.html</url-pattern>
   </servlet-mapping>
-  <servlet>
-    <servlet-name>ResourceServlet</servlet-name>
-    <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResourceServlet</servlet-name>
-    <url-pattern>/resources/*</url-pattern>
-  </servlet-mapping>
   <context-param>
     <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
     <param-value>https://sapui5.hana.ondemand.com</param-value>

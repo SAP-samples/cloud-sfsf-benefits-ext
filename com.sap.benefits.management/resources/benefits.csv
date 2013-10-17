@@ -1,7 +1,7 @@
 name,description,link,type,value,active
-Amazon Gigt Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$20 ,20,TRUE
-Amazon Gigt Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$40 ,40,TRUE
-Amazon Gigt Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$50 ,50,TRUE
+Amazon Gift Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$20 ,20,TRUE
+Amazon Gift Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$40 ,40,TRUE
+Amazon Gift Vaucher,"Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",http://www.amazon.com/,$50 ,50,TRUE
 Charity Donations ,,,Church construction,10,TRUE
 Charity Donations ,,,Sofia University St. Kl. Ohridski,10,TRUE
 Charity Donations ,,,Community Hospitals,10,TRUE

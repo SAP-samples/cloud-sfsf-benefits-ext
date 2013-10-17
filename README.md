@@ -20,7 +20,7 @@ The sample application relies on and integrates the following SAP HANA Cloud Pla
 Get the Source Code
 -------------------
 
-Clone the Git repository `git clone https://github.com/sap/successfactors-benefits-extension.git`, or [download the latest release](https://github.com/sap/successfactors-benefits-extension/zipball/master).
+Clone the Git repository `git clone https://github.com/sap/cloud-sfsf-benefits-ext.git`, or [download the latest release](https://github.com/sap/cloud-sfsf-benefits-ext/zipball/master).
 
 Architecture Overview
 ---------------------
@@ -59,19 +59,15 @@ SAP Employee Benefits Management application can be run either locally or on *SA
 
 2. Configure the project build
 
-In the project *pom.xml*, set the following properties:
+You need to set two environment variables in order to configure the local project build.
 
-  - *sap.cloud.sdk.location* - set the path to the directory where you have the downloaded the SAP HANA Cloud SDK
-  - *sap.cloud.sdk.version* - set the version of downloaded SAP HANA Cloud SDK
+* *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK
 
-For example:
+* *NW_CLOUD_SDK_VERSION* - defines the version of the used SAP HANA Cloud SDK version.
 
-    <sap.cloud.sdk.location>
-      C:\develop\neo-sdk-javaweb-1.37.16.2
-    </sap.cloud.sdk.location>   
-    <sap.cloud.sdk.version>
-      1.37.16.2
-    </sap.cloud.sdk.version>
+To define the environment variable in MS Windows go to your computerâ properties, Advanced System Settings, Environment variables and create a new user variable named *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. *NW_CLOUD_SDK_VERSION* variable is defined in similar way.
+
+
 
 Run on Local Server
 -------------------
@@ -95,16 +91,6 @@ For example:
 To create local users, follow the procedure described in the official documentation. [Details](https://help.hana.ondemand.com/help/frameset.htm?fe47e02fd9514ab889c37250ed771c0c.html).
 
 Assign the *Administrator* role to the relevant HR manager (for example, "*nnnn*").
-
-**JPA Configuration for the Local Server**
-
-By default, the application is configured to run on top of the SAP HANA database. The local server runs with derby, so you need to comment out the following line in the *persistence.xml*
-
-    <!-- 
-    <property 
-    name="eclipselink.target-database" 
-    value="com.sap.persistence.platform.database.HDBPlatform"/> 
-    -->
 
 Run the Application on the  SAP HANA Cloud Platform Extension Package Account
 ----------------------------------------------------------
