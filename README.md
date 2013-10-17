@@ -1,7 +1,7 @@
 SAP HANA Cloud Platform Extension Package 
 =========================================
 
-Employee Benefits Management Sample Application
+SAP Employee Benefits Management Sample Application
 -----------------------------------------------
 
 The *SAP HANA Cloud Platform extension package* makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.
@@ -25,7 +25,7 @@ Clone the Git repository `git clone https://github.com/sap/successfactors-benefi
 Architecture Overview
 ---------------------
 
-The *"successfactors-benefits-extension"* application is split into two main components - backend and frontend. 
+The SAP Employee Benefits Management extension application is split into two main components - backend and frontend. 
 
 The backend is implemented in the following packages:
 
