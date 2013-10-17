@@ -101,6 +101,14 @@
       <role-name>Administrator</role-name>
     </auth-constraint>
   </security-constraint>
+    <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Unsecured open social widgets for portal integration</web-resource-name>
+      <url-pattern>/admin.xml</url-pattern>
+      <url-pattern>/employee.xml</url-pattern>
+    </web-resource-collection>
+  </security-constraint>
+  
   <security-role>
     <description>HR Administrator</description>
     <role-name>Administrator</role-name>
