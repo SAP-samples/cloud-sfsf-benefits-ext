@@ -9,7 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.sap.hana.cloud.samples.benefits.persistence.common.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
 
 public class EntityManagerInterceptor implements Filter {
 

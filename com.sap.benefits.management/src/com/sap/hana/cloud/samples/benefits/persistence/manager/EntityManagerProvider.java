@@ -1,4 +1,4 @@
-package com.sap.hana.cloud.samples.benefits.persistence;
+package com.sap.hana.cloud.samples.benefits.persistence.manager;
 
 import javax.persistence.EntityManager;
 

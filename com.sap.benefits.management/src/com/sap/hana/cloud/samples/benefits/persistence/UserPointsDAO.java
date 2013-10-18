@@ -2,7 +2,7 @@ package com.sap.hana.cloud.samples.benefits.persistence;
 
 import javax.persistence.EntityManager;
 
-import com.sap.hana.cloud.samples.benefits.persistence.common.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
 import com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints;
 import com.sap.hana.cloud.samples.benefits.persistence.model.keys.UserPointsPrimaryKey;
 

@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import com.sap.hana.cloud.samples.benefits.persistence.common.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Order;

@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.hana.cloud.samples.benefits.persistence.common.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;

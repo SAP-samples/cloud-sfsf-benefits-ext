@@ -1,8 +1,8 @@
-package com.sap.hana.cloud.samples.benefits.persistence.common;
+package com.sap.hana.cloud.samples.benefits.persistence.manager.impl;
 
 import javax.persistence.EntityManager;
 
-import com.sap.hana.cloud.samples.benefits.persistence.EntityManagerProvider;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProvider;
 
 public class EntityManagerProviderImpl  implements EntityManagerProvider
 {  

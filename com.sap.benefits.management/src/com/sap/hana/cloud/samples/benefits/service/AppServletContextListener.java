@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import com.sap.hana.cloud.samples.benefits.csv.dataimport.BenefitsDataImporter;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitDAO;
-import com.sap.hana.cloud.samples.benefits.persistence.common.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
 
 public class AppServletContextListener implements ServletContextListener {
 
