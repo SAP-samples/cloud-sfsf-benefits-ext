@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+	<persistence-unit name="com.sap.hana.cloud.samples.benefits">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.User</class>
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType</class>
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.Benefit</class>
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.Campaign</class> 
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.Order</class>
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails</class>
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints</class>
+		<properties>
+			<property name="eclipselink.deploy-on-startup" value="True" />
+			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
+			<property name="eclipselink.logging.level" value="SEVERE" />
+		</properties>
+	</persistence-unit>
+</persistence>

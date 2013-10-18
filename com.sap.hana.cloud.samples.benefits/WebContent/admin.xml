@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+
+	<ModulePrefs title="all">
+		<Require feature="sap-xhrwrapper" />
+		<Require feature="sap-theme" />
+	</ModulePrefs>
+
+	<Content type="html"
+		view="default, authoring, consumption, mobile, preview" href="mobile/admin.html">
+	</Content>
+
+</Module>

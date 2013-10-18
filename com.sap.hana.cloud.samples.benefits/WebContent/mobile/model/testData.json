@@ -1,0 +1,420 @@
+{
+    "employees": [{
+            "firstName": "Marin",
+            "lastName": "Hadzhiev",
+            "id": "i071223",
+            "totalPoints": 300,
+            "availablePoints": 200,
+            "orders": {
+                "current": [{
+                        "item": "trapeza pass",
+                        "campId" : "campaign01",
+                        "quantity": 35,
+                        "total": 120,
+                        "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 13,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 4,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 18,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "campId" : "campaign01",
+                        "quantity": 56,
+                        "total": 34,
+                        "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 13,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 2,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 15,
+                                "value": 10
+                            }]
+                    }],
+                "history": [{
+                        "item": "trapeza pass",
+                        "campId" : "campaign02",
+                        "quantity": 35,
+                        "total": 120,
+                        "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 13,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 4,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 18,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "campId" : "campaign02",
+                        "quantity": 56,
+                        "total": 34,
+                        "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 13,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 2,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 15,
+                                "value": 10
+                            }]
+                    },
+                    {
+                        "item": "trapeza pass",
+                        "campId" : "campaign02",
+                        "quantity": 35,
+                        "total": 120,
+                        "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 13,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 4,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 18,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "campId" : "campaign02",
+                        "quantity": 56,
+                        "total": 34,
+                        "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 13,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 2,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 15,
+                                "value": 10
+                            }]
+                    }]
+            }
+        }, {
+            "firstName": "Joro",
+            "lastName": "Jorev",
+            "id": "i075896",
+            "totalPoints": 300,
+            "availablePoints": 20,
+            "orders": {
+                "current": [{
+                        "item": "trapeza pass",
+                        "quantity": 66,
+                        "total": 754,
+                        "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 10,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 5,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 15,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "quantity": 34,
+                        "total": 566,
+                        "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 10,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 6,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 18,
+                                "value": 10
+                            }]
+                    }],
+                "history": [{
+                        "item": "trapeza pass",
+                        "quantity": 355,
+                        "total": 120,
+                        "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 133,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 42,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 23,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "quantity": 546,
+                        "total": 354,
+                        "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 55,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 25,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 5,
+                                "value": 10
+                            }]
+                    },
+                    {
+                        "item": "trapeza pass",
+                        "quantity": 345,
+                        "total": 1250,
+                        "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 34,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 5,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 23,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "quantity": 556,
+                        "total": 354,
+                        "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 23,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 5,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 19,
+                                "value": 10
+                            }]
+                    }]
+            }
+        }, {
+            "firstName": "Takvor",
+            "lastName": "Tilkiyan",
+            "id": "i040700",
+            "totalPoints": 300,
+            "availablePoints": 0,
+            "orders": {
+                "current": [{
+                        "item": "trapeza pass",
+                        "quantity": 333,
+                        "total": 1204,
+                        "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 10,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 5,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 15,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "quantity": 1545,
+                        "total": 1530,
+                        "date" : "Fri Oct 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 150,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 54,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 15,
+                                "value": 10
+                            }]
+                    }],
+                "history": [{
+                        "item": "trapeza pass",
+                        "quantity": 355,
+                        "total": 120,
+                        "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 143,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 54,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 18,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "quantity": 526,
+                        "total": 334,
+                        "date" : "Wet Sep 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 133,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 22,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 155,
+                                "value": 10
+                            }]
+                    },
+                    {
+                        "item": "trapeza pass",
+                        "quantity": 325,
+                        "total": 1230,
+                        "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",
+                        "icon": "nutrition-activity",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 123,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 34,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 128,
+                                "value": 10
+                            }]
+                    }, {
+                        "item": "podarak pass",
+                        "quantity": 536,
+                        "total": 324,
+                        "date" : "Sut Aug 04 2013 13:21:02 GMT+0300",
+                        "icon": "database",
+                        "types": [{
+                                "name": "2 lv.",
+                                "quantity": 3,
+                                "value": 2
+                            },
+                            {
+                                "name": "5 lv.",
+                                "quantity": 2,
+                                "value": 5
+                            },
+                            {
+                                "name": "10 lv.",
+                                "quantity": 13,
+                                "value": 10
+                            }]
+                    }]
+            }
+        }]
+}
