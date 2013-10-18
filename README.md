@@ -29,10 +29,10 @@ The SAP Employee Benefits Management extension application is split into two mai
 
 The backend is implemented in the following packages:
 
-  - *com.sap.hana.cloud.sample.benefits.services.** - REST backend services and model for the user inteface
+  - *com.sap.hana.cloud.sample.benefits.api.** - REST backend services and model for the user inteface
   - *com.sap.hana.cloud.sample.benefits.connectivity.** - OData connectivity to SuccessFactors  
   - *com.sap.hana.cloud.sample.benefits.persistence.** - contains JPA entities and DAO objects.
-  - *com.sap.hana.cloud.sample.benefits.web.** - web integration logic
+  - *com.sap.hana.cloud.sample.benefits.services.** - web integration logic
 
 The frontend is located in WebContent folder. The structure is the following:
 
