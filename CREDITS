@@ -1,0 +1,27 @@
+This program references the following third party open source or other free download components.
+The third party licensors of these components may provide additional license rights,
+terms and conditions and/or require certain notices as described below.
+
+Apache HttpClient (http://hc.apache.org/httpcomponents-client-ga/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Apache CXF (http://cxf.apache.org/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+EclipseLink (http://www.eclipse.org/eclipselink/)
+Licensed under Eclipse Public License - v 1.0 - http://www.eclipse.org/legal/epl-v10.html
+
+jcsv (https://code.google.com/p/jcsv/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+Gson (http://code.google.com/p/google-gson/)
+Licensed under Apache License, Version 2.0 - http://www.apache.org/licenses/LICENSE-2.0
+
+JSR 311 (http://jsr311.java.net/)
+Licensed under Common Development and Distribution License, Version 1.0 - http://opensource.org/licenses/cddl1.php
+
+JUnit (http://www.junit.org/)
+Licensed under Common Public License - v 1.0 - http://junit.sourceforge.net/cpl-v10.html
+
+SLF4J (http://www.slf4j.org/)
+Licensed under MIT - http://www.slf4j.org/license.html

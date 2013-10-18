@@ -1,0 +1,47 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
+           controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Details" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="CampainMasterPage" title="Details" showNavButton="false">
+        <content>
+            <form:SimpleForm id="inputForm" minWidth="1024" maxContainerCols="2" editable="false">
+                <form:content>
+                    <common:Title text="Campaign Information"/>
+                    <Label text="Name:" class="labelHeight"/>
+                    <Text class="labelHeight" text="{name}"/>
+                    <Label text="Start Date:" class="labelHeight"/>
+                    <Text id="startDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight"/>
+                    <Label text="End Date:" class="labelHeight"/>
+                    <Text id="endDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight"/>
+                    <Label text="Points per User:" class="labelHeight"/>
+                    <Text id="pointsCtr" text="{points}" class="labelHeight" />
+                    <Label text="State:" class="labelHeight"/>
+                    <ObjectStatus state="{parts:['active'], formatter: '.formatState' }" text="{parts:['active'], formatter: '.formatStateText' }" class="labelHeight"/>
+                </form:content>
+            </form:SimpleForm>
+        </content> 
+        <footer>
+            <Bar>
+                <contentRight>
+                    <Button id="startStopButton" text="{parts:['active'], formatter: '.formatStartStopButtonText' }" press="startStopButtonPressed"/>
+                    <Button id="editButton" text="Edit" press="editButtonPressed"/>
+                </contentRight>
+            </Bar>
+        </footer>
+    </Page>
+    
+    <Dialog id="editCampaignDialog" title="Edit Campaign">
+        <content>
+            <VBox>
+                <items>
+                    <Label text="Start Date:" class="labelHeight"/>
+                    <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..."/>
+                    <Label text="End Date:" class="labelHeight"/>
+                    <DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..."/>
+                </items>
+            </VBox>
+        </content>
+    </Dialog>
+    
+</core:View>

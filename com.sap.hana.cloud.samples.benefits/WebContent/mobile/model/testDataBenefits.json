@@ -1,0 +1,21 @@
+{
+    "benefits": [{
+            "id": "1",
+            "name": "trapeza pass",
+            "info": "Mnogo gotin vaucher za hranica",
+            "linkText" : "sodexo",
+            "link": "http://bg.benefits-rewards.sodexo.com/sluzhitel/trapeza-pass",
+            "icon": "nutrition-activity",
+            "available": "true",
+            "points": 100
+        }, {
+            "id": "2",
+            "name": "podaruk pass",
+            "info": "Oshte po hubav vaucher za pochti vsichko",
+            "linkText" : "sodexo",
+            "link": "http://bg.benefits-rewards.sodexo.com/sluzhitel/podarak-pass",
+            "icon": "database",
+            "available": "true",
+            "points": 200
+        }]
+}

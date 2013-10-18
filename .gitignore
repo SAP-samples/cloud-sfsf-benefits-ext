@@ -1,6 +1,9 @@
-*.class
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# Binary folders
+
+*/bin/
+*/.settings
+*/lib/
+*/target/
+*/war/
+

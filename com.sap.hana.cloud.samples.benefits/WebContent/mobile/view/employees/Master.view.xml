@@ -1,0 +1,19 @@
+<core:View xmlns:core="sap.ui.core" 
+           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
+           controllerName="com.sap.hana.cloud.samples.benefits.view.employees.Master" 
+           xmlns:html="http://www.w3.org/1999/xhtml"
+           setDisplayBlock="true">
+    <Page id="EmployeesMasterPage" title="Managed employees" showNavButton="true" navButtonTap="onNavPressed">
+        <content>
+            <List id="employeesList" items="{managedEmployees>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+                <items>
+                    <ObjectListItem title="{managedEmployees>firstName} {managedEmployees>lastName}" number="{managedEmployees>activeCampaignBalance/availablePoints}" numberUnit="Unused Points">
+                        <attributes>
+                            <ObjectAttribute text="{managedEmployees>email}"/>  
+                        </attributes>
+                    </ObjectListItem>                  
+                </items>
+            </List>
+        </content>
+    </Page>
+</core:View>
