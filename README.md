@@ -13,8 +13,8 @@ The purpose of the application is to showcase the advantages of *SAP HANA Cloud 
 The sample application relies on and integrates the following SAP HANA Cloud Platform capabilities:
 
 * *SAP HANA Cloud Platform extension package* that provides SuccessFactors connectivity  on top of the standard based OData API 
-* Persistency – JPA on top of [SAP HANA Database technology](http://www.saphana.com/welcome)
-* User interface technology – SAPUI5 (sap.m) libraries [Details](https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/explored/index.html)
+* Persistency - JPA on top of [SAP HANA Database technology](http://www.saphana.com/welcome)
+* User interface technology - SAPUI5 (sap.m) libraries [Details](https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/explored/index.html)
 *  Backend logic implemented using JAX-RS Services (Apache CXF and Google Gson for JSON serialization/deserialization)
 
 Get the Source Code
@@ -29,10 +29,10 @@ The SAP Employee Benefits Management extension application is split into two mai
 
 The backend is implemented in the following packages:
 
-  - *com.sap.hana.cloud.sample.benefits.services.** - REST backend services and model for the user inteface
+  - *com.sap.hana.cloud.sample.benefits.api.** - REST backend services and model for the user inteface
   - *com.sap.hana.cloud.sample.benefits.connectivity.** - OData connectivity to SuccessFactors  
   - *com.sap.hana.cloud.sample.benefits.persistence.** - contains JPA entities and DAO objects.
-  - *com.sap.hana.cloud.sample.benefits.web.** - web integration logic
+  - *com.sap.hana.cloud.sample.benefits.services.** - web integration logic
 
 The frontend is located in WebContent folder. The structure is the following:
 
@@ -54,20 +54,17 @@ SAP Employee Benefits Management application can be run either locally or on *SA
 
 1. Prerequisites
 
- * Access to *SAP HANA Cloud Platform extension package* account
- * *SAP HANA Cloud Platform* development enviroment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
+  * Access to *SAP HANA Cloud Platform extension package* account
+  * *SAP HANA Cloud Platform* development enviroment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
 
 2. Configure the project build
 
-You need to set two environment variables in order to configure the local project build.
+ You need to set two environment variables in order to configure the local project build.
 
-* *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK
+ * *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK
+ * *NW_CLOUD_SDK_VERSION* - defines the version of the used SAP HANA Cloud SDK version.
 
-* *NW_CLOUD_SDK_VERSION* - defines the version of the used SAP HANA Cloud SDK version.
-
-To define the environment variable in MS Windows go to your computerâ properties, Advanced System Settings, Environment variables and create a new user variable named *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. *NW_CLOUD_SDK_VERSION* variable is defined in similar way.
-
-
+ To define the environment variable in MS Windows go to your computerâ properties, Advanced System Settings, Environment variables and create a new user variable named *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. *NW_CLOUD_SDK_VERSION* variable is defined in similar way.
 
 Run on Local Server
 -------------------
