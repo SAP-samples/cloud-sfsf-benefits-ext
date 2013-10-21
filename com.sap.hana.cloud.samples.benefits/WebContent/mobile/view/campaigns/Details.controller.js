@@ -1,5 +1,7 @@
 jQuery.sap.require("sap.ui.core.ValueState");
 jQuery.sap.require("sap.ui.core.format.DateFormat");
+jQuery.sap.require("sap.m.MessageBox");
+jQuery.sap.require("sap.m.MessageToast");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", {
     onInit: function() {
         this.getView().addEventDelegate({
@@ -34,31 +36,33 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
         editCampDialog.open();
     },
     saveEditedCampaignData: function(evt) {
-        jQuery.sap.require("sap.m.MessageToast");
-        jQuery.sap.require("sap.ui.core.format.DateFormat");
         this.byId("editCampaignDialog").close();
-        var ctx = this.byId("inputForm").getBindingContext().getObject();
-        var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({style: "full", pattern: "yyyy-MM-dd'T'HH:mm:ss'Z'"});
-        jQuery.ajax({
-            url: '../api/campaigns/edit/' + ctx.id,
-            type: 'post',
-            dataType: 'json',
-            success: function(data) {
-                sap.m.MessageToast.show("Data Saved Successfully.");
-                appController.reloadCampaignModel();
-            },
-            contentType: "application/json; charset=utf-8",
-            data: JSON.stringify({
-                id: ctx.id,
-                startDate: dateFormat.format(this.byId("startDateCtr").getDateValue()),
-                endDate: dateFormat.format(this.byId("endDateCtr").getDateValue())
-            }),
-            statusCode: {
-                400: function(xhr, error) {
-                    sap.m.MessageToast.show(xhr.responseText);
+        if (this.byId("startDateCtr").getDateValue().getTime() < this.byId("endDateCtr").getDateValue().getTime()) {
+            var ctx = this.byId("inputForm").getBindingContext().getObject();
+            var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({style: "full", pattern: "yyyy-MM-dd'T'HH:mm:ss'Z'"});
+            jQuery.ajax({
+                url: '../api/campaigns/edit/' + ctx.id,
+                type: 'post',
+                dataType: 'json',
+                success: function(data) {
+                    sap.m.MessageToast.show("Data Saved Successfully.");
+                    appController.reloadCampaignModel();
+                },
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({
+                    id: ctx.id,
+                    startDate: dateFormat.format(this.byId("startDateCtr").getDateValue()),
+                    endDate: dateFormat.format(this.byId("endDateCtr").getDateValue())
+                }),
+                statusCode: {
+                    400: function(xhr, error) {
+                        sap.m.MessageToast.show(xhr.responseText);
+                    }
                 }
-            }
-        });
+            })
+        } else {
+            this._showErrorMessageBox("Start date must be before the end date!");
+        }
     },
     startStopButtonPressed: function(evt) {
         if (evt.getSource().state === 'stop') {
@@ -68,26 +72,28 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
         }
     },
     startCampaign: function(evt) {
-        jQuery.sap.require("sap.m.MessageBox");
-        jQuery.sap.require("sap.m.MessageToast");
-        this.busyDialog.open();
-        var ctx = this.byId("inputForm").getBindingContext().getObject();
-        jQuery.ajax({
-            url: '../api/campaigns/start-possible/' + ctx.id,
-            type: 'get',
-            dataType: 'json',
-            success: jQuery.proxy(function(data) {
-                if (data.canBeStarted) {
-                    this._requestStartCampaign();
-                } else {
-                    sap.m.MessageBox.alert("Only one campaign can be active. Currently active campaign is \"" + data.startedCampaignName + "\"");
-                }
-            }, this),
-            complete: jQuery.proxy(function() {
-                this.busyDialog.close();
-            }, this),
-            contentType: "application/json; charset=utf-8",
-        });
+        if (this._validateCampaignDataExist()) {
+            this.busyDialog.open();
+            var ctx = this.byId("inputForm").getBindingContext().getObject();
+            jQuery.ajax({
+                url: '../api/campaigns/start-possible/' + ctx.id,
+                type: 'get',
+                dataType: 'json',
+                success: jQuery.proxy(function(data) {
+                    if (data.canBeStarted) {
+                        this._requestStartCampaign();
+                    } else {
+                        this._showErrorMessageBox("Only one campaign can be active. Currently active campaign is \"" + data.startedCampaignName + "\"");
+                    }
+                }, this),
+                complete: jQuery.proxy(function() {
+                    this.busyDialog.close();
+                }, this),
+                contentType: "application/json; charset=utf-8",
+            });
+        } else {
+            this._showErrorMessageBox("Unnable to start the campaign. Not all required fields are set!");
+        }
     },
     formatState: function(active) {
         return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
@@ -117,8 +123,22 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             this.byId("startStopButton").state = 'start';
         }
     },
+    _showErrorMessageBox: function(message) {
+        sap.m.MessageBox.show(
+                message,
+                sap.m.MessageBox.Icon.ERROR,
+                null,
+                [sap.m.MessageBox.Action.OK]
+                );
+    },
+    _validateCampaignDataExist: function() {
+        var campData = this.getView().getBindingContext().getObject();
+        if (campData.name && campData.startDate && campData.endDate && campData.points) {
+            return true;
+        }
+        return false;
+    },
     _requestStopCampaign: function() {
-        jQuery.sap.require("sap.m.MessageToast");
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
             url: '../api/campaigns/stop/' + ctx.id,
@@ -133,7 +153,6 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
         });
     },
     _requestStartCampaign: function() {
-        jQuery.sap.require("sap.m.MessageToast");
         var ctx = this.byId("inputForm").getBindingContext().getObject();
         jQuery.ajax({
             url: '../api/campaigns/start/' + ctx.id,

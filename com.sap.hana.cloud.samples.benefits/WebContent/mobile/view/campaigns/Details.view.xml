@@ -13,7 +13,7 @@
                     <Label text="Start Date:" class="labelHeight"/>
                     <Text id="startDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight"/>
                     <Label text="End Date:" class="labelHeight"/>
-                    <Text id="endDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight"/>
+                    <Text id="endDateTextCtr" text="{path:'endDate', formatter:'.formatDate'}" class="labelHeight"/>
                     <Label text="Points per User:" class="labelHeight"/>
                     <Text id="pointsCtr" text="{points}" class="labelHeight" />
                     <Label text="State:" class="labelHeight"/>
