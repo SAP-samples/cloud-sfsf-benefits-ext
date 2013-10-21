@@ -11,6 +11,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -126,9 +127,9 @@ public class CampaignService extends BaseService {
 	}
 	
 	@GET
-	@Path("/check-name-availability/{name}")
+	@Path("/check-name-availability")
 	@Produces(MediaType.APPLICATION_JSON)
-	public CampaignNameAvailabilityCheckResponseBean checkNameAvailability(@PathParam("name") String name) {
+	public CampaignNameAvailabilityCheckResponseBean checkNameAvailability(@QueryParam("name") String name) {
 		final CampaignNameAvailabilityCheckResponseBean response = new CampaignNameAvailabilityCheckResponseBean();
 		final Campaign campaign = campaignDAO.getByName(name, getLoggedInUser());
 		if(campaign == null){

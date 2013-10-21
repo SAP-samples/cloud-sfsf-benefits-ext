@@ -116,7 +116,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
         if (name.length > 0) {
             newCampDialog.setBusy(true);
             jQuery.ajax({
-                url: '../api/campaigns/check-name-availability/' + name,
+                url: '../api/campaigns/check-name-availability?name=' + jQuery.sap.encodeURL(name),
                 type: 'get',
                 dataType: 'json',
                 success: jQuery.proxy(function(data) {
