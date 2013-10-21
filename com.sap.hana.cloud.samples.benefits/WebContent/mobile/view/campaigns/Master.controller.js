@@ -1,5 +1,5 @@
 jQuery.sap.require("sap.ui.core.ValueState");
-
+jQuery.sap.require("sap.m.MessageBox");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     onInit: function() {
         this.busyDialog = new sap.m.BusyDialog({showCancelButton: false});
@@ -28,6 +28,23 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     },
     onItemSelect: function(evt) {
         appController.campaignItemSelected(evt);
+    },
+    onDeleteItem: function(evt) {
+        var campaignId = evt.getParameter('listItem').getBindingContext('campaignModel').getObject().id;
+        var campaignName = evt.getParameter('listItem').getBindingContext('campaignModel').getObject().name;
+        sap.m.MessageBox.confirm("Are you sure you want to delete campaign '" + campaignName + "'?", jQuery.proxy(function(action){
+            if(action === sap.m.MessageBox.Action.OK){
+                this._deleteCampaign(campaignId);
+            }
+        }, this));
+    },
+    editButtonPressed: function(evt) {
+        var list = this.byId("campaignsList");
+        var newMode = list.getMode() === sap.m.ListMode.Delete ? sap.m.ListMode.SingleSelectMaster : sap.m.ListMode.Delete;
+        list.setMode(newMode);
+        evt.getSource().setText((newMode === sap.m.ListMode.Delete) ? "Done" : "Edit");
+        evt.getSource().setIcon((newMode === sap.m.ListMode.Delete) ? "sap-icon://accept" : "sap-icon://edit");
+        this.byId("addButton").setVisible((newMode === sap.m.ListMode.Delete) ? false : true);
     },
     addButtonPressed: function(evt) {
         var newCampDialog = this.byId("newcampaignDialog");
@@ -76,6 +93,21 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
                 data: JSON.stringify({name: newCampaignName, startDate: null, endDate: null, points: newCampaignPoints})
             });
         }
+    },
+    _deleteCampaign: function(id) {
+        this.busyDialog.open();
+        jQuery.ajax({
+            url: '../api/campaigns/' + id,
+            type: 'delete',
+            success: jQuery.proxy(function(data) {
+                appController.reloadCampaignModel();
+                var list = this.byId("campaignsList");
+                appController.selectListItem(list, 0);
+            }, this),
+            complete: jQuery.proxy(function() {
+                this.busyDialog.close();
+            }, this)
+        });
     },
     _validateNewCampaignName: function() {
         var newCampDialog = this.byId("newcampaignDialog");

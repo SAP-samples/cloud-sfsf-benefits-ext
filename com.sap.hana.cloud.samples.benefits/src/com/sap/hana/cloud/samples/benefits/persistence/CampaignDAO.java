@@ -42,19 +42,6 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		return null;
 	}
 
-	public Campaign getOrCreateCampaign(String name, User user) {
-		Campaign campaign = getByName(name, user);
-		if (campaign == null) {
-			campaign = new Campaign();
-			campaign.setName(name);
-			campaign.setOwner(user);
-			saveNew(campaign);
-
-			setPointsToUsers(campaign);
-		}
-		return campaign;
-	}
-
 	public boolean canBeActive(Long campaignId, User user) {
 		final Campaign activeCampaign = getActiveCampaign(user);
 		if (activeCampaign != null && !activeCampaign.getId().equals(campaignId)) {
@@ -62,6 +49,18 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		} else {
 			return true;
 		}
+	}
+	
+	public void delete(long id) {
+		final EntityManager em = emProvider.get();
+		final Campaign campaign = em.find(Campaign.class, id);
+		em.getTransaction().begin();
+		if (campaign != null) {
+			campaign.getOwner().getCampaigns().remove(campaign);
+			em.merge(campaign.getOwner());
+			em.remove(campaign);
+		}
+		em.getTransaction().commit();
 	}
 
 	public Campaign getActiveCampaign(User user) {

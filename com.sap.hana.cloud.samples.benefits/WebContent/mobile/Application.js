@@ -80,6 +80,8 @@ sap.ui.app.Application.extend("Application", {
                 listItem: items[itemIndex],
                 id: list.getId()
             });
+        }else {
+            this._toDetailsPage("DefaultDetails");
         }
     },
     benefitItemSelected: function(evt) {

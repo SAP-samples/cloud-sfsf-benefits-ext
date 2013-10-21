@@ -5,7 +5,7 @@
            setDisplayBlock="true">
     <Page id="CampaignMasterPage" title="Campaigns" showNavButton="true" navButtonTap="onNavPressed">
         <content>
-            <List id="campaignsList" items="{campaignModel>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelect">
+            <List id="campaignsList" items="{campaignModel>/}" includeItemInSelection="true" mode="SingleSelectMaster" delete="onDeleteItem" select="onItemSelect">
                 <items>
                     <ObjectListItem title="{campaignModel>name}">
                         <firstStatus>
@@ -18,8 +18,8 @@
         <footer>
             <Bar>
                 <contentRight>
-                    <Button id="saveButton" text="Save" press="saveButtonPressed" visible="false"/>
-                    <Button id="addButton" text="Add" press="addButtonPressed"/>
+                    <Button id="addButton" text="Add" press="addButtonPressed" icon="sap-icon://add"/>
+                    <Button id="editButton" text="Edit" press="editButtonPressed" icon="sap-icon://edit"/>
                 </contentRight>
             </Bar>
         </footer>

@@ -1,6 +1,7 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -21,12 +22,12 @@ public class UserPoints implements IDBEntity {
 	@Column(name="ID")
 	private Long id;
 
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.REFRESH)
 	@Id
     @JoinColumn(name="USER_ID", referencedColumnName="ID")
 	private User user;
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.REFRESH)
 	@Id
     @JoinColumn(name="CAMPAIGN_ID", referencedColumnName="CAMPAIGN_ID")
 	private Campaign campaign;

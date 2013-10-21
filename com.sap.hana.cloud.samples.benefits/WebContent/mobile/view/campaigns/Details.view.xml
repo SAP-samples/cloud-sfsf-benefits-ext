@@ -25,7 +25,7 @@
             <Bar>
                 <contentRight>
                     <Button id="startStopButton" text="{parts:['active'], formatter: '.formatStartStopButtonText' }" press="startStopButtonPressed"/>
-                    <Button id="editButton" text="Edit" press="editButtonPressed"/>
+                    <Button id="editButton" text="Edit" press="editButtonPressed" icon="sap-icon://edit"/>
                 </contentRight>
             </Bar>
         </footer>

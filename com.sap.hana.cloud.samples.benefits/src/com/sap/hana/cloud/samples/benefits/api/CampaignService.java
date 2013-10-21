@@ -5,6 +5,7 @@ import static java.text.MessageFormat.format;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -50,6 +51,12 @@ public class CampaignService extends BaseService {
 		campaignDAO.setPointsToUsers(newCampaign);
 
 		return createOkResponse();
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public void deleteCampaign(@PathParam("id") long campaignId){
+		campaignDAO.delete(campaignId);
 	}
 
 	@POST

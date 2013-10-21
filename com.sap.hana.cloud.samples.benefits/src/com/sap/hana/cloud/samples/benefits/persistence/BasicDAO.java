@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 
 import org.slf4j.Logger;
@@ -87,6 +88,8 @@ public class BasicDAO<T extends IDBEntity> {
 			t = (T) query.getSingleResult();
 		} catch (NoResultException e) {
 			logger.error("Could not retrieve entity {} from table {}.", id, getTableName()); //$NON-NLS-1$
+		} catch (NonUniqueResultException e) {
+			logger.error("More than one entity {} from table {}.", id, getTableName()); //$NON-NLS-1$
 		}
 
 		return t;
