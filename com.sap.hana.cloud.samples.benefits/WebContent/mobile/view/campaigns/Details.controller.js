@@ -166,5 +166,4 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             contentType: "application/json; charset=utf-8"
         });
     }
-
 });
