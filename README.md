@@ -56,15 +56,17 @@ SAP Employee Benefits Management application can be run either locally or on *SA
 
   * Access to *SAP HANA Cloud Platform extension package* account
   * *SAP HANA Cloud Platform* development enviroment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
-
+  
 2. Configure the project build
-
- You need to set two environment variables in order to configure the local project build.
 
  * *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK
  * *NW_CLOUD_SDK_VERSION* - defines the version of the used SAP HANA Cloud SDK version.
 
- To define the environment variable in MS Windows go to your computerâ properties, Advanced System Settings, Environment variables and create a new user variable named *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. *NW_CLOUD_SDK_VERSION* variable is defined in similar way.
+ To define the environment variable in MS Windows go to your computerâ properties, Advanced System Settings, Environment variables and create a new user variable named *NW_CLOUD_SDK_PATH* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. *NW_CLOUD_SDK_VERSION* variable is defined in similar way.
+ 
+3. Importing the project in Eclipse
+
+ In Eclipse do *import* as *Existing Maven Project* and point to the *pom.xml* file located in *com.sap.hana.cloud.samples.benefits* folder.
 
 Run on Local Server
 -------------------
