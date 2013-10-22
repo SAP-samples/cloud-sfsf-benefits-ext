@@ -18,28 +18,47 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 		jQuery.sap.require("sap.m.MessageToast");
 		var dialog = this.byId("addItemCtrl");
 		var that = this;
+		var model = sap.ui.getCore().byId("EmployeeOrdersDetails").getModel("orderByCampaignModel");
+		var currentOrder = model.getData().getData().currentOrder; 
+		var campPoints = currentOrder.campaign.points;
+		var orderPrice = currentOrder.orderPrice;
+		var availablePoints = campPoints - orderPrice;
+		
 		
 		dialog.setLeftButton(new sap.m.Button({
 			text : "Ok",
-			press : function() {			
-				jQuery.ajax({
-		            url: '/com.sap.hana.cloud.samples.benefits/api/orders/add/' + appController.getCampaignId(),
-		            type: 'post',
-		            dataType: 'json',
-		            success: function(data) {          
-		            	dialog.close();
-						sap.m.MessageToast.show("New item has been saved");
-		                appController.reloadOrdersModel(appController.getCampaignId());
-		            },
-		            contentType: "application/json; charset=utf-8",
-		            data: JSON.stringify({campaignId: appController.getCampaignId(),
-		            					  benefitTypeId : that.byId("quantityTypeSelect").getSelectedItem().getKey(),
-		            					  quantity : that.byId("quantityTypeTxt").getValue()
-		            }),
-		            error: function(xhr, error) {
-		                sap.m.MessageToast.show(xhr.responseText);
-		            }
-		        });
+			press : function() {	
+				jQuery.sap.require("sap.m.MessageBox");
+				var selectedItem = that.byId("quantityTypeSelect").getSelectedItem().getKey();
+				var selectedBenefit = that.byId("benefitTypeSelect").getSelectedItem().getKey();
+				var selItemVal = that.getItemValue(selectedBenefit, selectedItem);
+				var quantity = that.byId("quantityTypeTxt").getValue();
+				var value = selItemVal * quantity;
+				if(value <= 0){
+					sap.m.MessageBox.alert("Insert correct value for the quantity", function(){});
+				} else if (value <= availablePoints){
+					jQuery.ajax({
+						url: '/com.sap.hana.cloud.samples.benefits/api/orders/add/' + appController.getCampaignId(),
+						type: 'post',
+						dataType: 'json',
+						success: function(data) {          
+							dialog.close();
+							sap.m.MessageToast.show("New item has been saved");
+							appController.reloadOrdersModel(appController.getCampaignId());
+						},
+						contentType: "application/json; charset=utf-8",
+						data: JSON.stringify({campaignId: appController.getCampaignId(),
+							benefitTypeId : that.byId("quantityTypeSelect").getSelectedItem().getKey(),
+							quantity : that.byId("quantityTypeTxt").getValue()
+						}),
+						error: function(xhr, error) {
+							sap.m.MessageToast.show(xhr.responseText);
+						}
+					});					
+				} else {
+					dialog.close();
+					sap.m.MessageBox.alert("Item was not send, limit has been exceeded", function () {});
+				}				
 			}
 		}));
 		
@@ -61,7 +80,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
         }
         return result;
     },
-    formatAvailablePoints: function(campaignPoints,usedPoints) {
+    formatAvailablePoints: function(campaignPoints, usedPoints) {
         var result = campaignPoints - usedPoints;     
         return result.toString(10) + " Points";
     },
@@ -80,7 +99,27 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
     handleDialogOpen : function(oCtrEvt){
     	var ctx = this.byId("benefitTypeSelect").getSelectedItem().getBindingContext("benefitsModel");
     	this.byId("quantityTypeSelect").setBindingContext(ctx);
-    	this.byId("quantityTypeSelect").setModel(ctx.getModel());
+    	this.byId("quantityTypeSelect").setModel(ctx.getModel()); 
+    },
+    onDelete : function (evt) {
+    	var item = evt.getParameter("listItem"); 
+    	this.byId("listCtr").removeItem(item);
+    },
+    isOrderValid : function(){
+    	return true;
+    },
+    getItemValue : function(selectedBenefit, selectedItemId){
+    	var benefits = sap.ui.getCore().byId("EmployeeOrdersDetails").getModel("benefitsModel").getData();
+    	for(var i = 0; i < benefits.length; i++ ){
+    		if(benefits[i].id = selectedBenefit){
+    			for(var j = 0; j < benefits[i].benefitTypes.length; j++){
+    				if(benefits[i].benefitTypes[j].id = selectedItemId){
+    					return benefits[i].benefitTypes[j].value;
+    				}
+    			}
+    		}
+    	}
+    	return 0;
     }
 
 });

@@ -2,11 +2,10 @@
 	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
 	controllerName="com.sap.hana.cloud.samples.benefits.view.orders.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="EmployeeOrdersPage" title="Employee Orders"
-		showNavButton="false">
+	<Page id="EmployeeOrdersPage" title="Employee Orders" showNavButton="false">
 
 		<content>
-			<ObjectHeader title="{/currentOrder/campaign/name} campaign orders"
+			<ObjectHeader id="headerCtrl" title="{/currentOrder/campaign/name} campaign orders"
 				number="{/currentOrder/orderPrice}" numberUnit="Used Points">
 				<attributes>
 					<ObjectAttribute text="Unused Points:" />
@@ -22,8 +21,7 @@
 						state="Success" />
 				</secondStatus>
 			</ObjectHeader>
-			<List items="{/currentOrder/orderItems}" inset="true" class="benefitList"
-				headerText="order details">
+			<List items="{/currentOrder/orderItems}" inset="true" class="benefitList" headerText="order details">
 				<items>
 					<CustomListItem>
 						<content>
@@ -40,7 +38,7 @@
 									</ObjectListItem>
 									<CustomListItem>
 										<content>
-											<List items="{benefitItems}">
+											<List id="listCtr" mode="Delete" items="{benefitItems}" delete="onDelete" >
 												<items>
 													<StandardListItem title="{name}"
 														description="quantity:" info="{quantity} x {itemValue} Points"
@@ -84,9 +82,9 @@
 
 					<Label text="quantity type" />
 					<Select id="quantityTypeSelect" type="sap.m.InputType.Text"
-						items="{benefitTypes}">
+						items="{benefitTypes}" change="onQuantityTypeSelect">
 						<items>
-							<core:Item key="{id}" text="{name} value {value}" />
+							<core:Item key="{id}" text="{name} value {value}"/>							
 						</items>
 					</Select>
 					<Label text="quantity" />
