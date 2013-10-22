@@ -110,13 +110,13 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     _validateNewCampaignPoints: function() {
         var pointsCtr = this.byId("pointsCtr");
         var points = pointsCtr.getValue();
-        if (jQuery.isNumeric(points)) {
+        if (jQuery.isNumeric(points) && points > 0) {
             pointsCtr.setValueState(sap.ui.core.ValueState.None);
         } else if (points.length === 0) {
             pointsCtr.setValueStateText("Valid Points is required");
             pointsCtr.setValueState(sap.ui.core.ValueState.Error);
         } else {
-            pointsCtr.setValueStateText("Not a valid number");
+            pointsCtr.setValueStateText("Not a valid positive number");
             pointsCtr.setValueState(sap.ui.core.ValueState.Error);
         }
     },

@@ -61,7 +61,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
         editCampDialog.open();
     },
     _saveEditedDates: function(evt) {
-        if (this.byId("startDateCtr").getDateValue().getTime() < this.byId("endDateCtr").getDateValue().getTime()) {
+        var startDate = this.byId("startDateCtr").getDateValue();
+        var endDate = this.byId("endDateCtr").getDateValue();
+        var isvalidPeriod = this._isValidDatePeriod(startDate, endDate);
+        if (isvalidPeriod) {
             this.byId("editCampaignDialog").close();
             var ctx = this.byId("inputForm").getBindingContext().getObject();
             var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({style: "full", pattern: "yyyy-MM-dd'T'HH:mm:ss'Z'"});
@@ -87,7 +90,18 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             })
         } else {
             $(".errorContainer").removeClass("displayNone");
-            this.byId("errorStatusText").setText("The start date must be before end date.");
+            if(!startDate || !endDate){
+                this.byId("errorStatusText").setText("You need to select a valid dates");
+            } else {
+                this.byId("errorStatusText").setText("The start date must be before end date.");
+            }
+        }
+    },
+    _isValidDatePeriod:function(startDate, endDate){
+        if (startDate && endDate && startDate.getTime() < endDate.getTime()){
+            return true;
+        } else {
+            return false;
         }
     },
     _deleteCampaignBtnPressed: function(evt) {
