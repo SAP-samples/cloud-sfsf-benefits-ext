@@ -27,7 +27,7 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 public class OrderService extends BaseService {
 
 	private CampaignDAO campaignDAO = new CampaignDAO();
-	
+
 	@GET
 	@Path("/for-user/{campain_id}/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -41,12 +41,19 @@ public class OrderService extends BaseService {
 			return BenefitsOrderBean.getEmpty(campaign);
 		}
 	}
-	
+
 	@POST
 	@Path("/add/{campaignId}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response addOrder(@PathParam("campaignId") long campaignId, OrderBean request) {
-		final User user = getLoggedInUser();
+		return this.addOrder(campaignId, getLoggedInUserId(), request);
+	}
+
+	@POST
+	@Path("/add/{campaignId}/{userId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addOrder(@PathParam("campaignId") long campaignId, @PathParam("userId") String userId, OrderBean request) {
+		final User user = userDAO.getByUserId(userId);
 		final Campaign campaign = campaignDAO.getById(campaignId);
 
 		if (campaign == null) {

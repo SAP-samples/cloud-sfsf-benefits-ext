@@ -37,6 +37,10 @@ sap.ui.app.Application.extend("Application", {
     getCampaignId : function(){
     	return campId;
     },
+    getSelecedUserID : function() {
+        // Relevant only for HR Manager role.
+        return undefined;
+    },
 
     campaignItemSelected: function(evt) {
     	var listItem = evt.getParameters().listItem;

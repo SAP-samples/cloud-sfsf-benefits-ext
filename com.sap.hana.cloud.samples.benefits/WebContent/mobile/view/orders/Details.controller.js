@@ -33,11 +33,17 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 				var selItemVal = that.getItemValue(selectedBenefit, selectedItem);
 				var quantity = that.byId("quantityTypeTxt").getValue();
 				var value = selItemVal * quantity;
+				var addServiceURL = "/com.sap.hana.cloud.samples.benefits/api/orders/add/"+ appController.getCampaignId();
+				var selectUserId = appController.getSelecedUserID();
+				if (selectUserId) {
+				    addServiceURL += "/"+selectUserId;
+				}
+				
 				if(value <= 0){
 					sap.m.MessageBox.alert("Insert correct value for the quantity", function(){});
 				} else if (value <= availablePoints){
 					jQuery.ajax({
-						url: '/com.sap.hana.cloud.samples.benefits/api/orders/add/' + appController.getCampaignId(),
+						url: addServiceURL,
 						type: 'post',
 						dataType: 'json',
 						success: function(data) {          
