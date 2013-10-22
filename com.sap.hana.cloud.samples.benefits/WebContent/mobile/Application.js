@@ -6,7 +6,7 @@ sap.ui.app.Application.extend("Application", {
     EMPLOYEE_MASTER_VIEW_ID: "EmployeesMaster",
     BENEFITS_MASTER_VIEW_ID: "BenefitsMaster",
     CAMPAIGN_DETAILS_VIEW_ID: "CampaignDetails",
-    EMPLOYEE_DETAILS_VIEW_ID: "EmployeesDetails",
+    EMPLOYEE_DETAILS_VIEW_ID: "EmployeeOrdersDetails",
     BENEFITS_DETAILS_VIEW_ID: "BenefitsDetails",
     DEFAULT_DETAILS_VIEW_ID: "DefaultDetails",
     init: function() {
@@ -18,6 +18,7 @@ sap.ui.app.Application.extend("Application", {
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "managedEmployees");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignDetailsModel");
+        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeOrderDetailsModel");
 
         this.reloadCampaignModel();
         this.reloadManagedEmployeesModel();
@@ -41,6 +42,9 @@ sap.ui.app.Application.extend("Application", {
         // Reload available points of managed employees
         this.reloadManagedEmployeesModel();
     },
+    getCampaignId : function() {
+        return sap.ui.getCore().getModel("activeCampaignModel").getProperty("/id");
+    },
     reloadManagedEmployeesModel: function() {
         sap.ui.getCore().getModel("managedEmployees").loadData("../api/user/managed", null, false);
         var employeesTile = sap.ui.getCore().byId("Employees");
@@ -48,27 +52,35 @@ sap.ui.app.Application.extend("Application", {
             employeesTile.setNumber(sap.ui.getCore().getModel("managedEmployees").getData().length);
         }
     },
-    employeeItemSelected: function(evt) {
-        var listItem = evt.getParameters().listItem;
-        var bindingCtx = listItem.getBindingContext("managedEmployees");
-        var model = new sap.ui.model.json.JSONModel({
-            employee: bindingCtx.getObject()
-        });
-        var campaignId = sap.ui.getCore().getModel("activeCampaignModel").getProperty("/id");
-        var userId = model.getProperty("/employee/userId");
+    reloadOrdersModel : function(campaignId) {
+        reloadOrdersModel(); 
+    },
+
+    getSelecedUserID : function() {
+        return sap.ui.getCore().getModel("employeeOrderDetailsModel").getProperty("/employee/userId");
+    },
+
+    reloadOrdersModel : function() {
+        var campaignId = this.getCampaignId();
+        var userId = this.getSelecedUserID();
         if (campaignId) {
             jQuery.ajax({
                 async: false,
                 url: "../api/orders/for-user/" + campaignId + "/" + userId,
                 type: 'GET',
                 success: function(data) {
-                    model.setProperty("/currentOrder", data);
+                    sap.ui.getCore().getModel("employeeOrderDetailsModel").setProperty("/currentOrder", data);
                 }
             });
         }
+    },
 
-        sap.ui.getCore().byId(this.EMPLOYEE_DETAILS_VIEW_ID).setModel(model);
-        this._toDetailsPage(this.EMPLOYEE_DETAILS_VIEW_ID);
+    employeeItemSelected : function(evt) {
+        var listItem = evt.getParameters().listItem;
+        var bindingCtx = listItem.getBindingContext("managedEmployees");
+        sap.ui.getCore().getModel("employeeOrderDetailsModel").setProperty("/employee", bindingCtx.getObject());
+        this.reloadOrdersModel();
+        this._toDetailsPage(EMPLOYEE_DETAILS_VIEW_ID);
     },
     campaignItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
@@ -129,7 +141,7 @@ sap.ui.app.Application.extend("Application", {
         });
 
         var emplMasterView = sap.ui.xmlview(this.EMPLOYEE_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Master");
-        var emplDetailsView = sap.ui.xmlview(this.EMPLOYEE_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Details");
+        var emplDetailsView = sap.ui.xmlview(this.EMPLOYEE_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.orders.Details");
         var benefitsMasterView = sap.ui.xmlview(this.BENEFITS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Master");
         var benefitsDetailsView = sap.ui.xmlview(this.BENEFITS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Details");
         var campaignMasterView = sap.ui.xmlview(this.CAMPAIGN_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Master");

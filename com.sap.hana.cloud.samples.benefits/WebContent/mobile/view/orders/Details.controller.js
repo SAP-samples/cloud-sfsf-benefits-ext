@@ -18,8 +18,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 		jQuery.sap.require("sap.m.MessageToast");
 		var dialog = this.byId("addItemCtrl");
 		var that = this;
-		var model = sap.ui.getCore().byId("EmployeeOrdersDetails").getModel("orderByCampaignModel");
-		var currentOrder = model.getData().getData().currentOrder; 
+		var currentOrder = this.getView().getModel().getProperty("/currentOrder"); 
 		var campPoints = currentOrder.campaign.points;
 		var orderPrice = currentOrder.orderPrice;
 		var availablePoints = campPoints - orderPrice;
