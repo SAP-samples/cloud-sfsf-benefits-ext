@@ -2,6 +2,13 @@ jQuery.sap.declare("Application");
 jQuery.sap.require("sap.ui.app.Application");
 
 sap.ui.app.Application.extend("Application", {
+    CAMPAIGN_MASTER_VIEW_ID: "CampaignMaster",
+    EMPLOYEE_MASTER_VIEW_ID: "EmployeesMaster",
+    BENEFITS_MASTER_VIEW_ID: "BenefitsMaster",
+    CAMPAIGN_DETAILS_VIEW_ID: "CampaignDetails",
+    EMPLOYEE_DETAILS_VIEW_ID: "EmployeesDetails",
+    BENEFITS_DETAILS_VIEW_ID: "BenefitsDetails",
+    DEFAULT_DETAILS_VIEW_ID: "DefaultDetails",
     init: function() {
 
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
@@ -60,15 +67,15 @@ sap.ui.app.Application.extend("Application", {
             });
         }
 
-        sap.ui.getCore().byId("EmployeesDetails").setModel(model);
-        this._toDetailsPage("EmployeesDetails");
+        sap.ui.getCore().byId(this.EMPLOYEE_DETAILS_VIEW_ID).setModel(model);
+        this._toDetailsPage(this.EMPLOYEE_DETAILS_VIEW_ID);
     },
     campaignItemSelected: function(evt) {
         var listItem = evt.getParameters().listItem;
         var bindingCtx = listItem.getBindingContext("campaignModel");
-        sap.ui.getCore().byId("CampaignDetails").setModel(bindingCtx.getModel());
-        this._toDetailsPage("DefaultDetails");
-        this._toDetailsPage("CampaignDetails", {
+        sap.ui.getCore().byId(this.CAMPAIGN_DETAILS_VIEW_ID).setModel(bindingCtx.getModel());
+        this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
+        this._toDetailsPage(this.CAMPAIGN_DETAILS_VIEW_ID, {
             context: bindingCtx
         });
     },
@@ -80,8 +87,8 @@ sap.ui.app.Application.extend("Application", {
                 listItem: items[itemIndex],
                 id: list.getId()
             });
-        }else {
-            this._toDetailsPage("DefaultDetails");
+        } else {
+            this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
         }
     },
     benefitItemSelected: function(evt) {
@@ -89,9 +96,9 @@ sap.ui.app.Application.extend("Application", {
         var bindingCtx = listItem.getBindingContext("benefitsModel");
         var model = new sap.ui.model.json.JSONModel(bindingCtx.getObject());
 
-        sap.ui.getCore().byId("BenefitsDetails").setModel(model);
+        sap.ui.getCore().byId(this.BENEFITS_DETAILS_VIEW_ID).setModel(model);
 
-        this._toDetailsPage("BenefitsDetails");
+        this._toDetailsPage(this.BENEFITS_DETAILS_VIEW_ID);
     },
     goHome: function() {
         var homePage = sap.ui.getCore().byId("HomePage");
@@ -121,15 +128,17 @@ sap.ui.app.Application.extend("Application", {
                 })]
         });
 
-        var emplMasterView = sap.ui.xmlview("EmployeesMaster", "com.sap.hana.cloud.samples.benefits.view.employees.Master");
-        var emplDetailsView = sap.ui.xmlview("EmployeesDetails", "com.sap.hana.cloud.samples.benefits.view.employees.Details");
-        var benefitsMasterView = sap.ui.xmlview("BenefitsMaster", "com.sap.hana.cloud.samples.benefits.view.benefits.Master");
-        var benefitsDetailsView = sap.ui.xmlview("BenefitsDetails", "com.sap.hana.cloud.samples.benefits.view.benefits.Details");
-        var campaignMasterView = sap.ui.xmlview("CampaignMaster", "com.sap.hana.cloud.samples.benefits.view.campaigns.Master");
-        var campaignDetailsView = sap.ui.xmlview("CampaignDetails", "com.sap.hana.cloud.samples.benefits.view.campaigns.Details");
-        var defaultDetailsView = sap.ui.xmlview("DefaultDetails", "com.sap.hana.cloud.samples.benefits.view.DefaultDetails");
+        var emplMasterView = sap.ui.xmlview(this.EMPLOYEE_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Master");
+        var emplDetailsView = sap.ui.xmlview(this.EMPLOYEE_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Details");
+        var benefitsMasterView = sap.ui.xmlview(this.BENEFITS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Master");
+        var benefitsDetailsView = sap.ui.xmlview(this.BENEFITS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Details");
+        var campaignMasterView = sap.ui.xmlview(this.CAMPAIGN_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Master");
+        var campaignDetailsView = sap.ui.xmlview(this.CAMPAIGN_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Details");
+        var defaultDetailsView = sap.ui.xmlview(this.DEFAULT_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.DefaultDetails");
 
         var splitApp = new sap.m.SplitApp("SplitAppControl");
+        splitApp.setBusyIndicatorDelay(0);
+        
         splitApp.addMasterPage(emplMasterView);
         splitApp.addDetailPage(emplDetailsView);
 
@@ -152,23 +161,26 @@ sap.ui.app.Application.extend("Application", {
     _getShell: function() {
         return sap.ui.getCore().byId("ShellControl");
     },
+    setAppBusy: function(busy) {
+        sap.ui.getCore().byId("SplitAppControl").setBusy(busy);
+    },
     _handleTilePressed: function(evt) {
         var splitApp = sap.ui.getCore().byId("SplitAppControl");
         switch (evt.getParameters().id) {
             case "Employees":
-                splitApp.toMaster("EmployeesMaster");
-                splitApp.toDetail(sap.ui.getCore().byId("DefaultDetails"), "show");
+                splitApp.toMaster(this.EMPLOYEE_MASTER_VIEW_ID);
+                splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Benefits":
-                splitApp.toMaster("BenefitsMaster");
-                splitApp.toDetail(sap.ui.getCore().byId("DefaultDetails"), "show");
+                splitApp.toMaster(this.BENEFITS_MASTER_VIEW_ID);
+                splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Campaigns":
                 splitApp.hideMaster();
-                splitApp.toMaster("CampaignMaster");
-                splitApp.toDetail(sap.ui.getCore().byId("DefaultDetails"), "show");
+                splitApp.toMaster(this.CAMPAIGN_MASTER_VIEW_ID);
+                splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             default:

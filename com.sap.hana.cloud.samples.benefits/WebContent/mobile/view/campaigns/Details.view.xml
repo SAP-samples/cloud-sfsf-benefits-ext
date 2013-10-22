@@ -24,17 +24,20 @@
         <footer>
             <Bar>
                 <contentRight>
-                    <Button id="startStopButton" text="{parts:['active'], formatter: '.formatStartStopButtonText' }" press="startStopButtonPressed"/>
-                    <Button id="editButton" text="Edit" press="editButtonPressed" icon="sap-icon://edit"/>
+                    <Button id="optionsBtn" text="Options" press="optionsBtnPressHandler" icon="sap-icon://action-settings"/>
                 </contentRight>
             </Bar>
         </footer>
     </Page>
-    
-    <Dialog id="editCampaignDialog" title="Edit Campaign">
+    <Dialog id="editCampaignDialog" title="Change Campaign Dates" afterOpen="_closeDateTimeSelectors">
         <content>
             <VBox>
                 <items>
+                    <HBox id="errorContainer" class="errorContainer displayNone">
+                        <items>
+                            <Text id="errorStatusText" class="errorText" data-text="..." data-text-align="Left"/>
+                        </items>
+                    </HBox>
                     <Label text="Start Date:" class="labelHeight"/>
                     <DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..."/>
                     <Label text="End Date:" class="labelHeight"/>
@@ -43,5 +46,4 @@
             </VBox>
         </content>
     </Dialog>
-    
 </core:View>

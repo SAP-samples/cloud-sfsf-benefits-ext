@@ -7,21 +7,46 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
         this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
                 this.setBindingContext(evt.data.context);
-                this.getController().refreshStartStopBtnState();
+                this.getController()._refreshStartStopBtnState();
             }
         }, this.getView());
 
-        this.busyDialog = new sap.m.BusyDialog({showCancelButton: false});
+        this.actionSheet = this._createActionSheet();
     },
     onAfterRendering: function() {
     },
     onBeforeRendering: function() {
     },
-    editButtonPressed: function(evt) {
+    formatState: function(active) {
+        return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
+    },
+    formatStateText: function(active) {
+        return active ? "Active" : "Inactive";
+    },
+    formatDate: function(date) {
+        if (date) {
+            var formatter = sap.ui.core.format.DateFormat;
+            var dateObject = formatter.getDateInstance({style: "full", pattern: "yyyy-MM-dd\'T\'HH:mm:ss\'Z\'"}).parse(date);
+            return formatter.getDateInstance({style: "full", pattern: "MMM d, y"}).format(dateObject);
+        } else {
+            return "not set";
+        }
+    },
+    optionsBtnPressHandler: function(evt) {
+        this.actionSheet.openBy(evt.getSource());
+    },
+    startStopButtonPressed: function(evt) {
+        if (evt.getSource().state === 'stop') {
+            this._requestStopCampaign();
+        } else {
+            this._startCampaign();
+        }
+    },
+    changeDatesButtonPressed: function(evt) {
         var editCampDialog = this.byId("editCampaignDialog");
         editCampDialog.setLeftButton(new sap.m.Button({
             text: "Ok",
-            press: jQuery.proxy(this.saveEditedCampaignData, this)
+            press: jQuery.proxy(this._saveEditedDates, this)
         }));
         editCampDialog.setRightButton(new sap.m.Button({
             text: "Cancel",
@@ -30,14 +55,14 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             }, this)
         }));
 
-        this.byId("startDateCtr").setValue(this.byId("startDateTextCtr").getText() === "not set" ? "" : this.byId("startDateTextCtr").getText());
-        this.byId("endDateCtr").setValue(this.byId("endDateTextCtr").getText() === "not set" ? "" : this.byId("endDateTextCtr").getText());
+        this.byId("startDateCtr").setProperty('value', this.byId("startDateTextCtr").getText() === "not set" ? undefined : this.byId("startDateTextCtr").getText());
+        this.byId("endDateCtr").setProperty('value', this.byId("endDateTextCtr").getText() === "not set" ? undefined : this.byId("endDateTextCtr").getText());
         sap.ui.getCore().getEventBus().publish("nav", "virtual");
         editCampDialog.open();
     },
-    saveEditedCampaignData: function(evt) {
-        this.byId("editCampaignDialog").close();
+    _saveEditedDates: function(evt) {
         if (this.byId("startDateCtr").getDateValue().getTime() < this.byId("endDateCtr").getDateValue().getTime()) {
+            this.byId("editCampaignDialog").close();
             var ctx = this.byId("inputForm").getBindingContext().getObject();
             var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({style: "full", pattern: "yyyy-MM-dd'T'HH:mm:ss'Z'"});
             jQuery.ajax({
@@ -61,19 +86,45 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
                 }
             })
         } else {
-            this._showErrorMessageBox("Start date must be before the end date!");
+            $(".errorContainer").removeClass("displayNone");
+            this.byId("errorStatusText").setText("The start date must be before end date.");
         }
     },
-    startStopButtonPressed: function(evt) {
-        if (evt.getSource().state === 'stop') {
-            this._requestStopCampaign();
+    _deleteCampaignBtnPressed: function(evt) {
+        var campaignId = this.byId("inputForm").getBindingContext().getObject().id;
+        var campaignName = this.byId("inputForm").getBindingContext().getObject().name;
+        sap.m.MessageBox.confirm("Are you sure you want to delete campaign '" + campaignName + "'?", jQuery.proxy(function(action) {
+            if (action === sap.m.MessageBox.Action.OK) {
+                this.getView().setBusy(true);
+                jQuery.ajax({
+                    url: '../api/campaigns/' + campaignId,
+                    type: 'delete',
+                    success: jQuery.proxy(function(data) {
+                       appController.reloadCampaignModel();
+                       sap.ui.getCore().byId(appController.CAMPAIGN_MASTER_VIEW_ID).getController().selectFirstCampaign();
+                    }, this),
+                    complete: jQuery.proxy(function() {
+                        this.getView().setBusy(false);
+                    }, this)
+                });
+            }
+        }, this));
+    },
+    _refreshStartStopBtnState: function() {
+        var isCampaignStarted = this.byId("inputForm").getBindingContext().getObject().active;
+        if (isCampaignStarted) {
+            this.startStopBtn.setText("Stop");
+            this.startStopBtn.setIcon("sap-icon://decline");
+            this.startStopBtn.state = 'stop';
         } else {
-            this.startCampaign();
+            this.startStopBtn.setText("Start");
+            this.startStopBtn.setIcon("sap-icon://begin");
+            this.startStopBtn.state = 'start';
         }
     },
-    startCampaign: function(evt) {
+    _startCampaign: function(evt) {
         if (this._validateCampaignDataExist()) {
-            this.busyDialog.open();
+            appController.setAppBusy(true);
             var ctx = this.byId("inputForm").getBindingContext().getObject();
             jQuery.ajax({
                 url: '../api/campaigns/start-possible/' + ctx.id,
@@ -86,53 +137,17 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
                         this._showErrorMessageBox("Only one campaign can be active. Currently active campaign is \"" + data.startedCampaignName + "\"");
                     }
                 }, this),
-                complete: jQuery.proxy(function() {
-                    this.busyDialog.close();
-                }, this),
+                complete: function() {
+                    appController.setAppBusy(false);
+                },
                 contentType: "application/json; charset=utf-8",
             });
         } else {
             this._showErrorMessageBox("Unnable to start the campaign. Not all required fields are set!");
         }
     },
-    formatState: function(active) {
-        return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
-    },
-    formatStateText: function(active) {
-        return active ? "Active" : "Inactive";
-    },
-    formatStartStopButtonText: function(active) {
-        return active ? "Stop" : "Start";
-    },
-    formatDate: function(date) {
-        if (date) {
-            var formatter = sap.ui.core.format.DateFormat;
-            var dateObject = formatter.getDateInstance({style: "full", pattern: "yyyy-MM-dd\'T\'HH:mm:ss\'Z\'"}).parse(date);
-            return formatter.getDateInstance({style: "full", pattern: "MMM d, y"}).format(dateObject);
-        } else {
-            return "not set";
-        }
-    },
-    refreshStartStopBtnState: function(isCampaignStarted) {
-        var isCampaignStarted = this.getView().getBindingContext().getObject().active;
-        if (isCampaignStarted) {
-            this.byId("startStopButton").setText("Stop");
-            this.byId("startStopButton").state = 'stop';
-        } else {
-            this.byId("startStopButton").setText("Start");
-            this.byId("startStopButton").state = 'start';
-        }
-    },
-    _showErrorMessageBox: function(message) {
-        sap.m.MessageBox.show(
-                message,
-                sap.m.MessageBox.Icon.ERROR,
-                null,
-                [sap.m.MessageBox.Action.OK]
-                );
-    },
     _validateCampaignDataExist: function() {
-        var campData = this.getView().getBindingContext().getObject();
+        var campData = this.byId("inputForm").getBindingContext().getObject();
         if (campData.name && campData.startDate && campData.endDate && campData.points) {
             return true;
         }
@@ -147,7 +162,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             success: jQuery.proxy(function(data) {
                 sap.m.MessageToast.show("Campaign Stoped");
                 appController.reloadCampaignModel();
-                this.refreshStartStopBtnState();
+                this._refreshStartStopBtnState();
             }, this),
             contentType: "application/json; charset=utf-8"
         });
@@ -161,9 +176,53 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             success: jQuery.proxy(function(data) {
                 sap.m.MessageToast.show("Campaign Started");
                 appController.reloadCampaignModel();
-                this.refreshStartStopBtnState();
+                this._refreshStartStopBtnState();
             }, this),
             contentType: "application/json; charset=utf-8"
         });
+    },
+    _createActionSheet: function() {
+        this.startStopBtn = new sap.m.Button("startStopButton", {
+            icon: "sap-icon://decline",
+            text: "Stop",
+            press: jQuery.proxy(this.startStopButtonPressed, this)
+        });
+
+        return new sap.m.ActionSheet({
+            title: "Please choose one action",
+            showCancelButton: true,
+            buttons: [
+                this.startStopBtn,
+                new sap.m.Button({
+                    icon: "sap-icon://edit",
+                    text: "Change Dates",
+                    press: jQuery.proxy(this.changeDatesButtonPressed, this)
+                }),
+                new sap.m.Button({
+                    icon: "sap-icon://delete",
+                    text: "Delete",
+                    press: jQuery.proxy(this._deleteCampaignBtnPressed, this)
+                })
+            ],
+            placement: sap.m.PlacementType.Top,
+            afterClose: this._actionSheetAfterCloseEvtHandler
+        });
+    },
+    _showErrorMessageBox: function(message) {
+        sap.m.MessageBox.show(
+                message,
+                sap.m.MessageBox.Icon.ERROR,
+                null,
+                [sap.m.MessageBox.Action.OK]
+                );
+    },
+    _actionSheetAfterCloseEvtHandler: function(evt) {
+        if (evt.getParameter("origin")) {
+            sap.ui.getCore().getEventBus().publish("nav", "back");
+        }
+    },
+    _closeDateTimeSelectors: function() {
+        this.byId("startDateCtr").close();
+        this.byId("endDateCtr").close();
     }
 });

@@ -19,7 +19,6 @@
             <Bar>
                 <contentRight>
                     <Button id="addButton" text="Add" press="addButtonPressed" icon="sap-icon://add"/>
-                    <Button id="editButton" text="Edit" press="editButtonPressed" icon="sap-icon://edit"/>
                 </contentRight>
             </Bar>
         </footer>
