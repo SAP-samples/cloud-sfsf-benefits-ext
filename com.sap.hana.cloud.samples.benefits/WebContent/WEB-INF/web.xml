@@ -36,22 +36,45 @@
     <url-pattern>/index.html</url-pattern>
   </servlet-mapping>
   <context-param>
+    <param-name>com.sap.ui5.resource.USE_CACHE</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
     <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
     <param-value>https://sapui5.hana.ondemand.com</param-value>
   </context-param>
   <context-param>
-    <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
+   <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
+   <param-value>true</param-value>
+  </context-param>  
+    <context-param>
+    <param-name>com.sap.ui5.resource.DEV_MODE</param-name>
     <param-value>true</param-value>
   </context-param>
   <context-param>
-    <param-name>com.sap.ui5.resource.DEV_MODE</param-name>
-    <param-value>false</param-value>
+    <param-name>com.sap.ui5.resource.VERBOSE</param-name>
+    <param-value>true</param-value>
   </context-param>
+  <context-param>
+    <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
+    <param-value>true</param-value>
+  </context-param>    
+  <!-- ============================================================ -->
+  <!-- SAPUI5 resource servlet used to handle application resources  -->
+  <!-- ============================================================ -->
+  <servlet>
+    <servlet-name>ResourceServlet</servlet-name>
+    <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResourceServlet</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
   <filter>
     <display-name>SessionCreateFilter</display-name>
     <filter-name>SessionCreateFilter</filter-name>
     <filter-class>com.sap.hana.cloud.samples.benefits.service.SessionCreateFilter</filter-class>
-  </filter>
+  </filter> 
   <filter-mapping>
     <filter-name>SessionCreateFilter</filter-name>
     <url-pattern>/api/*</url-pattern>
@@ -98,6 +121,7 @@
       <web-resource-name>Unsecured open social widgets for portal integration</web-resource-name>
       <url-pattern>/admin.xml</url-pattern>
       <url-pattern>/employee.xml</url-pattern>
+      <url-pattern>/resources/*</url-pattern>
     </web-resource-collection>
   </security-constraint>
   

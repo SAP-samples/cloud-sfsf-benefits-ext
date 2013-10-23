@@ -15,12 +15,14 @@ The sample application relies on and integrates the following SAP HANA Cloud Pla
 * *SAP HANA Cloud Platform extension package* that provides SuccessFactors connectivity  on top of the standard based OData API 
 * Persistency - JPA on top of [SAP HANA Database technology](http://www.saphana.com/welcome)
 * User interface technology - SAPUI5 (sap.m) libraries [Details](https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/explored/index.html)
-*  Backend logic implemented using JAX-RS Services (Apache CXF and Google Gson for JSON serialization/deserialization)
+* Backend logic implemented using JAX-RS Services (Apache CXF and Google Gson for JSON serialization/deserialization)
 
 Get the Source Code
 -------------------
 
 Clone the Git repository `git clone https://github.com/sap/cloud-sfsf-benefits-ext.git`, or [download the latest release](https://github.com/sap/cloud-sfsf-benefits-ext/zipball/master).
+
+In Eclipse import as *Existing Maven Project* and point to the *pom.xml* file located in *com.sap.hana.cloud.samples.benefits* folder.
 
 Architecture Overview
 ---------------------
@@ -56,17 +58,17 @@ SAP Employee Benefits Management application can be run either locally or on *SA
 
   * Access to *SAP HANA Cloud Platform extension package* account
   * *SAP HANA Cloud Platform* development enviroment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
-  
+
 2. Configure the project build
 
- * *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK
+ You need to set two environment variables in order to configure the local project build.
+
+ * *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK.
  * *NW_CLOUD_SDK_VERSION* - defines the version of the used SAP HANA Cloud SDK version.
+ * *ECLIPSE_HOME* - defines the path to eclipse installation folder.
+ * *SAP_UI5_VERSION* - defines the SAP UI5 version installed in the *SAP HANA Cloud Platform* development enviroment. You can see the installed verion in *Eclipse>Help>About Eclipse>SAP UI5* button
 
- To define the environment variable in MS Windows go to your computerâ properties, Advanced System Settings, Environment variables and create a new user variable named *NW_CLOUD_SDK_PATH* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. *NW_CLOUD_SDK_VERSION* variable is defined in similar way.
- 
-3. Importing the project in Eclipse
-
- In Eclipse do *import* as *Existing Maven Project* and point to the *pom.xml* file located in *com.sap.hana.cloud.samples.benefits* folder.
+ To define the environment variable in MS Windows go to your *Computer>Properties>Advanced System Settings>Environment variables* and create a new user variable named *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. The other variables are defined the same way.
 
 Run on Local Server
 -------------------
