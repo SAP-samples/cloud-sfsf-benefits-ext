@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -38,7 +39,7 @@ public class BenefitType implements IDBEntity{
 	@JoinColumn(name = "BENEFIT_ID", referencedColumnName = "BENEFIT_ID")
 	private Benefit benefit;
 	
-	@OneToMany(mappedBy = "benefitType", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
+	@OneToMany(cascade=CascadeType.ALL, mappedBy = "benefitType", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
 	private Collection<OrderDetails> orders;
 
 	@Override

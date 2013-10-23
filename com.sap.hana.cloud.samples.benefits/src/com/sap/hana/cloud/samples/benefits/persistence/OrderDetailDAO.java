@@ -15,10 +15,11 @@ public class OrderDetailDAO extends BasicDAO<OrderDetails>{
 		final EntityManager em = emProvider.get();
 		final OrderDetails orderDetail = em.find(OrderDetails.class, id);
 		em.getTransaction().begin();
-		if (orderDetail != null) {			
+		if (orderDetail != null) {
+			orderDetail.getOrder().getOrderDetails().remove(orderDetail);
 			em.remove(orderDetail);
 		}
 		em.getTransaction().commit();
-	}
+	}	
 
 }

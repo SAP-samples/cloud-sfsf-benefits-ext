@@ -20,7 +20,7 @@ public class BenefitItemBean {
 	public BigDecimal itemValue;
 
 	public void init(OrderDetails orderItem) {
-//		this.id = orderItem.getId();
+		this.id = orderItem.getId();
 		this.name = orderItem.getBenefitType().getName();
 		this.itemValue = orderItem.getBenefitType().getValue();
 		this.quantity = orderItem.getQuantity();	

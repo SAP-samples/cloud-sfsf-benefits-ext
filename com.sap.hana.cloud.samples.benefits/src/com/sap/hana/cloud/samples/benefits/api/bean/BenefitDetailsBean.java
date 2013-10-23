@@ -43,6 +43,5 @@ public class BenefitDetailsBean {
 		BenefitDetailsBean result = new BenefitDetailsBean();
 		result.init(benefit);
 		return result;
-	}
-	
+	}	
 }
