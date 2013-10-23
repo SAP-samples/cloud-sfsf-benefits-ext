@@ -9,7 +9,12 @@ sap.ui.app.Application.extend("Application", {
 
         sap.ui.getCore().setModel(campaignModel, "campaignModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
-        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "orderByCampaignModel");
+        
+        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeOrderDetailsModel");
+        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
+        // Loads the logged in user profile
+        sap.ui.getCore().getModel("employeeDetailsModel").loadData("../api/user/profile", null, false);
+        sap.ui.getCore().getModel("employeeOrderDetailsModel").setProperty("/employee",sap.ui.getCore().getModel("employeeDetailsModel").getData());
         
         this.reloadCampaignModel();
         this.reloadBenefitsModel();
@@ -21,18 +26,15 @@ sap.ui.app.Application.extend("Application", {
         sap.ui.getCore().getModel("benefitsModel").loadData("/com.sap.hana.cloud.samples.benefits/api/benefits/all", null, false);
     },
     reloadOrdersModel : function(campaignId){
-    	var model = new sap.ui.model.json.JSONModel();
     	if (campaignId) {
             jQuery.ajax({
                 url : "../api/user/orders/" + campaignId,
                 type : 'GET',
                 success : function(data) {
-                    model.setProperty("/currentOrder", data);
+                    sap.ui.getCore().getModel("employeeOrderDetailsModel").setProperty("/currentOrder", data);
                 }
-            });
-        }
-    	sap.ui.getCore().getModel("orderByCampaignModel").setData(model);
-    	sap.ui.getCore().byId("EmployeeOrdersDetails").setModel(model);
+            });            
+        }    	
     },
     getCampaignId : function(){
     	return campId;
@@ -47,7 +49,6 @@ sap.ui.app.Application.extend("Application", {
     	var bindingCtx = listItem.getBindingContext("campaignModel");
     	campId = bindingCtx.getObject().id;
     	this.reloadOrdersModel(campId);
-    	sap.ui.getCore().byId("EmployeeOrdersDetails").byId("EmployeeOrdersPage").setTitle(bindingCtx.getObject().name + " Details");
     	this._toDetailsPage("EmployeeOrdersDetails", {
     		context : bindingCtx
     	});
@@ -82,6 +83,7 @@ sap.ui.app.Application.extend("Application", {
 
         var emplOrdersMasterView =  sap.ui.xmlview("EmployeeOrdersMaster", "com.sap.hana.cloud.samples.benefits.view.orders.Master");
         var emplOrdersDetailsView =  sap.ui.xmlview("EmployeeOrdersDetails", "com.sap.hana.cloud.samples.benefits.view.orders.Details");
+        emplOrdersDetailsView.setModel(sap.ui.getCore().getModel("employeeOrderDetailsModel"));
         
         var splitApp = new sap.m.SplitApp("SplitAppControl");
   

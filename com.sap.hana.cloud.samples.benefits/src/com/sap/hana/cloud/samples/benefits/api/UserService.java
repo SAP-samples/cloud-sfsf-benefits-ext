@@ -33,6 +33,14 @@ public class UserService extends BaseService {
 		final OrderService orderService = new OrderService();
 		return orderService.getUserBenefitsOrder(campaign_id, getLoggedInUserId());
 	}
+	
+	@GET
+	@Path("/profile")
+	@Produces(MediaType.APPLICATION_JSON)
+	public UserBean getUserProfile() {
+		User currentUser = getLoggedInUser();
+		return UserBean.get(currentUser);
+	}
 
 	@GET
 	@Path("/managed")

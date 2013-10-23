@@ -9,6 +9,7 @@ sap.ui.app.Application.extend("Application", {
     EMPLOYEE_DETAILS_VIEW_ID : "EmployeeOrdersDetails",
     BENEFITS_DETAILS_VIEW_ID : "BenefitsDetails",
     DEFAULT_DETAILS_VIEW_ID : "DefaultDetails",
+    
     init : function() {
 
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
@@ -19,14 +20,21 @@ sap.ui.app.Application.extend("Application", {
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignDetailsModel");
         sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "employeeOrderDetailsModel");
+        
+        // Loads the logged in user profile
+        sap.ui.getCore().getModel("employeeDetailsModel").loadData("../api/user/profile", null, false);
 
         this.reloadCampaignModel();
         this.reloadManagedEmployeesModel();
         this.reloadBenefitsModel();
     },
+    
+    
+    
     reloadBenefitsModel : function() {
         sap.ui.getCore().getModel("benefitsModel").loadData("../api/benefits/all", null, false);
     },
+    
     reloadActiveCampaign : function() {
         var campaigns = sap.ui.getCore().getModel("campaignModel").getData();
         for (var i = 0; i < campaigns.length; i++) {
@@ -35,7 +43,7 @@ sap.ui.app.Application.extend("Application", {
             }
         }
     },
-    
+
     reloadCampaignModel : function() {
         sap.ui.getCore().getModel("campaignModel").loadData("../api/campaigns/", null, false);
         // Set active campaign
@@ -43,11 +51,11 @@ sap.ui.app.Application.extend("Application", {
         // Reload available points of managed employees
         this.reloadManagedEmployeesModel();
     },
-    
+
     getCampaignId : function() {
         return sap.ui.getCore().getModel("activeCampaignModel").getProperty("/id");
     },
-    
+
     reloadManagedEmployeesModel : function() {
         sap.ui.getCore().getModel("managedEmployees").loadData("../api/user/managed", null, false);
         var employeesTile = sap.ui.getCore().byId("Employees");
@@ -83,9 +91,13 @@ sap.ui.app.Application.extend("Application", {
         var bindingCtx = listItem.getBindingContext("managedEmployees");
         sap.ui.getCore().getModel("employeeOrderDetailsModel").setProperty("/employee", bindingCtx.getObject());
         this.reloadOrdersModel();
-        this._toDetailsPage(this.EMPLOYEE_DETAILS_VIEW_ID);
+        if (this.getCampaignId()) {
+            this._toDetailsPage(this.EMPLOYEE_DETAILS_VIEW_ID);
+        } else { // No data case
+            this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
+        }
     },
-    
+
     campaignItemSelected : function(evt) {
         var listItem = evt.getParameters().listItem;
         var bindingCtx = listItem.getBindingContext("campaignModel");
@@ -95,7 +107,7 @@ sap.ui.app.Application.extend("Application", {
             context : bindingCtx
         });
     },
-    
+
     selectListItem : function(list, itemIndex) {
         var items = list.getItems();
         if (items[itemIndex]) {
@@ -121,7 +133,7 @@ sap.ui.app.Application.extend("Application", {
         var homePage = sap.ui.getCore().byId("HomePage");
         this._getShell().setApp(homePage);
     },
-    openDefaultDetailsPage: function() {
+    openDefaultDetailsPage : function() {
         this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
     },
     search: function(list, searchField, property) {

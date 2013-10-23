@@ -3,7 +3,7 @@
            controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Details" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
-    <Page id="CampainMasterPage" title="Details" showNavButton="false">
+    <Page id="CampainMasterPage" title="Campaign Details" showNavButton="false">
         <content>
             <form:SimpleForm id="inputForm" minWidth="1024" maxContainerCols="2" editable="false">
                 <form:content>

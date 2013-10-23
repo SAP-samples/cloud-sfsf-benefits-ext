@@ -2,7 +2,7 @@
 	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
 	controllerName="com.sap.hana.cloud.samples.benefits.view.orders.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="EmployeeOrdersPage" title="Employee Orders" showNavButton="false">
+	<Page id="EmployeeOrdersPage" title="Benefit orders of {/employee/firstName} {/employee/lastName}" showNavButton="false">
 
 		<content>
 			<ObjectHeader id="headerCtrl" title="{/currentOrder/campaign/name} campaign orders"
