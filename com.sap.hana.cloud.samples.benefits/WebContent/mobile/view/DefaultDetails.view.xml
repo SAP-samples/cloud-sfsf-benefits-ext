@@ -3,6 +3,6 @@
            controllerName="com.sap.hana.cloud.samples.benefits.view.DefaultDetails" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
-    <Page title="Details" showNavButton="false">
+    <Page showNavButton="false">
     </Page>
 </core:View>

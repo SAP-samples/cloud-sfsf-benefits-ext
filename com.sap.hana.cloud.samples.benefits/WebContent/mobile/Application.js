@@ -90,7 +90,7 @@ sap.ui.app.Application.extend("Application", {
         var listItem = evt.getParameters().listItem;
         var bindingCtx = listItem.getBindingContext("campaignModel");
         sap.ui.getCore().byId(this.CAMPAIGN_DETAILS_VIEW_ID).setModel(bindingCtx.getModel());
-        this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
+        this.openDefaultDetailsPage();
         this._toDetailsPage(this.CAMPAIGN_DETAILS_VIEW_ID, {
             context : bindingCtx
         });
@@ -105,7 +105,7 @@ sap.ui.app.Application.extend("Application", {
                 id : list.getId()
             });
         } else {
-            this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
+            this.openDefaultDetailsPage();
         }
     },
     benefitItemSelected : function(evt) {
@@ -120,6 +120,9 @@ sap.ui.app.Application.extend("Application", {
     goHome : function() {
         var homePage = sap.ui.getCore().byId("HomePage");
         this._getShell().setApp(homePage);
+    },
+    openDefaultDetailsPage: function() {
+        this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
     },
     main : function() {
         var root = this.getRoot();

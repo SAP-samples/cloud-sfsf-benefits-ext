@@ -1,5 +1,7 @@
 package com.sap.hana.cloud.samples.benefits.api.bean;
 
+import java.text.MessageFormat;
+
 import com.google.gson.annotations.Expose;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 
@@ -10,6 +12,9 @@ public class UserBean {
 
 	@Expose
 	public String lastName;
+	
+	@Expose
+	public String fullName;
 
 	@Expose
 	public String userId;
@@ -24,6 +29,7 @@ public class UserBean {
 		this.email = user.getEmail();
 		this.firstName = user.getFirstName();
 		this.lastName = user.getLastName();
+		this.fullName = MessageFormat.format("{0} {1}", user.getFirstName(), user.getLastName()); 
 		this.userId = user.getUserId();
 	}
 
