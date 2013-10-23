@@ -30,6 +30,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
         var list = this.byId("campaignsList");
         appController.selectListItem(list, 0);
     },
+    handleSearch: function() {
+        var employeesList = this.getView().byId("campaignsList");
+        var searchField = this.getView().byId("searchField");
+        appController.search(employeesList, searchField, "name");
+    },
     addButtonPressed: function(evt) {
         var newCampDialog = this.byId("newcampaignDialog");
         this.byId("nameCtr").setValue(null);

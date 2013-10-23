@@ -124,6 +124,20 @@ sap.ui.app.Application.extend("Application", {
     openDefaultDetailsPage: function() {
         this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
     },
+    search: function(list, searchField, property) {
+        appController.openDefaultDetailsPage();
+        var showSearch = (searchField.getValue().length !== 0);
+        var binding = list.getBinding("items");
+
+        if (binding) {
+            if(showSearch){
+            var filterName = new sap.ui.model.Filter(property, sap.ui.model.FilterOperator.Contains, searchField.getValue());
+            binding.filter([filterName]);
+            }else {
+                binding.filter([]);
+            }
+        }
+    },
     main : function() {
         var root = this.getRoot();
         var managedEmployees = 0;

@@ -10,8 +10,18 @@
                     <ObjectListItem icon="sap-icon://database" title="{benefitsModel>name}" class="benefitListItem"/>
                 </items>
             </List>
-            
         </content>
+        <subHeader>
+            <Bar id="searchBar" enableFlexBox="true">
+                <contentMiddle>
+                    <SearchField id="searchField" search="handleSearch" liveChange="handleSearch" width="100%" placeholder="Search..." showRefreshButton="false">
+                        <layoutData>
+                            <FlexItemData growFactor="1"/>
+                        </layoutData>
+                    </SearchField>
+                </contentMiddle>
+            </Bar>
+        </subHeader>
     </Page>
     
          
