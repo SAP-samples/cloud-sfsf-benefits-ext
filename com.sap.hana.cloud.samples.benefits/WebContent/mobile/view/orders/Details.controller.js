@@ -1,6 +1,8 @@
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 	
 	onInit : function() {
+		this.busyDialog = new sap.m.BusyDialog({showCancelButton: false});
+		
 		this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
             	this.setBindingContext(evt.data.context);                		
@@ -30,7 +32,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 				jQuery.sap.require("sap.m.MessageBox");
 				var selectedItem = that.byId("quantityTypeSelect").getSelectedItem().getKey();
 				var selectedBenefit = that.byId("benefitTypeSelect").getSelectedItem().getKey();
-				var selItemVal = that.getItemValue(selectedBenefit, selectedItem);
+				var selItemVal = that._getItemValue(selectedBenefit, selectedItem);
 				var quantity = that.byId("quantityTypeTxt").getValue();
 				var value = selItemVal * quantity;
 				var addServiceURL = "/com.sap.hana.cloud.samples.benefits/api/orders/add/"+ appController.getCampaignId();
@@ -107,13 +109,20 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
     	this.byId("quantityTypeSelect").setModel(ctx.getModel()); 
     },
     onDelete : function (evt) {
+    	jQuery.sap.require("sap.m.MessageBox");
     	var item = evt.getParameter("listItem"); 
-    	this.byId("listCtr").removeItem(item);
+    	var ctx = evt.getParameter("listItem").getBindingContext().getObject();
+    	var itemId = ctx.id;
+        var itemDetails = ctx.name + " " + ctx.quantity + " x " + ctx.itemValue + " points";
+        sap.m.MessageBox.confirm("Are you sure you want to delete order with details '" + itemDetails + "'?", jQuery.proxy(function(action){
+             if(action === sap.m.MessageBox.Action.OK){
+                 this._deleteOrder(itemId);
+             }
+         }, this));
+    	
+//    	this.byId("listCtr").removeItem(item);
     },
-    isOrderValid : function(){
-    	return true;
-    },
-    getItemValue : function(selectedBenefit, selectedItemId){
+    _getItemValue : function(selectedBenefit, selectedItemId){
     	var benefits = sap.ui.getCore().byId("EmployeeOrdersDetails").getModel("benefitsModel").getData();
     	for(var i = 0; i < benefits.length; i++ ){
     		if(benefits[i].id = selectedBenefit){
@@ -125,6 +134,19 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
     		}
     	}
     	return 0;
+    },
+    _deleteOrder : function (orderId){
+    	 this.busyDialog.open();
+         jQuery.ajax({
+             url: '../api/orders/' + orderId,
+             type: 'delete',
+             success: jQuery.proxy(function(data) {
+                 appController.reloadOrdersModel(appController.getCampaignId());                 
+             }, this),
+             complete: jQuery.proxy(function() {
+                 this.busyDialog.close();
+             }, this)
+         });
     }
 
 });

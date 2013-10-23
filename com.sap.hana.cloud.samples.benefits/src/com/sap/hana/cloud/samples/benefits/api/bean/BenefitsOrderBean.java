@@ -31,19 +31,24 @@ public class BenefitsOrderBean {
 		this.orderPrice = order.getTotal();
 		this.campaign = CampaignBean.get(order.getCampaign());
 		final Map<Long,BenefitsOrderItemBean> benefitsMap = new HashMap<Long, BenefitsOrderItemBean>();
-		for (OrderDetails orderItem: order.getOrderDetails()) {
-			Benefit benefit = orderItem.getBenefitType().getBenefit();
-			BenefitsOrderItemBean benefitOrderItem = benefitsMap.get(benefit.getId());
-			if (benefitOrderItem == null) {
-				benefitOrderItem = new BenefitsOrderItemBean();
-				benefitOrderItem.initBenefitDetails(orderItem.getBenefitType().getBenefit());
-				benefitsMap.put(benefit.getId(), benefitOrderItem);
-			}
-			benefitOrderItem.addBenefitItem(orderItem);
+		if(order.getOrderDetails() != null){
+			for (OrderDetails orderItem: order.getOrderDetails()) {
+				BenefitsOrderItemBean benefitOrderItem = null;
+				if(orderItem.getBenefitType() != null){
+					Benefit benefit = orderItem.getBenefitType().getBenefit();
+					benefitOrderItem = benefitsMap.get(benefit.getId());
+					if (benefitOrderItem == null) {
+						benefitOrderItem = new BenefitsOrderItemBean();
+						benefitOrderItem.initBenefitDetails(orderItem.getBenefitType().getBenefit());
+						benefitsMap.put(benefit.getId(), benefitOrderItem);
+					}					
+					benefitOrderItem.addBenefitItem(orderItem);
+				}
+			}			
 		}
 		this.orderItems.clear();
 		this.orderItems.addAll(benefitsMap.values());
-	}
+	}	
 	
 	public static BenefitsOrderBean get(Order order) {
 		BenefitsOrderBean result = new BenefitsOrderBean();

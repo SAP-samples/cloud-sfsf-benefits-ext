@@ -3,6 +3,7 @@ package com.sap.hana.cloud.samples.benefits.api;
 import java.util.Collection;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,6 +17,7 @@ import com.sap.hana.cloud.samples.benefits.api.bean.OrderBean;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitTypeDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.CampaignDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.OrderDAO;
+import com.sap.hana.cloud.samples.benefits.persistence.OrderDetailDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.UserDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
@@ -73,6 +75,13 @@ public class OrderService extends BaseService {
 		orderDAO.save(userOrder);
 
 		return createOkResponse();
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public void deleteOrderDetail(@PathParam("id") long orderDetailId){
+		final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
+		orderDetailDAO.delete(orderDetailId);
 	}
 
 	private Order getOrCreateUserOrder(final User user, final Campaign campaign, final OrderDAO orderDAO) {

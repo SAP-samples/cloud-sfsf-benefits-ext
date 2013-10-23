@@ -8,6 +8,9 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails;
 public class BenefitItemBean {
 	
 	@Expose
+	public long id;
+	
+	@Expose
 	public String name;
 	
 	@Expose
@@ -17,10 +20,12 @@ public class BenefitItemBean {
 	public BigDecimal itemValue;
 
 	public void init(OrderDetails orderItem) {
+//		this.id = orderItem.getId();
 		this.name = orderItem.getBenefitType().getName();
 		this.itemValue = orderItem.getBenefitType().getValue();
 		this.quantity = orderItem.getQuantity();	
-	}
+	}	
+	
 	
 	public static BenefitItemBean get(OrderDetails orderItem) {
 		BenefitItemBean result = new BenefitItemBean();
