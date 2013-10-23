@@ -63,10 +63,10 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		em.getTransaction().commit();
 	}
 
-	public Campaign getActiveCampaign(User user) {
+	public Campaign getActiveCampaign(User owner) {
 		final EntityManager em = emProvider.get();
 		final TypedQuery<Campaign> query = em.createNamedQuery(DBQueries.GET_ACTIVE_CAMPAIGNS, Campaign.class);
-		query.setParameter("owner", user);
+		query.setParameter("owner", owner);
 		List<Campaign> result = query.getResultList();
 		if (result.size() == 1) {
 			return result.get(0);

@@ -6,7 +6,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
         appController.selectListItem(list, 0);
     },
     onItemSelected: function(oEvent) {
-        appController.campaignItemSelected(oEvent);
+        appController.handleUserCampaignItemSelect(oEvent);
     },
     onNavPressed: function() {
         appController.goHome();

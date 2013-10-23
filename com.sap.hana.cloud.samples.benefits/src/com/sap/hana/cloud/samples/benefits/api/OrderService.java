@@ -72,7 +72,7 @@ public class OrderService extends BaseService {
 		final OrderDetails orderDetails = createOrderDetails(request, benefitType);
 
 		userOrder.addOrderDetails(orderDetails);
-		orderDAO.save(userOrder);
+		new OrderDetailDAO().saveNew(orderDetails);
 
 		return createOkResponse();
 	}

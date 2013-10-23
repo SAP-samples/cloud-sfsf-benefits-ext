@@ -27,14 +27,6 @@
   <filter-name>EntityManagerInterseptor</filter-name>
   <url-pattern>/api/*</url-pattern>
 </filter-mapping>
-  <servlet>
-    <servlet-name>DispatcherServlet</servlet-name>
-    <servlet-class>com.sap.hana.cloud.samples.benefits.DispatcherServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>DispatcherServlet</servlet-name>
-    <url-pattern>/index.html</url-pattern>
-  </servlet-mapping>
   <context-param>
     <param-name>com.sap.ui5.resource.USE_CACHE</param-name>
     <param-value>true</param-value>
@@ -104,13 +96,8 @@
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Admin area</web-resource-name>
-      <url-pattern>/mobile/admin.html</url-pattern>
-      <url-pattern>/mobile/Application.js</url-pattern>
-      <url-pattern>/mobile/view/benefits/*</url-pattern>
       <url-pattern>/mobile/view/campaigns/*</url-pattern>
       <url-pattern>/mobile/view/employees/*</url-pattern>
-      <url-pattern>/mobile/view/DefaultDetails.controller.js</url-pattern>
-      <url-pattern>/mobile/view/DefaultDetails.view.xml</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>Administrator</role-name>
@@ -152,7 +139,8 @@
     		{path: &quot;/api/campaigns/&quot;, roles: [&quot;Administrator&quot;]},
     		{path: &quot;/api/orders/add/&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/orders/for-user/&quot;, roles: [&quot;Administrator&quot;]},
-    		{path: &quot;/api/system/&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/system/reset-db&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/system/ui-config&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/user/managed/&quot;, roles: [&quot;Administrator&quot;]},
     		{path: &quot;/api/user/orders/&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/user/campaigns/&quot;, roles: [&quot;Everyone&quot;]}

@@ -33,6 +33,17 @@ public class CampaignService extends BaseService {
 		final User user = getLoggedInUser();
 		return CampaignBean.getList(user.getCampaigns());
 	}
+	
+	@GET
+	@Path("/active")
+	@Produces(MediaType.APPLICATION_JSON)
+	public CampaignBean getActiveCampaign(){
+		final Campaign activeCampaign = campaignDAO.getActiveCampaign(getLoggedInUser());
+		final CampaignBean response = new CampaignBean();
+		response.init(activeCampaign);
+		
+		return response;
+	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

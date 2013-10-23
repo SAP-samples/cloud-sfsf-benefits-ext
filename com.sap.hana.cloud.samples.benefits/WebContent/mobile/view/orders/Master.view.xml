@@ -5,11 +5,11 @@
            setDisplayBlock="true">
     <Page id="EmployeeOrdersMasterPage" title="Employee Orders" showNavButton="true" navButtonTap="onNavPressed">
         <content>
-            <List id="campaignsList" items="{campaignModel>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+            <List id="campaignsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
-                    <ObjectListItem title="{campaignModel>name}" number="{employeesModel>points}">
+                    <ObjectListItem title="{name}" number="{employeesModel>points}">
                     	<firstStatus>
-	                           <ObjectStatus text="{parts:[{path:'campaignModel>active'}], formatter:'.isActiveCampaign'}"/>	                                   
+	                           <ObjectStatus text="{parts:[{path:'active'}], formatter:'.isActiveCampaign'}"/>	                                   
 	                    </firstStatus>
                      </ObjectListItem>                  
                 </items>

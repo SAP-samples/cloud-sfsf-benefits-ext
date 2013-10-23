@@ -2,14 +2,18 @@ package com.sap.hana.cloud.samples.benefits.api;
 
 import java.io.IOException;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sap.hana.cloud.samples.benefits.api.bean.ConfigBean;
 import com.sap.hana.cloud.samples.benefits.csv.dataimport.BenefitsDataImporter;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitTypeDAO;
@@ -37,6 +41,20 @@ public class SystemService extends BaseService{
 		}
 		
 		return Response.ok().build();
+	}
+	
+	@GET
+	@Path("ui-config")
+	@Produces(MediaType.APPLICATION_JSON)
+	public ConfigBean getUIConfigurationData(){
+		final ConfigBean config = new ConfigBean();
+		if(request.isUserInRole(ADMIN_ROLE)){
+			config.initAdminConfiguration();
+		} else {
+			config.initEmployeeConfiguration();
+		}
+		
+		return config;
 	}
 
 	private void cleanDB(){

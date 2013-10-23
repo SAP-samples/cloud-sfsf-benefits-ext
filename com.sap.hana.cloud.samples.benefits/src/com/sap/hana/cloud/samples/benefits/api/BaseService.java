@@ -13,6 +13,8 @@ import com.sap.hana.cloud.samples.benefits.persistence.UserDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 
 public class BaseService {
+	
+	protected static final String ADMIN_ROLE = "Administrator";
     
     @Resource
     protected HttpServletRequest request;

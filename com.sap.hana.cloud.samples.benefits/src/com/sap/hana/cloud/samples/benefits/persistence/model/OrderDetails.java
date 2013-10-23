@@ -20,11 +20,11 @@ public class OrderDetails implements IDBEntity {
 	@Basic
 	private Long quantity;
 	
-	@ManyToOne(cascade=CascadeType.REFRESH)
+	@ManyToOne(cascade=CascadeType.MERGE)
 	@JoinColumn(name = "ORDER_ID", referencedColumnName = "ORDER_ID")
 	private Order order;
 
-	@ManyToOne(cascade=CascadeType.REFRESH)
+	@ManyToOne(cascade=CascadeType.PERSIST)
 	@JoinColumn(name = "BENEFIT_TYPE_ID", referencedColumnName = "TYPE_ID")
 	private BenefitType benefitType;
 
