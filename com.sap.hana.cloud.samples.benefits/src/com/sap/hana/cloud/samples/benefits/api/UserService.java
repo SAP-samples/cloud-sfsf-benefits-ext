@@ -29,7 +29,7 @@ public class UserService extends BaseService {
 	@GET
 	@Path("/orders/{campain_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BenefitsOrderBean getUserBenefitsOrderForLoggedUser(@PathParam("campain_id") long campaign_id) {
+	public BenefitsOrderBean getUserBenefitsOrderForLoggedUser(@PathParam("campain_id") long campaign_id) throws IOException {
 		final OrderService orderService = new OrderService();
 		return orderService.getUserBenefitsOrder(campaign_id, getLoggedInUserId());
 	}

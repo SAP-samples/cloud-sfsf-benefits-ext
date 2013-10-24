@@ -1,5 +1,6 @@
 package com.sap.hana.cloud.samples.benefits.api;
 
+import java.io.IOException;
 import java.util.Collection;
 
 import javax.ws.rs.Consumes;
@@ -11,6 +12,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.sap.hana.cloud.samples.benefits.api.bean.BenefitsOrderBean;
 import com.sap.hana.cloud.samples.benefits.api.bean.OrderBean;
@@ -33,53 +35,64 @@ public class OrderService extends BaseService {
 	@GET
 	@Path("/for-user/{campain_id}/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public BenefitsOrderBean getUserBenefitsOrder(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) {
-		Campaign campaign = campaignDAO.getById(campaign_id);
-		User user = (new UserDAO()).getByUserId(user_id);
-		Collection<Order> orders = (new OrderDAO()).getOrdersForUser(user, campaign);
-		if (orders.size() > 0) {
-			return BenefitsOrderBean.get(orders.iterator().next());
+	public BenefitsOrderBean getUserBenefitsOrder(@PathParam("campain_id") long campaign_id, @PathParam("user_id") String user_id) throws IOException {
+		final User loggedInUser = getLoggedInUser();
+		if (loggedInUser.getUserId().equals(user_id) || request.isUserInRole(ADMIN_ROLE)) {
+			Campaign campaign = campaignDAO.getById(campaign_id);
+			User user = (new UserDAO()).getByUserId(user_id);
+			Collection<Order> orders = (new OrderDAO()).getOrdersForUser(user, campaign);
+			if (orders.size() > 0) {
+				return BenefitsOrderBean.get(orders.iterator().next());
+			} else {
+				return BenefitsOrderBean.getEmpty(campaign);
+			}
 		} else {
-			return BenefitsOrderBean.getEmpty(campaign);
+			response.sendError(403);
 		}
+		return null;
 	}
 
 	@POST
 	@Path("/add/{campaignId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addOrder(@PathParam("campaignId") long campaignId, OrderBean request) {
+	public Response addOrder(@PathParam("campaignId") long campaignId, OrderBean request) throws IOException {
 		return this.addOrder(campaignId, getLoggedInUserId(), request);
 	}
 
 	@POST
 	@Path("/add/{campaignId}/{userId}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addOrder(@PathParam("campaignId") long campaignId, @PathParam("userId") String userId, OrderBean request) {
-		final User user = userDAO.getByUserId(userId);
-		final Campaign campaign = campaignDAO.getById(campaignId);
+	public Response addOrder(@PathParam("campaignId") long campaignId, @PathParam("userId") String userId, OrderBean requestData) throws IOException {
+		final User loggedInUser = getLoggedInUser();
+		if (loggedInUser.getUserId().equals(userId) || request.isUserInRole(ADMIN_ROLE)) {
+			final User user = userDAO.getByUserId(userId);
+			final Campaign campaign = campaignDAO.getById(campaignId);
 
-		if (campaign == null) {
-			return createBadRequestResponse("Incorrect campaign id");
+			if (campaign == null) {
+				return createBadRequestResponse("Incorrect campaign id");
+			}
+
+			final OrderDAO orderDAO = new OrderDAO();
+			final Order userOrder = getOrCreateUserOrder(user, campaign, orderDAO);
+			final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
+			final BenefitType benefitType = benefitTypeDAO.getById(requestData.benefitTypeId);
+			if (benefitType == null) {
+				return createBadRequestResponse("Incorrect benefit type id");
+			}
+			final OrderDetails orderDetails = createOrderDetails(requestData, benefitType);
+
+			userOrder.addOrderDetails(orderDetails);
+			new OrderDetailDAO().saveNew(orderDetails);
+
+			return createOkResponse();
+		}else {
+			return Response.status(Status.UNAUTHORIZED).build();
 		}
-
-		final OrderDAO orderDAO = new OrderDAO();
-		final Order userOrder = getOrCreateUserOrder(user, campaign, orderDAO);
-		final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
-		final BenefitType benefitType = benefitTypeDAO.getById(request.benefitTypeId);
-		if (benefitType == null) {
-			return createBadRequestResponse("Incorrect benefit type id");
-		}
-		final OrderDetails orderDetails = createOrderDetails(request, benefitType);
-
-		userOrder.addOrderDetails(orderDetails);
-		new OrderDetailDAO().saveNew(orderDetails);
-
-		return createOkResponse();
 	}
-	
+
 	@DELETE
 	@Path("/{id}")
-	public void deleteOrderDetail(@PathParam("id") long orderDetailId){
+	public void deleteOrderDetail(@PathParam("id") long orderDetailId) {
 		final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
 		orderDetailDAO.delete(orderDetailId);
 	}
