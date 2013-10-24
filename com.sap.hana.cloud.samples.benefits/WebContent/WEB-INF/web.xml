@@ -138,7 +138,7 @@
     		{path: &quot;/api/benefits/&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/campaigns/&quot;, roles: [&quot;Administrator&quot;]},
     		{path: &quot;/api/orders/add/&quot;, roles: [&quot;Everyone&quot;]},
-    		{path: &quot;/api/orders/for-user/&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/orders/for-user/&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/system/reset-db&quot;, roles: [&quot;Administrator&quot;]},
     		{path: &quot;/api/system/ui-config&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/user/managed/&quot;, roles: [&quot;Administrator&quot;]},

@@ -1,5 +1,11 @@
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Details", {
     onInit: function() {
+         this.getView().addEventDelegate({
+            onBeforeShow: function(evt) {
+                this.setBindingContext(evt.data.context);
+                this.setModel(evt.data.context.getModel());
+            }
+        }, this.getView());
     },
     onAfterRendering: function() {
     },

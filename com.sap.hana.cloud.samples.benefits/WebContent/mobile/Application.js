@@ -12,60 +12,21 @@ sap.ui.app.Application.extend("Application", {
     DEFAULT_DETAILS_VIEW_ID: "DefaultDetails",
     EMPLOYEE_ORDERS_DETAILS_VIEW_ID: "EmployeeOrdersDetails",
     init: function() {
-        sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
-        sap.ui.getCore().getModel("benefitsModel").loadData("../api/benefits/all", null, false);
+        // subscribe to event bus
+        var bus = sap.ui.getCore().getEventBus();
+        bus.subscribe("nav", "to", this.navToHandler, this);
+        bus.subscribe("nav", "home", this.goHome, this);
     },
-    getSelecedUserID: function() {
-        return this.selectedManagedUserId;
-    },
-    reloadCampaignModel: function() {
-        sap.ui.getCore().getModel("campaignModel").loadData("../api/campaigns/", null, false);
-    },
-    getCampaignId: function() {
-        return this.selectedCampaignId;
-    },
-    handleUserCampaignItemSelect: function(evt) {
-        var listItem = evt.getParameters().listItem;
-        var bindingCtx = listItem.getBindingContext();
-        this.selectedCampaignId = bindingCtx.getObject().id;
-        this.selectedManagedUserId = undefined;
-        this.reloadOrdersModel();
-        this.openDefaultDetailsPage();
-        this._toDetailsPage(this.EMPLOYEE_ORDERS_DETAILS_VIEW_ID, {
-            context: bindingCtx
-        });
-    },
-    reloadOrdersModel: function() {
-        var campaignId = this.selectedCampaignId;
-        var url = this.selectedManagedUserId ? "../api/orders/for-user/" + campaignId + "/" + this.selectedManagedUserId : "../api/user/orders/" + campaignId;
-        if (campaignId) {
-            jQuery.ajax({
-                async: false,
-                url: url,
-                type: 'GET',
-                success: jQuery.proxy(function(data) {
-                    this._setOrderDataToOrderDetailsModel(data);
-                }, this)
+    navToHandler: function(channelId, eventId, data) {
+        if (data && data.id) {
+            this.openDefaultDetailsPage();
+            this._toDetailsPage(data.id, {
+                context: data.context,
+                additionalData: data.additionalData,
             });
+        } else {
+            jQuery.sap.log.error("nav-to event cannot be processed. Invalid data: " + data);
         }
-    },
-    employeeItemSelected: function(evt) {
-        var listItem = evt.getParameters().listItem;
-        var bindingCtx = listItem.getBindingContext();
-        this._setEmployeeDataToOrderDetailsModel(bindingCtx.getObject());
-        this.selectedManagedUserId = bindingCtx.getObject().userId;
-        this.selectedCampaignId = jQuery.sap.syncGetJSON("../api/campaigns/active").data.id;
-        this.reloadOrdersModel();
-        this._toDetailsPage(this.EMPLOYEE_DETAILS_VIEW_ID);
-    },
-    campaignItemSelected: function(evt) {
-        var listItem = evt.getParameters().listItem;
-        var bindingCtx = listItem.getBindingContext("campaignModel");
-        sap.ui.getCore().byId(this.CAMPAIGN_DETAILS_VIEW_ID).setModel(bindingCtx.getModel());
-        this.openDefaultDetailsPage();
-        this._toDetailsPage(this.CAMPAIGN_DETAILS_VIEW_ID, {
-            context: bindingCtx
-        });
     },
     selectListItem: function(list, itemIndex) {
         var items = list.getItems();
@@ -78,15 +39,6 @@ sap.ui.app.Application.extend("Application", {
         } else {
             this.openDefaultDetailsPage();
         }
-    },
-    benefitItemSelected: function(evt) {
-        var listItem = evt.getParameters().listItem;
-        var bindingCtx = listItem.getBindingContext("benefitsModel");
-        var model = new sap.ui.model.json.JSONModel(bindingCtx.getObject());
-
-        sap.ui.getCore().byId(this.BENEFITS_DETAILS_VIEW_ID).setModel(model);
-
-        this._toDetailsPage(this.BENEFITS_DETAILS_VIEW_ID);
     },
     goHome: function() {
         var homePage = sap.ui.getCore().byId("HomePage");
@@ -116,11 +68,6 @@ sap.ui.app.Application.extend("Application", {
         var tileContainer = new sap.m.TileContainer("HomePage");
 
         var configData = this.getConfig().getData();
-
-        if (configData.isAdmin) {
-            sap.ui.getCore().setModel(new sap.ui.model.json.JSONModel(), "campaignModel");
-            this.reloadCampaignModel();
-        } 
 
         if (configData.showEmployeesTile) {
             this._showEmployeeTile(splitApp, tileContainer);
@@ -197,12 +144,6 @@ sap.ui.app.Application.extend("Application", {
             emplOrdersDetailsView.setModel(new sap.ui.model.json.JSONModel());
         }
     },
-    _setOrderDataToOrderDetailsModel: function(currentOrder) {
-        sap.ui.getCore().byId(this.EMPLOYEE_ORDERS_DETAILS_VIEW_ID).getModel().setProperty("/currentOrder", currentOrder);
-    },
-    _setEmployeeDataToOrderDetailsModel: function(employeeData) {
-        sap.ui.getCore().byId(this.EMPLOYEE_ORDERS_DETAILS_VIEW_ID).getModel().setProperty("/employee", employeeData);
-    },
     _getShell: function() {
         return sap.ui.getCore().byId("ShellControl");
     },
@@ -228,12 +169,6 @@ sap.ui.app.Application.extend("Application", {
                 this._getShell().setApp(splitApp);
                 break;
             case "Orders":
-                sap.ui.getCore().byId(this.EMPLOYEE_ORDERS_MASTER_VIEW_ID).getModel().loadData("../api/user/campaigns", null, false);
-                //load user profile data
-                var userProfile = new sap.ui.model.json.JSONModel();
-                userProfile.loadData("../api/user/profile", null, false);
-                sap.ui.getCore().byId(this.EMPLOYEE_ORDERS_DETAILS_VIEW_ID).getModel().setProperty("/employee", userProfile.getData());
-
                 splitApp.toMaster(this.EMPLOYEE_ORDERS_MASTER_VIEW_ID);
                 splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);

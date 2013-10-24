@@ -5,9 +5,9 @@
            setDisplayBlock="true">
     <Page id="BenefitsMasterPage" title="Benefits catalog" showNavButton="true" navButtonTap="onNavPressed">
         <content>
-            <List id="benefitsList" items="{benefitsModel>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+            <List id="benefitsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
-                    <ObjectListItem icon="sap-icon://database" title="{benefitsModel>name}" class="benefitListItem"/>
+                    <ObjectListItem icon="sap-icon://database" title="{name}" class="benefitListItem"/>
                 </items>
             </List>
         </content>

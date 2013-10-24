@@ -6,7 +6,7 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints;
 public class UserPointsBean {
 	
 	@Expose
-	public long campaingId;
+	public long campaignId;
 	
 	@Expose
 	public long availablePoints;
@@ -15,7 +15,7 @@ public class UserPointsBean {
 	public String userId;
 
 	public void init(com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints userPoints) {
-		this.campaingId = userPoints.getCampaign().getId();
+		this.campaignId = userPoints.getCampaign().getId();
 		this.userId = userPoints.getUser().getUserId();
 		this.availablePoints = userPoints.getAvailablePoints();		
 	}

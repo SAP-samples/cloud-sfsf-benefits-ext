@@ -2,6 +2,12 @@ jQuery.sap.require("sap.ui.core.ValueState");
 jQuery.sap.require("sap.m.MessageBox");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     onInit: function() {
+        this.getView().addEventDelegate({
+            onBeforeShow: function(evt) {
+                this.getController().loadModel();
+            }
+        }, this.getView());
+        
         this.dialogOkBtn = new sap.m.Button({
             text: "Ok",
             press: jQuery.proxy(this.okButtonPressed, this)
@@ -16,15 +22,29 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 
         this.byId("nameCtr").attachChange(jQuery.proxy(this._validateNewCampaignName, this), this);
         this.byId("pointsCtr").attachLiveChange(jQuery.proxy(this._validateNewCampaignPoints, this), this);
+        
+        // subscribe to event bus
+        this.eventBus = sap.ui.getCore().getEventBus();
+        this.eventBus.subscribe("refresh", "campaigns", this._handleModelChanged, this);
+    },
+    loadModel: function() {
+        if (!this.getView().getModel()) {
+            this.getView().setModel(new sap.ui.model.json.JSONModel());
+        }
+        this.getView().getModel().loadData("../api/campaigns/", null, false);
     },
     onAfterRendering: function() {
         this.selectFirstCampaign();
     },
     onNavPressed: function() {
-        appController.goHome();
+        this.eventBus.publish("nav", "home");
     },
     onItemSelect: function(evt) {
-        appController.campaignItemSelected(evt);
+        var bindingContext = evt.getParameter('listItem').getBindingContext();
+        this.eventBus.publish("nav", "to", { 
+                id : "CampaignDetails",
+                context : bindingContext,
+        });
     },
     selectFirstCampaign: function() {
         var list = this.byId("campaignsList");
@@ -70,7 +90,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
                 type: 'post',
                 dataType: 'json',
                 success: jQuery.proxy(function(data) {
-                    appController.reloadCampaignModel();
+                    this.loadModel();
                     var list = this.byId("campaignsList");
                     var newItemIndex = list.getItems().length - 1;
                     appController.selectListItem(list, newItemIndex);
@@ -81,6 +101,17 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({name: newCampaignName, startDate: null, endDate: null, points: newCampaignPoints})
             });
+        }
+    },
+    _handleModelChanged : function(channelId, eventId, data){
+        var list = this.byId("campaignsList");
+        var selectedItem = list.getSelectedItem();
+        if(selectedItem){
+            var index = data.action === 'delete' ? 0 : list.indexOfItem(selectedItem);
+            this.loadModel();
+            appController.selectListItem(list, index);
+        }else {
+            this.loadModel();
         }
     },
     _validateNewCampaignName: function() {

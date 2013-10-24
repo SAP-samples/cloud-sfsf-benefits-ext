@@ -7,11 +7,13 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
         this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
                 this.setBindingContext(evt.data.context);
+                this.setModel(evt.data.context.getModel());
                 this.getController()._refreshStartStopBtnState();
             }
         }, this.getView());
 
         this.actionSheet = this._createActionSheet();
+        this.eventBus = sap.ui.getCore().getEventBus();
     },
     onAfterRendering: function() {
     },
@@ -57,8 +59,14 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 
         this.byId("startDateCtr").setProperty('value', this.byId("startDateTextCtr").getText() === "not set" ? undefined : this.byId("startDateTextCtr").getText());
         this.byId("endDateCtr").setProperty('value', this.byId("endDateTextCtr").getText() === "not set" ? undefined : this.byId("endDateTextCtr").getText());
-        sap.ui.getCore().getEventBus().publish("nav", "virtual");
+        this.eventBus.publish("nav", "virtual");
         editCampDialog.open();
+    },
+    fireModelChanged: function(action) {
+        this.eventBus.publish("refresh", "campaigns", {
+            sourceId: this.getView().getId(),
+            action: action,
+        });
     },
     _saveEditedDates: function(evt) {
         var startDate = this.byId("startDateCtr").getDateValue();
@@ -72,10 +80,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
                 url: '../api/campaigns/edit/' + ctx.id,
                 type: 'post',
                 dataType: 'json',
-                success: function(data) {
+                success: jQuery.proxy(function(data) {
                     sap.m.MessageToast.show("Data Saved Successfully.");
-                    appController.reloadCampaignModel();
-                },
+                    this.fireModelChanged("edit");
+                }, this),
                 contentType: "application/json; charset=utf-8",
                 data: JSON.stringify({
                     id: ctx.id,
@@ -90,15 +98,15 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             })
         } else {
             $(".errorContainer").removeClass("displayNone");
-            if(!startDate || !endDate){
+            if (!startDate || !endDate) {
                 this.byId("errorStatusText").setText("You need to select a valid dates");
             } else {
                 this.byId("errorStatusText").setText("The start date must be before end date.");
             }
         }
     },
-    _isValidDatePeriod:function(startDate, endDate){
-        if (startDate && endDate && startDate.getTime() < endDate.getTime()){
+    _isValidDatePeriod: function(startDate, endDate) {
+        if (startDate && endDate && startDate.getTime() < endDate.getTime()) {
             return true;
         } else {
             return false;
@@ -114,8 +122,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
                     url: '../api/campaigns/' + campaignId,
                     type: 'delete',
                     success: jQuery.proxy(function(data) {
-                       appController.reloadCampaignModel();
-                       sap.ui.getCore().byId(appController.CAMPAIGN_MASTER_VIEW_ID).getController().selectFirstCampaign();
+                        this.fireModelChanged("delete");
                     }, this),
                     complete: jQuery.proxy(function() {
                         this.getView().setBusy(false);
@@ -175,7 +182,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             dataType: 'json',
             success: jQuery.proxy(function(data) {
                 sap.m.MessageToast.show("Campaign Stoped");
-                appController.reloadCampaignModel();
+                this.fireModelChanged("stop");
                 this._refreshStartStopBtnState();
             }, this),
             contentType: "application/json; charset=utf-8"
@@ -189,7 +196,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             dataType: 'json',
             success: jQuery.proxy(function(data) {
                 sap.m.MessageToast.show("Campaign Started");
-                appController.reloadCampaignModel();
+                this.fireModelChanged("start");
                 this._refreshStartStopBtnState();
             }, this),
             contentType: "application/json; charset=utf-8"

@@ -3,13 +3,13 @@
            xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
     <Page id="BenefitsDetailsPage" title="Benefit details" showNavButton="false">
         <content>
-            <ObjectHeader title="{/name}">
+            <ObjectHeader title="{name}">
                 <attributes>
-                    <ObjectAttribute text="{/description}" />
+                    <ObjectAttribute text="{description}" />
                     <ObjectAttribute text="More information" active="true" press="linkPressed" />
                 </attributes>
             </ObjectHeader>
-            <List items="{/benefitTypes}" inset="true" class="benefitList">
+            <List items="{benefitTypes}" inset="true" class="benefitList">
                 <items>
                     <StandardListItem title="{name}" description="price:" info="{value} Points" infoState="Success" />
                 </items>

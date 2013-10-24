@@ -5,16 +5,26 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
                 this.getController().loadModel();
             }
         }, this.getView());
+        
+        this.eventBus = sap.ui.getCore().getEventBus();
     },
     onAfterRendering: function() {
         var list = this.byId("employeesList");
         appController.selectListItem(list, 0);
     },
-    onItemSelected: function(oEvent) {
-        appController.employeeItemSelected(oEvent);
+    onItemSelected: function(evt) {
+        var employee = evt.getParameter('listItem').getBindingContext().getObject();
+        
+        this.eventBus.publish("nav", "to", { 
+                id : "EmployeeOrdersDetails",
+                additionalData : {modelData : {
+                        employee : employee,
+                        campaignId : employee.activeCampaignBalance.campaignId
+                }}
+        });
     },
     onNavPressed: function() {
-        appController.goHome();
+       this.eventBus.publish("nav", "home");
     },
     handleSearch: function() {
         var employeesList = this.getView().byId("employeesList");

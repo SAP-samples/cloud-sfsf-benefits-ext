@@ -5,11 +5,11 @@
            setDisplayBlock="true">
     <Page id="CampaignMasterPage" title="Campaigns" showNavButton="true" navButtonTap="onNavPressed">
         <content>
-            <List id="campaignsList" items="{campaignModel>/}" includeItemInSelection="true" mode="SingleSelectMaster" delete="onDeleteItem" select="onItemSelect">
+            <List id="campaignsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" delete="onDeleteItem" select="onItemSelect">
                 <items>
-                    <ObjectListItem title="{campaignModel>name}">
+                    <ObjectListItem title="{name}">
                         <firstStatus>
-                            <ObjectStatus state="{parts:['campaignModel>active'], formatter: '.setState' }" text="{parts:['campaignModel>active'], formatter: '.setStateText' }" class="labelHeight"/>
+                            <ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:['active'], formatter: '.setStateText' }" class="labelHeight"/>
                         </firstStatus>
                     </ObjectListItem>
                 </items>
