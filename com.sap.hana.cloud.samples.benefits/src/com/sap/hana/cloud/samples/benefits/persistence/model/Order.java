@@ -100,6 +100,16 @@ public class Order implements IDBEntity {
 			details.setOrder(this);
 		}
 	}
+	
+	public void removeOrderDetails(OrderDetails details){
+//		getOrderDetails().add(details);
+		final BigDecimal quantity = BigDecimal.valueOf(details.getQuantity());
+		final BigDecimal value = details.getBenefitType().getValue();
+		removeFromTotal(value.multiply(quantity));
+//		if(details.getOrder() != this){
+//			details.setOrder(this);
+//		}
+	}
 
 	public void setOrderDetails(Collection<OrderDetails> orderDetails) {
 		this.orderDetails = orderDetails;
@@ -110,6 +120,16 @@ public class Order implements IDBEntity {
 			this.total = new BigDecimal(0);
 		}
 		this.total = this.total.add(value);
+	}
+	
+	private void removeFromTotal(BigDecimal value){
+		if(this.total == null){
+			this.total = new BigDecimal(0);
+		} 
+		this.total = this.total.subtract(value);
+		if(this.total.compareTo( new BigDecimal(0)) == -1){
+			throw new IllegalArgumentException("Order total value can not be less than zero");
+		}
 	}
 
 	

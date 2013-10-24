@@ -1,7 +1,9 @@
 package com.sap.hana.cloud.samples.benefits.api;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.Iterator;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -26,10 +28,12 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Order;
 import com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
+import com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints;
 
 @Path("/orders")
 public class OrderService extends BaseService {
 
+	private static final String ORDER_DETAIL_NOT_VALID_MESSAGE = "The order value exceedes the available unused points, so is not valid. The order is not persisted";
 	private CampaignDAO campaignDAO = new CampaignDAO();
 
 	@GET
@@ -80,12 +84,14 @@ public class OrderService extends BaseService {
 				return createBadRequestResponse("Incorrect benefit type id");
 			}
 			final OrderDetails orderDetails = createOrderDetails(requestData, benefitType);
-
-			userOrder.addOrderDetails(orderDetails);
-			new OrderDetailDAO().saveNew(orderDetails);
-
-			return createOkResponse();
-		}else {
+			if (isOrderDetailsValid(userOrder, campaignId, calcPointsToAdd(orderDetails))){
+				userOrder.addOrderDetails(orderDetails);
+				new OrderDetailDAO().saveNew(orderDetails);			
+				return createOkResponse();
+			} else {
+				return createBadRequestResponse(ORDER_DETAIL_NOT_VALID_MESSAGE);	
+			}	
+		} else {
 			return Response.status(Status.UNAUTHORIZED).build();
 		}
 	}
@@ -94,7 +100,14 @@ public class OrderService extends BaseService {
 	@Path("/{id}")
 	public void deleteOrderDetail(@PathParam("id") long orderDetailId) {
 		final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
-		orderDetailDAO.delete(orderDetailId);
+		Order order = orderDetailDAO.getOrderByOrderDetailsId(orderDetailId);
+		OrderDetails details = orderDetailDAO.getById(orderDetailId);
+		try {
+			order.removeOrderDetails(details);
+			orderDetailDAO.delete(orderDetailId);
+		} catch (IllegalArgumentException ex) {
+			throw ex;
+		}
 	}
 
 	private Order getOrCreateUserOrder(final User user, final Campaign campaign, final OrderDAO orderDAO) {
@@ -113,6 +126,29 @@ public class OrderService extends BaseService {
 		orderDetails.setBenefitType(benefitType);
 		orderDetails.setQuantity(request.quantity);
 		return orderDetails;
+	}
+	
+	private boolean isOrderDetailsValid(Order userOrder, long campaignId, BigDecimal pointsToAdd){
+		Iterator<UserPoints> iter = userOrder.getUser().getUserPoints().iterator();
+		while(iter.hasNext()){
+			UserPoints points = iter.next();
+			if(points.getCampaign().getId() == campaignId){
+				BigDecimal availablePoints = new BigDecimal(points.getAvailablePoints());
+				BigDecimal restPoints = availablePoints.subtract( userOrder.getTotal());
+				if(restPoints.compareTo(pointsToAdd) > -1){
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}
+		return false;
+	}	
+	
+	private BigDecimal calcPointsToAdd(OrderDetails orderDetail){
+		final BigDecimal quantity = BigDecimal.valueOf(orderDetail.getQuantity());
+		final BigDecimal value = orderDetail.getBenefitType().getValue();
+		return quantity.multiply(value);
 	}
 
 }

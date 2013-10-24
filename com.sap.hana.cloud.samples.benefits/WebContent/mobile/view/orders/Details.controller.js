@@ -38,71 +38,26 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
     },
     onAfterRendering: function() {
     },
-    addItem: function() {
-        jQuery.sap.require("sap.m.MessageToast");
-        var dialog = this.byId("addItemCtrl");
-        var that = this;
-        var currentOrder = this.getView().getModel().getProperty("/currentOrder");
-        var campPoints = currentOrder.campaign.points;
-        var orderPrice = currentOrder.orderPrice;
-        var availablePoints = campPoints - orderPrice;
-
-
-        dialog.setLeftButton(new sap.m.Button({
-            text: "Ok",
-            press: jQuery.proxy(function() {
-                jQuery.sap.require("sap.m.MessageBox");
-                var selectedItem = that.byId("quantityTypeSelect").getSelectedItem().getKey();
-                var selectedBenefit = that.byId("benefitTypeSelect").getSelectedItem().getKey();
-                var selItemVal = that._getItemValue(selectedBenefit, selectedItem);
-                var quantity = that.byId("quantityTypeTxt").getValue();
-                var value = selItemVal * quantity;
-                var addServiceURL = "../api/orders/add/" + this.campaignId;
-                var selectUserId = this.employeeProfile.userId;
-                if (selectUserId) {
-                    addServiceURL += "/" + selectUserId;
-                }
-
-                if (value <= 0) {
-                    sap.m.MessageBox.alert("Insert correct value for the quantity", function() {
-                    });
-                } else if (value <= availablePoints) {
-                    jQuery.ajax({
-                        url: addServiceURL,
-                        type: 'post',
-                        dataType: 'json',
-                        success: jQuery.proxy(function(data) {
-                            dialog.close();
-                            sap.m.MessageToast.show("New item has been saved");
-                            this.loadOrderDetails();
-                        }, this),
-                        contentType: "application/json; charset=utf-8",
-                        data: JSON.stringify({campaignId: this.campaignId,
-                            benefitTypeId: that.byId("quantityTypeSelect").getSelectedItem().getKey(),
-                            quantity: that.byId("quantityTypeTxt").getValue()
-                        }),
-                        error: function(xhr, error) {
-                            sap.m.MessageToast.show(xhr.responseText);
-                        }
-                    });
-                } else {
-                    dialog.close();
-                    sap.m.MessageBox.alert("Item was not send, limit has been exceeded", function() {
-                    });
-                }
-            }, this)
-        }));
-
-        dialog.setRightButton(new sap.m.Button({
-            text: "Cancel",
-            press: function() {
-                dialog.close();
-                sap.m.MessageToast.show("Item was canceled");
-            }
-        }));
-
-        dialog.open();
-    },
+	addItem : function() {
+		jQuery.sap.require("sap.m.MessageToast");
+		var dialog = this.byId("addItemCtrl");				
+		
+		dialog.setLeftButton(new sap.m.Button({
+			text : "Ok",
+			press : jQuery.proxy(this._addItem, this)
+			
+		}));
+		
+		dialog.setRightButton(new sap.m.Button({
+			text : "Cancel",
+			press : function() {
+				dialog.close();
+				sap.m.MessageToast.show("Item was canceled");
+			}
+		}));
+		
+		dialog.open();
+	},
     formatBenefitItemsSum: function(benefitItems) {
         var result = 0;
         for (benefitItem in benefitItems) {
@@ -142,21 +97,49 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
                 this._deleteOrder(itemId);
             }
         }, this));
-
-//    	this.byId("listCtr").removeItem(item);
     },
-    _getItemValue: function(selectedBenefit, selectedItemId) {
-        var benefits = sap.ui.getCore().byId(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID).getModel("benefitsModel").getData();
-        for (var i = 0; i < benefits.length; i++) {
-            if (benefits[i].id = selectedBenefit) {
-                for (var j = 0; j < benefits[i].benefitTypes.length; j++) {
-                    if (benefits[i].benefitTypes[j].id = selectedItemId) {
-                        return benefits[i].benefitTypes[j].value;
-                    }
-                }
-            }
-        }
-        return 0;
+    _addItem : function (availablePoints){		
+		jQuery.sap.require("sap.m.MessageBox");
+		
+		var currentOrder = this.getView().getModel().getProperty("/currentOrder"); 
+		var campPoints = currentOrder.campaign.points;
+		var orderPrice = currentOrder.orderPrice;
+		var availablePoints = campPoints - orderPrice;
+		var dialog = this.byId("addItemCtrl");
+		var selItemVal =  this.byId("quantityTypeSelect").getSelectedItem().getBindingContext().getObject().value;
+		var quantity = this.byId("quantityTypeTxt").getValue();
+		var value = selItemVal * quantity;
+		var addServiceURL = "../api/orders/add/"+ this.campaignId;
+		var selectUserId = this.employeeProfile.userId;
+		if (selectUserId) {
+		    addServiceURL += "/" + selectUserId;
+		}
+		
+		if(value <= 0){
+			sap.m.MessageBox.alert("Insert correct value for the quantity", function(){});
+		} else if (value <= availablePoints){
+			jQuery.ajax({
+				url: addServiceURL,
+				type: 'post',
+				dataType: 'json',
+				success: jQuery.proxy(function(data) {
+					dialog.close();
+					sap.m.MessageToast.show("New item has been saved");
+					this.loadOrderDetails();
+				}, this),
+				contentType: "application/json; charset=utf-8",
+				data: JSON.stringify({campaignId: this.campaignId,
+					benefitTypeId : this.byId("quantityTypeSelect").getSelectedItem().getKey(),
+					quantity : this.byId("quantityTypeTxt").getValue()
+				}),
+				error: function(xhr, error) {
+					sap.m.MessageToast.show(xhr.responseText);
+				}
+			});					
+		} else {
+			dialog.close();
+			sap.m.MessageBox.alert("Item was not send, limit has been exceeded", function () {});
+		}
     },
     _deleteOrder: function(orderId) {
         this.busyDialog.open();
@@ -171,5 +154,4 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
             }, this)
         });
     }
-
 });
