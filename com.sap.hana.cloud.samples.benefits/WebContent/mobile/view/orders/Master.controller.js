@@ -1,3 +1,4 @@
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
     onInit: function() {
         this.getView().addEventDelegate({
@@ -15,14 +16,15 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
     },
     onAfterRendering: function() {
         var list = this.byId("campaignsList");
-        appController.selectListItem(list, 0);
+        var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+        listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
     },
     onItemSelected: function(evt) {
         var employee = jQuery.sap.syncGetJSON("../api/user/profile").data;
         var campaignId = evt.getParameter("listItem").getBindingContext().getObject().id;
 
         this.eventBus.publish("nav", "to", {
-            id: "EmployeeOrdersDetails",
+            id: views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID,
             additionalData: {modelData: {
                     employee: employee,
                     campaignId: campaignId
@@ -33,10 +35,6 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
         this.eventBus.publish("nav", "home");
     },
     isActiveCampaign: function(isActive) {
-        if (isActive) {
-            return "active";
-        } else {
-            return "inactive";
-        }
+        return isActive ? "active" : "inactive";
     }
 });

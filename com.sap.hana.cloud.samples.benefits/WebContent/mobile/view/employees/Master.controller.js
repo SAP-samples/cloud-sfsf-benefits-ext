@@ -1,3 +1,5 @@
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.SearchFilter");
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
     onInit: function() {
         this.getView().addEventDelegate({
@@ -10,13 +12,14 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
     },
     onAfterRendering: function() {
         var list = this.byId("employeesList");
-        appController.selectListItem(list, 0);
+        var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+        listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
     },
     onItemSelected: function(evt) {
         var employee = evt.getParameter('listItem').getBindingContext().getObject();
         
         this.eventBus.publish("nav", "to", { 
-                id : "EmployeeOrdersDetails",
+                id : views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID,
                 additionalData : {modelData : {
                         employee : employee,
                         campaignId : employee.activeCampaignBalance.campaignId
@@ -29,7 +32,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
     handleSearch: function() {
         var employeesList = this.getView().byId("employeesList");
         var searchField = this.getView().byId("searchField");
-        appController.search(employeesList, searchField, "fullName");
+        
+        
+        var searchFilter = new com.sap.hana.cloud.samples.benefits.common.SearchFilter();
+        searchFilter.applySearch(employeesList, searchField, "fullName", views.DEFAULT_DETAILS_VIEW_ID);
     },
     loadModel: function() {
         if (!this.getView().getModel()) {

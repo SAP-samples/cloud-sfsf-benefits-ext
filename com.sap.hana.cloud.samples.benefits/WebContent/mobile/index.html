@@ -12,29 +12,33 @@
         </script>
         <link rel="stylesheet" type="text/css" href="/com.sap.hana.cloud.samples.benefits/mobile/css/styles.css">
         <script>
-            
+
             var appController = null;
-            
+            var views = null;
+
             $(document).ready(function() {
                 // tell UI5 where to find stuff
                 sap.ui.localResources("util");
                 sap.ui.localResources("model");
+                sap.ui.localResources("common");
                 sap.ui.localResources("view");
                 sap.ui.localResources("view/employees");
                 sap.ui.localResources("view/benefits");
                 sap.ui.localResources("view/campaigns");
                 sap.ui.localResources("view/orders");
-                
+
                 jQuery.sap.registerModulePath('Application', '/com.sap.hana.cloud.samples.benefits/mobile/Application');
-                
+
                 jQuery.sap.registerModulePath("com.sap.hana.cloud.samples.benefits", "/com.sap.hana.cloud.samples.benefits/mobile");
-                                
+
+                jQuery.sap.require("com.sap.hana.cloud.samples.benefits.view.Views");
+                views = new com.sap.hana.cloud.samples.benefits.view.Views();
 
                 // launch application
                 jQuery.sap.require("Application");
                 appController = new Application({
                     root: "sapUiBody",
-                    config : "../api/system/ui-config"
+                    config: "../api/system/ui-config"
                 });
             });
         </script>

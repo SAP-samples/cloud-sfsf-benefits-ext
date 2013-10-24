@@ -1,4 +1,6 @@
 jQuery.sap.require("sap.ui.core.ValueState");
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.SearchFilter");
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 jQuery.sap.require("sap.m.MessageBox");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     onInit: function() {
@@ -7,7 +9,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
                 this.getController().loadModel();
             }
         }, this.getView());
-        
+
         this.dialogOkBtn = new sap.m.Button({
             text: "Ok",
             press: jQuery.proxy(this.okButtonPressed, this)
@@ -22,7 +24,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 
         this.byId("nameCtr").attachChange(jQuery.proxy(this._validateNewCampaignName, this), this);
         this.byId("pointsCtr").attachLiveChange(jQuery.proxy(this._validateNewCampaignPoints, this), this);
-        
+
         // subscribe to event bus
         this.eventBus = sap.ui.getCore().getEventBus();
         this.eventBus.subscribe("refresh", "campaigns", this._handleModelChanged, this);
@@ -41,19 +43,21 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     },
     onItemSelect: function(evt) {
         var bindingContext = evt.getParameter('listItem').getBindingContext();
-        this.eventBus.publish("nav", "to", { 
-                id : "CampaignDetails",
-                context : bindingContext,
+        this.eventBus.publish("nav", "to", {
+            id: views.CAMPAIGN_DETAILS_VIEW_ID,
+            context: bindingContext,
         });
     },
     selectFirstCampaign: function() {
         var list = this.byId("campaignsList");
-        appController.selectListItem(list, 0);
+        var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+        listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
     },
     handleSearch: function() {
         var employeesList = this.getView().byId("campaignsList");
         var searchField = this.getView().byId("searchField");
-        appController.search(employeesList, searchField, "name");
+        var searchFilter = new com.sap.hana.cloud.samples.benefits.common.SearchFilter();
+        searchFilter.applySearch(employeesList, searchField, "name", views.DEFAULT_DETAILS_VIEW_ID);
     },
     addButtonPressed: function(evt) {
         var newCampDialog = this.byId("newcampaignDialog");
@@ -93,7 +97,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
                     this.loadModel();
                     var list = this.byId("campaignsList");
                     var newItemIndex = list.getItems().length - 1;
-                    appController.selectListItem(list, newItemIndex);
+                    var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+                    listHelper.selectListItem(list, newItemIndex, views.DEFAULT_DETAILS_VIEW_ID);
                 }, this),
                 complete: function() {
                     appController.setAppBusy(false);
@@ -103,14 +108,16 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
             });
         }
     },
-    _handleModelChanged : function(channelId, eventId, data){
+    _handleModelChanged: function(channelId, eventId, data) {
         var list = this.byId("campaignsList");
         var selectedItem = list.getSelectedItem();
-        if(selectedItem){
+        if (selectedItem) {
             var index = data.action === 'delete' ? 0 : list.indexOfItem(selectedItem);
             this.loadModel();
             appController.selectListItem(list, index);
-        }else {
+            var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+            listHelper.selectListItem(list, index, views.DEFAULT_DETAILS_VIEW_ID);
+        } else {
             this.loadModel();
         }
     },

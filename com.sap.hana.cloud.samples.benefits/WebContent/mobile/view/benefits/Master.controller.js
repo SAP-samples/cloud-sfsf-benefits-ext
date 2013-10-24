@@ -1,3 +1,5 @@
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.SearchFilter");
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
     onInit: function() {
         this.getView().addEventDelegate({
@@ -16,12 +18,13 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
     },
     onAfterRendering: function() {
         var list = this.byId("benefitsList");
-        appController.selectListItem(list, 0);
+        var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+        listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
     },
     onItemSelected: function(evt) {
         var bindingContext = evt.getParameter('listItem').getBindingContext();
         this.eventBus.publish("nav", "to", {
-            id: "BenefitsDetails",
+            id: views.BENEFITS_DETAILS_VIEW_ID,
             context: bindingContext
         });
     },
@@ -31,6 +34,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
     handleSearch: function() {
         var employeesList = this.getView().byId("benefitsList");
         var searchField = this.getView().byId("searchField");
-        appController.search(employeesList, searchField, "name");
+        var searchFilter = new com.sap.hana.cloud.samples.benefits.common.SearchFilter();
+        searchFilter.applySearch(employeesList, searchField, "name", views.DEFAULT_DETAILS_VIEW_ID);
     },
 });

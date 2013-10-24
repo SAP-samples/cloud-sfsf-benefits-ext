@@ -2,15 +2,14 @@ jQuery.sap.declare("Application");
 jQuery.sap.require("sap.ui.app.Application");
 
 sap.ui.app.Application.extend("Application", {
-    CAMPAIGN_MASTER_VIEW_ID: "CampaignMaster",
-    EMPLOYEE_MASTER_VIEW_ID: "EmployeesMaster",
-    BENEFITS_MASTER_VIEW_ID: "BenefitsMaster",
-    EMPLOYEE_ORDERS_MASTER_VIEW_ID: "EmployeeOrdersMaster",
-    CAMPAIGN_DETAILS_VIEW_ID: "CampaignDetails",
-    EMPLOYEE_DETAILS_VIEW_ID: "EmployeeOrdersDetails",
-    BENEFITS_DETAILS_VIEW_ID: "BenefitsDetails",
-    DEFAULT_DETAILS_VIEW_ID: "DefaultDetails",
-    EMPLOYEE_ORDERS_DETAILS_VIEW_ID: "EmployeeOrdersDetails",
+//    CAMPAIGN_MASTER_VIEW_ID: "CampaignMaster",
+//    EMPLOYEE_MASTER_VIEW_ID: "EmployeesMaster",
+//    BENEFITS_MASTER_VIEW_ID: "BenefitsMaster",
+//    EMPLOYEE_ORDERS_MASTER_VIEW_ID: "EmployeeOrdersMaster",
+//    CAMPAIGN_DETAILS_VIEW_ID: "CampaignDetails",
+//    BENEFITS_DETAILS_VIEW_ID: "BenefitsDetails",
+//    DEFAULT_DETAILS_VIEW_ID: "DefaultDetails",
+//    EMPLOYEE_ORDERS_DETAILS_VIEW_ID: "EmployeeOrdersDetails",
     init: function() {
         // subscribe to event bus
         var bus = sap.ui.getCore().getEventBus();
@@ -28,38 +27,12 @@ sap.ui.app.Application.extend("Application", {
             jQuery.sap.log.error("nav-to event cannot be processed. Invalid data: " + data);
         }
     },
-    selectListItem: function(list, itemIndex) {
-        var items = list.getItems();
-        if (items[itemIndex]) {
-            items[itemIndex].setSelected(true);
-            list.fireSelect({
-                listItem: items[itemIndex],
-                id: list.getId()
-            });
-        } else {
-            this.openDefaultDetailsPage();
-        }
-    },
     goHome: function() {
         var homePage = sap.ui.getCore().byId("HomePage");
         this._getShell().setApp(homePage);
     },
     openDefaultDetailsPage: function() {
-        this._toDetailsPage(this.DEFAULT_DETAILS_VIEW_ID);
-    },
-    search: function(list, searchField, property) {
-        appController.openDefaultDetailsPage();
-        var showSearch = (searchField.getValue().length !== 0);
-        var binding = list.getBinding("items");
-
-        if (binding) {
-            if (showSearch) {
-                var filterName = new sap.ui.model.Filter(property, sap.ui.model.FilterOperator.Contains, searchField.getValue());
-                binding.filter([filterName]);
-            } else {
-                binding.filter([]);
-            }
-        }
+        this._toDetailsPage(views.DEFAULT_DETAILS_VIEW_ID);
     },
     main: function() {
         var root = this.getRoot();
@@ -85,7 +58,7 @@ sap.ui.app.Application.extend("Application", {
             this._showOrdersTile(splitApp, tileContainer);
         }
 
-        splitApp.addDetailPage(sap.ui.xmlview(this.DEFAULT_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.DefaultDetails"));
+        splitApp.addDetailPage(sap.ui.xmlview(views.DEFAULT_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.DefaultDetails"));
 
         var oShell = new sap.m.Shell("ShellControl", {
             title: "SAP Benefits App",
@@ -96,7 +69,7 @@ sap.ui.app.Application.extend("Application", {
         oShell.placeAt(root);
     },
     _showEmployeeTile: function(app, tileContainer) {
-        app.addMasterPage(sap.ui.xmlview(this.EMPLOYEE_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Master"));
+        app.addMasterPage(sap.ui.xmlview(views.EMPLOYEE_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Master"));
         this._addOrdersDetailPageToApp(app);
 
         tileContainer.addTile(new sap.m.StandardTile("Employees", {
@@ -106,8 +79,8 @@ sap.ui.app.Application.extend("Application", {
         }));
     },
     _showBenefitsTile: function(app, tileContainer) {
-        app.addMasterPage(sap.ui.xmlview(this.BENEFITS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Master"));
-        app.addDetailPage(sap.ui.xmlview(this.BENEFITS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Details"));
+        app.addMasterPage(sap.ui.xmlview(views.BENEFITS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Master"));
+        app.addDetailPage(sap.ui.xmlview(views.BENEFITS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Details"));
 
         tileContainer.addTile(new sap.m.StandardTile("Benefits", {
             icon: "sap-icon://competitor",
@@ -116,8 +89,8 @@ sap.ui.app.Application.extend("Application", {
         }));
     },
     _showCampaignTile: function(app, tileContainer) {
-        app.addMasterPage(sap.ui.xmlview(this.CAMPAIGN_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Master"));
-        app.addDetailPage(sap.ui.xmlview(this.CAMPAIGN_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Details"));
+        app.addMasterPage(sap.ui.xmlview(views.CAMPAIGN_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Master"));
+        app.addDetailPage(sap.ui.xmlview(views.CAMPAIGN_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Details"));
 
         tileContainer.addTile(new sap.m.StandardTile("Campaigns", {
             icon: "sap-icon://marketing-campaign",
@@ -126,7 +99,7 @@ sap.ui.app.Application.extend("Application", {
         }));
     },
     _showOrdersTile: function(app, tileContainer) {
-        var masterPage = sap.ui.xmlview(this.EMPLOYEE_ORDERS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.orders.Master");
+        var masterPage = sap.ui.xmlview(views.EMPLOYEE_ORDERS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.orders.Master");
         masterPage.setModel(new sap.ui.model.json.JSONModel());
         app.addMasterPage(masterPage);
         this._addOrdersDetailPageToApp(app);
@@ -138,8 +111,8 @@ sap.ui.app.Application.extend("Application", {
         }));
     },
     _addOrdersDetailPageToApp: function(app) {
-        if (!app.getDetailPage(this.EMPLOYEE_ORDERS_DETAILS_VIEW_ID)) {
-            var emplOrdersDetailsView = sap.ui.xmlview(this.EMPLOYEE_ORDERS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.orders.Details");
+        if (!app.getDetailPage(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID)) {
+            var emplOrdersDetailsView = sap.ui.xmlview(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.orders.Details");
             app.addDetailPage(emplOrdersDetailsView);
             emplOrdersDetailsView.setModel(new sap.ui.model.json.JSONModel());
         }
@@ -154,23 +127,23 @@ sap.ui.app.Application.extend("Application", {
         var splitApp = sap.ui.getCore().byId("SplitAppControl");
         switch (evt.getParameters().id) {
             case "Employees":
-                splitApp.toMaster(this.EMPLOYEE_MASTER_VIEW_ID);
-                splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
+                splitApp.toMaster(views.EMPLOYEE_MASTER_VIEW_ID);
+                splitApp.toDetail(sap.ui.getCore().byId(views.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Benefits":
-                splitApp.toMaster(this.BENEFITS_MASTER_VIEW_ID);
-                splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
+                splitApp.toMaster(views.BENEFITS_MASTER_VIEW_ID);
+                splitApp.toDetail(sap.ui.getCore().byId(views.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Campaigns":
-                splitApp.toMaster(this.CAMPAIGN_MASTER_VIEW_ID);
-                splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
+                splitApp.toMaster(views.CAMPAIGN_MASTER_VIEW_ID);
+                splitApp.toDetail(sap.ui.getCore().byId(views.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Orders":
-                splitApp.toMaster(this.EMPLOYEE_ORDERS_MASTER_VIEW_ID);
-                splitApp.toDetail(sap.ui.getCore().byId(this.DEFAULT_DETAILS_VIEW_ID), "show");
+                splitApp.toMaster(views.EMPLOYEE_ORDERS_MASTER_VIEW_ID);
+                splitApp.toDetail(sap.ui.getCore().byId(views.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             default:

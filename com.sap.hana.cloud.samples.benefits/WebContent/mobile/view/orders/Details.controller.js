@@ -146,7 +146,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 //    	this.byId("listCtr").removeItem(item);
     },
     _getItemValue: function(selectedBenefit, selectedItemId) {
-        var benefits = sap.ui.getCore().byId("EmployeeOrdersDetails").getModel("benefitsModel").getData();
+        var benefits = sap.ui.getCore().byId(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID).getModel("benefitsModel").getData();
         for (var i = 0; i < benefits.length; i++) {
             if (benefits[i].id = selectedBenefit) {
                 for (var j = 0; j < benefits[i].benefitTypes.length; j++) {
