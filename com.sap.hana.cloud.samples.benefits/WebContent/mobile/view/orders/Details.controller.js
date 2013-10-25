@@ -5,11 +5,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
         this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
                 this.getController().loadBenefitsModel();
-                if (evt.data.context) {
-                    this.setBindingContext(evt.data.context);
-                    this.byId("addButton").setEnabled(evt.data.context.getObject().active);
-                }
                 var data = evt.data.additionalData.modelData;
+                this.byId("addButton").setEnabled(data.active);
                 this.getController().initEmployeeDetailsModel(data.employee, data.campaignId);
             }
         }, this.getView());
@@ -152,7 +149,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
             });
         }
     },
-    _deleteOrder: function(orderId) {
+    _deleteOrder : function(orderId) {
         this.busyDialog.open();
         jQuery.ajax({
             url: '../api/orders/' + orderId,

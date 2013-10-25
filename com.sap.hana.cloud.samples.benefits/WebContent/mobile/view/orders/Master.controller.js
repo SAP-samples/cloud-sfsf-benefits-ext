@@ -23,12 +23,14 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
     onItemSelected: function(evt) {
         var employee = jQuery.sap.syncGetJSON("../api/user/profile").data;
         var campaignId = evt.getParameter("listItem").getBindingContext().getObject().id;
+        var isActive = evt.getParameter("listItem").getBindingContext().getObject().active;
 
         this.eventBus.publish("nav", "to", {
             id: views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID,
             additionalData: {modelData: {
                     employee: employee,
-                    campaignId: campaignId
+                    campaignId: campaignId,
+                    active: isActive
                 }}
         });
     },

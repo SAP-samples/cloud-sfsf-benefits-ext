@@ -59,8 +59,7 @@
 		<footer>
 			<Bar>
 				<contentRight>
-					<Button id="addButton" text="Add Item" icon="sap-icon://add"
-						press="addItem"></Button>
+					<Button id="addButton" text="Add Item" icon="sap-icon://add" press="addItem"></Button>
 				</contentRight>
 			</Bar>
 		</footer>
