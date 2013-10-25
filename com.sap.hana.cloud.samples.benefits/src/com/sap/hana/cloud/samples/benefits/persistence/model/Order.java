@@ -59,6 +59,9 @@ public class Order implements IDBEntity {
 	}
 
 	public BigDecimal getTotal() {
+		if(this.total == null){
+			this.total = new BigDecimal(0);
+		}
 		return total;
 	}
 
