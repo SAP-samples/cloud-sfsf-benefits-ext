@@ -20,12 +20,15 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
     },
     onItemSelected: function(evt) {
         var employee = evt.getParameter('listItem').getBindingContext().getObject();
-
+        var campaignId = undefined;
+        if(employee.activeCampaignBalance){
+            campaignId = employee.activeCampaignBalance.campaignId;
+        }
         this.eventBus.publish("nav", "to", {
             id: views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID,
             additionalData: {modelData: {
                     employee: employee,
-                    campaignId: employee.activeCampaignBalance.campaignId
+                    campaignId: campaignId
                 }}
         });
     },
