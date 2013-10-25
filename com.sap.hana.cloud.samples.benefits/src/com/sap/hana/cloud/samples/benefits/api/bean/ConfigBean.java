@@ -21,7 +21,7 @@ public class ConfigBean {
 	}
 	
 	public void initEmployeeConfiguration(){
-		init(false, false, false, true);
+		init(false, true, false, true);
 	}
 	
 	private void init(boolean employeesTile, boolean benefitsTile, boolean campaignTile, boolean orderTile){
