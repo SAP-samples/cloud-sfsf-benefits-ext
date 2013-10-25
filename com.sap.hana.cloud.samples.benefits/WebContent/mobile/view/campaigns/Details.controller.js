@@ -68,6 +68,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
             action: action
         });
     },
+    closeDateTimeSelectors: function() {
+        this.byId("startDateCtr").close();
+        this.byId("endDateCtr").close();
+    },
     _saveEditedDates: function(evt) {
         var startDate = this.byId("startDateCtr").getDateValue();
         var endDate = this.byId("endDateCtr").getDateValue();
@@ -241,9 +245,5 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
         if (evt.getParameter("origin")) {
             sap.ui.getCore().getEventBus().publish("nav", "back");
         }
-    },
-    _closeDateTimeSelectors: function() {
-        this.byId("startDateCtr").close();
-        this.byId("endDateCtr").close();
     }
 });

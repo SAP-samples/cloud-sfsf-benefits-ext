@@ -29,7 +29,7 @@
             </Bar>
         </footer>
     </Page>
-    <Dialog id="editCampaignDialog" title="Change Campaign Dates" afterOpen="_closeDateTimeSelectors">
+    <Dialog id="editCampaignDialog" title="Change Campaign Dates" afterOpen="closeDateTimeSelectors">
         <content>
             <VBox>
                 <items>
