@@ -3,9 +3,9 @@
            controllerName="com.sap.hana.cloud.samples.benefits.view.employees.Master" 
            xmlns:html="http://www.w3.org/1999/xhtml"
            setDisplayBlock="true">
-    <Page id="EmployeesMasterPage" title="Managed employees" showNavButton="true" navButtonTap="onNavPressed">
+    <Page id="EmployeesMasterPage" title="Managed employees" scrollToLoad="false" showNavButton="true" navButtonTap="onNavPressed">
         <content>
-            <List id="employeesList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
+            <GrowingList id="employeesList" threshold="6" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
                     <ObjectListItem title="{firstName} {lastName}" number="{activeCampaignBalance/availablePoints}" numberUnit="Unused Points">
                         <attributes>
@@ -13,7 +13,7 @@
                         </attributes>
                     </ObjectListItem>                  
                 </items>
-            </List>
+            </GrowingList>
         </content>
         <subHeader>
             <Bar id="searchBar" enableFlexBox="true">

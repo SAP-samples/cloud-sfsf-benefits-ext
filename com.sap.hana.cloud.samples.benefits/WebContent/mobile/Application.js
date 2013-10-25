@@ -2,37 +2,14 @@ jQuery.sap.declare("Application");
 jQuery.sap.require("sap.ui.app.Application");
 
 sap.ui.app.Application.extend("Application", {
-//    CAMPAIGN_MASTER_VIEW_ID: "CampaignMaster",
-//    EMPLOYEE_MASTER_VIEW_ID: "EmployeesMaster",
-//    BENEFITS_MASTER_VIEW_ID: "BenefitsMaster",
-//    EMPLOYEE_ORDERS_MASTER_VIEW_ID: "EmployeeOrdersMaster",
-//    CAMPAIGN_DETAILS_VIEW_ID: "CampaignDetails",
-//    BENEFITS_DETAILS_VIEW_ID: "BenefitsDetails",
-//    DEFAULT_DETAILS_VIEW_ID: "DefaultDetails",
-//    EMPLOYEE_ORDERS_DETAILS_VIEW_ID: "EmployeeOrdersDetails",
     init: function() {
         // subscribe to event bus
         var bus = sap.ui.getCore().getEventBus();
-        bus.subscribe("nav", "to", this.navToHandler, this);
-        bus.subscribe("nav", "home", this.goHome, this);
+        bus.subscribe("nav", "to", this._navToHandler, this);
+        bus.subscribe("nav", "home", this._goHome, this);
     },
-    navToHandler: function(channelId, eventId, data) {
-        if (data && data.id) {
-            this.openDefaultDetailsPage();
-            this._toDetailsPage(data.id, {
-                context: data.context,
-                additionalData: data.additionalData,
-            });
-        } else {
-            jQuery.sap.log.error("nav-to event cannot be processed. Invalid data: " + data);
-        }
-    },
-    goHome: function() {
-        var homePage = sap.ui.getCore().byId("HomePage");
-        this._getShell().setApp(homePage);
-    },
-    openDefaultDetailsPage: function() {
-        this._toDetailsPage(views.DEFAULT_DETAILS_VIEW_ID);
+    setAppBusy: function(busy) {
+        sap.ui.getCore().byId("SplitAppControl").setBusy(busy);
     },
     main: function() {
         var root = this.getRoot();
@@ -67,6 +44,21 @@ sap.ui.app.Application.extend("Application", {
         });
 
         oShell.placeAt(root);
+    },
+    _navToHandler: function(channelId, eventId, data) {
+        if (data && data.id) {
+            this._toDetailsPage(views.DEFAULT_DETAILS_VIEW_ID);
+            this._toDetailsPage(data.id, {
+                context: data.context,
+                additionalData: data.additionalData
+            });
+        } else {
+            jQuery.sap.log.error("nav-to event cannot be processed. Invalid data: " + data);
+        }
+    },
+    _goHome: function() {
+        var homePage = sap.ui.getCore().byId("HomePage");
+        this._getShell().setApp(homePage);
     },
     _showEmployeeTile: function(app, tileContainer) {
         app.addMasterPage(sap.ui.xmlview(views.EMPLOYEE_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Master"));
@@ -119,9 +111,6 @@ sap.ui.app.Application.extend("Application", {
     },
     _getShell: function() {
         return sap.ui.getCore().byId("ShellControl");
-    },
-    setAppBusy: function(busy) {
-        sap.ui.getCore().byId("SplitAppControl").setBusy(busy);
     },
     _handleTilePressed: function(evt) {
         var splitApp = sap.ui.getCore().byId("SplitAppControl");

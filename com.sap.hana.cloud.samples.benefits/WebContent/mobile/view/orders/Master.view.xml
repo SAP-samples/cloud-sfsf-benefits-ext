@@ -8,10 +8,10 @@
             <List id="campaignsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
                     <ObjectListItem title="{name}" number="{employeesModel>points}">
-                    	<firstStatus>
-	                           <ObjectStatus text="{parts:[{path:'active'}], formatter:'.isActiveCampaign'}"/>	                                   
-	                    </firstStatus>
-                     </ObjectListItem>                  
+                        <firstStatus>
+                            <ObjectStatus text="{parts:[{path:'active'}], formatter:'.isActiveCampaign'}"/>	                                   
+                        </firstStatus>
+                    </ObjectListItem>                  
                 </items>
             </List>            
         </content>

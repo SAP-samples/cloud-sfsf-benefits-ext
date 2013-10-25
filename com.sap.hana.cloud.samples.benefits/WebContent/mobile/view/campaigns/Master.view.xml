@@ -16,14 +16,14 @@
             </List>
         </content>
         <footer>
-            <Bar>
+            <Bar id="footerBar">
                 <contentRight>
                     <Button id="addButton" text="Add" press="addButtonPressed" icon="sap-icon://add"/>
                 </contentRight>
             </Bar>
         </footer>
         <subHeader>
-            <Bar id="searchBar" enableFlexBox="true">
+            <Bar enableFlexBox="true">
                 <contentMiddle>
                     <SearchField id="searchField" search="handleSearch" liveChange="handleSearch" width="100%" placeholder="Search..." showRefreshButton="false">
                         <layoutData>

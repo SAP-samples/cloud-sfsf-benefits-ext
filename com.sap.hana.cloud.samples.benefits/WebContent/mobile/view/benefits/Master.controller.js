@@ -32,9 +32,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
         this.eventBus.publish("nav", "home");
     },
     handleSearch: function() {
-        var employeesList = this.getView().byId("benefitsList");
+        var benefitsList = this.getView().byId("benefitsList");
         var searchField = this.getView().byId("searchField");
         var searchFilter = new com.sap.hana.cloud.samples.benefits.common.SearchFilter();
-        searchFilter.applySearch(employeesList, searchField, "name", views.DEFAULT_DETAILS_VIEW_ID);
-    },
+        searchFilter.applySearch(benefitsList, searchField, "name", views.DEFAULT_DETAILS_VIEW_ID);
+    }
 });

@@ -4,11 +4,12 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
         this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
                 this.getController().loadModel();
+                this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("active", true));
             }
         }, this.getView());
         this.eventBus = sap.ui.getCore().getEventBus();
     },
-    loadModel: function(){
+    loadModel: function() {
         if (!this.getView().getModel()) {
             this.getView().setModel(new sap.ui.model.json.JSONModel());
         }

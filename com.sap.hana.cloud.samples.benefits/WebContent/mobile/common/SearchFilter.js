@@ -4,7 +4,6 @@ com.sap.hana.cloud.samples.benefits.common.SearchFilter = function(){
 com.sap.hana.cloud.samples.benefits.common.SearchFilter.prototype = jQuery.sap.newObject(sap.ui.base.Object.prototype);
 
 sap.ui.base.Object.defineClass("com.sap.hana.cloud.samples.benefits.common.SearchFilter", {
-
 	baseType : "sap.ui.base.Object",
 	publicMethods : [
 	// methods

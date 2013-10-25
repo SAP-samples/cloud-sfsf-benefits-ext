@@ -65,7 +65,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
     fireModelChanged: function(action) {
         this.eventBus.publish("refresh", "campaigns", {
             sourceId: this.getView().getId(),
-            action: action,
+            action: action
         });
     },
     _saveEditedDates: function(evt) {
