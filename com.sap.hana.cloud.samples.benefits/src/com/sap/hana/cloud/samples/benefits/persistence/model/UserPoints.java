@@ -75,5 +75,14 @@ public class UserPoints implements IDBEntity {
 		this.availablePoints = availablePoints;
 	}
 
-
+	public void addPoints(long points){
+		this.availablePoints += points;
+	}
+	
+	public void subtractPoints(long points){
+		if((this.availablePoints - points) < 0){
+			throw new IllegalArgumentException("Available user points can not be less than zero");
+		}
+		this.availablePoints -= points;
+	}
 }

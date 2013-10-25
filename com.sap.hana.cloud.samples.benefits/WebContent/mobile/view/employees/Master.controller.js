@@ -2,13 +2,16 @@ jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.SearchFilter");
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
     onInit: function() {
+        this.eventBus = sap.ui.getCore().getEventBus();
         this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
                 this.getController().loadModel();
+                this.getController().subscribeForOrderModelChange();
+            },
+            onAfterHide: function(evt) {
+                this.getController().unsubscribeForOrderModelChange();
             }
         }, this.getView());
-
-        this.eventBus = sap.ui.getCore().getEventBus();
     },
     onAfterRendering: function() {
         var list = this.byId("employeesList");
@@ -29,6 +32,12 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
     onNavPressed: function() {
         this.eventBus.publish("nav", "home");
     },
+    subscribeForOrderModelChange: function() {
+        this.eventBus.subscribe("refresh", "orders", this._handleModelChanged, this);
+    },
+    unsubscribeForOrderModelChange: function() {
+        this.eventBus.unsubscribe("refresh", "orders", this._handleModelChanged, this);
+    },
     handleSearch: function() {
         var employeesList = this.getView().byId("employeesList");
         var searchField = this.getView().byId("searchField");
@@ -42,5 +51,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
             this.getView().setModel(new sap.ui.model.json.JSONModel());
         }
         this.getView().getModel().loadData("../api/user/managed", null, false);
+    },
+    _handleModelChanged: function() {
+        this.loadModel();
     }
 });

@@ -1,6 +1,5 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -29,8 +28,8 @@ public class BenefitType implements IDBEntity{
 	private String name;
 	
 	@Basic
-	@Column(precision = 25, scale = 2)
-	private BigDecimal value;
+	@Column
+	private long value;
 	
 	@Basic
 	private boolean active;
@@ -59,11 +58,11 @@ public class BenefitType implements IDBEntity{
 		this.name = name;
 	}
 
-	public BigDecimal getValue() {
+	public long getValue() {
 		return value;
 	}
 
-	public void setValue(BigDecimal value) {
+	public void setValue(long value) {
 		this.value = value;
 	}
 

@@ -3,7 +3,6 @@ package com.sap.hana.cloud.samples.benefits.persistence.model;
 import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_USER_ALL_ORDERS;
 import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_USER_ORDERS_FOR_CAMPAIGN;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -35,8 +34,8 @@ public class Order implements IDBEntity {
 	private Long id;
 	
 	@Basic
-	@Column(precision = 25, scale = 2)
-	private BigDecimal total;
+	@Column
+	private long total;
 
 	@ManyToOne
 	@JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
@@ -58,10 +57,7 @@ public class Order implements IDBEntity {
 		this.id = id;
 	}
 
-	public BigDecimal getTotal() {
-		if(this.total == null){
-			this.total = new BigDecimal(0);
-		}
+	public long getTotal() {
 		return total;
 	}
 
@@ -96,44 +92,24 @@ public class Order implements IDBEntity {
 	
 	public void addOrderDetails(OrderDetails details){
 		getOrderDetails().add(details);
-		final BigDecimal quantity = BigDecimal.valueOf(details.getQuantity());
-		final BigDecimal value = details.getBenefitType().getValue();
-		addToTotal(value.multiply(quantity));
+		this.total += details.getQuantity() * details.getBenefitType().getValue();
+		
 		if(details.getOrder() != this){
 			details.setOrder(this);
 		}
 	}
 	
 	public void removeOrderDetails(OrderDetails details){
-//		getOrderDetails().add(details);
-		final BigDecimal quantity = BigDecimal.valueOf(details.getQuantity());
-		final BigDecimal value = details.getBenefitType().getValue();
-		removeFromTotal(value.multiply(quantity));
-//		if(details.getOrder() != this){
-//			details.setOrder(this);
-//		}
+		final long orderTotal = details.getQuantity() * details.getBenefitType().getValue();
+		if((this.total - orderTotal) < 0){
+			throw new IllegalArgumentException("Order total value can not be less than zero");
+		}
+		getOrderDetails().remove(details);
+		this.total -= orderTotal;
 	}
 
 	public void setOrderDetails(Collection<OrderDetails> orderDetails) {
 		this.orderDetails = orderDetails;
 	}
-	
-	private void addToTotal(BigDecimal value){
-		if(this.total == null){
-			this.total = new BigDecimal(0);
-		}
-		this.total = this.total.add(value);
-	}
-	
-	private void removeFromTotal(BigDecimal value){
-		if(this.total == null){
-			this.total = new BigDecimal(0);
-		} 
-		this.total = this.total.subtract(value);
-		if(this.total.compareTo( new BigDecimal(0)) == -1){
-			throw new IllegalArgumentException("Order total value can not be less than zero");
-		}
-	}
-
 	
 }

@@ -1,6 +1,5 @@
 package com.sap.hana.cloud.samples.benefits.api.bean;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,7 @@ public class BenefitsOrderBean {
 	public long id;
 	
 	@Expose
-	public BigDecimal orderPrice = BigDecimal.ZERO;
+	public long orderPrice;
 	
 	@Expose
 	public CampaignBean campaign;

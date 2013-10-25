@@ -101,6 +101,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
         this.byId("benefitTypeSelect").close();
         this.byId("quantityTypeSelect").close();
     },
+    fireModelChange: function() {
+        sap.ui.getCore().getEventBus().publish("refresh", "orders", {
+            sourceId: this.getView().getId()
+        });
+    },
     _addItem: function(availablePoints) {
         jQuery.sap.require("sap.m.MessageBox");
 
@@ -129,6 +134,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
                 success: jQuery.proxy(function(data) {
                     dialog.close();
                     sap.m.MessageToast.show("New item has been saved");
+                    this.fireModelChange();
                     this.loadOrderDetails();
                 }, this),
                 contentType: "application/json; charset=utf-8",
@@ -152,6 +158,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
             url: '../api/orders/' + orderId,
             type: 'delete',
             success: jQuery.proxy(function(data) {
+                this.fireModelChange();
                 this.loadOrderDetails();
             }, this),
             complete: jQuery.proxy(function() {

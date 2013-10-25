@@ -1,7 +1,5 @@
 package com.sap.hana.cloud.samples.benefits.csv.dataimport;
 
-import java.math.BigDecimal;
-
 import com.googlecode.jcsv.reader.CSVEntryParser;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Benefit;
 import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType;
@@ -21,8 +19,7 @@ public class BenefitParser implements CSVEntryParser<Benefit> {
 
 		final BenefitType type = new BenefitType();
 		type.setName(data[3]);
-		final double valueAsDouble = Double.parseDouble(data[4]);
-		type.setValue(BigDecimal.valueOf(valueAsDouble));
+		type.setValue(Long.parseLong(data[4]));
 		type.setActive(Boolean.parseBoolean(data[5]));
 
 		benefit.addType(type);

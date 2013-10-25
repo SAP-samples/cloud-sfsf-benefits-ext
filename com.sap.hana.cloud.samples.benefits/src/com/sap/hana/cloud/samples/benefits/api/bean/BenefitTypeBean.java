@@ -1,7 +1,5 @@
 package com.sap.hana.cloud.samples.benefits.api.bean;
 
-import java.math.BigDecimal;
-
 import com.google.gson.annotations.Expose;
 import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType;
 
@@ -14,7 +12,7 @@ public class BenefitTypeBean {
 	public String name;
 
 	@Expose
-	public BigDecimal value;
+	public long value;
 
 	public void init(BenefitType benefitType) {
 		this.id = benefitType.getId();
