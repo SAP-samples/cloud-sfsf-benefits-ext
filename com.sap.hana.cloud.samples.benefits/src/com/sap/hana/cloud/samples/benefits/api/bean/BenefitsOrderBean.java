@@ -29,7 +29,7 @@ public class BenefitsOrderBean {
 		this.id = order.getId();
 		this.orderPrice = order.getTotal();
 		this.campaign = CampaignBean.get(order.getCampaign());
-		final Map<Long,BenefitsOrderItemBean> benefitsMap = new HashMap<Long, BenefitsOrderItemBean>();
+		final Map<Long, BenefitsOrderItemBean> benefitsMap = new HashMap<Long, BenefitsOrderItemBean>();
 		if(order.getOrderDetails() != null){
 			for (OrderDetails orderItem: order.getOrderDetails()) {
 				BenefitsOrderItemBean benefitOrderItem = null;

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import com.googlecode.jcsv.CSVStrategy;
@@ -16,7 +17,7 @@ public class BenefitsDataImporter {
 
 	public void importData(String filepath) throws IOException{
 		final InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(filepath);
-		final Reader csvFile = new InputStreamReader(resourceAsStream);
+		final Reader csvFile = new InputStreamReader(resourceAsStream, Charset.forName("UTF-8"));
 
 		CSVStrategy strategy = new CSVStrategy(',', '"', '#', true, true);
 		final CSVReader<Benefit> personReader = new CSVReaderBuilder<Benefit>(csvFile).entryParser(new BenefitParser()).strategy(strategy).build();
