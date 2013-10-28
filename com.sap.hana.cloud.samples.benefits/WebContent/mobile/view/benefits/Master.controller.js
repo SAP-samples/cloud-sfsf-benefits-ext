@@ -19,9 +19,14 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
     },
     onItemSelected: function(evt) {
         var bindingContext = evt.getParameter('listItem').getBindingContext();
-        sap.ui.getCore().getEventBus().publish("nav", "to", {
-            id: views.BENEFITS_DETAILS_VIEW_ID,
+        
+        sap.ui.getCore().getEventBus().publish("app", "benefitsDetailsRefresh", {
+            id: views.CAMPAIGN_DETAILS_VIEW_ID,
             context: bindingContext
+        });
+        
+        sap.ui.getCore().getEventBus().publish("nav", "to", {
+            id: views.BENEFITS_DETAILS_VIEW_ID
         });
     },
     onNavPressed: function() {
