@@ -15,46 +15,46 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.Benefit;
 import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType;
 
 public class BenefitDAO extends BasicDAO<Benefit> {
-	
-	private final Logger logger = LoggerFactory.getLogger(BenefitDAO.class);
 
-	public BenefitDAO() {
-		super(PersistenceManager.getInstance().getEntityManagerProvider());
-	}
+    private final Logger logger = LoggerFactory.getLogger(BenefitDAO.class);
 
-	public Benefit getByName(String name) {
-		Benefit benefit = null;
-		final EntityManager em = emProvider.get();
-		try {
-			final Query query = em.createQuery("select b from Benefit b where b.name = :name");
-			query.setParameter("name", name); 
-			
-			benefit = (Benefit) query.getSingleResult();
-		} catch (NoResultException e) {
-			logger.error("Could not retrieve entity {} from table {}.", name, "Benefit"); 
-		} catch (NonUniqueResultException e){
-			logger.error("More than one entity {} from table {}.", name, "Benefit"); 
-		}
+    public BenefitDAO() {
+        super(PersistenceManager.getInstance().getEntityManagerProvider());
+    }
 
-		return benefit;
-	}
-	
-	@Override
-	public Benefit save(Benefit benefit){
-		Benefit existingBenefit = getByName(benefit.getName());
-		if(existingBenefit == null){
-			saveNew(benefit);
-			return benefit;
-		}
-		
-		final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
-		final Collection<BenefitType> types = benefit.getTypes();
-		for (BenefitType benefitType : types) {
-			benefitType.setBenefit(existingBenefit);
-			benefitTypeDAO.saveNew(benefitType);
-		}
-		
-		return existingBenefit;
-	}
+    public Benefit getByName(String name) {
+        Benefit benefit = null;
+        final EntityManager em = emProvider.get();
+        try {
+            final Query query = em.createQuery("select b from Benefit b where b.name = :name");
+            query.setParameter("name", name);
+
+            benefit = (Benefit) query.getSingleResult();
+        } catch (NoResultException e) {
+            logger.error("Could not retrieve entity {} from table {}.", name, "Benefit");
+        } catch (NonUniqueResultException e) {
+            logger.error("More than one entity {} from table {}.", name, "Benefit");
+        }
+
+        return benefit;
+    }
+
+    @Override
+    public Benefit save(Benefit benefit) {
+        Benefit existingBenefit = getByName(benefit.getName());
+        if (existingBenefit == null) {
+            saveNew(benefit);
+            return benefit;
+        }
+
+        final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
+        final Collection<BenefitType> types = benefit.getTypes();
+        for (BenefitType benefitType : types) {
+            benefitType.setBenefit(existingBenefit);
+            benefitTypeDAO.saveNew(benefitType);
+        }
+
+        return existingBenefit;
+    }
 
 }

@@ -15,74 +15,74 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "BENEFITS", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
-public class Benefit implements IDBEntity{
-	
-	@Id
-	@GeneratedValue
-	@Column(name = "BENEFIT_ID")
-	private Long id;
-	
-	@Basic
-	private String name;
-	
-	@Basic
-	private String description;
-	
-	@Basic
-	private String link;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "benefit", fetch = FetchType.LAZY, targetEntity = BenefitType.class)
-	private Collection<BenefitType> types;
+@Table(name = "BENEFITS", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
+public class Benefit implements IDBEntity {
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = "BENEFIT_ID")
+    private Long id;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Basic
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    @Basic
+    private String description;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Basic
+    private String link;
 
-	public String getDescription() {
-		return description;
-	}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "benefit", fetch = FetchType.LAZY, targetEntity = BenefitType.class)
+    private Collection<BenefitType> types;
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    @Override
+    public Long getId() {
+        return id;
+    }
 
-	public String getLink() {
-		return link;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setLink(String link) {
-		this.link = link;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Collection<BenefitType> getTypes() {
-		if(this.types == null){
-			this.types = new ArrayList<>();
-		}
-		return types;
-	}
-	
-	public void addType(BenefitType type){
-		getTypes().add(type);
-		if(type.getBenefit() != this){
-			type.setBenefit(this);
-		}
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setTypes(Collection<BenefitType> types) {
-		this.types = types;
-	}
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public Collection<BenefitType> getTypes() {
+        if (this.types == null) {
+            this.types = new ArrayList<>();
+        }
+        return types;
+    }
+
+    public void addType(BenefitType type) {
+        getTypes().add(type);
+        if (type.getBenefit() != this) {
+            type.setBenefit(this);
+        }
+    }
+
+    public void setTypes(Collection<BenefitType> types) {
+        this.types = types;
+    }
 }

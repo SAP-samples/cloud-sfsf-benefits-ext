@@ -22,94 +22,92 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "ORDERS")
-@NamedQueries({ 
-	@NamedQuery(name = GET_USER_ORDERS_FOR_CAMPAIGN, query = "select o from Order o where o.user = :user and o.campaign = :campaign"),
-	@NamedQuery(name = GET_USER_ALL_ORDERS, query = "select o from Order o where o.user = :user")
-	})
+@NamedQueries({ @NamedQuery(name = GET_USER_ORDERS_FOR_CAMPAIGN, query = "select o from Order o where o.user = :user and o.campaign = :campaign"),
+        @NamedQuery(name = GET_USER_ALL_ORDERS, query = "select o from Order o where o.user = :user") })
 public class Order implements IDBEntity {
-	
-	@Id
-	@GeneratedValue
-	@Column(name = "ORDER_ID")
-	private Long id;
-	
-	@Basic
-	@Column
-	private long total;
 
-	@ManyToOne
-	@JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
-	private Campaign campaign;
-	
-	@ManyToOne
-    @JoinColumn(name="USER_ID", referencedColumnName="ID")
-	private User user;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
-	private Collection<OrderDetails> orderDetails;
+    @Id
+    @GeneratedValue
+    @Column(name = "ORDER_ID")
+    private Long id;
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+    @Basic
+    @Column
+    private long total;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @ManyToOne
+    @JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
+    private Campaign campaign;
 
-	public long getTotal() {
-		return total;
-	}
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    private User user;
 
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
-		if(!campaign.getOrders().contains(this)){
-			campaign.getOrders().add(this);
-		}
-	}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
+    private Collection<OrderDetails> orderDetails;
 
-	public Campaign getCampaign() {
-		return campaign;
-	}
+    @Override
+    public Long getId() {
+        return id;
+    }
 
-	public User getUser() {
-		return user;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setUser(User user) {
-		this.user = user;
-		if(!user.getOrders().contains(this)){
-			user.addOrder(this);
-		}
-	}
+    public long getTotal() {
+        return total;
+    }
 
-	public Collection<OrderDetails> getOrderDetails() {
-		if(this.orderDetails == null){
-			this.orderDetails = new ArrayList<>();
-		}
-		return orderDetails;
-	}
-	
-	public void addOrderDetails(OrderDetails details){
-		getOrderDetails().add(details);
-		this.total += details.getQuantity() * details.getBenefitType().getValue();
-		
-		if(details.getOrder() != this){
-			details.setOrder(this);
-		}
-	}
-	
-	public void removeOrderDetails(OrderDetails details){
-		final long orderTotal = details.getQuantity() * details.getBenefitType().getValue();
-		if((this.total - orderTotal) < 0){
-			throw new IllegalArgumentException("Order total value can not be less than zero");
-		}
-		getOrderDetails().remove(details);
-		this.total -= orderTotal;
-	}
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
+        if (!campaign.getOrders().contains(this)) {
+            campaign.getOrders().add(this);
+        }
+    }
 
-	public void setOrderDetails(Collection<OrderDetails> orderDetails) {
-		this.orderDetails = orderDetails;
-	}
-	
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+        if (!user.getOrders().contains(this)) {
+            user.addOrder(this);
+        }
+    }
+
+    public Collection<OrderDetails> getOrderDetails() {
+        if (this.orderDetails == null) {
+            this.orderDetails = new ArrayList<>();
+        }
+        return orderDetails;
+    }
+
+    public void addOrderDetails(OrderDetails details) {
+        getOrderDetails().add(details);
+        this.total += details.getQuantity() * details.getBenefitType().getValue();
+
+        if (details.getOrder() != this) {
+            details.setOrder(this);
+        }
+    }
+
+    public void removeOrderDetails(OrderDetails details) {
+        final long orderTotal = details.getQuantity() * details.getBenefitType().getValue();
+        if ((this.total - orderTotal) < 0) {
+            throw new IllegalArgumentException("Order total value can not be less than zero");
+        }
+        getOrderDetails().remove(details);
+        this.total -= orderTotal;
+    }
+
+    public void setOrderDetails(Collection<OrderDetails> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
 }

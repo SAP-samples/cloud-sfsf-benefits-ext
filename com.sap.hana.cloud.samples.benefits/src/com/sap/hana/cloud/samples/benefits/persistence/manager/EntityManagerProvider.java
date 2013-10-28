@@ -4,6 +4,6 @@ import javax.persistence.EntityManager;
 
 public interface EntityManagerProvider {
 
-	EntityManager get();
+    EntityManager get();
 
 }

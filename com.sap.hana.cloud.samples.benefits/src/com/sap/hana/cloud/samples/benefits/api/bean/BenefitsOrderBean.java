@@ -13,52 +13,52 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails;
 
 public class BenefitsOrderBean {
 
-	@Expose
-	public long id;
-	
-	@Expose
-	public long orderPrice;
-	
-	@Expose
-	public CampaignBean campaign;
-	
-	@Expose
-	List<BenefitsOrderItemBean> orderItems = new ArrayList<>();
+    @Expose
+    public long id;
 
-	public void init(Order order) {
-		this.id = order.getId();
-		this.orderPrice = order.getTotal();
-		this.campaign = CampaignBean.get(order.getCampaign());
-		final Map<Long, BenefitsOrderItemBean> benefitsMap = new HashMap<Long, BenefitsOrderItemBean>();
-		if(order.getOrderDetails() != null){
-			for (OrderDetails orderItem: order.getOrderDetails()) {
-				BenefitsOrderItemBean benefitOrderItem = null;
-				if(orderItem.getBenefitType() != null){
-					Benefit benefit = orderItem.getBenefitType().getBenefit();
-					benefitOrderItem = benefitsMap.get(benefit.getId());
-					if (benefitOrderItem == null) {
-						benefitOrderItem = new BenefitsOrderItemBean();
-						benefitOrderItem.initBenefitDetails(orderItem.getBenefitType().getBenefit());
-						benefitsMap.put(benefit.getId(), benefitOrderItem);
-					}					
-					benefitOrderItem.addBenefitItem(orderItem);
-				}
-			}			
-		}
-		this.orderItems.clear();
-		this.orderItems.addAll(benefitsMap.values());
-	}	
-	
-	public static BenefitsOrderBean get(Order order) {
-		BenefitsOrderBean result = new BenefitsOrderBean();
-		result.init(order);
-		return result;
-	}
-	
-	public static BenefitsOrderBean getEmpty(Campaign campaign) {
-		BenefitsOrderBean result = new BenefitsOrderBean();
-		result.campaign = CampaignBean.get(campaign);
-		return result;
-	}
-	
+    @Expose
+    public long orderPrice;
+
+    @Expose
+    public CampaignBean campaign;
+
+    @Expose
+    List<BenefitsOrderItemBean> orderItems = new ArrayList<>();
+
+    public void init(Order order) {
+        this.id = order.getId();
+        this.orderPrice = order.getTotal();
+        this.campaign = CampaignBean.get(order.getCampaign());
+        final Map<Long, BenefitsOrderItemBean> benefitsMap = new HashMap<Long, BenefitsOrderItemBean>();
+        if (order.getOrderDetails() != null) {
+            for (OrderDetails orderItem : order.getOrderDetails()) {
+                BenefitsOrderItemBean benefitOrderItem = null;
+                if (orderItem.getBenefitType() != null) {
+                    Benefit benefit = orderItem.getBenefitType().getBenefit();
+                    benefitOrderItem = benefitsMap.get(benefit.getId());
+                    if (benefitOrderItem == null) {
+                        benefitOrderItem = new BenefitsOrderItemBean();
+                        benefitOrderItem.initBenefitDetails(orderItem.getBenefitType().getBenefit());
+                        benefitsMap.put(benefit.getId(), benefitOrderItem);
+                    }
+                    benefitOrderItem.addBenefitItem(orderItem);
+                }
+            }
+        }
+        this.orderItems.clear();
+        this.orderItems.addAll(benefitsMap.values());
+    }
+
+    public static BenefitsOrderBean get(Order order) {
+        BenefitsOrderBean result = new BenefitsOrderBean();
+        result.init(order);
+        return result;
+    }
+
+    public static BenefitsOrderBean getEmpty(Campaign campaign) {
+        BenefitsOrderBean result = new BenefitsOrderBean();
+        result.campaign = CampaignBean.get(campaign);
+        return result;
+    }
+
 }

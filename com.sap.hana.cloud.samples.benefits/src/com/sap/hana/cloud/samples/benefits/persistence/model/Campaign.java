@@ -25,142 +25,140 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "CAMPAIGNS", uniqueConstraints={@UniqueConstraint(columnNames={"name"})})
-@NamedQueries({ 
-	@NamedQuery(name = GET_CAMPAIGN_BY_NAME, query = "select c from Campaign c where c.name = :name and c.owner = :owner"),
-	@NamedQuery(name = GET_ACTIVE_CAMPAIGNS, query = "select c from Campaign c where c.active = 1 and c.owner = :owner")
-	})
+@Table(name = "CAMPAIGNS", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
+@NamedQueries({ @NamedQuery(name = GET_CAMPAIGN_BY_NAME, query = "select c from Campaign c where c.name = :name and c.owner = :owner"),
+        @NamedQuery(name = GET_ACTIVE_CAMPAIGNS, query = "select c from Campaign c where c.active = 1 and c.owner = :owner") })
 public class Campaign implements IDBEntity {
-	
-	@Id
-	@GeneratedValue
-	@Column(name = "CAMPAIGN_ID")
-	private Long id;
-	
-	@Basic
-	private String name;
-	
-	@Basic
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "START_DATE")
-	private Date startDate;
-	
-	@Basic
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "END_DATE")
-	private Date endDate;
-	
-	@Basic
-	private long points;
-	
-	@Basic
-	private boolean active;
-	
-	@ManyToOne(cascade = CascadeType.REFRESH)
-	@JoinColumn(name="OWNER_ID")
-	private User owner;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.LAZY, targetEntity = Order.class)
-	private Collection<Order> orders;
-	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
-	private Collection<UserPoints> userPoints;
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+    @Id
+    @GeneratedValue
+    @Column(name = "CAMPAIGN_ID")
+    private Long id;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Basic
+    private String name;
 
-	public String getName() {
-		return name;
-	}
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "START_DATE")
+    private Date startDate;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @Basic
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "END_DATE")
+    private Date endDate;
 
-	public Date getStartDate() {
-		return startDate;
-	}
+    @Basic
+    private long points;
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
+    @Basic
+    private boolean active;
 
-	public Date getEndDate() {
-		return endDate;
-	}
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @JoinColumn(name = "OWNER_ID")
+    private User owner;
 
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.LAZY, targetEntity = Order.class)
+    private Collection<Order> orders;
 
-	public boolean isActive() {
-		return active;
-	}
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
+    private Collection<UserPoints> userPoints;
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+    @Override
+    public Long getId() {
+        return id;
+    }
 
-	public Collection<Order> getOrders() {
-		if(this.orders == null){
-			this.orders = new ArrayList<>();
-		}
-		return orders;
-	}
-	
-	public void addOrder(Order order){
-		getOrders().add(order);
-		if(order.getCampaign() != this){
-			order.setCampaign(this);
-		}
-		
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setOrders(Collection<Order> orders) {
-		this.orders = orders;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Collection<UserPoints> getUserPoints() {
-		if(this.userPoints == null){
-			this.userPoints = new ArrayList<>();
-		}
-		return userPoints;
-	}
-	
-	public void addUserPoints(UserPoints points){
-		getUserPoints().add(points);
-		if(points.getCampaign() != this){
-			points.setCampaign(this);
-		}
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setUserPoints(Collection<UserPoints> userPoints) {
-		this.userPoints = userPoints;
-	}
+    public Date getStartDate() {
+        return startDate;
+    }
 
-	public User getOwner() {
-		return owner;
-	}
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
 
-	public void setOwner(User owner) {
-		this.owner = owner;
-		if(!owner.getCampaigns().contains(this)){
-			owner.addCampaign(this);
-		}
-	}
+    public Date getEndDate() {
+        return endDate;
+    }
 
-	public long getPoints() {
-		return points;
-	}
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
+    }
 
-	public void setPoints(long points) {
-		this.points = points;
-	}
-	
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Collection<Order> getOrders() {
+        if (this.orders == null) {
+            this.orders = new ArrayList<>();
+        }
+        return orders;
+    }
+
+    public void addOrder(Order order) {
+        getOrders().add(order);
+        if (order.getCampaign() != this) {
+            order.setCampaign(this);
+        }
+
+    }
+
+    public void setOrders(Collection<Order> orders) {
+        this.orders = orders;
+    }
+
+    public Collection<UserPoints> getUserPoints() {
+        if (this.userPoints == null) {
+            this.userPoints = new ArrayList<>();
+        }
+        return userPoints;
+    }
+
+    public void addUserPoints(UserPoints points) {
+        getUserPoints().add(points);
+        if (points.getCampaign() != this) {
+            points.setCampaign(this);
+        }
+    }
+
+    public void setUserPoints(Collection<UserPoints> userPoints) {
+        this.userPoints = userPoints;
+    }
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+        if (!owner.getCampaigns().contains(this)) {
+            owner.addCampaign(this);
+        }
+    }
+
+    public long getPoints() {
+        return points;
+    }
+
+    public void setPoints(long points) {
+        this.points = points;
+    }
+
 }

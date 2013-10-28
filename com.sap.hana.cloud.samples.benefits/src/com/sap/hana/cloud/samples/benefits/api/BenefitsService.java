@@ -14,21 +14,21 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.Benefit;
 
 @Path("/benefits")
 public class BenefitsService extends BaseService {
-	
-	final BenefitDAO benefitDAO = new BenefitDAO();
-	
-	@GET
-	@Path("/all")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<BenefitDetailsBean> getAllBnefitsNew(){
-		List<Benefit> benfits = benefitDAO.getAll();
-		List<BenefitDetailsBean> result = new ArrayList<>();
-		for (Benefit benefit: benfits) {
-			BenefitDetailsBean benefitDetails = BenefitDetailsBean.get(benefit);
-			benefitDetails.initBenefitTypes(benefit);
-			result.add(benefitDetails);
-		}
-		return result;
-	}
+
+    final BenefitDAO benefitDAO = new BenefitDAO();
+
+    @GET
+    @Path("/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<BenefitDetailsBean> getAllBnefitsNew() {
+        List<Benefit> benfits = benefitDAO.getAll();
+        List<BenefitDetailsBean> result = new ArrayList<>();
+        for (Benefit benefit : benfits) {
+            BenefitDetailsBean benefitDetails = BenefitDetailsBean.get(benefit);
+            benefitDetails.initBenefitTypes(benefit);
+            result.add(benefitDetails);
+        }
+        return result;
+    }
 
 }

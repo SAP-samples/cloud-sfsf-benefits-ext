@@ -17,36 +17,37 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
 /**
- * java.util.Date serializer/deserializer in UTC format. 
+ * java.util.Date serializer/deserializer in UTC format.
+ * 
  * @author Chavdar Baikov
  */
 public class DateTimeAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
 
-	private static final String UTC_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    private static final String UTC_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
-	private final DateFormat dateFormat;
+    private final DateFormat dateFormat;
 
-	public DateTimeAdapter() {
-		dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT, Locale.US);
-		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-	}
-	
-	@Override
-	public JsonElement serialize(Date date, Type type, JsonSerializationContext jsonSerializationContext) {
-		synchronized (dateFormat) {
-			return new JsonPrimitive(dateFormat.format(date));	
-		}		
-	}
+    public DateTimeAdapter() {
+        dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT, Locale.US);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
 
-	@Override
-	public Date deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
-		try {
-			synchronized (dateFormat) {
-				return dateFormat.parse(jsonElement.getAsString());				
-			}
-		} catch (ParseException e) {
-			throw new JsonParseException(e);
-		}
-	}
-	
+    @Override
+    public JsonElement serialize(Date date, Type type, JsonSerializationContext jsonSerializationContext) {
+        synchronized (dateFormat) {
+            return new JsonPrimitive(dateFormat.format(date));
+        }
+    }
+
+    @Override
+    public Date deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+        try {
+            synchronized (dateFormat) {
+                return dateFormat.parse(jsonElement.getAsString());
+            }
+        } catch (ParseException e) {
+            throw new JsonParseException(e);
+        }
+    }
+
 }

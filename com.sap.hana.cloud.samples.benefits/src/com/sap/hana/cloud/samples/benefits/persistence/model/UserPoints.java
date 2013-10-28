@@ -17,72 +17,72 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.keys.UserPointsPrim
 @IdClass(UserPointsPrimaryKey.class)
 @Table(name = "USER_POINTS")
 public class UserPoints implements IDBEntity {
-	
-	@GeneratedValue
-	@Column(name="ID")
-	private Long id;
 
-	@ManyToOne(cascade=CascadeType.REFRESH)
-	@Id
-    @JoinColumn(name="USER_ID", referencedColumnName="ID")
-	private User user;
-	
-	@ManyToOne(cascade=CascadeType.REFRESH)
-	@Id
-    @JoinColumn(name="CAMPAIGN_ID", referencedColumnName="CAMPAIGN_ID")
-	private Campaign campaign;
-	
-	@Basic
-	@Column(name="AVAILABLE_POINTS")
-	private Long availablePoints;
-	
-	@Override
-	public Long getId() {
-		return id;
-	}
+    @GeneratedValue
+    @Column(name = "ID")
+    private Long id;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @Id
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+    private User user;
 
-	public User getUser() {
-		return user;
-	}
+    @ManyToOne(cascade = CascadeType.REFRESH)
+    @Id
+    @JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
+    private Campaign campaign;
 
-	public void setUser(User user) {
-		this.user = user;
-		if(!user.getUserPoints().contains(this)){
-			user.addUserPoints(this);
-		}
-	}
+    @Basic
+    @Column(name = "AVAILABLE_POINTS")
+    private Long availablePoints;
 
-	public Campaign getCampaign() {
-		return campaign;
-	}
+    @Override
+    public Long getId() {
+        return id;
+    }
 
-	public void setCampaign(Campaign campaign) {
-		this.campaign = campaign;
-		if(!campaign.getUserPoints().contains(this)){
-			campaign.addUserPoints(this);
-		}
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Long getAvailablePoints() {
-		return availablePoints;
-	}
+    public User getUser() {
+        return user;
+    }
 
-	public void setAvailablePoints(Long availablePoints) {
-		this.availablePoints = availablePoints;
-	}
+    public void setUser(User user) {
+        this.user = user;
+        if (!user.getUserPoints().contains(this)) {
+            user.addUserPoints(this);
+        }
+    }
 
-	public void addPoints(long points){
-		this.availablePoints += points;
-	}
-	
-	public void subtractPoints(long points){
-		if((this.availablePoints - points) < 0){
-			throw new IllegalArgumentException("Available user points can not be less than zero");
-		}
-		this.availablePoints -= points;
-	}
+    public Campaign getCampaign() {
+        return campaign;
+    }
+
+    public void setCampaign(Campaign campaign) {
+        this.campaign = campaign;
+        if (!campaign.getUserPoints().contains(this)) {
+            campaign.addUserPoints(this);
+        }
+    }
+
+    public Long getAvailablePoints() {
+        return availablePoints;
+    }
+
+    public void setAvailablePoints(Long availablePoints) {
+        this.availablePoints = availablePoints;
+    }
+
+    public void addPoints(long points) {
+        this.availablePoints += points;
+    }
+
+    public void subtractPoints(long points) {
+        if ((this.availablePoints - points) < 0) {
+            throw new IllegalArgumentException("Available user points can not be less than zero");
+        }
+        this.availablePoints -= points;
+    }
 }

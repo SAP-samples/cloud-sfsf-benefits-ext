@@ -13,9 +13,9 @@ import com.sap.hana.cloud.samples.benefits.persistence.UserDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 
 public class BaseService {
-	
-	protected static final String ADMIN_ROLE = "Administrator";
-    
+
+    protected static final String ADMIN_ROLE = "Administrator";
+
     @Resource
     protected HttpServletRequest request;
 
@@ -24,9 +24,9 @@ public class BaseService {
 
     @Resource
     protected ServletContext context;
-    
+
     protected UserDAO userDAO = new UserDAO();
-    
+
     protected String getLoggedInUserId() {
         if (request == null) {
             throw new IllegalArgumentException("Request must not be null.");
@@ -42,17 +42,17 @@ public class BaseService {
 
         return userId;
     }
-    
-    protected User getLoggedInUser(){
-    	return userDAO.getByUserId(getLoggedInUserId());
+
+    protected User getLoggedInUser() {
+        return userDAO.getByUserId(getLoggedInUserId());
     }
-    
-    protected Response createBadRequestResponse(String reponseText){
-    	return Response.status(Status.BAD_REQUEST).entity(reponseText).build();
+
+    protected Response createBadRequestResponse(String reponseText) {
+        return Response.status(Status.BAD_REQUEST).entity(reponseText).build();
     }
-    
-    protected Response createOkResponse(){
-    	return Response.ok().build();
+
+    protected Response createOkResponse() {
+        return Response.ok().build();
     }
 
 }

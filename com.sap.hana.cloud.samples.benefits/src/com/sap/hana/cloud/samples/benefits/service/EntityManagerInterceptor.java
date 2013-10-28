@@ -13,19 +13,19 @@ import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManage
 
 public class EntityManagerInterceptor implements Filter {
 
-	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		try {
-			PersistenceManager.getInstance().initEntityManagerProvider();
-			chain.doFilter(request, response);
-		} finally {
-			PersistenceManager.getInstance().closeEntityManager();
-		}
-	}
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+        try {
+            PersistenceManager.getInstance().initEntityManagerProvider();
+            chain.doFilter(request, response);
+        } finally {
+            PersistenceManager.getInstance().closeEntityManager();
+        }
+    }
 
-	public void init(FilterConfig config) {
-	}
+    public void init(FilterConfig config) {
+    }
 
-	public void destroy() {
-		PersistenceManager.getInstance().closeAll();
-	}
+    public void destroy() {
+        PersistenceManager.getInstance().closeAll();
+    }
 }

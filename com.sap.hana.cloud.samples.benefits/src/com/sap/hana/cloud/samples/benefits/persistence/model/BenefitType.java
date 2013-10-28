@@ -17,89 +17,89 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "BENEFIT_TYPE", uniqueConstraints={@UniqueConstraint(columnNames={"name", "BENEFIT_ID"})})
-public class BenefitType implements IDBEntity{
-	@Id
-	@GeneratedValue
-	@Column(name = "TYPE_ID")
-	private Long id;
-	
-	@Basic
-	private String name;
-	
-	@Basic
-	@Column
-	private long value;
-	
-	@Basic
-	private boolean active;
+@Table(name = "BENEFIT_TYPE", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "BENEFIT_ID" }) })
+public class BenefitType implements IDBEntity {
+    @Id
+    @GeneratedValue
+    @Column(name = "TYPE_ID")
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "BENEFIT_ID", referencedColumnName = "BENEFIT_ID")
-	private Benefit benefit;
-	
-	@OneToMany(cascade=CascadeType.REFRESH, mappedBy = "benefitType", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
-	private Collection<OrderDetails> orders;
+    @Basic
+    private String name;
 
-	@Override
-	public Long getId() {
-		return id;
-	}
+    @Basic
+    @Column
+    private long value;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @Basic
+    private boolean active;
 
-	public String getName() {
-		return name;
-	}
+    @ManyToOne
+    @JoinColumn(name = "BENEFIT_ID", referencedColumnName = "BENEFIT_ID")
+    private Benefit benefit;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "benefitType", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
+    private Collection<OrderDetails> orders;
 
-	public long getValue() {
-		return value;
-	}
+    @Override
+    public Long getId() {
+        return id;
+    }
 
-	public void setValue(long value) {
-		this.value = value;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public boolean isActive() {
-		return active;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setActive(boolean active) {
-		this.active = active;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public Benefit getBenefit() {
-		return benefit;
-	}
+    public long getValue() {
+        return value;
+    }
 
-	public void setBenefit(Benefit benefit) {
-		this.benefit = benefit;
-		if(!benefit.getTypes().contains(this)){
-			benefit.addType(this);
-		}
-	}
+    public void setValue(long value) {
+        this.value = value;
+    }
 
-	public Collection<OrderDetails> getOrders() {
-		if(this.orders == null){
-			this.orders = new ArrayList<>();
-		}
-		return orders;
-	}
-	
-	public void addOrder(OrderDetails order){
-		getOrders().add(order);
-		if(order.getBenefitType() != this){
-			order.setBenefitType(this);
-		}
-	}
+    public boolean isActive() {
+        return active;
+    }
 
-	public void setOrders(Collection<OrderDetails> orders) {
-		this.orders = orders;
-	}
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Benefit getBenefit() {
+        return benefit;
+    }
+
+    public void setBenefit(Benefit benefit) {
+        this.benefit = benefit;
+        if (!benefit.getTypes().contains(this)) {
+            benefit.addType(this);
+        }
+    }
+
+    public Collection<OrderDetails> getOrders() {
+        if (this.orders == null) {
+            this.orders = new ArrayList<>();
+        }
+        return orders;
+    }
+
+    public void addOrder(OrderDetails order) {
+        getOrders().add(order);
+        if (order.getBenefitType() != this) {
+            order.setBenefitType(this);
+        }
+    }
+
+    public void setOrders(Collection<OrderDetails> orders) {
+        this.orders = orders;
+    }
 }
