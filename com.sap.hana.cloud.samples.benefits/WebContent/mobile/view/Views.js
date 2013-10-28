@@ -1,13 +1,12 @@
 jQuery.sap.declare("com.sap.hana.cloud.samples.benefits.view.Views");
 
-
 com.sap.hana.cloud.samples.benefits.view.Views = function() {
 };
 com.sap.hana.cloud.samples.benefits.view.Views.prototype = jQuery.sap.newObject(sap.ui.base.Object.prototype);
 
 sap.ui.base.Object.defineClass("com.sap.hana.cloud.samples.benefits.view.Views", {
-    baseType: "sap.ui.base.Object",
-    publicMethods: []
+	baseType : "sap.ui.base.Object",
+	publicMethods : []
 });
 com.sap.hana.cloud.samples.benefits.view.Views.prototype.CAMPAIGN_MASTER_VIEW_ID = "CampaignMaster";
 com.sap.hana.cloud.samples.benefits.view.Views.prototype.EMPLOYEE_MASTER_VIEW_ID = "EmployeesMaster";
