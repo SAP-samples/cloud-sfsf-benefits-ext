@@ -39,14 +39,6 @@
    <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
    <param-value>true</param-value>
   </context-param>  
-    <context-param>
-    <param-name>com.sap.ui5.resource.DEV_MODE</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.VERBOSE</param-name>
-    <param-value>true</param-value>
-  </context-param>
   <context-param>
     <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
     <param-value>true</param-value>
@@ -106,8 +98,7 @@
     <security-constraint>
     <web-resource-collection>
       <web-resource-name>Unsecured open social widgets for portal integration</web-resource-name>
-      <url-pattern>/admin.xml</url-pattern>
-      <url-pattern>/employee.xml</url-pattern>
+      <url-pattern>/benefits.xml</url-pattern>
       <url-pattern>/resources/*</url-pattern>
     </web-resource-collection>
   </security-constraint>
