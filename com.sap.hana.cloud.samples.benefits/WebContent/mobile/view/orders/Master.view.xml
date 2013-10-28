@@ -7,9 +7,9 @@
         <content>
             <List id="campaignsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
-                    <ObjectListItem title="{name}" number="{employeesModel>points}">
+                    <ObjectListItem title="{name}" number="{employeesModel>points}" class="listItem">
                         <firstStatus>
-                            <ObjectStatus text="{parts:[{path:'active'}], formatter:'.isActiveCampaign'}"/>	                                   
+                            <ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:[{path:'active'}], formatter:'.isActiveCampaign'}"/>	                                   
                         </firstStatus>
                     </ObjectListItem>                  
                 </items>

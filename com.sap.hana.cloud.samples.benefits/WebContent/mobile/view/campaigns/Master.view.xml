@@ -9,7 +9,7 @@
                 <items>
                     <ObjectListItem title="{name}">
                         <firstStatus>
-                            <ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:['active'], formatter: '.setStateText' }" class="labelHeight"/>
+                            <ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:['active'], formatter: '.setStateText' }" class="labelHeight listItem"/>
                         </firstStatus>
                     </ObjectListItem>
                 </items>

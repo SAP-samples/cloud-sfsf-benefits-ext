@@ -7,7 +7,7 @@
         <content>
             <List id="benefitsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
                 <items>
-                    <ObjectListItem icon="sap-icon://database" title="{name}" class="benefitListItem"/>
+                    <ObjectListItem icon="sap-icon://database" title="{name}" class="benefitListItem listItem"/>
                 </items>
             </List>
         </content>

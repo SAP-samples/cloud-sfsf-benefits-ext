@@ -33,3 +33,7 @@
 .displayNone {
 	display: none !important;
 }
+
+.listItem:hover {
+	cursor: pointer;
+}

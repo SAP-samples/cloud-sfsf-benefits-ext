@@ -23,7 +23,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
             listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
         }
     },
-            onItemSelected: function(evt) {
+    setState: function(active) {
+        return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
+    },
+    onItemSelected: function(evt) {
         var employee = jQuery.sap.syncGetJSON("../api/user/profile").data;
         var campaignId = evt.getParameter("listItem").getBindingContext().getObject().id;
 
