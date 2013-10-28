@@ -4,12 +4,7 @@ jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 jQuery.sap.require("sap.m.MessageBox");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
     onInit: function() {
-        this.getView().addEventDelegate({
-            onBeforeShow: function(evt) {
-                this.getController().loadModel();
-                this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("name", false));
-            }
-        }, this.getView());
+        this.listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
 
         this.dialogOkBtn = new sap.m.Button({
             text: "Ok",
@@ -27,8 +22,12 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
         this.byId("pointsCtr").attachLiveChange(jQuery.proxy(this._validateNewCampaignPoints, this), this);
 
         // subscribe to event bus
-        this.eventBus = sap.ui.getCore().getEventBus();
-        this.eventBus.subscribe("refresh", "campaigns", this._handleModelChanged, this);
+        sap.ui.getCore().getEventBus().subscribe("refresh", "campaigns", this._handleModelChanged, this);
+    },
+    onBeforeRendering: function() {
+        this.loadModel();
+        this.checkToShowDefaultPage();
+        this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("name", false));
     },
     loadModel: function() {
         if (!this.getView().getModel()) {
@@ -37,22 +36,33 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
         this.getView().getModel().loadData("../api/campaigns/", null, false);
     },
     onAfterRendering: function() {
-        this.selectFirstCampaign();
+        var list = this.byId("campaignsList");
+        if (!list.getItems()) {
+            sap.ui.getCore().getEventBus().publish("nav", "to", {
+                id: views.DEFAULT_DETAILS_VIEW_ID,
+            });
+        } else {
+            this.listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
+        }
+    },
+    checkToShowDefaultPage: function() {
+        var list = this.byId("campaignsList");
+        if (!list.getItems()) {
+            sap.ui.getCore().getEventBus().publish("nav", "to", {
+                id: views.DEFAULT_DETAILS_VIEW_ID,
+            });
+        }
     },
     onNavPressed: function() {
-        this.eventBus.publish("nav", "home");
+        sap.ui.getCore().getEventBus().publish("nav", "home");
     },
     onItemSelect: function(evt) {
+        this._navigateToDetailsPage();
         var bindingContext = evt.getParameter('listItem').getBindingContext();
-        this.eventBus.publish("nav", "to", {
+        sap.ui.getCore().getEventBus().publish("app", "campaignDetailsRefresh", {
             id: views.CAMPAIGN_DETAILS_VIEW_ID,
             context: bindingContext,
         });
-    },
-    selectFirstCampaign: function() {
-        var list = this.byId("campaignsList");
-        var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
-        listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
     },
     handleSearch: function() {
         var campaignsList = this.getView().byId("campaignsList");
@@ -105,6 +115,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
                 data: JSON.stringify({name: newCampaignName, startDate: null, endDate: null, points: newCampaignPoints})
             });
         }
+    },
+    _navigateToDetailsPage: function() {
+        sap.ui.getCore().getEventBus().publish("nav", "to", {
+            id: views.CAMPAIGN_DETAILS_VIEW_ID,
+        });
     },
     _selectCampaignByName: function(name) {
         var list = this.byId("campaignsList");

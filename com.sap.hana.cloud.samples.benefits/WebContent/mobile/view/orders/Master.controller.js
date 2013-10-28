@@ -1,13 +1,6 @@
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
     onInit: function() {
-        this.getView().addEventDelegate({
-            onBeforeShow: function(evt) {
-                this.getController().loadModel();
-                this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("active", true));
-            }
-        }, this.getView());
-        this.eventBus = sap.ui.getCore().getEventBus();
     },
     loadModel: function() {
         if (!this.getView().getModel()) {
@@ -15,27 +8,38 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
         }
         this.getView().getModel().loadData("../api/user/campaigns", null, false);
     },
+    onBeforeRendering: function() {
+        this.loadModel();
+        this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("active", true));
+    },
     onAfterRendering: function() {
         var list = this.byId("campaignsList");
-        var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
-        listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
+        if (!list.getItems()) {
+            sap.ui.getCore().getEventBus().publish("nav", "to", {
+                id: views.DEFAULT_DETAILS_VIEW_ID,
+            });
+        } else {
+            var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+            listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
+        }
     },
-    onItemSelected: function(evt) {
+            onItemSelected: function(evt) {
         var employee = jQuery.sap.syncGetJSON("../api/user/profile").data;
         var campaignId = evt.getParameter("listItem").getBindingContext().getObject().id;
-        var isActive = evt.getParameter("listItem").getBindingContext().getObject().active;
 
-        this.eventBus.publish("nav", "to", {
+        sap.ui.getCore().getEventBus().publish("app", "ordersDetailsRefresh", {
+            context: {
+                employee: employee,
+                campaignId: campaignId
+            }
+        });
+
+        sap.ui.getCore().getEventBus().publish("nav", "to", {
             id: views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID,
-            additionalData: {modelData: {
-                    employee: employee,
-                    campaignId: campaignId,
-                    active: isActive
-                }}
         });
     },
     onNavPressed: function() {
-        this.eventBus.publish("nav", "home");
+        sap.ui.getCore().getEventBus().publish("nav", "home");
     },
     isActiveCampaign: function(isActive) {
         return isActive ? "active" : "inactive";

@@ -15,7 +15,9 @@ sap.ui.app.Application.extend("Application", {
         var root = this.getRoot();
         var splitApp = new sap.m.SplitApp("SplitAppControl");
         splitApp.setBusyIndicatorDelay(0);
+        splitApp.addDetailPage(sap.ui.xmlview(views.DEFAULT_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.DefaultDetails"));
         var tileContainer = new sap.m.TileContainer("HomePage");
+
 
         var configData = this.getConfig().getData();
 
@@ -35,8 +37,6 @@ sap.ui.app.Application.extend("Application", {
             this._showOrdersTile(splitApp, tileContainer);
         }
 
-        splitApp.addDetailPage(sap.ui.xmlview(views.DEFAULT_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.DefaultDetails"));
-
         var oShell = new sap.m.Shell("ShellControl", {
             title: "SAP Benefits App",
             app: tileContainer,
@@ -47,7 +47,6 @@ sap.ui.app.Application.extend("Application", {
     },
     _navToHandler: function(channelId, eventId, data) {
         if (data && data.id) {
-            this._toDetailsPage(views.DEFAULT_DETAILS_VIEW_ID);
             this._toDetailsPage(data.id, {
                 context: data.context,
                 additionalData: data.additionalData
@@ -117,7 +116,6 @@ sap.ui.app.Application.extend("Application", {
         switch (evt.getParameters().id) {
             case "Employees":
                 splitApp.toMaster(views.EMPLOYEE_MASTER_VIEW_ID);
-                splitApp.toDetail(sap.ui.getCore().byId(views.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Benefits":
@@ -127,12 +125,11 @@ sap.ui.app.Application.extend("Application", {
                 break;
             case "Campaigns":
                 splitApp.toMaster(views.CAMPAIGN_MASTER_VIEW_ID);
-                splitApp.toDetail(sap.ui.getCore().byId(views.DEFAULT_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             case "Orders":
                 splitApp.toMaster(views.EMPLOYEE_ORDERS_MASTER_VIEW_ID);
-                splitApp.toDetail(sap.ui.getCore().byId(views.DEFAULT_DETAILS_VIEW_ID), "show");
+//                splitApp.toDetail(sap.ui.getCore().byId(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID), "show");
                 this._getShell().setApp(splitApp);
                 break;
             default:
@@ -142,5 +139,4 @@ sap.ui.app.Application.extend("Application", {
         var splitApp = sap.ui.getCore().byId("SplitAppControl");
         splitApp.toDetail(sap.ui.getCore().byId(pageId), "show", data);
     }
-
 });

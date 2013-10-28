@@ -4,16 +4,8 @@ jQuery.sap.require("sap.m.MessageBox");
 jQuery.sap.require("sap.m.MessageToast");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", {
     onInit: function() {
-        this.getView().addEventDelegate({
-            onBeforeShow: function(evt) {
-                this.setBindingContext(evt.data.context);
-                this.setModel(evt.data.context.getModel());
-                this.getController()._refreshStartStopBtnState();
-            }
-        }, this.getView());
-
         this.actionSheet = this._createActionSheet();
-        this.eventBus = sap.ui.getCore().getEventBus();
+        sap.ui.getCore().getEventBus().subscribe("app", "campaignDetailsRefresh", this._refreshHandler, this);
     },
     onAfterRendering: function() {
     },
@@ -59,11 +51,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 
         this.byId("startDateCtr").setProperty('value', this.byId("startDateTextCtr").getText() === "not set" ? undefined : this.byId("startDateTextCtr").getText());
         this.byId("endDateCtr").setProperty('value', this.byId("endDateTextCtr").getText() === "not set" ? undefined : this.byId("endDateTextCtr").getText());
-        this.eventBus.publish("nav", "virtual");
+        sap.ui.getCore().getEventBus().publish("nav", "virtual");
         editCampDialog.open();
     },
     fireModelChanged: function(action) {
-        this.eventBus.publish("refresh", "campaigns", {
+        sap.ui.getCore().getEventBus().publish("refresh", "campaigns", {
             sourceId: this.getView().getId(),
             action: action
         });
@@ -71,6 +63,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
     closeDateTimeSelectors: function() {
         this.byId("startDateCtr").close();
         this.byId("endDateCtr").close();
+    },
+    _refreshHandler: function(channelId, eventId, data) {
+        this.getView().setBindingContext(data.context);
+        this.getView().setModel(data.context.getModel());
+        this._refreshStartStopBtnState();
     },
     _saveEditedDates: function(evt) {
         var startDate = this.byId("startDateCtr").getDateValue();

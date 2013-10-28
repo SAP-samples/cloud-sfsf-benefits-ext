@@ -1,9 +1,11 @@
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Details", {
     onInit: function() {
-         this.getView().addEventDelegate({
+        this.getView().addEventDelegate({
             onBeforeShow: function(evt) {
-                this.setBindingContext(evt.data.context);
-                this.setModel(evt.data.context.getModel());
+                if (evt.data.context) {
+                    this.setBindingContext(evt.data.context);
+                    this.setModel(evt.data.context.getModel());
+                }
             }
         }, this.getView());
     },
@@ -13,8 +15,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Details", {
         var control = sap.ui.getCore().byId(evt.getParameters().id);
         var link = control.getModel().getData().infoLink;
         if (link) {
-            sap.m.URLHelper.redirect(link, true);    
-        }        
+            sap.m.URLHelper.redirect(link, true);
+        }
     }
 
 });

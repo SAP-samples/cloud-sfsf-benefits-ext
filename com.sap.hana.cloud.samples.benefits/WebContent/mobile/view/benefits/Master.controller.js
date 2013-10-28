@@ -2,13 +2,9 @@ jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.SearchFilter");
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
     onInit: function() {
-        this.getView().addEventDelegate({
-            onBeforeShow: function(evt) {
-                this.getController().loadModel();
-            }
-        }, this.getView());
-
-        this.eventBus = sap.ui.getCore().getEventBus();
+    },
+    onBeforeRendering: function() {
+        this.loadModel();
     },
     loadModel: function() {
         if (!this.getView().getModel()) {
@@ -23,13 +19,13 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
     },
     onItemSelected: function(evt) {
         var bindingContext = evt.getParameter('listItem').getBindingContext();
-        this.eventBus.publish("nav", "to", {
+        sap.ui.getCore().getEventBus().publish("nav", "to", {
             id: views.BENEFITS_DETAILS_VIEW_ID,
             context: bindingContext
         });
     },
     onNavPressed: function() {
-        this.eventBus.publish("nav", "home");
+        sap.ui.getCore().getEventBus().publish("nav", "home");
     },
     handleSearch: function() {
         var benefitsList = this.getView().byId("benefitsList");

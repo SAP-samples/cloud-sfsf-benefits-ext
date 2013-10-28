@@ -1,15 +1,10 @@
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
     onInit: function() {
         this.busyDialog = new sap.m.BusyDialog({showCancelButton: false});
-
-        this.getView().addEventDelegate({
-            onBeforeShow: function(evt) {
-                this.getController().loadBenefitsModel();
-                var data = evt.data.additionalData.modelData;
-                this.byId("addButton").setEnabled(data.active);
-                this.getController().initEmployeeDetailsModel(data.employee, data.campaignId);
-            }
-        }, this.getView());
+        sap.ui.getCore().getEventBus().subscribe("app", "ordersDetailsRefresh", this._refreshHandler, this);
+    },
+    onBeforeRendering: function() {
+        this.loadBenefitsModel();
     },
     initEmployeeDetailsModel: function(employeeProfile, campaignId) {
         this.employeeProfile = employeeProfile;
@@ -25,6 +20,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
     },
     loadOrderDetails: function() {
         var orderDetails = jQuery.sap.syncGetJSON("../api/orders/for-user/" + this.campaignId + "/" + this.employeeProfile.userId).data;
+        this.byId("addButton").setEnabled(orderDetails.campaign.active);
         this.getView().getModel().setProperty("/currentOrder", orderDetails);
     },
     loadBenefitsModel: function() {
@@ -102,6 +98,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
         sap.ui.getCore().getEventBus().publish("refresh", "orders", {
             sourceId: this.getView().getId()
         });
+    },
+    _refreshHandler: function(channelId, eventId, data) {
+        this.initEmployeeDetailsModel(data.context.employee, data.context.campaignId);
     },
     _addItem: function(availablePoints) {
         jQuery.sap.require("sap.m.MessageBox");

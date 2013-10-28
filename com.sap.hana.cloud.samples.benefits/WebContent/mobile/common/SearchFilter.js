@@ -10,10 +10,6 @@ sap.ui.base.Object.defineClass("com.sap.hana.cloud.samples.benefits.common.Searc
 	"applySearch"]
 });
 com.sap.hana.cloud.samples.benefits.common.SearchFilter.prototype.applySearch = function(list, searchField, modelProperty, defaultPageId) {
-    sap.ui.getCore().getEventBus().publish("nav", "to", {
-        id: defaultPageId
-    });
-
     var showSearch = (searchField.getValue().length !== 0);
     var binding = list.getBinding("items");
 
