@@ -104,16 +104,12 @@ Configure the application role assigments from the cockpit: [Details](https://he
 Access the Application 
 ----------------------
 
-After deployment, the applciation is accessible on the following URLs:
+After deployment, the applciation is accessible on the following URL:
 
-* Managing benefits and campaigns (HR manager role):
+`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/index.html`
 
-`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/admin.html`
+Based on the role of the user with which you are logged in, you will see a page designed for HR manager or for a regular employee(user).
 
-* Simplified user interface for benefit orders (Everyone role):
-
-`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/employee.html`
- 
 Explore the Application
 -----------------------
 
@@ -136,8 +132,12 @@ As an *HR manager*, you can manage benefits from three panes:
 * Campaigns
 
   Add and edit benefits campaigns and their details.
+  
+* Orders
 
-As an *employee*, you can edit your active campaign benefit orders and view your past orders.
+  Edit your active campaign benefit orders and view your past orders
+
+As an *employee*, you can edit your active campaign benefit orders and view your past orders. Also you can see a list of available benefits.
 
 By default, the application has a benefits list that is hardcoded and no campaigns added. We recommend that you first log in to the application with the HR Manager user first *("nnnn")* and to add a benefits campaign. Next, log in as an employee *("cgrant")* and add benefits to your order.  
 
