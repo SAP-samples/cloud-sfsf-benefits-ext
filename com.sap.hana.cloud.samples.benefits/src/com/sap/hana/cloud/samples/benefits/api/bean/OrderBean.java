@@ -4,13 +4,13 @@ import com.google.gson.annotations.Expose;
 
 public class OrderBean {
 
-	@Expose
-	public long campaignId;
+    @Expose
+    public long campaignId;
 
-	@Expose
-	public long benefitTypeId;
+    @Expose
+    public long benefitTypeId;
 
-	@Expose
-	public long quantity;
+    @Expose
+    public long quantity;
 
 }

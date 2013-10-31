@@ -16,7 +16,6 @@
 	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<version>1.0.1</version>
 	<packaging>war</packaging>
-	<description>Success Factors extension sample application.</description>
 
 	<organization>
 		<name>SAP AG</name>
@@ -48,6 +47,8 @@
 
 		<sap.cloud.sdk.location>${env.NW_CLOUD_SDK_PATH}</sap.cloud.sdk.location>
 		<sap.cloud.sdk.version>${env.NW_CLOUD_SDK_VERSION}</sap.cloud.sdk.version>
+		<local.eclipse.path>${env.ECLIPSE_HOME}</local.eclipse.path>
+		<sap.ui5.version>${env.SAP_UI5_VERSION}</sap.ui5.version>
 		<apache.cxf.version>2.7.3</apache.cxf.version>
 	</properties>
 
@@ -153,6 +154,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>com.sap.ui5</groupId>
+			<artifactId>resource</artifactId>
+			<version>${sap.ui5.version}</version>
+			<scope>system</scope>
+			<systemPath>${local.eclipse.path}/plugins/com.sap.ui5.resource_${sap.ui5.version}.jar</systemPath>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -164,6 +172,15 @@
 		<resources>
 			<resource>
 				<directory>${project.basedir}/src</directory>
+				<includes>
+					<include>**/*</include>
+				</includes>
+				<excludes>
+					<exclude>**/*.java</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<directory>${project.basedir}/resources</directory>
 				<includes>
 					<include>**/*</include>
 				</includes>
@@ -247,6 +264,39 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${project.basedir}/WebContent/WEB-INF/lib</directory>				
+							<includes>
+								<include>resource*.jar</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.4</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.basedir}/WebContent/WEB-INF/lib</outputDirectory>
+							<includeGroupIds>
+								com.sap.ui5
+							</includeGroupIds>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>			
 		</plugins>
 
 		<pluginManagement>
@@ -282,7 +332,38 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-			</plugins>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>
+											org.apache.maven.plugins
+										</groupId>
+										<artifactId>
+											maven-dependency-plugin
+										</artifactId>
+										<versionRange>[2.4,)</versionRange>
+										<goals>
+											<goal>copy-dependencies</goal>
+											<goal>unpack-dependencies</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<execute>
+											<runOnIncremental>false</runOnIncremental>
+										</execute>
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>							
 		</pluginManagement>
 	</build>
 
@@ -311,4 +392,7 @@
 		</profile>
 
 	</profiles>
+	<name>SAP Employee Benefits Management Sample Application</name>
+	<description>The SAP HANA Cloud Platform extension package makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.</description>
+	<url>https://github.com/SAP/cloud-sfsf-benefits-ext</url>
 </project>

@@ -8,13 +8,13 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.keys.UserPointsPrim
 
 public class UserPointsDAO extends BasicDAO<UserPoints> {
 
-	public UserPointsDAO() {
-		super(PersistenceManager.getInstance().getEntityManagerProvider());
-	}
+    public UserPointsDAO() {
+        super(PersistenceManager.getInstance().getEntityManagerProvider());
+    }
 
-	public UserPoints getByPrimaryKey(UserPointsPrimaryKey key) {
-		final EntityManager em = emProvider.get();
-		UserPoints points = em.find(UserPoints.class, key);
-		return points;
-	}
+    public UserPoints getByPrimaryKey(UserPointsPrimaryKey key) {
+        final EntityManager em = emProvider.get();
+        UserPoints points = em.find(UserPoints.class, key);
+        return points;
+    }
 }

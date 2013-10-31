@@ -1,20 +1,20 @@
-<core:View xmlns:core="sap.ui.core" 
-           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m"
-           controllerName="com.sap.hana.cloud.samples.benefits.view.orders.Master" 
-           xmlns:html="http://www.w3.org/1999/xhtml"
-           setDisplayBlock="true">
-    <Page id="EmployeeOrdersMasterPage" title="Employee Orders" showNavButton="true" navButtonTap="onNavPressed">
-        <content>
-            <List id="campaignsList" items="{campaignModel>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
-                <items>
-                    <ObjectListItem title="{campaignModel>name}" number="{employeesModel>points}">
-                    	<firstStatus>
-	                           <ObjectStatus text="{parts:[{path:'campaignModel>active'}], formatter:'.isActiveCampaign'}"/>	                                   
-	                    </firstStatus>
-                     </ObjectListItem>                  
-                </items>
-            </List>            
-        </content>
-    </Page>
-         
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.orders.Master"
+	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
+	<Page id="EmployeeOrdersMasterPage" title="Employee Orders" showNavButton="true" navButtonTap="onNavPressed">
+		<content>
+			<List id="campaignsList" items="{/}" includeItemInSelection="true"
+				mode="SingleSelectMaster" select="onItemSelected">
+				<items>
+					<ObjectListItem title="{name}" number="{employeesModel>points}"
+						class="listItem">
+						<firstStatus>
+							<ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:[{path:'active'}], formatter:'.isActiveCampaign'}" />
+						</firstStatus>
+					</ObjectListItem>
+				</items>
+			</List>
+		</content>
+	</Page>
+
 </core:View>

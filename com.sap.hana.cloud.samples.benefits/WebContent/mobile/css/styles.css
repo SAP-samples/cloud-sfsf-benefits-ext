@@ -21,3 +21,19 @@
 .bold {
     font-weight: bold;
 }
+
+.errorText{
+	color: red;
+}
+
+.errorContainer{
+	margin-bottom: 0.5rem;
+}
+
+.displayNone {
+	display: none !important;
+}
+
+.listItem:hover {
+	cursor: pointer;
+}

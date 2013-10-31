@@ -1,9 +1,16 @@
-
 # Binary folders
-
 */bin/
-*/.settings
+*/build/
 */lib/
+*/libs/
 */target/
 */war/
+*/Users/
 
+# Generated folders
+*/.settings/
+*/.project
+*/.classpath
+
+*.jar
+*.class

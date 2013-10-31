@@ -27,31 +27,38 @@
   <filter-name>EntityManagerInterseptor</filter-name>
   <url-pattern>/api/*</url-pattern>
 </filter-mapping>
-  <servlet>
-    <servlet-name>DispatcherServlet</servlet-name>
-    <servlet-class>com.sap.hana.cloud.samples.benefits.DispatcherServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>DispatcherServlet</servlet-name>
-    <url-pattern>/index.html</url-pattern>
-  </servlet-mapping>
+  <context-param>
+    <param-name>com.sap.ui5.resource.USE_CACHE</param-name>
+    <param-value>true</param-value>
+  </context-param>
   <context-param>
     <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
     <param-value>https://sapui5.hana.ondemand.com</param-value>
   </context-param>
   <context-param>
+   <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
+   <param-value>true</param-value>
+  </context-param>  
+  <context-param>
     <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
     <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.DEV_MODE</param-name>
-    <param-value>false</param-value>
-  </context-param>
+  </context-param>    
+  <!-- ============================================================ -->
+  <!-- SAPUI5 resource servlet used to handle application resources  -->
+  <!-- ============================================================ -->
+  <servlet>
+    <servlet-name>ResourceServlet</servlet-name>
+    <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResourceServlet</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
   <filter>
     <display-name>SessionCreateFilter</display-name>
     <filter-name>SessionCreateFilter</filter-name>
     <filter-class>com.sap.hana.cloud.samples.benefits.service.SessionCreateFilter</filter-class>
-  </filter>
+  </filter> 
   <filter-mapping>
     <filter-name>SessionCreateFilter</filter-name>
     <url-pattern>/api/*</url-pattern>
@@ -81,13 +88,8 @@
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Admin area</web-resource-name>
-      <url-pattern>/mobile/admin.html</url-pattern>
-      <url-pattern>/mobile/Application.js</url-pattern>
-      <url-pattern>/mobile/view/benefits/*</url-pattern>
       <url-pattern>/mobile/view/campaigns/*</url-pattern>
       <url-pattern>/mobile/view/employees/*</url-pattern>
-      <url-pattern>/mobile/view/DefaultDetails.controller.js</url-pattern>
-      <url-pattern>/mobile/view/DefaultDetails.view.xml</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>Administrator</role-name>
@@ -96,8 +98,8 @@
     <security-constraint>
     <web-resource-collection>
       <web-resource-name>Unsecured open social widgets for portal integration</web-resource-name>
-      <url-pattern>/admin.xml</url-pattern>
-      <url-pattern>/employee.xml</url-pattern>
+      <url-pattern>/benefits.spec.xml</url-pattern>
+      <url-pattern>/resources/*</url-pattern>
     </web-resource-collection>
   </security-constraint>
   
@@ -127,8 +129,9 @@
     		{path: &quot;/api/benefits/&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/campaigns/&quot;, roles: [&quot;Administrator&quot;]},
     		{path: &quot;/api/orders/add/&quot;, roles: [&quot;Everyone&quot;]},
-    		{path: &quot;/api/orders/for-user/&quot;, roles: [&quot;Administrator&quot;]},
-    		{path: &quot;/api/system/&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/orders/for-user/&quot;, roles: [&quot;Everyone&quot;]},
+    		{path: &quot;/api/system/reset-db&quot;, roles: [&quot;Administrator&quot;]},
+    		{path: &quot;/api/system/ui-config&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/user/managed/&quot;, roles: [&quot;Administrator&quot;]},
     		{path: &quot;/api/user/orders/&quot;, roles: [&quot;Everyone&quot;]},
     		{path: &quot;/api/user/campaigns/&quot;, roles: [&quot;Everyone&quot;]}

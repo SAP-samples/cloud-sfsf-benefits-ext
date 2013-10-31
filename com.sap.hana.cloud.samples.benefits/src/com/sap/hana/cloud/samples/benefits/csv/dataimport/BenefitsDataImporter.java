@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.Charset;
 import java.util.List;
 
 import com.googlecode.jcsv.CSVStrategy;
@@ -14,24 +15,24 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.Benefit;
 
 public class BenefitsDataImporter {
 
-	public void importData(String filepath) throws IOException{
-		final InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(filepath);
-		final Reader csvFile = new InputStreamReader(resourceAsStream);
+    public void importData(String filepath) throws IOException {
+        final InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(filepath);
+        final Reader csvFile = new InputStreamReader(resourceAsStream, Charset.forName("UTF-8"));
 
-		CSVStrategy strategy = new CSVStrategy(',', '"', '#', true, true);
-		final CSVReader<Benefit> personReader = new CSVReaderBuilder<Benefit>(csvFile).entryParser(new BenefitParser()).strategy(strategy).build();
-		final List<Benefit> benefits = personReader.readAll();
-		
-		persistBenefits(benefits);
-	}
+        CSVStrategy strategy = new CSVStrategy(',', '"', '#', true, true);
+        final CSVReader<Benefit> personReader = new CSVReaderBuilder<Benefit>(csvFile).entryParser(new BenefitParser()).strategy(strategy).build();
+        final List<Benefit> benefits = personReader.readAll();
 
-	private void persistBenefits(List<Benefit> benefits) {
-		final BenefitDAO dao = new BenefitDAO();
-		dao.deleteAll();
-		
-		for (Benefit benefit : benefits) {
-			dao.save(benefit);
-		}
-	}
+        persistBenefits(benefits);
+    }
+
+    private void persistBenefits(List<Benefit> benefits) {
+        final BenefitDAO dao = new BenefitDAO();
+        dao.deleteAll();
+
+        for (Benefit benefit : benefits) {
+            dao.save(benefit);
+        }
+    }
 
 }

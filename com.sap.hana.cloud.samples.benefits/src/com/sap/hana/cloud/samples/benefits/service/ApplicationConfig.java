@@ -12,16 +12,15 @@ import com.sap.hana.cloud.samples.benefits.api.SystemService;
 import com.sap.hana.cloud.samples.benefits.api.UserService;
 import com.sap.hana.cloud.samples.benefits.api.util.GsonMessageBodyHandler;
 
-
 public class ApplicationConfig extends Application {
 
     private Set<Object> singletons = new HashSet<Object>();
 
     public ApplicationConfig() {
-    	singletons.add(new GsonMessageBodyHandler<>());
-		singletons.add(new UserService());
-    	singletons.add(new SystemService());
-    	singletons.add(new CampaignService());
+        singletons.add(new GsonMessageBodyHandler<>());
+        singletons.add(new UserService());
+        singletons.add(new SystemService());
+        singletons.add(new CampaignService());
         singletons.add(new BenefitsService());
         singletons.add(new OrderService());
     }

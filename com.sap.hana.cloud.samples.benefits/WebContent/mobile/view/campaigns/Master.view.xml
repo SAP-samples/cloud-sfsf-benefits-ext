@@ -1,37 +1,48 @@
-<core:View xmlns:core="sap.ui.core" 
-           xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
-           controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Master" 
-           xmlns:html="http://www.w3.org/1999/xhtml"
-           setDisplayBlock="true">
-    <Page id="CampaignMasterPage" title="Campaigns" showNavButton="true" navButtonTap="onNavPressed">
-        <content>
-            <List id="campaignsList" items="{campaignModel>/}" includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelect">
-                <items>
-                    <ObjectListItem title="{campaignModel>name}">
-                        <firstStatus>
-                            <ObjectStatus state="{parts:['campaignModel>active'], formatter: '.setState' }" text="{parts:['campaignModel>active'], formatter: '.setStateText' }" class="labelHeight"/>
-                        </firstStatus>
-                    </ObjectListItem>
-                </items>
-            </List>
-        </content>
-        <footer>
-            <Bar>
-                <contentRight>
-                    <Button id="saveButton" text="Save" press="saveButtonPressed" visible="false"/>
-                    <Button id="addButton" text="Add" press="addButtonPressed"/>
-                </contentRight>
-            </Bar>
-        </footer>
-    </Page>
-    <Dialog id="newcampaignDialog" title="Add New Campaign">
-        <content>
-            <VBox>
-                <items>
-                    <Input id="nameCtr" type="Text" placeholder="Enter Name ..."/>
-                    <Input id="pointsCtr" type="Text" placeholder="Enter Points ..."/>
-                </items>
-            </VBox>
-        </content>
-    </Dialog>
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
+	controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Master"
+	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
+	<Page id="CampaignMasterPage" title="Campaigns" showNavButton="true" navButtonTap="onNavPressed">
+		<content>
+			<List id="campaignsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" delete="onDeleteItem" select="onItemSelect">
+				<items>
+					<ObjectListItem title="{name}">
+						<firstStatus>
+							<ObjectStatus state="{parts:['active'], formatter: '.setState' }"
+								text="{parts:['active'], formatter: '.setStateText' }" class="labelHeight listItem" />
+						</firstStatus>
+					</ObjectListItem>
+				</items>
+			</List>
+		</content>
+		<footer>
+			<Bar id="footerBar">
+				<contentRight>
+					<Button id="addButton" text="Add" press="addButtonPressed" icon="sap-icon://add" />
+				</contentRight>
+			</Bar>
+		</footer>
+		<subHeader>
+			<Bar enableFlexBox="true">
+				<contentMiddle>
+					<SearchField id="searchField" search="handleSearch" liveChange="handleSearch" width="100%" placeholder="Search..."
+						showRefreshButton="false">
+						<layoutData>
+							<FlexItemData growFactor="1" />
+						</layoutData>
+					</SearchField>
+				</contentMiddle>
+			</Bar>
+		</subHeader>
+	</Page>
+	<Dialog id="newcampaignDialog" title="Add New Campaign">
+		<content>
+			<VBox>
+				<items>
+					<Input id="nameCtr" type="Text" placeholder="Enter Name ..." />
+					<Input id="pointsCtr" type="Text" placeholder="Enter Points ..." />
+				</items>
+			</VBox>
+		</content>
+	</Dialog>
 </core:View>

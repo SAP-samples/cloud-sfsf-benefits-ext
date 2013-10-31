@@ -15,12 +15,14 @@ The sample application relies on and integrates the following SAP HANA Cloud Pla
 * *SAP HANA Cloud Platform extension package* that provides SuccessFactors connectivity  on top of the standard based OData API 
 * Persistency - JPA on top of [SAP HANA Database technology](http://www.saphana.com/welcome)
 * User interface technology - SAPUI5 (sap.m) libraries [Details](https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/explored/index.html)
-*  Backend logic implemented using JAX-RS Services (Apache CXF and Google Gson for JSON serialization/deserialization)
+* Backend logic implemented using JAX-RS Services (Apache CXF and Google Gson for JSON serialization/deserialization)
 
 Get the Source Code
 -------------------
 
 Clone the Git repository `git clone https://github.com/sap/cloud-sfsf-benefits-ext.git`, or [download the latest release](https://github.com/sap/cloud-sfsf-benefits-ext/zipball/master).
+
+In Eclipse import as *Existing Maven Project* and point to the *pom.xml* file located in *com.sap.hana.cloud.samples.benefits* folder.
 
 Architecture Overview
 ---------------------
@@ -61,10 +63,12 @@ SAP Employee Benefits Management application can be run either locally or on *SA
 
  You need to set two environment variables in order to configure the local project build.
 
- * *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK
+ * *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK.
  * *NW_CLOUD_SDK_VERSION* - defines the version of the used SAP HANA Cloud SDK version.
+ * *ECLIPSE_HOME* - defines the path to eclipse installation folder.
+ * *SAP_UI5_VERSION* - defines the SAP UI5 version installed in the *SAP HANA Cloud Platform* development enviroment. You can see the installed verion in *Eclipse>Help>About Eclipse>SAP UI5* button
 
- To define the environment variable in MS Windows go to your computerâ properties, Advanced System Settings, Environment variables and create a new user variable named *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. *NW_CLOUD_SDK_VERSION* variable is defined in similar way.
+ To define the environment variable in MS Windows go to your *Computer>Properties>Advanced System Settings>Environment variables* and create a new user variable named *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. The other variables are defined the same way.
 
 Run on Local Server
 -------------------
@@ -100,16 +104,12 @@ Configure the application role assigments from the cockpit: [Details](https://he
 Access the Application 
 ----------------------
 
-After deployment, the applciation is accessible on the following URLs:
+After deployment, the applciation is accessible on the following URL:
 
-* Managing benefits and campaigns (HR manager role):
+`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/index.html`
 
-`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/admin.html`
+Based on the role of the user with which you are logged in, you will see a page designed for HR manager or for a regular employee(user).
 
-* Simplified user interface for benefit orders (Everyone role):
-
-`http://host:port/com.sap.hana.cloud.sample.benefits/mobile/employee.html`
- 
 Explore the Application
 -----------------------
 
@@ -132,8 +132,12 @@ As an *HR manager*, you can manage benefits from three panes:
 * Campaigns
 
   Add and edit benefits campaigns and their details.
+  
+* Orders
 
-As an *employee*, you can edit your active campaign benefit orders and view your past orders.
+  Edit your active campaign benefit orders and view your past orders
+
+As an *employee*, you can edit your active campaign benefit orders and view your past orders. Also you can see a list of available benefits.
 
 By default, the application has a benefits list that is hardcoded and no campaigns added. We recommend that you first log in to the application with the HR Manager user first *("nnnn")* and to add a benefits campaign. Next, log in as an employee *("cgrant")* and add benefits to your order.  
 
