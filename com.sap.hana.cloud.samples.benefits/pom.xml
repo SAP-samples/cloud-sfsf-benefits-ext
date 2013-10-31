@@ -16,7 +16,6 @@
 	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<version>1.0.1</version>
 	<packaging>war</packaging>
-	<description>Success Factors extension sample application.</description>
 
 	<organization>
 		<name>SAP AG</name>
@@ -393,4 +392,7 @@
 		</profile>
 
 	</profiles>
+	<name>SAP Employee Benefits Management Sample Application</name>
+	<description>The SAP HANA Cloud Platform extension package makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.</description>
+	<url>https://github.com/SAP/cloud-sfsf-benefits-ext</url>
 </project>
