@@ -363,6 +363,24 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<configLocation>checkstyle/checkstyleRules.xml</configLocation>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>2.7.1</version>
+					<configuration>
+						<rulesets>
+							<ruleset>checkstyle/pmd-rules.xml</ruleset>
+						</rulesets>
+					</configuration>
+				</plugin>
 			</plugins>							
 		</pluginManagement>
 	</build>
