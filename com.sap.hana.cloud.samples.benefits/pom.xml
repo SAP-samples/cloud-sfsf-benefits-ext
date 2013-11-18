@@ -270,7 +270,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${project.basedir}/WebContent/WEB-INF/lib</directory>				
+							<directory>${project.basedir}/WebContent/WEB-INF/lib</directory>
 							<includes>
 								<include>resource*.jar</include>
 							</includes>
@@ -296,7 +296,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>			
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
@@ -381,7 +381,20 @@
 						</rulesets>
 					</configuration>
 				</plugin>
-			</plugins>							
+				<plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.5.2</version>
+                    <configuration>
+                        <includeFilterFile><![CDATA[http://ldisonarci.wdf.sap.corp:8080/sonar/profiles/export?format=findbugs&language=java]]></includeFilterFile>
+                        <excludeFilterFile>checkstyle/findbugs-exclude-filter.xml</excludeFilterFile>
+                        <findbugsXmlOutput>true</findbugsXmlOutput>
+                        <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                        <xmlOutput>true</xmlOutput>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+			</plugins>
 		</pluginManagement>
 	</build>
 
