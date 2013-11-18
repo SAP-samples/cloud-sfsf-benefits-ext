@@ -45,10 +45,10 @@
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<sap.cloud.sdk.location>${env.NW_CLOUD_SDK_PATH}</sap.cloud.sdk.location>
-		<sap.cloud.sdk.version>${env.NW_CLOUD_SDK_VERSION}</sap.cloud.sdk.version>
-		<local.eclipse.path>${env.ECLIPSE_HOME}</local.eclipse.path>
-		<sap.ui5.version>${env.SAP_UI5_VERSION}</sap.ui5.version>
+		<sap.cloud.sdk.location>${NW_CLOUD_SDK_PATH}</sap.cloud.sdk.location>
+		<sap.cloud.sdk.version>${NW_CLOUD_SDK_VERSION}</sap.cloud.sdk.version>
+		<local.eclipse.path>${ECLIPSE_HOME}</local.eclipse.path>
+		<sap.ui5.version>${SAP_UI5_VERSION}</sap.ui5.version>
 		<apache.cxf.version>2.7.3</apache.cxf.version>
 	</properties>
 
