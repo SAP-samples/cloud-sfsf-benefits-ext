@@ -45,10 +45,10 @@
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-		<sap.cloud.sdk.location>${env.NW_CLOUD_SDK_PATH}</sap.cloud.sdk.location>
-		<sap.cloud.sdk.version>${env.NW_CLOUD_SDK_VERSION}</sap.cloud.sdk.version>
-		<local.eclipse.path>${env.ECLIPSE_HOME}</local.eclipse.path>
-		<sap.ui5.version>${env.SAP_UI5_VERSION}</sap.ui5.version>
+		<sap.cloud.sdk.location>${NW_CLOUD_SDK_PATH}</sap.cloud.sdk.location>
+		<sap.cloud.sdk.version>${NW_CLOUD_SDK_VERSION}</sap.cloud.sdk.version>
+		<local.eclipse.path>${ECLIPSE_HOME}</local.eclipse.path>
+		<sap.ui5.version>${SAP_UI5_VERSION}</sap.ui5.version>
 		<apache.cxf.version>2.7.3</apache.cxf.version>
 	</properties>
 
@@ -270,7 +270,7 @@
 				<configuration>
 					<filesets>
 						<fileset>
-							<directory>${project.basedir}/WebContent/WEB-INF/lib</directory>				
+							<directory>${project.basedir}/WebContent/WEB-INF/lib</directory>
 							<includes>
 								<include>resource*.jar</include>
 							</includes>
@@ -296,7 +296,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>			
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
@@ -363,7 +363,38 @@
 						</lifecycleMappingMetadata>
 					</configuration>
 				</plugin>
-			</plugins>							
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-checkstyle-plugin</artifactId>
+					<version>2.10</version>
+					<configuration>
+						<configLocation>checkstyle/checkstyleRules.xml</configLocation>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-pmd-plugin</artifactId>
+					<version>2.7.1</version>
+					<configuration>
+						<rulesets>
+							<ruleset>checkstyle/pmd-rules.xml</ruleset>
+						</rulesets>
+					</configuration>
+				</plugin>
+				<plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>2.5.2</version>
+                    <configuration>
+                        <includeFilterFile><![CDATA[http://ldisonarci.wdf.sap.corp:8080/sonar/profiles/export?format=findbugs&language=java]]></includeFilterFile>
+                        <excludeFilterFile>checkstyle/findbugs-exclude-filter.xml</excludeFilterFile>
+                        <findbugsXmlOutput>true</findbugsXmlOutput>
+                        <findbugsXmlWithMessages>true</findbugsXmlWithMessages>
+                        <xmlOutput>true</xmlOutput>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                    </configuration>
+                </plugin>
+			</plugins>
 		</pluginManagement>
 	</build>
 

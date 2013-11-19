@@ -12,8 +12,8 @@ public class PersistenceManager {
 
     private static PersistenceManager instance = null;
 
-    private static EntityManagerFactory factory = null;
-    private static EntityManagerProviderImpl emProvider = null;
+    private EntityManagerFactory factory = null;
+    private EntityManagerProviderImpl emProvider = null;
 
     public synchronized static PersistenceManager getInstance() {
         if (instance == null) {
@@ -25,7 +25,7 @@ public class PersistenceManager {
         return instance;
     }
 
-    protected PersistenceManager(EntityManagerFactory emFactory, EntityManagerProviderImpl provider) {
+    private PersistenceManager(EntityManagerFactory emFactory, EntityManagerProviderImpl provider) {
         factory = emFactory;
         emProvider = provider;
     }
