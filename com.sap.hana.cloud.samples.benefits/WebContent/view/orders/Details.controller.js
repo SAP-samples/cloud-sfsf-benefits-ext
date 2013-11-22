@@ -21,7 +21,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 		this.loadOrderDetails();
 	},
 	loadOrderDetails : function() {
-		var orderDetails = jQuery.sap.syncGetJSON("../api/orders/for-user/" + this.campaignId + "/" + this.employeeProfile.userId).data;
+		var orderDetails = jQuery.sap.syncGetJSON("api/orders/for-user/" + this.campaignId + "/" + this.employeeProfile.userId).data;
 		this.byId("addButton").setEnabled(orderDetails.campaign.active);
 		this.getView().getModel().setProperty("/currentOrder", orderDetails);
 	},
@@ -29,7 +29,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 		if (!this.getView().getModel("benefitsModel")) {
 			this.getView().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
 		}
-		this.getView().getModel("benefitsModel").loadData("../api/benefits/all", null, false);
+		this.getView().getModel("benefitsModel").loadData("api/benefits/all", null, false);
 	},
 	onAfterRendering : function() {
 	},
@@ -115,7 +115,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 		var selItemVal = this.byId("quantityTypeSelect").getSelectedItem().getBindingContext().getObject().value;
 		var quantity = this.byId("quantityTypeTxt").getValue();
 		var value = selItemVal * quantity;
-		var addServiceURL = "../api/orders/add/" + this.campaignId;
+		var addServiceURL = "api/orders/add/" + this.campaignId;
 		var selectUserId = this.employeeProfile.userId;
 		if (selectUserId) {
 			addServiceURL += "/" + selectUserId;
@@ -154,7 +154,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 	_deleteOrder : function(orderId) {
 		this.busyDialog.open();
 		jQuery.ajax({
-			url : '../api/orders/' + orderId,
+			url : 'api/orders/' + orderId,
 			type : 'delete',
 			success : jQuery.proxy(function(data) {
 				this.fireModelChange();

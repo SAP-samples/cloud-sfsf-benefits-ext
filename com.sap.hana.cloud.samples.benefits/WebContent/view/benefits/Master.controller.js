@@ -10,7 +10,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Master", {
 		if (!this.getView().getModel()) {
 			this.getView().setModel(new sap.ui.model.json.JSONModel());
 		}
-		this.getView().getModel().loadData("../api/benefits/all", null, false);
+		this.getView().getModel().loadData("api/benefits/all", null, false);
 	},
 	onAfterRendering : function() {
 		var list = this.byId("benefitsList");

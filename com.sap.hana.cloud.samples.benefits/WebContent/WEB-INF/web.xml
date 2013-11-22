@@ -34,6 +34,7 @@
   <context-param>
     <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
     <param-value>https://sapui5.hana.ondemand.com</param-value>
+    <!-- <param-value>http://veui5infra.dhcp.wdf.sap.corp:8080/sapui5-sdk-dist/</param-value>  --> 
   </context-param>
   <context-param>
    <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
@@ -88,8 +89,8 @@
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>Admin area</web-resource-name>
-      <url-pattern>/mobile/view/campaigns/*</url-pattern>
-      <url-pattern>/mobile/view/employees/*</url-pattern>
+      <url-pattern>/view/campaigns/*</url-pattern>
+      <url-pattern>/view/employees/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>Administrator</role-name>

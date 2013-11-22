@@ -1,0 +1,10 @@
+#Fri Nov 22 15:37:11 FET 2013
+Description=SuccessFactors Core OData API
+Type=HTTP
+TrustAll=true
+Authentication=BasicAuthentication
+Name=sap_hcmcloud_core_odata
+Password=password
+ProxyType=Internet
+URL=https\://sfsfbizxtrial.hana.ondemand.com/odata/v2
+User=pUserOrEmail

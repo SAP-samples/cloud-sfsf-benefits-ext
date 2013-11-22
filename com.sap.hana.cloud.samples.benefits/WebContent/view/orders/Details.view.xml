@@ -67,14 +67,14 @@
 				<form:content>
 					<Label text="benefit type" />
 
-					<Select id="benefitTypeSelect" type="sap.m.InputType.Text" items="{benefitsModel>/}" change="onBenefitSelect">
+					<Select id="benefitTypeSelect" items="{benefitsModel>/}" change="onBenefitSelect">
 						<items>
 							<core:Item key="{benefitsModel>id}" text="{benefitsModel>name}" />
 						</items>
 					</Select>
 
 					<Label text="quantity type" />
-					<Select id="quantityTypeSelect" type="sap.m.InputType.Text" items="{benefitTypes}" change="onQuantityTypeSelect">
+					<Select id="quantityTypeSelect" items="{benefitTypes}" change="onQuantityTypeSelect">
 						<items>
 							<core:Item key="{id}" text="{name} value {value}" />
 						</items>

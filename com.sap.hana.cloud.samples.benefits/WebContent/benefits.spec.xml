@@ -7,7 +7,7 @@
 	</ModulePrefs>
 
 	<Content type="html"
-		view="default, authoring, consumption, mobile, preview" href="mobile">
+		view="default, authoring, consumption, mobile, preview" href="index.html">
 	</Content>
 
 </Module>

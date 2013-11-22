@@ -89,7 +89,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 				pattern : "yyyy-MM-dd'T'HH:mm:ss'Z'"
 			});
 			jQuery.ajax({
-				url : '../api/campaigns/edit/' + ctx.id,
+				url : 'api/campaigns/edit/' + ctx.id,
 				type : 'post',
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {
@@ -132,7 +132,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 			if (action === sap.m.MessageBox.Action.OK) {
 				this.getView().setBusy(true);
 				jQuery.ajax({
-					url : '../api/campaigns/' + campaignId,
+					url : 'api/campaigns/' + campaignId,
 					type : 'delete',
 					success : jQuery.proxy(function(data) {
 						this.fireModelChanged("delete");
@@ -161,7 +161,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 			appController.setAppBusy(true);
 			var ctx = this.byId("inputForm").getBindingContext().getObject();
 			jQuery.ajax({
-				url : '../api/campaigns/start-possible/' + ctx.id,
+				url : 'api/campaigns/start-possible/' + ctx.id,
 				type : 'get',
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {
@@ -191,7 +191,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	_requestStopCampaign : function() {
 		var ctx = this.byId("inputForm").getBindingContext().getObject();
 		jQuery.ajax({
-			url : '../api/campaigns/stop/' + ctx.id,
+			url : 'api/campaigns/stop/' + ctx.id,
 			type : 'post',
 			dataType : 'json',
 			success : jQuery.proxy(function(data) {
@@ -205,7 +205,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	_requestStartCampaign : function() {
 		var ctx = this.byId("inputForm").getBindingContext().getObject();
 		jQuery.ajax({
-			url : '../api/campaigns/start/' + ctx.id,
+			url : 'api/campaigns/start/' + ctx.id,
 			type : 'post',
 			dataType : 'json',
 			success : jQuery.proxy(function(data) {

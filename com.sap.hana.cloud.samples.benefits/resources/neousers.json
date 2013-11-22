@@ -1,0 +1,82 @@
+{
+  "Users": [
+    {
+      "UID": "bmays1",
+      "Password": "{SSHA}SzCxARm3yua3EqVHmH5cqy3Y8b5KZTxnT3M\u003d",
+      "Roles": [
+        "Administrator"
+      ],
+      "Attributes": [
+        {
+          "attributeName": "firstname",
+          "attributeValue": "Bonnie"
+        },
+        {
+          "attributeName": "lastname",
+          "attributeValue": "Mays"
+        },
+        {
+          "attributeName": "email",
+          "attributeValue": "BMays@ACECompany.com"
+        }
+      ]
+    },
+    {
+      "UID": "cccc",
+      "Password": "{SSHA}dBJ1FhU6uzD1LLIO5LpuKRWtDDwWDqKSVcg\u003d",
+      "Roles": [],
+      "Attributes": [
+        {
+          "attributeName": "firstname",
+          "attributeValue": "Casey"
+        },
+        {
+          "attributeName": "lastname",
+          "attributeValue": "Weimer"
+        },
+        {
+          "attributeName": "email",
+          "attributeValue": "CWeimer@ACECompany.com"
+        }
+      ]
+    },
+    {
+      "UID": "dwong1",
+      "Password": "{SSHA}Hj7ZQ9Ml0apyXRQjXNbLeZYn4sxyiCNOa7o\u003d",
+      "Roles": [],
+      "Attributes": [
+        {
+          "attributeName": "firstname",
+          "attributeValue": "Daniel"
+        },
+        {
+          "attributeName": "lastname",
+          "attributeValue": "Wong"
+        },
+        {
+          "attributeName": "email",
+          "attributeValue": "DWong@ACECompany.com"
+        }
+      ]
+    },
+    {
+      "UID": "kpatel1",
+      "Password": "{SSHA}kz5EGBXQ7ax0bypY43exigsuBdKdWI2zRDk\u003d",
+      "Roles": [],
+      "Attributes": [
+        {
+          "attributeName": "firstname",
+          "attributeValue": "Kumar"
+        },
+        {
+          "attributeName": "lastname",
+          "attributeValue": "Patel"
+        },
+        {
+          "attributeName": "email",
+          "attributeValue": "KPatel@ACECompany.com"
+        }
+      ]
+    }
+  ]
+}

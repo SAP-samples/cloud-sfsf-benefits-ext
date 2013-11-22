@@ -33,7 +33,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		if (!this.getView().getModel()) {
 			this.getView().setModel(new sap.ui.model.json.JSONModel());
 		}
-		this.getView().getModel().loadData("../api/campaigns/", null, false);
+		this.getView().getModel().loadData("api/campaigns/", null, false);
 	},
 	onAfterRendering : function() {
 		var list = this.byId("campaignsList");
@@ -101,7 +101,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 			var newCampaignPoints = this.byId("pointsCtr").getValue();
 			appController.setAppBusy(true);
 			jQuery.ajax({
-				url : '../api/campaigns/',
+				url : 'api/campaigns/',
 				type : 'post',
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {
@@ -165,7 +165,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		if (name.length > 0) {
 			newCampDialog.setBusy(true);
 			jQuery.ajax({
-				url : '../api/campaigns/check-name-availability?name=' + jQuery.sap.encodeURL(name),
+				url : 'api/campaigns/check-name-availability?name=' + jQuery.sap.encodeURL(name),
 				type : 'get',
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {

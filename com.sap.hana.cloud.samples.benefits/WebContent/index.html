@@ -6,11 +6,11 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>SAP Benefits Management Tool</title>
-        <script src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js" type="text/javascript" id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
+        <script src="resources/sap-ui-core.js" type="text/javascript" id="sap-ui-bootstrap" data-sap-ui-libs="sap.m,sap.ui.commons"
                 data-sap-ui-theme="sap_bluecrystal" data-sap-ui-xx-bindingSyntax="complex">
 
         </script>
-        <link rel="stylesheet" type="text/css" href="/com.sap.hana.cloud.samples.benefits/mobile/css/styles.css">
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
         <script>
 
             var appController = null;
@@ -27,9 +27,9 @@
                 sap.ui.localResources("view/campaigns");
                 sap.ui.localResources("view/orders");
 
-                jQuery.sap.registerModulePath('Application', '/com.sap.hana.cloud.samples.benefits/mobile/Application');
+                jQuery.sap.registerModulePath('Application', '/com.sap.hana.cloud.samples.benefits/Application');
 
-                jQuery.sap.registerModulePath("com.sap.hana.cloud.samples.benefits", "/com.sap.hana.cloud.samples.benefits/mobile");
+                jQuery.sap.registerModulePath("com.sap.hana.cloud.samples.benefits", "/com.sap.hana.cloud.samples.benefits");
 
                 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.view.Views");
                 views = new com.sap.hana.cloud.samples.benefits.view.Views();
@@ -38,7 +38,7 @@
                 jQuery.sap.require("Application");
                 appController = new Application({
                     root: "sapUiBody",
-                    config: "../api/system/ui-config"
+                    config: "api/system/ui-config"
                 });
                 // Removes the application header and side padding in order to fit a widget better
                 $('html').removeClass("sap-desktop");

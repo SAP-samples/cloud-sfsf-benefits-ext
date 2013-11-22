@@ -6,7 +6,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
 		if (!this.getView().getModel()) {
 			this.getView().setModel(new sap.ui.model.json.JSONModel());
 		}
-		this.getView().getModel().loadData("../api/user/campaigns", null, false);
+		this.getView().getModel().loadData("api/user/campaigns", null, false);
 	},
 	onBeforeRendering : function() {
 		this.loadModel();
@@ -27,7 +27,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
 		return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
 	},
 	onItemSelected : function(evt) {
-		var employee = jQuery.sap.syncGetJSON("../api/user/profile").data;
+		var employee = jQuery.sap.syncGetJSON("api/user/profile").data;
 		var campaignId = evt.getParameter("listItem").getBindingContext().getObject().id;
 
 		sap.ui.getCore().getEventBus().publish("app", "ordersDetailsRefresh", {
