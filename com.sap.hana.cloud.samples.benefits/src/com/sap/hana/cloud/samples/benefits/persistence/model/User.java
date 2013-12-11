@@ -24,164 +24,164 @@ import javax.persistence.UniqueConstraint;
 @Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_ID" }) })
 @NamedQueries({ @NamedQuery(name = GET_USER_BY_USER_ID, query = "select u from User u where u.userId = :userId") })
 public class User implements IDBEntity {
-    @Id
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "ID")
+	private Long id;
 
-    @Basic
-    @Column(name = "FIRST_NAME")
-    private String firstName;
+	@Basic
+	@Column(name = "FIRST_NAME")
+	private String firstName;
 
-    @Basic
-    @Column(name = "LAST_NAME")
-    private String lastName;
+	@Basic
+	@Column(name = "LAST_NAME")
+	private String lastName;
 
-    @Basic
-    @Column(name = "USER_ID")
-    private String userId;
+	@Basic
+	@Column(name = "USER_ID")
+	private String userId;
 
-    @Basic
-    private String email;
+	@Basic
+	private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "HR_USER_ID")
-    private User hrManager;
+	@ManyToOne
+	@JoinColumn(name = "HR_USER_ID")
+	private User hrManager;
 
-    @OneToMany(mappedBy = "hrManager", fetch = FetchType.LAZY, targetEntity = User.class)
-    private Collection<User> employees;
+	@OneToMany(mappedBy = "hrManager", fetch = FetchType.LAZY, targetEntity = User.class)
+	private Collection<User> employees;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)
-    private Collection<Order> orders;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)
+	private Collection<Order> orders;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
-    private Collection<UserPoints> userPoints;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
+	private Collection<UserPoints> userPoints;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.LAZY, targetEntity = Campaign.class)
-    private Collection<Campaign> campaigns;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.LAZY, targetEntity = Campaign.class)
+	private Collection<Campaign> campaigns;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public String getFirstName() {
+		return firstName;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public String getLastName() {
+		return lastName;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-    public String getUserId() {
-        return userId;
-    }
+	public String getUserId() {
+		return userId;
+	}
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-    public String getEmail() {
-        return email;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public Collection<Order> getOrders() {
-        if (orders == null) {
-            orders = new ArrayList<>();
-        }
-        return orders;
-    }
+	public Collection<Order> getOrders() {
+		if (orders == null) {
+			orders = new ArrayList<>();
+		}
+		return orders;
+	}
 
-    public void setOrders(Collection<Order> orders) {
-        this.orders = orders;
-    }
+	public void setOrders(Collection<Order> orders) {
+		this.orders = orders;
+	}
 
-    public void addOrder(Order order) {
-        getOrders().add(order);
-        if (order.getUser() != this) {
-            order.setUser(this);
-        }
-    }
+	public void addOrder(Order order) {
+		getOrders().add(order);
+		if (order.getUser() != this) {
+			order.setUser(this);
+		}
+	}
 
-    public Collection<UserPoints> getUserPoints() {
-        if (this.userPoints == null) {
-            this.userPoints = new ArrayList<>();
-        }
-        return userPoints;
-    }
+	public Collection<UserPoints> getUserPoints() {
+		if (this.userPoints == null) {
+			this.userPoints = new ArrayList<>();
+		}
+		return userPoints;
+	}
 
-    public void setUserPoints(Collection<UserPoints> userPoints) {
-        this.userPoints = userPoints;
-    }
+	public void setUserPoints(Collection<UserPoints> userPoints) {
+		this.userPoints = userPoints;
+	}
 
-    public void addUserPoints(UserPoints points) {
-        getUserPoints().add(points);
-        if (points.getUser() != this) {
-            points.setUser(this);
-        }
-    }
+	public void addUserPoints(UserPoints points) {
+		getUserPoints().add(points);
+		if (points.getUser() != this) {
+			points.setUser(this);
+		}
+	}
 
-    public User getHrManager() {
-        return hrManager;
-    }
+	public User getHrManager() {
+		return hrManager;
+	}
 
-    public void setHrManager(User hrManager) {
-        this.hrManager = hrManager;
-        if (!hrManager.getEmployees().contains(this)) {
-            hrManager.addEmployee(this);
-        }
-    }
+	public void setHrManager(User hrManager) {
+		this.hrManager = hrManager;
+		if (!hrManager.getEmployees().contains(this)) {
+			hrManager.addEmployee(this);
+		}
+	}
 
-    public Collection<User> getEmployees() {
-        if (this.employees == null) {
-            this.employees = new ArrayList<>();
-        }
-        return employees;
-    }
+	public Collection<User> getEmployees() {
+		if (this.employees == null) {
+			this.employees = new ArrayList<>();
+		}
+		return employees;
+	}
 
-    public void addEmployee(User employee) {
-        getEmployees().add(employee);
-        if (employee.getHrManager() != this) {
-            employee.setHrManager(this);
-        }
-    }
+	public void addEmployee(User employee) {
+		getEmployees().add(employee);
+		if (employee.getHrManager() != this) {
+			employee.setHrManager(this);
+		}
+	}
 
-    public void setEmployees(Collection<User> employees) {
-        this.employees = employees;
-    }
+	public void setEmployees(Collection<User> employees) {
+		this.employees = employees;
+	}
 
-    public Collection<Campaign> getCampaigns() {
-        if (this.campaigns == null) {
-            this.campaigns = new ArrayList<>();
-        }
-        return campaigns;
-    }
+	public Collection<Campaign> getCampaigns() {
+		if (this.campaigns == null) {
+			this.campaigns = new ArrayList<>();
+		}
+		return campaigns;
+	}
 
-    public void addCampaign(Campaign campaign) {
-        getCampaigns().add(campaign);
-        if (campaign.getOwner() != this) {
-            campaign.setOwner(this);
-        }
-    }
+	public void addCampaign(Campaign campaign) {
+		getCampaigns().add(campaign);
+		if (campaign.getOwner() != this) {
+			campaign.setOwner(this);
+		}
+	}
 
-    public void setCampaigns(Collection<Campaign> campaigns) {
-        this.campaigns = campaigns;
-    }
+	public void setCampaigns(Collection<Campaign> campaigns) {
+		this.campaigns = campaigns;
+	}
 
 }

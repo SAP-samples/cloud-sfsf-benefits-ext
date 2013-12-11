@@ -44,7 +44,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
 	onNavPressed : function() {
 		sap.ui.getCore().getEventBus().publish("nav", "home");
 	},
-	isActiveCampaign : function(isActive) {
-		return isActive ? "active" : "inactive";
+	isActiveCampaign : function(active) {
+		var activeMsg = sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_STATUS_ACTIVE");
+		var inactiveMsg = sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_STATUS_INACTIVE");
+		return active ? activeMsg : inactiveMsg;
 	}
 });

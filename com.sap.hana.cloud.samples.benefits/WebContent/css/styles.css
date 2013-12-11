@@ -26,6 +26,10 @@
 	color: red;
 }
 
+.successText{
+	color: green;
+}
+
 .errorContainer{
 	margin-bottom: 0.5rem;
 }
@@ -36,4 +40,42 @@
 
 .listItem:hover {
 	cursor: pointer;
+}
+.sapMGrowingListTrigger:hover {
+	cursor: pointer;
+}
+.red{
+	color: red;
+}
+.green{
+	color: green;
+}
+
+.infoPageContainer {
+	width: 100%;
+	height: 100%;
+}
+
+.emailIcon span:before {
+	content: '\e037';
+	padding-right: 0.5rem;
+	font-family: 'SAP-icons';
+}
+
+.phoneIcon span:before {
+	content: '\e018';
+	padding-right: 0.5rem;
+	font-family: 'SAP-icons';
+}
+
+.mobilePhoneIcon span:before {
+	content: '\e15b';
+	padding-right: 0.5rem;
+	font-family: 'SAP-icons';
+}
+
+.personIcon span:before {
+	content: '\e0ca';
+	padding-right: 0.5rem;
+	font-family: 'SAP-icons';
 }

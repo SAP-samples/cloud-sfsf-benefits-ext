@@ -15,20 +15,24 @@ public class ConfigBean {
 
     @Expose
     public boolean showOrderTile;
+    
+    @Expose
+    public boolean showInfoTile;
 
     public void initAdminConfiguration() {
-        init(true, true, true, true);
+        init(true, true, true, true, true);
     }
 
     public void initEmployeeConfiguration() {
-        init(false, true, false, true);
+        init(false, true, false, true, true);
     }
 
-    private void init(boolean employeesTile, boolean benefitsTile, boolean campaignTile, boolean orderTile) {
+    private void init(boolean employeesTile, boolean benefitsTile, boolean campaignTile, boolean orderTile, boolean infoTile ) {
         this.showBenefitsTile = benefitsTile;
         this.showEmployeesTile = employeesTile;
         this.showCampaignTile = campaignTile;
         this.showOrderTile = orderTile;
+        this.showInfoTile = infoTile; 
     }
 
 }

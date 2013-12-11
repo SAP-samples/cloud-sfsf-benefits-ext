@@ -12,7 +12,13 @@
         </script>
         <link rel="stylesheet" type="text/css" href="css/styles.css">
         <script>
-
+		    String.prototype.formatPropertyMessage = function() {
+		          var args = arguments;
+		          return this.replace(/\{(\d+)\}/g, function() {
+		              return args[arguments[1]];
+		          });
+		    };
+		      
             var appController = null;
             var views = null;
 
@@ -26,6 +32,7 @@
                 sap.ui.localResources("view/benefits");
                 sap.ui.localResources("view/campaigns");
                 sap.ui.localResources("view/orders");
+                sap.ui.localResources("view/info");
 
                 jQuery.sap.registerModulePath('Application', '/com.sap.hana.cloud.samples.benefits/Application');
 

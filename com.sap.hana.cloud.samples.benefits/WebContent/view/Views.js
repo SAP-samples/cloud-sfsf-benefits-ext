@@ -16,3 +16,4 @@ com.sap.hana.cloud.samples.benefits.view.Views.prototype.CAMPAIGN_DETAILS_VIEW_I
 com.sap.hana.cloud.samples.benefits.view.Views.prototype.BENEFITS_DETAILS_VIEW_ID = "BenefitsDetails";
 com.sap.hana.cloud.samples.benefits.view.Views.prototype.DEFAULT_DETAILS_VIEW_ID = "DefaultDetails";
 com.sap.hana.cloud.samples.benefits.view.Views.prototype.EMPLOYEE_ORDERS_DETAILS_VIEW_ID = "EmployeeOrdersDetails";
+com.sap.hana.cloud.samples.benefits.view.Views.prototype.INFO_DETAILS_VIEW_ID = "InfoDetails";

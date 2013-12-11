@@ -1,7 +1,7 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.benefits.Master"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="BenefitsMasterPage" title="Benefits catalog" showNavButton="true" navButtonTap="onNavPressed">
+	<Page id="BenefitsMasterPage" title="{b_i18n>BENEFITS_MASTER_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
 		<content>
 			<List id="benefitsList" items="{/}" includeItemInSelection="true"
 				mode="SingleSelectMaster" select="onItemSelected">
@@ -15,7 +15,7 @@
 			<Bar id="searchBar" enableFlexBox="true">
 				<contentMiddle>
 					<SearchField id="searchField" search="handleSearch"
-						liveChange="handleSearch" width="100%" placeholder="Search..."
+						liveChange="handleSearch" width="100%" placeholder="{b_i18n>SEARCH_BAR_PLACEHOLDER}"
 						showRefreshButton="false">
 						<layoutData>
 							<FlexItemData growFactor="1" />

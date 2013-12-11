@@ -61,6 +61,10 @@ public class CampaignService extends BaseService {
         newCampaign.setName(campaign.name);
         newCampaign.setOwner(user);
         newCampaign.setPoints(campaign.points);
+        if(campaign.startDate != null && campaign.endDate != null && campaign.startDate.compareTo(campaign.endDate) < 0){
+        	newCampaign.setStartDate(campaign.startDate);
+            newCampaign.setEndDate(campaign.endDate);	
+        }        
         campaignDAO.saveNew(newCampaign);
         campaignDAO.setPointsToUsers(newCampaign);
 

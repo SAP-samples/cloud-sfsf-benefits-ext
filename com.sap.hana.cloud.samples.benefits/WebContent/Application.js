@@ -7,6 +7,12 @@ sap.ui.app.Application.extend("Application", {
 		var bus = sap.ui.getCore().getEventBus();
 		bus.subscribe("nav", "to", this._navToHandler, this);
 		bus.subscribe("nav", "home", this._goHome, this);
+		var i18nModel = new sap.ui.model.resource.ResourceModel({
+      bundleUrl : jQuery.sap.getModulePath("com.sap.hana.cloud.samples.benefits") + "/i18n/i18n.properties"
+		});
+		
+		sap.ui.getCore().setModel(i18nModel, "b_i18n");
+
 	},
 	setAppBusy : function(busy) {
 		sap.ui.getCore().byId("SplitAppControl").setBusy(busy);
@@ -35,9 +41,14 @@ sap.ui.app.Application.extend("Application", {
 		if (configData.showOrderTile) {
 			this._showOrdersTile(splitApp, tileContainer);
 		}
+		
+		if (configData.showInfoTile) {
+			this._showInfoTile(tileContainer);
+		}
+
 
 		var oShell = new sap.m.Shell("ShellControl", {
-			title : "SAP Benefits App",
+			title : "{b_i18n>APPLICATION_NAME}",
 			app : tileContainer,
 			showLogout : false
 		});
@@ -57,6 +68,7 @@ sap.ui.app.Application.extend("Application", {
 	_goHome : function() {
 		var homePage = sap.ui.getCore().byId("HomePage");
 		this._getShell().setApp(homePage);
+		sap.ui.getCore().byId("SplitAppControl").toDetail(views.BENEFITS_DETAILS_VIEW_ID);
 	},
 	_showEmployeeTile : function(app, tileContainer) {
 		app.addMasterPage(sap.ui.xmlview(views.EMPLOYEE_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Master"));
@@ -64,7 +76,7 @@ sap.ui.app.Application.extend("Application", {
 
 		tileContainer.addTile(new sap.m.StandardTile("Employees", {
 			icon : "sap-icon://employee",
-			title : "Employees",
+			title : "{b_i18n>EMPLOYEES_TILE_NAME}",
 			press : jQuery.proxy(this._handleTilePressed, this)
 		}));
 	},
@@ -74,7 +86,7 @@ sap.ui.app.Application.extend("Application", {
 
 		tileContainer.addTile(new sap.m.StandardTile("Benefits", {
 			icon : "sap-icon://competitor",
-			title : "Benefits",
+			title : "{b_i18n>BENEFITS_TILE_NAME}",
 			press : jQuery.proxy(this._handleTilePressed, this)
 		}));
 	},
@@ -84,7 +96,7 @@ sap.ui.app.Application.extend("Application", {
 
 		tileContainer.addTile(new sap.m.StandardTile("Campaigns", {
 			icon : "sap-icon://marketing-campaign",
-			title : "Campaigns",
+			title : "{b_i18n>CAMPAIGN_TILE_NAME}",
 			press : jQuery.proxy(this._handleTilePressed, this)
 		}));
 	},
@@ -96,7 +108,16 @@ sap.ui.app.Application.extend("Application", {
 
 		tileContainer.addTile(new sap.m.StandardTile("Orders", {
 			icon : "sap-icon://customer-order-entry",
-			title : "Orders",
+			title : "{b_i18n>ORDERS_TILE_NAME}",
+			press : jQuery.proxy(this._handleTilePressed, this)
+		}));
+	},
+	_showInfoTile : function(tileContainer) {
+		sap.ui.xmlview(views.INFO_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.info.Details").addStyleClass("infoPageContainer");
+
+		tileContainer.addTile(new sap.m.StandardTile("Info", {
+			icon : "sap-icon://account",
+			title : "{b_i18n>INFO_TILE_NAME}",
 			press : jQuery.proxy(this._handleTilePressed, this)
 		}));
 	},
@@ -128,8 +149,10 @@ sap.ui.app.Application.extend("Application", {
 				break;
 			case "Orders" :
 				splitApp.toMaster(views.EMPLOYEE_ORDERS_MASTER_VIEW_ID);
-				// splitApp.toDetail(sap.ui.getCore().byId(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID), "show");
 				this._getShell().setApp(splitApp);
+				break;
+			case "Info" :
+				this._getShell().setApp(sap.ui.getCore().byId(views.INFO_DETAILS_VIEW_ID));
 				break;
 			default :
 		}

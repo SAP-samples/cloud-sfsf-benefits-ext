@@ -1,19 +1,19 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.benefits.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="BenefitsDetailsPage" title="Benefit details" showNavButton="false">
+	<Page id="BenefitsDetailsPage" title="{b_i18n>BENEFITS_DETAILS_PAGE_NAME}" showNavButton="false">
 		<content>
 			<ObjectHeader title="{name}">
 				<attributes>
 					<ObjectAttribute text="{description}" />
-					<ObjectAttribute text="More information" active="true"
+					<ObjectAttribute text="{b_i18n>MORE_INFORMATION_LINK}" active="true"
 						press="linkPressed" />
 				</attributes>
 			</ObjectHeader>
-			<List items="{benefitTypes}" inset="true" class="benefitList">
+			<List items="{benefitTypes}" inset="true" class="benefitList" headerText="{b_i18n>BENEFITS_LIST_HEADER}">
 				<items>
-					<StandardListItem title="{name}" description="price:"
-						info="{value} Points" infoState="Success" />
+					<StandardListItem title="{b_i18n>VALUE_LABEL}:" description="{name}"
+						info="{path:'value' , formatter:'.formatValue'}"  />
 				</items>
 			</List>
 		</content>

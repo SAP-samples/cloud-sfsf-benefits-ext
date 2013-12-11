@@ -1,0 +1,28 @@
+<core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.info.Details"
+	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
+
+	<Page title="{b_i18n>INFO_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
+		<content>
+
+			<ObjectHeader title="{/firstName} {/lastName}">
+				<attributes>
+					<ObjectAttribute text="{/title}, {/department}, {/division}" />
+					<ObjectAttribute text="{/location}" />
+					<ObjectAttribute text="{/email}" class="emailIcon" />
+					<ObjectAttribute text="{/businessPhone}" class="phoneIcon" />
+					<ObjectAttribute text="{/cellPhone}" class="mobilePhoneIcon" />
+				</attributes>
+			</ObjectHeader>
+			<ObjectHeader title="{b_i18n>HR_MANAGER_HEADER}">
+				<attributes>
+					<ObjectAttribute text="{/hr/firstName} {/hr/lastName}" class="personIcon" />
+					<ObjectAttribute text="{/hr/email}" class="emailIcon" />
+					<ObjectAttribute text="{/hr/businessPhone}" class="phoneIcon" />
+				</attributes>
+			</ObjectHeader>
+
+		</content>
+
+	</Page>
+</core:View>

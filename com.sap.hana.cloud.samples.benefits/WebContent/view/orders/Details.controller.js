@@ -1,8 +1,6 @@
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 	onInit : function() {
-		this.busyDialog = new sap.m.BusyDialog({
-			showCancelButton : false
-		});
+		this.getView().setModel(new sap.ui.model.json.JSONModel());
 		sap.ui.getCore().getEventBus().subscribe("app", "ordersDetailsRefresh", this._refreshHandler, this);
 	},
 	onBeforeRendering : function() {
@@ -11,19 +9,17 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 	initEmployeeDetailsModel : function(employeeProfile, campaignId) {
 		this.employeeProfile = employeeProfile;
 		this.campaignId = campaignId;
-		if (!this.getView().getModel()) {
-			this.getView().setModel(new sap.ui.model.json.JSONModel());
-		}
-		this.getView().getModel().setData({
-			employee : employeeProfile
-		});
-
 		this.loadOrderDetails();
+		
 	},
 	loadOrderDetails : function() {
 		var orderDetails = jQuery.sap.syncGetJSON("api/orders/for-user/" + this.campaignId + "/" + this.employeeProfile.userId).data;
 		this.byId("addButton").setEnabled(orderDetails.campaign.active);
-		this.getView().getModel().setProperty("/currentOrder", orderDetails);
+		
+		this.getView().getModel().setData({
+			employee : this.employeeProfile,
+			currentOrder : orderDetails
+		});
 	},
 	loadBenefitsModel : function() {
 		if (!this.getView().getModel("benefitsModel")) {
@@ -32,26 +28,33 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 		this.getView().getModel("benefitsModel").loadData("api/benefits/all", null, false);
 	},
 	onAfterRendering : function() {
+		
 	},
 	addItem : function() {
 		jQuery.sap.require("sap.m.MessageToast");
 		var dialog = this.byId("addItemCtrl");
-
+		this.byId("quantityTypeTxt").setValue(null); 
+		this.byId("quantityTypeTxt").setValueState(sap.ui.core.ValueState.None); 
+		
 		dialog.setLeftButton(new sap.m.Button({
-			text : "Ok",
+			text : sap.ui.getCore().getModel("b_i18n").getProperty("OK_BTN_NAME"),
 			press : jQuery.proxy(this._addItem, this)
 
 		}));
 
 		dialog.setRightButton(new sap.m.Button({
-			text : "Cancel",
+			text : sap.ui.getCore().getModel("b_i18n").getProperty("CANCEL_BTN_NAME"),
 			press : function() {
 				dialog.close();
-				sap.m.MessageToast.show("Item was canceled");
+				sap.m.MessageToast.show(sap.ui.getCore().getModel("b_i18n").getProperty("ORDER_CANCELED"));
 			}
 		}));
 
 		dialog.open();
+	},
+	formatPageTitle : function(firstName, lastName) {
+		var pageTitleMsg = sap.ui.getCore().getModel("b_i18n").getProperty("ORDERS_DETAILS_PAGE_NAME").formatPropertyMessage(firstName, lastName);
+		return pageTitleMsg;
 	},
 	formatBenefitItemsSum : function(benefitItems) {
 		var result = 0;
@@ -62,7 +65,21 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 	},
 	formatAvailablePoints : function(campaignPoints, usedPoints) {
 		var result = campaignPoints - usedPoints;
-		return result.toString(10) + " Points";
+		var avilablePointsMsg = sap.ui.getCore().getModel("b_i18n").getProperty("LEFT_TO_USE_POINTS").formatPropertyMessage(result.toString(10));
+		return avilablePointsMsg;
+	},
+	formatBenefitPointsEntitlement : function(points) {
+		var entitlementMsg = sap.ui.getCore().getModel("b_i18n").getProperty("ALL_BENEFIT_POINTS").formatPropertyMessage(points);
+		return entitlementMsg;
+	},
+	formatItemValue : function(value) {
+		var itemValueMsg = sap.ui.getCore().getModel("b_i18n").getProperty("ITEM_VALUE").formatPropertyMessage(value);
+		return itemValueMsg;
+	},
+	formatTotalPoints : function(quantity, itemValue){
+		var total= quantity*itemValue;
+		var totalPointsMsg = sap.ui.getCore().getModel("b_i18n").getProperty("TOTAL_ITEM_VALUE").formatPropertyMessage(quantity, total);
+		return totalPointsMsg;
 	},
 	linkPressed : function(evt) {
 		var sourceControl = evt.getSource();
@@ -73,20 +90,47 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 	},
 	onBenefitSelect : function(evt) {
 		var ctx = evt.getParameters().selectedItem.getBindingContext("benefitsModel");
-		this.byId("quantityTypeSelect").setBindingContext(ctx);
-		this.byId("quantityTypeSelect").setModel(ctx.getModel());
+		this._setControlBindCtx(this.byId("quantityTypeSelect"), ctx);
+		var benefitsTypeCtx = this.byId("quantityTypeSelect").getSelectedItem().getBindingContext();
+		this._setControlBindCtx(this.byId("priceTypeTxt"), benefitsTypeCtx);
+		this.onValueSelect();
+		
+	},
+	onQuantityTypeSelect : function(evt){
+		var ctx = evt.getParameters().selectedItem.getBindingContext();
+		this._setControlBindCtx(this.byId("priceTypeTxt"), ctx);
+		this.onValueSelect();
+	},
+	onValueSelect : function(){
+		var valueSelected = this.byId("quantityTypeTxt").getValue();
+		var itemValue = this.byId("priceTypeTxt").getValue();
+		var totalValue= valueSelected*itemValue;
+		if(totalValue != 0){
+			this.byId("totalTypeTxt").setValue(totalValue);
+		} else {
+			this.byId("totalTypeTxt").setValue("0");
+		}
 	},
 	handleDialogOpen : function(oCtrEvt) {
+		var typeSelector = this.byId("quantityTypeSelect");
 		var ctx = this.byId("benefitTypeSelect").getSelectedItem().getBindingContext("benefitsModel");
-		this.byId("quantityTypeSelect").setBindingContext(ctx);
-		this.byId("quantityTypeSelect").setModel(ctx.getModel());
+		typeSelector.setBindingContext(ctx);
+		typeSelector.setModel(ctx.getModel());
+		var item = typeSelector.getItems()[0];
+		if(item){
+			typeSelector.setSelectedItem(item);
+			var benefitsTypeCtx = item.getBindingContext();
+			this._setControlBindCtx(this.byId("priceTypeTxt"), benefitsTypeCtx);
+			this.byId("totalTypeTxt").setValue("0");
+		}
 	},
 	onDelete : function(evt) {
 		jQuery.sap.require("sap.m.MessageBox");
 		var ctx = evt.getParameter("listItem").getBindingContext().getObject();
 		var itemId = ctx.id;
 		var itemDetails = ctx.name + " " + ctx.quantity + " x " + ctx.itemValue + " points";
-		sap.m.MessageBox.confirm("Are you sure you want to delete order with details '" + itemDetails + "'?", jQuery.proxy(function(action) {
+	  var onDeleteMsg = sap.ui.getCore().getModel("b_i18n").getProperty("DELETE_ORDER_MSG").formatPropertyMessage(itemDetails);
+		sap.m.MessageBox.confirm(onDeleteMsg, jQuery.proxy(function(action) {
 			if (action === sap.m.MessageBox.Action.OK) {
 				this._deleteOrder(itemId);
 			}
@@ -122,7 +166,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 		}
 
 		if (value <= 0) {
-			sap.m.MessageBox.alert("Insert correct value for the quantity", function() {
+			var alertMsg = sap.ui.getCore().getModel("b_i18n").getProperty("INCORRECT_QUANTITY_MSG");
+			sap.m.MessageBox.alert(alertMsg , function() {
 			});
 		} else if (value <= availablePoints) {
 			jQuery.ajax({
@@ -131,7 +176,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {
 					dialog.close();
-					sap.m.MessageToast.show("New item has been saved");
+					sap.m.MessageToast.show(sap.ui.getCore().getModel("b_i18n").getProperty("ORDER_ACCEPTED_MSG"));
 					this.fireModelChange();
 					this.loadOrderDetails();
 				}, this),
@@ -147,12 +192,12 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 			});
 		} else {
 			dialog.close();
-			sap.m.MessageBox.alert("Item was not send, limit has been exceeded", function() {
+			sap.m.MessageBox.alert(sap.ui.getCore().getModel("b_i18n").getProperty("LIMIT_EXCEEDED_MSG"), function() {
 			});
 		}
 	},
 	_deleteOrder : function(orderId) {
-		this.busyDialog.open();
+		appController.setAppBusy(true);
 		jQuery.ajax({
 			url : 'api/orders/' + orderId,
 			type : 'delete',
@@ -161,8 +206,13 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Details", {
 				this.loadOrderDetails();
 			}, this),
 			complete : jQuery.proxy(function() {
-				this.busyDialog.close();
+				appController.setAppBusy(false);
 			}, this)
 		});
+	},
+	
+	_setControlBindCtx : function(control, ctx){
+		control.setBindingContext(ctx);
+		control.setModel(ctx.getModel());
 	}
 });

@@ -2,35 +2,38 @@
 	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
 	controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="CampainMasterPage" title="Campaign Details" showNavButton="false">
+	<Page id="CampainMasterPage" title="{b_i18n>CAMPAIGN_DETAILS_PAGE_NAME}" showNavButton="false">
 		<content>
 			<form:SimpleForm id="inputForm" minWidth="1024"
 				maxContainerCols="2" editable="false">
 				<form:content>
-					<common:Title text="Campaign Information" />
-					<Label text="Name:" class="labelHeight" />
+					
+					<Label text="{b_i18n>CAMPAIGN_NAME}" class="labelHeight" />
 					<Text class="labelHeight" text="{name}" />
-					<Label text="Start Date:" class="labelHeight" />
+					<Label text="{b_i18n>CAMPAIGN_START_DATE}" class="labelHeight" />
 					<Text id="startDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight" />
-					<Label text="End Date:" class="labelHeight" />
+					<Label text="{b_i18n>CAMPAIGN_END_DATE}" class="labelHeight" />
 					<Text id="endDateTextCtr" text="{path:'endDate', formatter:'.formatDate'}" class="labelHeight" />
-					<Label text="Points per User:" class="labelHeight" />
-					<Text id="pointsCtr" text="{points}" class="labelHeight" />
-					<Label text="State:" class="labelHeight" />
-					<ObjectStatus state="{parts:['active'], formatter: '.formatState' }" text="{parts:['active'], formatter: '.formatStateText' }" class="labelHeight" />
+					<Label text="{b_i18n>CAMPAIGN_ENTITLEMENT}" class="labelHeight" />
+					<Text id="pointsCtr" text="{path:'points', formatter:'.formatBenefitPoints'}" class="labelHeight" />
+					<Label text="{b_i18n>CAMPAIGN_STATUS}" class="labelHeight" />
+					<Text id="stateCtr" text="{path:'active', formatter: '.formatStateText' }" class="labelHeight" />
 				</form:content>
 			</form:SimpleForm>
 		</content>
 		<footer>
 			<Bar>
 				<contentRight>
-					<Button id="optionsBtn" text="Options" press="optionsBtnPressHandler"
-						icon="sap-icon://action-settings" />
+						<Button id="startStopBtn" press="startStopButtonPressed" />
+						<Button id="changeDatesBtn" text="{b_i18n>CHANGE_DATES_BTN_NAME}" press="changeDatesButtonPressed"
+						icon="sap-icon://edit" />
+						<Button id="deleteBtn" text="{b_i18n>DELETE_BTN_NAME}" press="_deleteCampaignBtnPressed"
+						icon="sap-icon://delete" />
 				</contentRight>
 			</Bar>
 		</footer>
 	</Page>
-	<Dialog id="editCampaignDialog" title="Change Campaign Dates"
+	<Dialog id="editCampaignDialog" title="{b_i18n>EDIT_DIALOG_TITLE}"
 		afterOpen="closeDateTimeSelectors">
 		<content>
 			<VBox>
@@ -40,10 +43,10 @@
 							<Text id="errorStatusText" class="errorText" data-text="..." data-text-align="Left" />
 						</items>
 					</HBox>
-					<Label text="Start Date:" class="labelHeight" />
-					<DateTimeInput id="startDateCtr" type="Date" placeholder="Enter Date ..." />
-					<Label text="End Date:" class="labelHeight" />
-					<DateTimeInput id="endDateCtr" type="Date" placeholder="Enter Date ..." />
+					<Label text="{b_i18n>CAMPAIGN_START_DATE}" class="labelHeight" />
+					<DateTimeInput id="startDateCtr" type="Date" value="{path:'startDate', formatter:'.formatDateTxt'}" placeholder="{b_i18n>DATE_PLACEHOLDER}" />
+					<Label text="{b_i18n>CAMPAIGN_END_DATE}" class="labelHeight" />
+					<DateTimeInput id="endDateCtr" type="Date" value="{path:'endDate', formatter:'.formatDateTxt'}" placeholder="{b_i18n>DATE_PLACEHOLDER}" />
 				</items>
 			</VBox>
 		</content>

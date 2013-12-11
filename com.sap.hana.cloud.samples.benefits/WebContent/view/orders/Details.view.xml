@@ -2,35 +2,27 @@
 	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
 	controllerName="com.sap.hana.cloud.samples.benefits.view.orders.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="EmployeeOrdersPage" title="Benefit orders of {/employee/firstName} {/employee/lastName}" showNavButton="false">
+	<Page id="EmployeeOrdersPage" title="{parts: [{path:'/employee/firstName'},{path:'/employee/lastName'}], formatter:'.formatPageTitle'}" showNavButton="false">
 
 		<content>
 			<ObjectHeader id="headerCtrl"
-				title="{/currentOrder/campaign/name} campaign orders" number="{/currentOrder/orderPrice}" numberUnit="Used Points">
+				title="{/currentOrder/campaign/name}" number="{/currentOrder/orderPrice}" numberUnit="{b_i18n>USED_POINTS}">
 				<attributes>
-					<ObjectAttribute text="Unused Points:" />
-					<ObjectAttribute text="Entitlement:" />
+					<ObjectAttribute text="{parts: [{path:'/currentOrder/campaign/points'},{path:'/currentOrder/orderPrice'}], formatter:'.formatAvailablePoints'}" />
+					<ObjectAttribute text="{path:'/currentOrder/campaign/points', formatter:'.formatBenefitPointsEntitlement'}" />
 				</attributes>
-				<firstStatus>
-					<ObjectStatus
-						text="{parts: [{path:'/currentOrder/campaign/points'},{path:'/currentOrder/orderPrice'}], formatter:'.formatAvailablePoints'}"
-						state="Success" />
-				</firstStatus>
-				<secondStatus>
-					<ObjectStatus text="{/currentOrder/campaign/points} Points" state="Success" />
-				</secondStatus>
 			</ObjectHeader>
-			<List items="{/currentOrder/orderItems}" inset="true" class="benefitList" headerText="order details">
+			<List id="orderItemsList" items="{/currentOrder/orderItems}" inset="true" class="benefitList" headerText="{b_i18n>ORDERS_LIST_HEADER}">
 				<items>
 					<CustomListItem>
 						<content>
 							<List>
 								<items>
 									<ObjectListItem title="{benefitDetails/name}" number="{path:'benefitItems', formatter:'.formatBenefitItemsSum',useRawValues : true}"
-									 numberUnit="Points">
+									 numberUnit="{b_i18n>POINTS}">
 										<attributes>
 											<ObjectAttribute text="{benefitDetails/description}" />
-											<ObjectAttribute text="More information" active="true" press="linkPressed" />
+											<ObjectAttribute text="{b_i18n>MORE_INFORMATION_LINK}" active="true" press="linkPressed" />
 										</attributes>
 									</ObjectListItem>
 									<CustomListItem>
@@ -38,7 +30,7 @@
 											<List id="listCtr" mode="Delete" items="{benefitItems}" delete="onDelete">
 												<items>
 													<StandardListItem title="{name}"
-														description="quantity:" info="{quantity} x {itemValue} Points" infoState="Success">
+														description="{path:'itemValue', formatter:'.formatItemValue'}" info="{parts: [{path:'quantity'},{path:'itemValue'}], formatter:'.formatTotalPoints'}" infoState="Success">
 													</StandardListItem>
 												</items>
 											</List>
@@ -55,17 +47,19 @@
 		<footer>
 			<Bar>
 				<contentRight>
-					<Button id="addButton" text="Add Item" icon="sap-icon://add" press="addItem"></Button>
+					<Button id="addButton" text="{b_i18n>ADD_ORDER_BTN_NAME}" icon="sap-icon://add" press="addItem"></Button>
 				</contentRight>
 			</Bar>
 		</footer>
 	</Page>
 
-	<Dialog id="addItemCtrl" title="Add New Item" beforeOpen="handleDialogOpen" afterOpen="closeDateTimeSelectors">
+
+	<Dialog id="addItemCtrl" title="{b_i18n>ADD_ORDER_BTN_NAME}" beforeOpen="handleDialogOpen" afterOpen="closeDateTimeSelectors">
+
 		<content>
 			<form:SimpleForm id="inputForm" minWidth="1024" maxContainerCols="2" editable="false">
 				<form:content>
-					<Label text="benefit type" />
+					<Label text="{b_i18n>BENEFIT}" />
 
 					<Select id="benefitTypeSelect" items="{benefitsModel>/}" change="onBenefitSelect">
 						<items>
@@ -73,14 +67,21 @@
 						</items>
 					</Select>
 
-					<Label text="quantity type" />
+					<Label text="{b_i18n>TYPE_OF_BENEFIT}" />
 					<Select id="quantityTypeSelect" items="{benefitTypes}" change="onQuantityTypeSelect">
 						<items>
-							<core:Item key="{id}" text="{name} value {value}" />
+							<core:Item key="{id}" text="{name}" />
 						</items>
 					</Select>
-					<Label text="quantity" />
-					<Input id="quantityTypeTxt" type="Number" placeholder="Enter amount"></Input>
+					
+					<Label text="{b_i18n>PRICE}" />
+					<Input id="priceTypeTxt" type="Number" value="{value}" width="40%" enabled="false" ></Input>
+					
+					<Label text="{b_i18n>QUANTITY}" />
+					<Input id="quantityTypeTxt" type="Number" placeholder="Enter amount" width="40%" change="onValueSelect"></Input>
+					
+					<Label text="{b_i18n>TOTAL}" />
+					<Input id="totalTypeTxt" type="Number" value="" width="40%" enabled="false"></Input>
 				</form:content>
 			</form:SimpleForm>
 		</content>

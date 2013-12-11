@@ -7,12 +7,12 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		this.listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
 
 		this.dialogOkBtn = new sap.m.Button({
-			text : "Ok",
+			text : sap.ui.getCore().getModel("b_i18n").getProperty("OK_BTN_NAME"),
 			press : jQuery.proxy(this.okButtonPressed, this)
 		});
 
 		this.dialogCancelBtn = new sap.m.Button({
-			text : "Cancel",
+			text : sap.ui.getCore().getModel("b_i18n").getProperty("CANCEL_BTN_NAME"),
 			press : jQuery.proxy(function() {
 				this.byId("newcampaignDialog").close();
 			}, this)
@@ -37,13 +37,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 	},
 	onAfterRendering : function() {
 		var list = this.byId("campaignsList");
-		if (!list.getItems()) {
-			sap.ui.getCore().getEventBus().publish("nav", "to", {
-				id : views.DEFAULT_DETAILS_VIEW_ID,
-			});
-		} else {
-			this.listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
-		}
+		this.listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
 	},
 	checkToShowDefaultPage : function() {
 		var list = this.byId("campaignsList");
@@ -57,8 +51,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		sap.ui.getCore().getEventBus().publish("nav", "home");
 	},
 	onItemSelect : function(evt) {
-		this._navigateToDetailsPage();
 		var bindingContext = evt.getParameter('listItem').getBindingContext();
+		this._navigateToDetailsPage(bindingContext);
 		sap.ui.getCore().getEventBus().publish("app", "campaignDetailsRefresh", {
 			id : views.CAMPAIGN_DETAILS_VIEW_ID,
 			context : bindingContext,
@@ -88,7 +82,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
 	},
 	setStateText : function(active) {
-		return active ? "Active" : "Inactive";
+		var activeMsg = sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_STATUS_ACTIVE");
+		var inactiveMsg = sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_STATUS_INACTIVE");
+		return active ? activeMsg : inactiveMsg;
 	},
 	okButtonPressed : function(evt) {
 		this._validateNewCampaignName();
@@ -121,9 +117,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 			});
 		}
 	},
-	_navigateToDetailsPage : function() {
+	_navigateToDetailsPage : function(bindingContext) {
 		sap.ui.getCore().getEventBus().publish("nav", "to", {
 			id : views.CAMPAIGN_DETAILS_VIEW_ID,
+			context : bindingContext,
 		});
 	},
 	_selectCampaignByName : function(name) {
@@ -170,7 +167,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {
 					if (!data.isAvailable) {
-						nameCtr.setValueStateText("Already have a campaign with that name");
+						nameCtr.setValueStateText(sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_EXIST_MSG"));
 						nameCtr.setValueState(sap.ui.core.ValueState.Error);
 					} else {
 						nameCtr.setValueState(sap.ui.core.ValueState.None);
@@ -182,7 +179,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 				contentType : "application/json; charset=utf-8",
 			});
 		} else {
-			nameCtr.setValueStateText("Valid name is required");
+			nameCtr.setValueStateText(sap.ui.getCore().getModel("b_i18n").getProperty("INVALID_CAMPAIGN_NAME_MSG"));
 			nameCtr.setValueState(sap.ui.core.ValueState.Error);
 			this._changeOkButtonState(false);
 		}
@@ -193,10 +190,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		if (jQuery.isNumeric(points) && points > 0) {
 			pointsCtr.setValueState(sap.ui.core.ValueState.None);
 		} else if (points.length === 0) {
-			pointsCtr.setValueStateText("Valid Points is required");
+			pointsCtr.setValueStateText(sap.ui.getCore().getModel("b_i18n").getProperty("INVALID_CAMPAIGN_POINTS_MSG"));
 			pointsCtr.setValueState(sap.ui.core.ValueState.Error);
 		} else {
-			pointsCtr.setValueStateText("Not a valid positive number");
+			pointsCtr.setValueStateText(sap.ui.getCore().getModel("b_i18n").getProperty("NOT_POSITIVE_NUMBER_MSG"));
 			pointsCtr.setValueState(sap.ui.core.ValueState.Error);
 		}
 	},

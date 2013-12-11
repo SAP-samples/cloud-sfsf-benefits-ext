@@ -12,8 +12,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.sap.hana.cloud.samples.benefits</groupId>
 	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
+	<groupId>com.sap.hana.clould.samples.benefits</groupId>
 	<version>1.0.1</version>
 	<packaging>war</packaging>
 
@@ -209,11 +209,28 @@
 				<configuration>
 					<warName>${project.artifactId}</warName>
 					<warSourceDirectory>WebContent</warSourceDirectory>
+					<webXml>WebContent\WEB-INF\web.xml</webXml>
 					<archive>
 						<manifestFile>WebContent/META-INF/MANIFEST.MF</manifestFile>
 					</archive>
+					<attachClasses>true</attachClasses>
 				</configuration>
 			</plugin>
+			
+			<!-- 
+			<plugin>
+			   <groupId>org.apache.maven.plugins</groupId>
+			   <artifactId>maven-jar-plugin</artifactId>
+			   <version>2.4</version>
+			   <configuration>
+				 <archive>
+					 <manifest>
+						 <mainClass>com.sap.hana.cloud.samples.benefits</mainClass>
+					 </manifest>
+				 </archive>
+			   </configuration>
+			 </plugin>
+			 -->
 
 			<!-- Set compiler to officially supported JDK version for the given SAP 
 				HANA Cloud SDK -->

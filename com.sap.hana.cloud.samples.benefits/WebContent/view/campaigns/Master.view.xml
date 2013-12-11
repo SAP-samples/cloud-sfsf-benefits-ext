@@ -2,7 +2,7 @@
 	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
 	controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Master"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="CampaignMasterPage" title="Campaigns" showNavButton="true" navButtonTap="onNavPressed">
+	<Page id="CampaignMasterPage" title="{b_i18n>CAMPAIGNS_MASTER_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
 		<content>
 			<List id="campaignsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" delete="onDeleteItem" select="onItemSelect">
 				<items>
@@ -18,14 +18,14 @@
 		<footer>
 			<Bar id="footerBar">
 				<contentRight>
-					<Button id="addButton" text="Add" press="addButtonPressed" icon="sap-icon://add" />
+					<Button id="addButton" text="{b_i18n>ADD_BTN_NAME}" press="addButtonPressed" icon="sap-icon://add" />
 				</contentRight>
 			</Bar>
 		</footer>
 		<subHeader>
 			<Bar enableFlexBox="true">
 				<contentMiddle>
-					<SearchField id="searchField" search="handleSearch" liveChange="handleSearch" width="100%" placeholder="Search..."
+					<SearchField id="searchField" search="handleSearch" liveChange="handleSearch" width="100%" placeholder="{b_i18n>SEARCH_BAR_PLACEHOLDER}"
 						showRefreshButton="false">
 						<layoutData>
 							<FlexItemData growFactor="1" />
@@ -35,12 +35,12 @@
 			</Bar>
 		</subHeader>
 	</Page>
-	<Dialog id="newcampaignDialog" title="Add New Campaign">
+	<Dialog id="newcampaignDialog" title="{b_i18n>ADD_NEW_CAMPAIGNS_DIALOG_TITLE}">
 		<content>
 			<VBox>
 				<items>
-					<Input id="nameCtr" type="Text" placeholder="Enter Name ..." />
-					<Input id="pointsCtr" type="Text" placeholder="Enter Points ..." />
+					<Input id="nameCtr" type="Text" placeholder="{b_i18n>CAMPAIGN_NAME_PLACEHOLDER}" />
+					<Input id="pointsCtr" type="Text" placeholder="{b_i18n>CAMPAIGN_POINTS_PLACEHOLDER}" />
 				</items>
 			</VBox>
 		</content>

@@ -6,10 +6,14 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Details", {
 	},
 	linkPressed : function(evt) {
 		var control = sap.ui.getCore().byId(evt.getParameters().id);
-		var link = control.getModel().getData().infoLink;
+		var link = control.getBindingContext().getObject().infoLink;
 		if (link) {
 			sap.m.URLHelper.redirect(link, true);
 		}
+	},
+	formatValue : function(value){
+		var message = sap.ui.getCore().getModel("b_i18n").getProperty("BENEFITS_VALUE").formatPropertyMessage(value);
+		return message;
 	},
 	_refreshHandler : function(channelId, eventId, data) {
 		this.getView().setBindingContext(data.context);
