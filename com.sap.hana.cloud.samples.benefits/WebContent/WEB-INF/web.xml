@@ -39,7 +39,7 @@
   <context-param>
    <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
    <param-value>true</param-value>
-  </context-param>  
+  </context-param>
   <context-param>
     <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
     <param-value>true</param-value>
@@ -54,6 +54,15 @@
   <servlet-mapping>
     <servlet-name>ResourceServlet</servlet-name>
     <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <display-name>LogoutServlet</display-name>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>com.sap.hana.cloud.samples.benefits.logout.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
   </servlet-mapping>
   <filter>
     <display-name>SessionCreateFilter</display-name>
@@ -103,6 +112,23 @@
       <url-pattern>/resources/*</url-pattern>
     </web-resource-collection>
   </security-constraint>
+  <security-constraint>   
+    <web-resource-collection>
+      <web-resource-name>Logout</web-resource-name>
+      <description>Logout</description>
+      <url-pattern>/logout.jsp</url-pattern>      
+      <url-pattern>/logout</url-pattern>   
+    </web-resource-collection>
+  </security-constraint>
+  <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Static Content</web-resource-name>            
+            <url-pattern>/img/*</url-pattern>           
+        </web-resource-collection>
+        <user-data-constraint>
+            <transport-guarantee>NONE</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
   
   <security-role>
     <description>HR Administrator</description>

@@ -63,5 +63,6 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 			this.getView().setModel(new sap.ui.model.json.JSONModel());
 		}
 		this.getView().getModel().loadData("api/user/managed", null, false);
-	},
+	}
+	
 });

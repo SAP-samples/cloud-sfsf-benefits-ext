@@ -1,0 +1,13 @@
+<Dialog xmlns="sap.m" id="logoutDialog" title="{b_i18n>LOGOUT}">
+	<content>
+		<Text text="{b_i18n>LOGOUT_CONFIRM_MSG}" />
+	</content>
+	<beginButton>
+		<Button text="{b_i18n>OK_BTN_NAME}" press="okLogoutButtonPressed" />
+	</beginButton>
+	<endButton>
+		<Button text="{b_i18n>CANCEL_BTN_NAME}" press="cancelLogoutButtonPressed" />
+	</endButton>
+
+
+</Dialog>

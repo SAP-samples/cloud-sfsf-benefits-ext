@@ -15,6 +15,7 @@
 				</items>
 			</GrowingList>
 		</content>
+		
 		<subHeader>
 			<Bar id="searchBar" enableFlexBox="true">
 				<contentMiddle>

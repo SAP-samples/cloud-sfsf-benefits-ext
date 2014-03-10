@@ -11,6 +11,7 @@
 				</items>
 			</List>
 		</content>
+		
 		<subHeader>
 			<Bar id="searchBar" enableFlexBox="true">
 				<contentMiddle>

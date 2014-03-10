@@ -5,23 +5,7 @@ jQuery.sap.require("sap.m.MessageBox");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 	onInit : function() {
 		this.listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
-
-		this.dialogOkBtn = new sap.m.Button({
-			text : sap.ui.getCore().getModel("b_i18n").getProperty("OK_BTN_NAME"),
-			press : jQuery.proxy(this.okButtonPressed, this)
-		});
-
-		this.dialogCancelBtn = new sap.m.Button({
-			text : sap.ui.getCore().getModel("b_i18n").getProperty("CANCEL_BTN_NAME"),
-			press : jQuery.proxy(function() {
-				this.byId("newcampaignDialog").close();
-			}, this)
-		});
-
-		this.byId("nameCtr").attachChange(jQuery.proxy(this._validateNewCampaignName, this), this);
-		this.byId("pointsCtr").attachLiveChange(jQuery.proxy(this._validateNewCampaignPoints, this), this);
-
-		// subscribe to event bus
+	// subscribe to event bus
 		sap.ui.getCore().getEventBus().subscribe("refresh", "campaigns", this._handleModelChanged, this);
 	},
 	onBeforeRendering : function() {
@@ -64,20 +48,23 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		var searchFilter = new com.sap.hana.cloud.samples.benefits.common.SearchFilter();
 		searchFilter.applySearch(campaignsList, searchField, "name", views.DEFAULT_DETAILS_VIEW_ID);
 	},
-	addButtonPressed : function(evt) {
-		var newCampDialog = this.byId("newcampaignDialog");
-		this.byId("nameCtr").setValue(null);
-		this.byId("pointsCtr").setValue(null);
-		this.byId("nameCtr").setValueState(sap.ui.core.ValueState.None);
-		this.byId("pointsCtr").setValueState(sap.ui.core.ValueState.None);
+	resetDialog : function(){
+		sap.ui.getCore().byId("newCampDialog--nameCtr").setValue(null);
+		sap.ui.getCore().byId("newCampDialog--pointsCtr").setValue(null);
+		sap.ui.getCore().byId("newCampDialog--nameCtr").setValueState(sap.ui.core.ValueState.None);
+		sap.ui.getCore().byId("newCampDialog--pointsCtr").setValueState(sap.ui.core.ValueState.None);
 		this._changeOkButtonState(true);
-		newCampDialog.setLeftButton(this.dialogOkBtn);
-		newCampDialog.setRightButton(this.dialogCancelBtn);
-
-		sap.ui.getCore().getEventBus().publish("nav", "virtual");
-		newCampDialog.open();
-
 	},
+	addButtonPressed : function(evt) {
+		if (!this.newCampDialog) {
+			this.newCampDialog = sap.ui.xmlfragment("newCampDialog", "view.campaigns.addCampaignDialog", this);
+		}
+		sap.ui.getCore().byId("newCampDialog--nameCtr").attachChange(jQuery.proxy(this._validateNewCampaignName, this), this);
+		sap.ui.getCore().byId("newCampDialog--pointsCtr").attachLiveChange(jQuery.proxy(this._validateNewCampaignPoints, this), this);
+		sap.ui.getCore().getEventBus().publish("nav", "virtual");
+		this.newCampDialog.open();
+
+	},	
 	setState : function(active) {
 		return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
 	},
@@ -89,12 +76,12 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 	okButtonPressed : function(evt) {
 		this._validateNewCampaignName();
 		this._validateNewCampaignPoints();
-		var isValidName = this.byId("nameCtr").getValueState();
-		var isValidPoints = this.byId("pointsCtr").getValueState();
+		var isValidName = sap.ui.getCore().byId("newCampDialog--nameCtr").getValueState();
+		var isValidPoints = sap.ui.getCore().byId("newCampDialog--pointsCtr").getValueState();
 		if ((isValidName === sap.ui.core.ValueState.None) && (isValidPoints === sap.ui.core.ValueState.None)) {
-			this.byId("newcampaignDialog").close();
-			var newCampaignName = this.byId("nameCtr").getValue();
-			var newCampaignPoints = this.byId("pointsCtr").getValue();
+			this.newCampDialog.close();
+			var newCampaignName = sap.ui.getCore().byId("newCampDialog--nameCtr").getValue();
+			var newCampaignPoints = sap.ui.getCore().byId("newCampDialog--pointsCtr").getValue();
 			appController.setAppBusy(true);
 			jQuery.ajax({
 				url : 'api/campaigns/',
@@ -116,6 +103,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 				})
 			});
 		}
+	},
+	cancelButtonPressed : function(evt){
+		this.newCampDialog.close();
 	},
 	_navigateToDetailsPage : function(bindingContext) {
 		sap.ui.getCore().getEventBus().publish("nav", "to", {
@@ -156,11 +146,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		}
 	},
 	_validateNewCampaignName : function() {
-		var newCampDialog = this.byId("newcampaignDialog");
-		var nameCtr = this.byId("nameCtr");
+		var nameCtr = sap.ui.getCore().byId("newCampDialog--nameCtr");
 		var name = nameCtr.getValue();
 		if (name.length > 0) {
-			newCampDialog.setBusy(true);
+			this.newCampDialog.setBusy(true);
 			jQuery.ajax({
 				url : 'api/campaigns/check-name-availability?name=' + jQuery.sap.encodeURL(name),
 				type : 'get',
@@ -173,9 +162,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 						nameCtr.setValueState(sap.ui.core.ValueState.None);
 					}
 				}, this),
-				complete : function() {
-					newCampDialog.setBusy(false);
-				},
+				complete : jQuery.proxy(function() {
+					this.newCampDialog.setBusy(false);
+				}, this),
 				contentType : "application/json; charset=utf-8",
 			});
 		} else {
@@ -185,7 +174,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		}
 	},
 	_validateNewCampaignPoints : function() {
-		var pointsCtr = this.byId("pointsCtr");
+		var pointsCtr = sap.ui.getCore().byId("newCampDialog--pointsCtr");
 		var points = pointsCtr.getValue();
 		if (jQuery.isNumeric(points) && points > 0) {
 			pointsCtr.setValueState(sap.ui.core.ValueState.None);
@@ -198,12 +187,13 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		}
 	},
 	_changeOkButtonState : function(enabled) {
-		var isValidName = this.byId("nameCtr").getValueState();
-		var isValidPoints = this.byId("pointsCtr").getValueState();
+		var isValidName = sap.ui.getCore().byId("newCampDialog--nameCtr").getValueState();
+		var isValidPoints = sap.ui.getCore().byId("newCampDialog--pointsCtr").getValueState();
 		if (enabled && (isValidName === sap.ui.core.ValueState.None) && (isValidPoints === sap.ui.core.ValueState.None)) {
-			this.dialogOkBtn.setEnabled(true);
+			sap.ui.getCore().byId("newCampDialog--okButtonId").setEnabled(true);
 		} else {
-			this.dialogOkBtn.setEnabled(false);
+			sap.ui.getCore().byId("newCampDialog--okButtonId").setEnabled(false);
 		}
 	}
+	
 });

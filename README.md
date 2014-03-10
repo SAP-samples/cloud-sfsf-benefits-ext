@@ -12,7 +12,7 @@ The purpose of the application is to showcase the advantages of *SAP HANA Cloud 
 
 The sample application relies on and integrates the following SAP HANA Cloud Platform capabilities:
 
-* *SAP HANA Cloud Platform extension package* that provides SuccessFactors connectivity  on top of the standard based OData API 
+* *SAP HANA Cloud Platform extension package* that provides SuccessFactors connectivity  on top of the standard based OData API [Details] (http://scn.sap.com/docs/DOC-49540)
 * Persistency - JPA on top of [SAP HANA Database technology](http://www.saphana.com/welcome)
 * User interface technology - SAPUI5 (sap.m) libraries [Details](https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/explored/index.html)
 * Backend logic implemented using JAX-RS Services (Apache CXF and Google Gson for JSON serialization/deserialization)
@@ -26,7 +26,7 @@ Abbreviations
 Get the Source Code
 -------------------
 
-Clone the Git repository `git clone https://github.com/SAP/cloud-sfsf-benefits-ext.git`, or [download the latest release](https://github.com/sap/cloud-sfsf-benefits-ext/zipball/master).
+Clone the Git repository `git clone https://github.com/sap/cloud-sfsf-benefits-ext.git`, or [download the latest release](https://github.com/sap/cloud-sfsf-benefits-ext/zipball/master).
 
 In Eclipse import as *Existing Maven Project* and point to the *pom.xml* file located in *com.sap.hana.cloud.samples.benefits* folder.
 
@@ -37,7 +37,7 @@ The SAP Employee Benefits Management extension application is split into two mai
 
 The backend is implemented in the following packages:
 
-  - *com.sap.hana.cloud.sample.benefits.api.** - REST backend services and model for the user inteface
+  - *com.sap.hana.cloud.sample.benefits.api.** - REST backend services and model for the user interface
   - *com.sap.hana.cloud.sample.benefits.connectivity.** - OData connectivity to SuccessFactors  
   - *com.sap.hana.cloud.sample.benefits.persistence.** - contains JPA entities and DAO objects.
   - *com.sap.hana.cloud.sample.benefits.services.** - web integration logic
@@ -63,18 +63,16 @@ SAP Employee Benefits Management application can be run either locally or on *SA
 1. Prerequisites
 
   * Access to *SAP HANA Cloud Platform extension package* or *SAP HANA Cloud Platform trial* account
-  * *SAP HANA Cloud Platform* development enviroment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
-
+  * *SAP HANA Cloud Platform* development environment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
+  
 2. Configure the project build
 
  You need to set the following environment variables in order to configure the local project build.
 
- * *NW_CLOUD_SDK_PATH* - defines the path to the downloaded SAP HANA Cloud Platform SDK.
- * *NW_CLOUD_SDK_VERSION* - defines the version of the used SAP HANA Cloud SDK version.
  * *ECLIPSE_HOME* - defines the path to eclipse installation folder.
- * *SAP_UI5_VERSION* - defines the SAP UI5 version installed in the *SAP HANA Cloud Platform* development enviroment. You can see the installed verion in *Eclipse>Help>About Eclipse>SAP UI5* button
+ * *SAP_UI5_VERSION* - defines the SAP UI5 version installed in the *SAP HANA Cloud Platform* development environment. You can see the installed version in *Eclipse>Help>About Eclipse>SAP UI5* button
 
- To define the environment variable in MS Windows go to your *Computer>Properties>Advanced System Settings>Environment variables* and create a new user variable e.g. *NW_CLOUD_SDK_VERSION* and enter the path to the directory where you have the downloaded the SAP HANA Cloud SDK. The other variables are defined in similar way.
+ To define the environment variable in MS Windows go to your *Computer>Properties>Advanced System Settings>Environment variables* and create a new user variable e.g. *ECLIPSE_HOME* and enter the path to the directory where is the Eclipse IDE. The other variables are defined in similar way.
 
 Run on Local Server
 -------------------
@@ -85,7 +83,7 @@ The URL to the OData API Test system is:
 
     https://sfsfbizxtrial.hana.ondemand.com/odata/v2
 
-The authentication method is BASIC and you should use your SAP HANA Cloud Platfrorm trial user and password to authenticate.
+The authentication method is BASIC and you should use your SAP HANA Cloud Platform trial user and password to authenticate.
 The application contains pre-delivered HTTP Destination (*sap_hcmcloud_core_odata*) to the SuccessFactors OData API Test system, that is contained in */resources* application folder.
 In SFSF Extension Package accounts the destination would be preconfigured to the corresponding SFSF live instance.
 
@@ -99,7 +97,7 @@ In SFSF Extension Package accounts the destination would be preconfigured to the
 **Create Local Users**
 
 To enable local users to access the application, you need to define user IDs in the local user store. The user IDs should match existing users in the corresponding SFSF Test System.
-We have already defined a set of users and roles and pre-delivered them with the applciation in **/resources/neousers.json** file.
+We have already defined a set of users and roles and pre-delivered them with the application in **/resources/neousers.json** file.
 
 Copy the *neousers.json* file into the Local Server */config_master/com.sap.security.um.provider.neo.local* folder and restart the Server in order to load them.
 
@@ -140,7 +138,7 @@ It is possible to deploy and run the application on *SAP HANA Cloud Platfrom Tri
  2. Import the *SuccessFactors OData API* destination *sap_hcmcloud_core_odata* from **/resources** application folder in the application destinations tab. 
  Follow the procedure: [here](https://help.hana.ondemand.com/help/frameset.htm?a2550c3fcf2b430f94f99072677bf9ec.html).
  3. Fill your *SAP HANA Cloud Platform* user and password in the destination user/password fields.
- 4. Configure the application role assigments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html). You basically can add "Administrator" Role to your *SAP HANA Cloud Platform* user.
+ 4. Configure the application role assignments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html). You basically can add "Administrator" Role to your *SAP HANA Cloud Platform* user.
 
 Now that you have *SuccessFactors OData API* connectivity configured you should be able to login to the application, with your *SAP HANA Cloud Platform* user and password.
 
@@ -149,7 +147,7 @@ The *SuccessFactors OData API* endpoint would automatically map your SAP HANA Cl
 
 **Running against Local IDP (Optional)**
 
-The aforementioned method have one severe limitation that it would allways allow single predefined user Nancy Nash ('nnnn') mapped to your HCP user to login in the applcication and explore it. In order to explore the application from the view of multiple SuccessFactors users you would have to configure Local IDP and configure it in your SAP HCP Trial account.
+The aforementioned method have one severe limitation that it would always allow single predefined user Nancy Nash ('nnnn') mapped to your HCP user to login in the application and explore it. In order to explore the application from the view of multiple SuccessFactors users you would have to configure Local IDP and configure it in your SAP HCP Trial account.
 
 You can use the set of users delivered within the application (see Running on Local Server section) and provide them with Local IDP Provider to the cloud instance. Follow he process described [here](https://help.hana.ondemand.com/help/frameset.htm?754818ea63874ea38843ab0ed1928765.html).
 
@@ -158,7 +156,7 @@ You can use the set of users delivered within the application (see Running on Lo
 Access the Application 
 ----------------------
 
-After deployment, the applciation is accessible on the following URL:
+After deployment, the application is accessible on the following URL:
 
 `http://host:port/com.sap.hana.cloud.sample.benefits/index.html`
 
@@ -169,7 +167,7 @@ Explore the Application
 
 The purpose of the SAP Employee Benefits sample application is to ease the process of benefits management, both for employees and HR managers.
 
-Employees are rewarded with different non-monetary benefits, for exmaple concert tickets, food vouchers, and alike. The application uses abstract *"currency"*, called *benefit points* to evaluate the benefits' worth. In accordance with the company's policy, each employee is entitled a particular ammount of benefits' points for a certain period of time. Each rewarding period is called a *"campaign"* and is characterized by specific start and end dates, as well as a particular amount of benefit points. 
+Employees are rewarded with different non-monetary benefits, for example concert tickets, food vouchers, and alike. The application uses abstract *"currency"*, called *benefit points* to evaluate the benefits' worth. In accordance with the company's policy, each employee is entitled a particular ammount of benefits' points for a certain period of time. Each rewarding period is called a *"campaign"* and is characterized by specific start and end dates, as well as a particular amount of benefit points. 
 
 The HR manager is responsible for managing the campaigns and providing the employees with the rewards they ordered for a particular campaign.
 
@@ -193,7 +191,7 @@ As an *HR manager*, you can manage benefits from three panes:
 
 As an *employee*, you can edit your active campaign benefit orders and view your past orders. Also you can see a list of available benefits.
 
-By default, the application has a benefits list that is hardcoded and no campaigns are added. We recommend that you first log in to the application with the HR Administrator user first and to add a benefits campaign. Next, log in as an employee so you can view and add benefits to your order.  
+By default, the application has a benefits list that is hard-coded and no campaigns are added. We recommend that you first log in to the application with the HR Administrator user first and to add a benefits campaign. Next, log in as an employee so you can view and add benefits to your order.  
 
 Authors
 -------

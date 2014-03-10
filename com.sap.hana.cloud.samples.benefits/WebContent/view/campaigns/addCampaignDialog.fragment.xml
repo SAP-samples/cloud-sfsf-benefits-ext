@@ -1,0 +1,19 @@
+<Dialog xmlns="sap.m" id="newcampaignDialog"
+	title="{b_i18n>ADD_NEW_CAMPAIGNS_DIALOG_TITLE}" beforeOpen="resetDialog">
+	<content>
+		<VBox>
+			<items>
+				<Input id="nameCtr" type="Text" placeholder="{b_i18n>CAMPAIGN_NAME_PLACEHOLDER}" />
+				<Input id="pointsCtr" type="Text"
+					placeholder="{b_i18n>CAMPAIGN_POINTS_PLACEHOLDER}" />
+			</items>
+		</VBox>
+	</content>
+	<beginButton>
+		<Button id="okButtonId" text="{b_i18n>OK_BTN_NAME}" press="okButtonPressed" />
+	</beginButton>
+	<endButton>
+		<Button id="cancelButtonId" text="{b_i18n>CANCEL_BTN_NAME}" press="cancelButtonPressed" />
+	</endButton>
+
+</Dialog>

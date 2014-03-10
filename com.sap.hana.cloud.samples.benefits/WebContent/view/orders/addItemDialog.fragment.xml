@@ -1,0 +1,47 @@
+<Dialog xmlns="sap.m" xmlns:form="sap.ui.commons.form"
+	xmlns:core="sap.ui.core" id="addItemDialog" title="{b_i18n>ADD_ORDER_BTN_NAME}"
+	afterOpen="handleDialogOpen">
+
+	<content>
+		<form:SimpleForm id="inputForm" minWidth="1024"
+			maxContainerCols="2" editable="false">
+			<form:content>
+				<Label text="{b_i18n>BENEFIT}" />
+
+				<Select id="benefitTypeSelect" items="{benefitsModel>/}"
+					change="onBenefitSelect">
+					<items>
+						<core:Item key="{benefitsModel>id}" text="{benefitsModel>name}" />
+					</items>
+				</Select>
+
+				<Label text="{b_i18n>TYPE_OF_BENEFIT}" />
+				<Select id="quantityTypeSelect" items="{benefitTypes}"
+					change="onQuantityTypeSelect">
+					<items>
+						<core:Item key="{id}" text="{name}" />
+					</items>
+				</Select>
+
+				<Label text="{b_i18n>PRICE}" />
+				<Input id="priceTypeTxt" type="Number" value="{value}" width="40%"
+					enabled="false"></Input>
+
+				<Label text="{b_i18n>QUANTITY}" />
+				<Input id="quantityTypeTxt" type="Number" placeholder="Enter amount"
+					width="40%" change="onValueSelect"></Input>
+
+				<Label text="{b_i18n>TOTAL}" />
+				<Input id="totalTypeTxt" type="Number" value="" width="40%"
+					enabled="false"></Input>
+			</form:content>
+		</form:SimpleForm>
+	</content>
+	<beginButton>
+		<Button id="okButtonId" text="{b_i18n>OK_BTN_NAME}" press="_addItem" />
+	</beginButton>
+	<endButton>
+		<Button id="cancelButtonId" text="{b_i18n>CANCEL_BTN_NAME}"
+			press="cancelButtonPressed" />
+	</endButton>
+</Dialog>

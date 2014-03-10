@@ -3,7 +3,11 @@
 	controllerName="com.sap.hana.cloud.samples.benefits.view.orders.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 	<Page id="EmployeeOrdersPage" title="{parts: [{path:'/employee/firstName'},{path:'/employee/lastName'}], formatter:'.formatPageTitle'}" showNavButton="false">
-
+	
+		<headerContent>
+			<Button id="logoutButton" press="logoutButtonPressed" icon="sap-icon://log" text="{b_i18n>LOGOUT}" />
+		</headerContent>
+		
 		<content>
 			<ObjectHeader id="headerCtrl"
 				title="{/currentOrder/campaign/name}" number="{/currentOrder/orderPrice}" numberUnit="{b_i18n>USED_POINTS}">
@@ -53,37 +57,4 @@
 		</footer>
 	</Page>
 
-
-	<Dialog id="addItemCtrl" title="{b_i18n>ADD_ORDER_BTN_NAME}" beforeOpen="handleDialogOpen" afterOpen="closeDateTimeSelectors">
-
-		<content>
-			<form:SimpleForm id="inputForm" minWidth="1024" maxContainerCols="2" editable="false">
-				<form:content>
-					<Label text="{b_i18n>BENEFIT}" />
-
-					<Select id="benefitTypeSelect" items="{benefitsModel>/}" change="onBenefitSelect">
-						<items>
-							<core:Item key="{benefitsModel>id}" text="{benefitsModel>name}" />
-						</items>
-					</Select>
-
-					<Label text="{b_i18n>TYPE_OF_BENEFIT}" />
-					<Select id="quantityTypeSelect" items="{benefitTypes}" change="onQuantityTypeSelect">
-						<items>
-							<core:Item key="{id}" text="{name}" />
-						</items>
-					</Select>
-					
-					<Label text="{b_i18n>PRICE}" />
-					<Input id="priceTypeTxt" type="Number" value="{value}" width="40%" enabled="false" ></Input>
-					
-					<Label text="{b_i18n>QUANTITY}" />
-					<Input id="quantityTypeTxt" type="Number" placeholder="Enter amount" width="40%" change="onValueSelect"></Input>
-					
-					<Label text="{b_i18n>TOTAL}" />
-					<Input id="totalTypeTxt" type="Number" value="" width="40%" enabled="false"></Input>
-				</form:content>
-			</form:SimpleForm>
-		</content>
-	</Dialog>
 </core:View>

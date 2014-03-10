@@ -2,5 +2,9 @@
 	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.DefaultDetails"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 	<Page showNavButton="false" title="{b_i18n>DEFAULT_DETAILS_PAGE_NAME}">
+		<headerContent>
+			<Button id="logoutButton" press="logoutButtonPressed" icon="sap-icon://log" text="{b_i18n>LOGOUT}" />
+		</headerContent>
 	</Page>
+	
 </core:View>

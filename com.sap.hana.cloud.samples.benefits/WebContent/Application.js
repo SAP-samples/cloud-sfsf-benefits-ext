@@ -8,9 +8,9 @@ sap.ui.app.Application.extend("Application", {
 		bus.subscribe("nav", "to", this._navToHandler, this);
 		bus.subscribe("nav", "home", this._goHome, this);
 		var i18nModel = new sap.ui.model.resource.ResourceModel({
-      bundleUrl : jQuery.sap.getModulePath("com.sap.hana.cloud.samples.benefits") + "/i18n/i18n.properties"
+			bundleUrl : jQuery.sap.getModulePath("com.sap.hana.cloud.samples.benefits") + "/i18n/i18n.properties"
 		});
-		
+
 		sap.ui.getCore().setModel(i18nModel, "b_i18n");
 
 	},
@@ -21,7 +21,8 @@ sap.ui.app.Application.extend("Application", {
 		var root = this.getRoot();
 		var splitApp = new sap.m.SplitApp("SplitAppControl");
 		splitApp.setBusyIndicatorDelay(0);
-		splitApp.addDetailPage(sap.ui.xmlview(views.DEFAULT_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.DefaultDetails"));
+		splitApp.addDetailPage(sap.ui.xmlview(views.DEFAULT_DETAILS_VIEW_ID,
+				"com.sap.hana.cloud.samples.benefits.view.DefaultDetails"));
 		var tileContainer = new sap.m.TileContainer("HomePage");
 
 		var configData = this.getConfig().getData();
@@ -41,15 +42,29 @@ sap.ui.app.Application.extend("Application", {
 		if (configData.showOrderTile) {
 			this._showOrdersTile(splitApp, tileContainer);
 		}
-		
+
 		if (configData.showInfoTile) {
 			this._showInfoTile(tileContainer);
 		}
 
+		var logoutButton = new sap.m.Button({
+			text : "{b_i18n>LOGOUT}",
+			icon : "sap-icon://log",
+			press : jQuery.proxy(this.onLogout, this),
+			visible : this._hasLogoutButton()
+		});
+
+		var aPage = new sap.m.Page({
+			id : "MyHome",
+			showHeader : true,
+			enableScrolling : false,
+			content : [tileContainer],
+			headerContent : [logoutButton]
+		});
 
 		var oShell = new sap.m.Shell("ShellControl", {
 			title : "{b_i18n>APPLICATION_NAME}",
-			app : tileContainer,
+			app : aPage, // tileContainer
 			showLogout : false
 		});
 
@@ -66,12 +81,13 @@ sap.ui.app.Application.extend("Application", {
 		}
 	},
 	_goHome : function() {
-		var homePage = sap.ui.getCore().byId("HomePage");
+		var homePage = sap.ui.getCore().byId("MyHome");// ("HomePage");
 		this._getShell().setApp(homePage);
 		sap.ui.getCore().byId("SplitAppControl").toDetail(views.BENEFITS_DETAILS_VIEW_ID);
 	},
 	_showEmployeeTile : function(app, tileContainer) {
-		app.addMasterPage(sap.ui.xmlview(views.EMPLOYEE_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.employees.Master"));
+		app.addMasterPage(sap.ui.xmlview(views.EMPLOYEE_MASTER_VIEW_ID,
+				"com.sap.hana.cloud.samples.benefits.view.employees.Master"));
 		this._addOrdersDetailPageToApp(app);
 
 		tileContainer.addTile(new sap.m.StandardTile("Employees", {
@@ -81,8 +97,10 @@ sap.ui.app.Application.extend("Application", {
 		}));
 	},
 	_showBenefitsTile : function(app, tileContainer) {
-		app.addMasterPage(sap.ui.xmlview(views.BENEFITS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Master"));
-		app.addDetailPage(sap.ui.xmlview(views.BENEFITS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.benefits.Details"));
+		app.addMasterPage(sap.ui.xmlview(views.BENEFITS_MASTER_VIEW_ID,
+				"com.sap.hana.cloud.samples.benefits.view.benefits.Master"));
+		app.addDetailPage(sap.ui.xmlview(views.BENEFITS_DETAILS_VIEW_ID,
+				"com.sap.hana.cloud.samples.benefits.view.benefits.Details"));
 
 		tileContainer.addTile(new sap.m.StandardTile("Benefits", {
 			icon : "sap-icon://competitor",
@@ -91,8 +109,10 @@ sap.ui.app.Application.extend("Application", {
 		}));
 	},
 	_showCampaignTile : function(app, tileContainer) {
-		app.addMasterPage(sap.ui.xmlview(views.CAMPAIGN_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Master"));
-		app.addDetailPage(sap.ui.xmlview(views.CAMPAIGN_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.campaigns.Details"));
+		app.addMasterPage(sap.ui.xmlview(views.CAMPAIGN_MASTER_VIEW_ID,
+				"com.sap.hana.cloud.samples.benefits.view.campaigns.Master"));
+		app.addDetailPage(sap.ui.xmlview(views.CAMPAIGN_DETAILS_VIEW_ID,
+				"com.sap.hana.cloud.samples.benefits.view.campaigns.Details"));
 
 		tileContainer.addTile(new sap.m.StandardTile("Campaigns", {
 			icon : "sap-icon://marketing-campaign",
@@ -101,7 +121,8 @@ sap.ui.app.Application.extend("Application", {
 		}));
 	},
 	_showOrdersTile : function(app, tileContainer) {
-		var masterPage = sap.ui.xmlview(views.EMPLOYEE_ORDERS_MASTER_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.orders.Master");
+		var masterPage = sap.ui.xmlview(views.EMPLOYEE_ORDERS_MASTER_VIEW_ID,
+				"com.sap.hana.cloud.samples.benefits.view.orders.Master");
 		masterPage.setModel(new sap.ui.model.json.JSONModel());
 		app.addMasterPage(masterPage);
 		this._addOrdersDetailPageToApp(app);
@@ -113,7 +134,8 @@ sap.ui.app.Application.extend("Application", {
 		}));
 	},
 	_showInfoTile : function(tileContainer) {
-		sap.ui.xmlview(views.INFO_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.info.Details").addStyleClass("infoPageContainer");
+		sap.ui.xmlview(views.INFO_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.info.Details").addStyleClass(
+				"infoPageContainer");
 
 		tileContainer.addTile(new sap.m.StandardTile("Info", {
 			icon : "sap-icon://account",
@@ -123,7 +145,8 @@ sap.ui.app.Application.extend("Application", {
 	},
 	_addOrdersDetailPageToApp : function(app) {
 		if (!app.getDetailPage(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID)) {
-			var emplOrdersDetailsView = sap.ui.xmlview(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID, "com.sap.hana.cloud.samples.benefits.view.orders.Details");
+			var emplOrdersDetailsView = sap.ui.xmlview(views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID,
+					"com.sap.hana.cloud.samples.benefits.view.orders.Details");
 			app.addDetailPage(emplOrdersDetailsView);
 			emplOrdersDetailsView.setModel(new sap.ui.model.json.JSONModel());
 		}
@@ -160,5 +183,42 @@ sap.ui.app.Application.extend("Application", {
 	_toDetailsPage : function(pageId, data) {
 		var splitApp = sap.ui.getCore().byId("SplitAppControl");
 		splitApp.toDetail(sap.ui.getCore().byId(pageId), "show", data);
+	},
+	_hasLogoutButton : function() {
+		var hasLogout = this._getUrlParameter("hasLogout");
+		if (hasLogout == "true") {
+			return true;
+		}
+		return false;
+	},
+	_getUrlParameter : function(param) {
+		var urlParams = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+
+		for (var i = 0; i < urlParams.length; i++) {
+			if (urlParams[i].split('=')[0] == undefined) {
+				return false;
+			}
+			if (urlParams[i].split('=')[0] == param) {
+				return urlParams[i].split('=')[1];
+			}
+		}
+		return false;
+	},
+	onLogout : function() {
+
+		if (!this.logoutDialog) {
+			this.logoutDialog = sap.ui.xmlfragment("logoutDialog", "view.logoutDialog", this);
+		}
+
+		sap.ui.getCore().getEventBus().publish("nav", "virtual");
+		this.logoutDialog.open();
+	},
+
+	cancelLogoutButtonPressed : function() {
+		this.logoutDialog.close();
+	},
+
+	okLogoutButtonPressed : function() {
+		window.location.assign("logout");
 	}
 });

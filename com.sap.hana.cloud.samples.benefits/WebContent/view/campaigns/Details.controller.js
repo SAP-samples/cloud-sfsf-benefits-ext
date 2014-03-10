@@ -21,6 +21,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	onAfterRendering : function() {
 	},
 	onBeforeRendering : function() {
+		this.hideLogout();
 	},
 
 	formatStateText : function(active) {
@@ -73,19 +74,18 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 		}
 	},
 	changeDatesButtonPressed : function(evt) {
-		var editCampDialog = this.byId("editCampaignDialog");
-		editCampDialog.setLeftButton(new sap.m.Button({
-			text : this.getModelProperty("OK_BTN_NAME"),
-			press : jQuery.proxy(this._saveEditedDates, this)
-		}));
-		editCampDialog.setRightButton(new sap.m.Button({
-			text : this.getModelProperty("CANCEL_BTN_NAME"),
-			press : jQuery.proxy(function() {
-				editCampDialog.close();
-			}, this)
-		}));
+		if (!this.editCampaignDialog) {
+			this.editCampaignDialog = sap.ui.xmlfragment("editCampaignDialog", "view.campaigns.editCampaignDialog", this);
+		}
+		var startDate = this.byId("inputForm").getBindingContext().getObject().startDate;
+		var endDate = this.byId("inputForm").getBindingContext().getObject().endDate;
+		sap.ui.getCore().byId("editCampaignDialog--startDateCtr").setValue(this.formatDateTxt(startDate));
+		sap.ui.getCore().byId("editCampaignDialog--endDateCtr").setValue(this.formatDateTxt(endDate));
 		sap.ui.getCore().getEventBus().publish("nav", "virtual");
-		editCampDialog.open();
+		this.editCampaignDialog.open();
+	},
+	cancelButtonPressed : function(){
+		this.editCampaignDialog.close();
 	},
 	fireModelChanged : function(action) {
 		sap.ui.getCore().getEventBus().publish("refresh", "campaigns", {
@@ -94,8 +94,14 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 		});
 	},
 	closeDateTimeSelectors : function() {
-		this.byId("startDateCtr").close();
-		this.byId("endDateCtr").close();
+		sap.ui.getCore().byId("editCampaignDialog--startDateCtr").close();
+		sap.ui.getCore().byId("editCampaignDialog--endDateCtr").close();
+	},
+	hideLogout : function(){
+		this.byId("logoutButton").setVisible(appController._hasLogoutButton());
+	},	
+	logoutButtonPressed : function(evt) {
+		sap.ui.getApplication().onLogout();
 	},
 	getModelProperty : function(msgId){
 		var message = sap.ui.getCore().getModel("b_i18n").getProperty(msgId);
@@ -107,11 +113,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 		this._refreshStartStopBtnState();
 	},
 	_saveEditedDates : function(evt) {
-		var startDate = this.byId("startDateCtr").getDateValue();
-		var endDate = this.byId("endDateCtr").getDateValue();
+		var startDate = sap.ui.getCore().byId("editCampaignDialog--startDateCtr").getDateValue();
+		var endDate = sap.ui.getCore().byId("editCampaignDialog--endDateCtr").getDateValue();
 		var isvalidPeriod = this._isValidDatePeriod(startDate, endDate);
 		if (isvalidPeriod) {
-			this.byId("editCampaignDialog").close();
+			this.editCampaignDialog.close();
 			var ctx = this.byId("inputForm").getBindingContext().getObject();
 			var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
 				style : "full",
@@ -128,8 +134,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 				contentType : "application/json; charset=utf-8",
 				data : JSON.stringify({
 					id : ctx.id,
-					startDate : dateFormat.format(this.byId("startDateCtr").getDateValue()),
-					endDate : dateFormat.format(this.byId("endDateCtr").getDateValue())
+					startDate : dateFormat.format(sap.ui.getCore().byId("editCampaignDialog--startDateCtr").getDateValue()),
+					endDate : dateFormat.format(sap.ui.getCore().byId("editCampaignDialog--endDateCtr").getDateValue())
 				}),
 				statusCode : {
 					400 : function(xhr, error) {
@@ -140,9 +146,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 		} else {
 			$(".errorContainer").removeClass("displayNone");
 			if (!startDate || !endDate) {
-				this.byId("errorStatusText").setText(this.getModelProperty("INVALID_DATES_MSG"));
+				sap.ui.getCore().byId("editCampaignDialog--errorStatusText").setText(this.getModelProperty("INVALID_DATES_MSG"));
 			} else {
-				this.byId("errorStatusText").setText(this.getModelProperty("INVALID_PERIOD_MSG"));
+				sap.ui.getCore().byId("editCampaignDialog--errorStatusText").setText(this.getModelProperty("INVALID_PERIOD_MSG"));
 			}
 		}
 	},
@@ -250,4 +256,5 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	_showErrorMessageBox : function(message) {
 		sap.m.MessageBox.show(message, sap.m.MessageBox.Icon.ERROR, null, [sap.m.MessageBox.Action.OK]);
 	},
+	
 });

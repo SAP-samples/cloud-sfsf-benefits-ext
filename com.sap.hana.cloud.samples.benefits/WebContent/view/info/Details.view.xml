@@ -3,6 +3,10 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 
 	<Page title="{b_i18n>INFO_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
+		<headerContent>
+			<Button id="logoutButton" press="logoutButtonPressed" icon="sap-icon://log" text="{b_i18n>LOGOUT}" />
+		</headerContent>
+	
 		<content>
 
 			<ObjectHeader title="{/firstName} {/lastName}">
@@ -23,6 +27,6 @@
 			</ObjectHeader>
 
 		</content>
-
 	</Page>
+	
 </core:View>

@@ -18,8 +18,8 @@
 		<footer>
 			<Bar id="footerBar">
 				<contentRight>
-					<Button id="addButton" text="{b_i18n>ADD_BTN_NAME}" press="addButtonPressed" icon="sap-icon://add" />
-				</contentRight>
+					<Button id="addButton" text="{b_i18n>ADD_BTN_NAME}" press="addButtonPressed" icon="sap-icon://add" />					
+				</contentRight>					
 			</Bar>
 		</footer>
 		<subHeader>
@@ -35,14 +35,5 @@
 			</Bar>
 		</subHeader>
 	</Page>
-	<Dialog id="newcampaignDialog" title="{b_i18n>ADD_NEW_CAMPAIGNS_DIALOG_TITLE}">
-		<content>
-			<VBox>
-				<items>
-					<Input id="nameCtr" type="Text" placeholder="{b_i18n>CAMPAIGN_NAME_PLACEHOLDER}" />
-					<Input id="pointsCtr" type="Text" placeholder="{b_i18n>CAMPAIGN_POINTS_PLACEHOLDER}" />
-				</items>
-			</VBox>
-		</content>
-	</Dialog>
+	
 </core:View>
