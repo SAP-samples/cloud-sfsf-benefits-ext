@@ -82,7 +82,9 @@ You can run the application on local server against public SuccessFactors OData 
 The URL to the OData API Test system is:
 
     https://sfsfbizxtrial.hana.ondemand.com/odata/v2
-
+	
+That is the Root URL to OData API and it returns ServerErrorException.
+You need to make some valid OData query like https://sfsfbizxtrial.hana.ondemand.com/odata/v2/User('bmays1') to get some response.
 The authentication method is BASIC and you should use your SAP HANA Cloud Platform trial user and password to authenticate.
 The application contains pre-delivered HTTP Destination (*sap_hcmcloud_core_odata*) to the SuccessFactors OData API Test system, that is contained in */resources* application folder.
 In SFSF Extension Package accounts the destination would be preconfigured to the corresponding SFSF live instance.
