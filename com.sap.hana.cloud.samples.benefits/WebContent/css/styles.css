@@ -1,36 +1,36 @@
-.benefitItem .sapMOHTopRow .sapMOHTitleDiv{
-    line-height: 3rem;
+.benefitItem .sapMOHTopRow .sapMOHTitleDiv {
+	line-height: 3rem;
 }
 
 .benefitListItem .sapMObjLTopRow .sapMObjLTitle {
-    line-height: 3rem;
+	line-height: 3rem;
 }
 
 .benefitList {
 	padding-top: 0rem;
 }
 
-.visible{
-    display: none;
+.visible {
+	display: none;
 }
 
-.labelHeight{
-    line-height: 3rem;
+.labelHeight {
+	line-height: 3rem;
 }
 
 .bold {
-    font-weight: bold;
+	font-weight: bold;
 }
 
-.errorText{
+.errorText {
 	color: red;
 }
 
-.successText{
+.successText {
 	color: green;
 }
 
-.errorContainer{
+.errorContainer {
 	margin-bottom: 0.5rem;
 }
 
@@ -41,13 +41,16 @@
 .listItem:hover {
 	cursor: pointer;
 }
+
 .sapMGrowingListTrigger:hover {
 	cursor: pointer;
 }
-.red{
+
+.red {
 	color: red;
 }
-.green{
+
+.green {
 	color: green;
 }
 
@@ -56,26 +59,26 @@
 	height: 100%;
 }
 
-.emailIcon span:before {
-	content: '\e037';
-	padding-right: 0.5rem;
-	font-family: 'SAP-icons';
+.emailIcon > span:first-child > span:before {
+       content: '\e037';
+       padding-right: 0.5rem;
+       font-family: 'SAP-icons';
 }
 
-.phoneIcon span:before {
-	content: '\e018';
-	padding-right: 0.5rem;
-	font-family: 'SAP-icons';
+.phoneIcon > span:first-child > span:before {
+       content: '\e018';
+       padding-right: 0.5rem;
+       font-family: 'SAP-icons';
 }
 
-.mobilePhoneIcon span:before {
-	content: '\e15b';
-	padding-right: 0.5rem;
-	font-family: 'SAP-icons';
+.mobilePhoneIcon > span:first-child > span:before {
+       content: '\e15b';
+       padding-right: 0.5rem;
+       font-family: 'SAP-icons';
 }
 
-.personIcon span:before {
-	content: '\e0ca';
-	padding-right: 0.5rem;
-	font-family: 'SAP-icons';
+.itemFocus:focus {
+	outline-width: thin;
+	outline-style: dotted;
+	outline-color: black;
 }

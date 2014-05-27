@@ -13,15 +13,15 @@
 				<form:content>
 					
 					<Label text="{b_i18n>CAMPAIGN_NAME}" class="labelHeight" />
-					<Text class="labelHeight" text="{name}" />
+					<Text class="labelHeight" text="{Name}" />
 					<Label text="{b_i18n>CAMPAIGN_START_DATE}" class="labelHeight" />
-					<Text id="startDateTextCtr" text="{path:'startDate', formatter:'.formatDate'}" class="labelHeight" />
+					<Text id="startDateTextCtr" text="{path:'StartDate', formatter:'.formatDate'}" class="labelHeight" />
 					<Label text="{b_i18n>CAMPAIGN_END_DATE}" class="labelHeight" />
-					<Text id="endDateTextCtr" text="{path:'endDate', formatter:'.formatDate'}" class="labelHeight" />
+					<Text id="endDateTextCtr" text="{path:'EndDate', formatter:'.formatDate'}" class="labelHeight" />
 					<Label text="{b_i18n>CAMPAIGN_ENTITLEMENT}" class="labelHeight" />
-					<Text id="pointsCtr" text="{path:'points', formatter:'.formatBenefitPoints'}" class="labelHeight" />
+					<Text id="pointsCtr" text="{path:'Points', formatter:'.formatBenefitPoints'}" class="labelHeight" />
 					<Label text="{b_i18n>CAMPAIGN_STATUS}" class="labelHeight" />
-					<Text id="stateCtr" text="{path:'active', formatter: '.formatStateText' }" class="labelHeight" />
+					<Text id="stateCtr" text="{path:'Active', formatter: '.formatStateText' }" class="labelHeight" />
 				</form:content>
 			</form:SimpleForm>
 		</content>

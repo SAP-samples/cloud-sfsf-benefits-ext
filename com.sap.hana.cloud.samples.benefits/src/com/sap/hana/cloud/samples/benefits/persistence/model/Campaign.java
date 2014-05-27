@@ -1,10 +1,10 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
 import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_ACTIVE_CAMPAIGNS;
-import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_CAMPAIGN_BY_NAME;
+import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_CAMPAIGN_BY_CASE_INSENSITIVE_NAME;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -26,7 +26,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "CAMPAIGNS", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
-@NamedQueries({ @NamedQuery(name = GET_CAMPAIGN_BY_NAME, query = "select c from Campaign c where c.name = :name and c.owner = :owner"),
+@NamedQueries({ @NamedQuery(name = GET_CAMPAIGN_BY_CASE_INSENSITIVE_NAME, query = "select c from Campaign c where UPPER(c.name) = UPPER(:name) and c.owner = :owner"),
         @NamedQuery(name = GET_ACTIVE_CAMPAIGNS, query = "select c from Campaign c where c.active = 1 and c.owner = :owner") })
 public class Campaign implements IDBEntity {
 
@@ -55,14 +55,17 @@ public class Campaign implements IDBEntity {
     private boolean active;
 
     @ManyToOne(cascade = CascadeType.REFRESH)
-    @JoinColumn(name = "OWNER_ID")
+    @JoinColumn(name = "OWNER_ID", referencedColumnName="ID")
     private User owner;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.LAZY, targetEntity = Order.class)
-    private Collection<Order> orders;
+    @Column(name = "OWNER_ID", insertable = false, updatable = false) 
+    private Long ownerId;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.EAGER, targetEntity = Order.class)
+    private List<Order> orders;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
-    private Collection<UserPoints> userPoints;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "campaign", fetch = FetchType.EAGER, targetEntity = UserPoints.class)
+    private List<UserPoints> userPoints;
 
     @Override
     public Long getId() {
@@ -97,7 +100,7 @@ public class Campaign implements IDBEntity {
         this.endDate = endDate;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
@@ -105,7 +108,7 @@ public class Campaign implements IDBEntity {
         this.active = active;
     }
 
-    public Collection<Order> getOrders() {
+    public List<Order> getOrders() {
         if (this.orders == null) {
             this.orders = new ArrayList<>();
         }
@@ -120,11 +123,11 @@ public class Campaign implements IDBEntity {
 
     }
 
-    public void setOrders(Collection<Order> orders) {
+    public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
 
-    public Collection<UserPoints> getUserPoints() {
+    public List<UserPoints> getUserPoints() {
         if (this.userPoints == null) {
             this.userPoints = new ArrayList<>();
         }
@@ -138,7 +141,7 @@ public class Campaign implements IDBEntity {
         }
     }
 
-    public void setUserPoints(Collection<UserPoints> userPoints) {
+    public void setUserPoints(List<UserPoints> userPoints) {
         this.userPoints = userPoints;
     }
 
@@ -160,5 +163,13 @@ public class Campaign implements IDBEntity {
     public void setPoints(long points) {
         this.points = points;
     }
+    
+    public Long getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(Long ownerId) {
+		this.ownerId = ownerId;
+	}
 
 }

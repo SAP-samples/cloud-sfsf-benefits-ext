@@ -2,44 +2,42 @@
 	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
 	controllerName="com.sap.hana.cloud.samples.benefits.view.orders.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
-	<Page id="EmployeeOrdersPage" title="{parts: [{path:'/employee/firstName'},{path:'/employee/lastName'}], formatter:'.formatPageTitle'}" showNavButton="false">
-	
+	<Page id="EmployeeOrdersPage"
+		title="{parts: [{path:'/employee/FirstName'},{path:'/employee/LastName'}], formatter:'.formatPageTitle'}"
+		showNavButton="false">
+
 		<headerContent>
-			<Button id="logoutButton" press="logoutButtonPressed" icon="sap-icon://log" text="{b_i18n>LOGOUT}" />
+			<Button id="logoutButton" press="logoutButtonPressed" icon="sap-icon://log"
+				text="{b_i18n>LOGOUT}" />
 		</headerContent>
-		
+
 		<content>
 			<ObjectHeader id="headerCtrl"
-				title="{/currentOrder/campaign/name}" number="{/currentOrder/orderPrice}" numberUnit="{b_i18n>USED_POINTS}">
+				title="{/activeCampaign/Name}"
+				number="{path:'/currentOrder/d/results/0/Total', formatter:'.formatUsedPoints'}"
+				numberUnit="{b_i18n>USED_POINTS}">
 				<attributes>
-					<ObjectAttribute text="{parts: [{path:'/currentOrder/campaign/points'},{path:'/currentOrder/orderPrice'}], formatter:'.formatAvailablePoints'}" />
-					<ObjectAttribute text="{path:'/currentOrder/campaign/points', formatter:'.formatBenefitPointsEntitlement'}" />
+					<ObjectAttribute
+						text="{parts: [{path:'/activeCampaign/Points'},{path:'/currentOrder/d/results/0/Total'}], formatter:'.formatAvailablePoints'}" />
+					<ObjectAttribute
+						text="{path:'/activeCampaign/Points', formatter:'.formatBenefitPointsEntitlement'}" />
 				</attributes>
 			</ObjectHeader>
-			<List id="orderItemsList" items="{/currentOrder/orderItems}" inset="true" class="benefitList" headerText="{b_i18n>ORDERS_LIST_HEADER}">
+			<List inset="true">
 				<items>
 					<CustomListItem>
 						<content>
-							<List>
+							<List id="orderItemsList"
+								items="{path:'/currentOrder/d/results/0/OrderDetailsDetails/results', sorter: {path:'BenefitTypeDetails/BenefitDetails/Name' ,descending: false, group: true}}"
+								inset="true" class="benefitList" headerText="{b_i18n>ORDERS_LIST_HEADER}"
+								mode="Delete" delete="onDelete">
+								
 								<items>
-									<ObjectListItem title="{benefitDetails/name}" number="{path:'benefitItems', formatter:'.formatBenefitItemsSum',useRawValues : true}"
-									 numberUnit="{b_i18n>POINTS}">
-										<attributes>
-											<ObjectAttribute text="{benefitDetails/description}" />
-											<ObjectAttribute text="{b_i18n>MORE_INFORMATION_LINK}" active="true" press="linkPressed" />
-										</attributes>
-									</ObjectListItem>
-									<CustomListItem>
-										<content>
-											<List id="listCtr" mode="Delete" items="{benefitItems}" delete="onDelete">
-												<items>
-													<StandardListItem title="{name}"
-														description="{path:'itemValue', formatter:'.formatItemValue'}" info="{parts: [{path:'quantity'},{path:'itemValue'}], formatter:'.formatTotalPoints'}" infoState="Success">
-													</StandardListItem>
-												</items>
-											</List>
-										</content>
-									</CustomListItem>
+									<StandardListItem title="{BenefitTypeDetails/Name}"
+										description="{path:'BenefitTypeDetails/Value', formatter:'.formatItemValue'}"
+										info="{parts: [{path:'Quantity'},{path:'BenefitTypeDetails/Value'}], formatter:'.formatTotalPoints'}"
+										infoState="Success">
+									</StandardListItem>
 								</items>
 							</List>
 						</content>
@@ -51,7 +49,8 @@
 		<footer>
 			<Bar>
 				<contentRight>
-					<Button id="addButton" text="{b_i18n>ADD_ORDER_BTN_NAME}" icon="sap-icon://add" press="addItem"></Button>
+					<Button id="addButton" text="{b_i18n>ADD_ORDER_BTN_NAME}"
+						icon="sap-icon://add" press="addItem"></Button>
 				</contentRight>
 			</Bar>
 		</footer>

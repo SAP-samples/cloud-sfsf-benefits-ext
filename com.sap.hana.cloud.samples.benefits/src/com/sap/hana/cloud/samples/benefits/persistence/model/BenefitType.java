@@ -1,7 +1,7 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -26,20 +26,23 @@ public class BenefitType implements IDBEntity {
 
     @Basic
     private String name;
-
+ 
     @Basic
-    @Column
-    private long value;
+    @Column 
+    private long value;   
 
     @Basic
     private boolean active;
-
-    @ManyToOne
+ 
+    @ManyToOne 
     @JoinColumn(name = "BENEFIT_ID", referencedColumnName = "BENEFIT_ID")
     private Benefit benefit;
+    
+    @Column(name = "BENEFIT_ID", insertable = false, updatable = false) 
+    private Long benefitId;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "benefitType", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
-    private Collection<OrderDetails> orders;
+    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "benefitType", fetch = FetchType.EAGER, targetEntity = OrderDetails.class)
+    private List<OrderDetails> orders;
 
     @Override
     public Long getId() {
@@ -66,7 +69,7 @@ public class BenefitType implements IDBEntity {
         this.value = value;
     }
 
-    public boolean isActive() {
+    public boolean getActive() {
         return active;
     }
 
@@ -77,15 +80,23 @@ public class BenefitType implements IDBEntity {
     public Benefit getBenefit() {
         return benefit;
     }
+    
+    public Long getBenefitId() {
+		return benefitId;
+	}
 
-    public void setBenefit(Benefit benefit) {
+	public void setBenefitId(Long benefitId) {
+		this.benefitId = benefitId;
+	}
+
+	public void setBenefit(Benefit benefit) {
         this.benefit = benefit;
         if (!benefit.getTypes().contains(this)) {
             benefit.addType(this);
         }
     }
 
-    public Collection<OrderDetails> getOrders() {
+    public List<OrderDetails> getOrders() {
         if (this.orders == null) {
             this.orders = new ArrayList<>();
         }
@@ -99,7 +110,7 @@ public class BenefitType implements IDBEntity {
         }
     }
 
-    public void setOrders(Collection<OrderDetails> orders) {
+    public void setOrders(List<OrderDetails> orders) {
         this.orders = orders;
     }
 }

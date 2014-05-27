@@ -2,14 +2,14 @@ package com.sap.hana.cloud.samples.benefits.persistence;
 
 import javax.persistence.EntityManager;
 
-import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProvider;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Order;
 import com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails;
 
 public class OrderDetailDAO extends BasicDAO<OrderDetails> {
 
     public OrderDetailDAO() {
-        super(PersistenceManager.getInstance().getEntityManagerProvider());
+        super(EntityManagerProvider.getInstance());
     }
 
     public void delete(long id) {

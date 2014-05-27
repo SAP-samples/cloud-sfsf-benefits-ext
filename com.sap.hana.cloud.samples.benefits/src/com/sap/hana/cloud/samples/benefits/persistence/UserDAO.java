@@ -8,7 +8,7 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProvider;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 
@@ -17,7 +17,7 @@ public class UserDAO extends BasicDAO<User> {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public UserDAO() {
-		super(PersistenceManager.getInstance().getEntityManagerProvider());
+		super(EntityManagerProvider.getInstance());
 	}
 
 	public User getByUserId(String userId) {
@@ -28,7 +28,7 @@ public class UserDAO extends BasicDAO<User> {
 			User user = query.getSingleResult();
 			return user;
 		} catch (NoResultException x) {
-			logger.error("Could not retrieve entity for userId {} from table {}.", userId, "User");
+			logger.warn("Could not retrieve entity for userId {} from table {}. Maybe the user doesn't exist yet.", userId, "User");
 		} catch (NonUniqueResultException e) {
 			logger.error("More than one entity for userId {} from table {}.", userId, "User");
 		}

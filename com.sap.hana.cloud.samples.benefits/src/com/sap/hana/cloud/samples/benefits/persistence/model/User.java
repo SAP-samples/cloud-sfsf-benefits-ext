@@ -3,7 +3,7 @@ package com.sap.hana.cloud.samples.benefits.persistence.model;
 import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_USER_BY_USER_ID;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -45,20 +45,23 @@ public class User implements IDBEntity {
 	private String email;
 
 	@ManyToOne
-	@JoinColumn(name = "HR_USER_ID")
+	@JoinColumn(name =  "HR_USER_ID", referencedColumnName = "ID")
 	private User hrManager;
 
-	@OneToMany(mappedBy = "hrManager", fetch = FetchType.LAZY, targetEntity = User.class)
-	private Collection<User> employees;
+	@Column(name = "HR_USER_ID", insertable = false, updatable = false)
+	private Long hrId;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = Order.class)
-	private Collection<Order> orders;
+	@OneToMany(mappedBy = "hrManager", fetch = FetchType.EAGER, targetEntity = User.class)
+	private List<User> employees;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.LAZY, targetEntity = UserPoints.class)
-	private Collection<UserPoints> userPoints;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, targetEntity = Order.class)
+	private List<Order> orders;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.LAZY, targetEntity = Campaign.class)
-	private Collection<Campaign> campaigns;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER, targetEntity = UserPoints.class)
+	private List<UserPoints> userPoints;
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.EAGER, targetEntity = Campaign.class)
+	private List<Campaign> campaigns;
 
 	@Override
 	public Long getId() {
@@ -85,6 +88,10 @@ public class User implements IDBEntity {
 		this.lastName = lastName;
 	}
 
+	public String getFullName() {
+		return firstName + lastName;
+	}
+
 	public String getUserId() {
 		return userId;
 	}
@@ -101,14 +108,14 @@ public class User implements IDBEntity {
 		this.email = email;
 	}
 
-	public Collection<Order> getOrders() {
+	public List<Order> getOrders() {
 		if (orders == null) {
 			orders = new ArrayList<>();
 		}
 		return orders;
 	}
 
-	public void setOrders(Collection<Order> orders) {
+	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}
 
@@ -119,14 +126,14 @@ public class User implements IDBEntity {
 		}
 	}
 
-	public Collection<UserPoints> getUserPoints() {
+	public List<UserPoints> getUserPoints() {
 		if (this.userPoints == null) {
 			this.userPoints = new ArrayList<>();
 		}
 		return userPoints;
 	}
 
-	public void setUserPoints(Collection<UserPoints> userPoints) {
+	public void setUserPoints(List<UserPoints> userPoints) {
 		this.userPoints = userPoints;
 	}
 
@@ -148,7 +155,7 @@ public class User implements IDBEntity {
 		}
 	}
 
-	public Collection<User> getEmployees() {
+	public List<User> getEmployees() {
 		if (this.employees == null) {
 			this.employees = new ArrayList<>();
 		}
@@ -162,11 +169,11 @@ public class User implements IDBEntity {
 		}
 	}
 
-	public void setEmployees(Collection<User> employees) {
+	public void setEmployees(List<User> employees) {
 		this.employees = employees;
 	}
 
-	public Collection<Campaign> getCampaigns() {
+	public List<Campaign> getCampaigns() {
 		if (this.campaigns == null) {
 			this.campaigns = new ArrayList<>();
 		}
@@ -180,8 +187,16 @@ public class User implements IDBEntity {
 		}
 	}
 
-	public void setCampaigns(Collection<Campaign> campaigns) {
+	public void setCampaigns(List<Campaign> campaigns) {
 		this.campaigns = campaigns;
+	}
+
+	public Long getHrId() {
+		return hrId;
+	}
+
+	public void setHrId(Long hrId) {
+		this.hrId = hrId;
 	}
 
 }

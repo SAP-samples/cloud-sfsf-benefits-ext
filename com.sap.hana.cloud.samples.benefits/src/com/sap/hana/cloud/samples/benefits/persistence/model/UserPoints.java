@@ -1,88 +1,110 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
+import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_USER_POINTS;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-import com.sap.hana.cloud.samples.benefits.persistence.model.keys.UserPointsPrimaryKey;
-
 @Entity
-@IdClass(UserPointsPrimaryKey.class)
 @Table(name = "USER_POINTS")
+@NamedQueries({ @NamedQuery(name = GET_USER_POINTS, query = "select u from UserPoints u where u.user = :user and u.campaign = :campaign")})
 public class UserPoints implements IDBEntity {
 
-    @GeneratedValue
-    @Column(name = "ID")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "ID")
+	private Long id;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @Id
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
-    private User user;
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+	private User user;
+	
+	@Column(name = "USER_ID", insertable = false, updatable = false) 
+    private Long userId;
 
-    @ManyToOne(cascade = CascadeType.REFRESH)
-    @Id
-    @JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
-    private Campaign campaign;
+	@ManyToOne(cascade = CascadeType.REFRESH)
+	@JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
+	private Campaign campaign;
 
-    @Basic
-    @Column(name = "AVAILABLE_POINTS")
-    private Long availablePoints;
+	@Column(name = "CAMPAIGN_ID", insertable = false, updatable = false) 
+    private Long campaignId;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Basic
+	@Column(name = "AVAILABLE_POINTS")
+	private Long availablePoints;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-        if (!user.getUserPoints().contains(this)) {
-            user.addUserPoints(this);
-        }
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public Campaign getCampaign() {
-        return campaign;
-    }
+	public void setUser(User user) {
+		this.user = user;
+		if (!user.getUserPoints().contains(this)) {
+			user.addUserPoints(this);
+		}
+	}
 
-    public void setCampaign(Campaign campaign) {
-        this.campaign = campaign;
-        if (!campaign.getUserPoints().contains(this)) {
-            campaign.addUserPoints(this);
-        }
-    }
+	public Campaign getCampaign() {
+		return campaign;
+	}
 
-    public Long getAvailablePoints() {
-        return availablePoints;
-    }
+	public void setCampaign(Campaign campaign) {
+		this.campaign = campaign;
+		if (!campaign.getUserPoints().contains(this)) {
+			campaign.addUserPoints(this);
+		}
+	}
 
-    public void setAvailablePoints(Long availablePoints) {
-        this.availablePoints = availablePoints;
-    }
+	public Long getAvailablePoints() {
+		return availablePoints;
+	}
 
-    public void addPoints(long points) {
-        this.availablePoints += points;
-    }
+	public void setAvailablePoints(Long availablePoints) {
+		this.availablePoints = availablePoints;
+	}
 
-    public void subtractPoints(long points) {
-        if ((this.availablePoints - points) < 0) {
-            throw new IllegalArgumentException("Available user points can not be less than zero");
-        }
-        this.availablePoints -= points;
-    }
+	public void addPoints(long points) {
+		this.availablePoints += points;
+	}
+
+	public void subtractPoints(long points) {
+		if ((this.availablePoints - points) < 0) {
+			throw new IllegalArgumentException("Available user points can not be less than zero");
+		}
+		this.availablePoints -= points;
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	
+	public Long getCampaignId() {
+		return campaignId;
+	}
+
+	public void setCampaignId(Long campaignId) {
+		this.campaignId = campaignId;
+	}
 }

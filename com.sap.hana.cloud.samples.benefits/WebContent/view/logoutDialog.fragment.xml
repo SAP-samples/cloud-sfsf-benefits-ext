@@ -9,5 +9,4 @@
 		<Button text="{b_i18n>CANCEL_BTN_NAME}" press="cancelLogoutButtonPressed" />
 	</endButton>
 
-
 </Dialog>

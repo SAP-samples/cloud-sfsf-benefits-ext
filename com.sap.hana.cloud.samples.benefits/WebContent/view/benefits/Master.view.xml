@@ -3,11 +3,11 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 	<Page id="BenefitsMasterPage" title="{b_i18n>BENEFITS_MASTER_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
 		<content>
-			<List id="benefitsList" items="{/}" includeItemInSelection="true"
+			<List id="benefitsList" items="{/d/results/}" includeItemInSelection="true"
 				mode="SingleSelectMaster" select="onItemSelected">
 				<items>
-					<ObjectListItem icon="sap-icon://database" title="{name}"
-						class="benefitListItem listItem" />
+					<ObjectListItem icon="sap-icon://database" title="{Name}"
+						class="itemFocus benefitListItem listItem" />
 				</items>
 			</List>
 		</content>

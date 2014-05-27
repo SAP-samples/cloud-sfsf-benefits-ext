@@ -7,16 +7,16 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 		sap.ui.getCore().getEventBus().subscribe("app", "campaignDetailsRefresh", this._refreshHandler, this);
 		formatter = sap.ui.core.format.DateFormat;
 		this.getView().addEventDelegate({
-	         onBeforeShow: function(evt) {
-	        	
-	        	 if (evt.data && evt.data.context) {
-	                 this.setBindingContext(evt.data.context);
-	                 this.setModel(evt.data.context.getModel());
-	                 this.getController()._refreshStartStopBtnState();
-	             } 
+			onBeforeShow : function(evt) {
 
-	         }
-	     }, this.getView());
+				if (evt.data && evt.data.context) {
+					this.setBindingContext(evt.data.context);
+					this.setModel(evt.data.context.getModel());
+					this.getController()._refreshStartStopBtnState();
+				}
+
+			}
+		}, this.getView());
 	},
 	onAfterRendering : function() {
 	},
@@ -25,22 +25,23 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	},
 
 	formatStateText : function(active) {
-		if(active) {
-			this.byId("stateCtr").removeStyleClass("red");
-			this.byId("stateCtr").addStyleClass("green");
-			return this.getModelProperty("CAMPAIGN_STATUS_ACTIVE");
-		}
-		else{
-			this.byId("stateCtr").removeStyleClass("green");
-			this.byId("stateCtr").addStyleClass("red");
-			return this.getModelProperty("CAMPAIGN_STATUS_INACTIVE");
-		}
+		var stateControl = this.byId("stateCtr");
+		stateControl.removeStyleClass("green").removeStyleClass("red");
+		stateControl.addStyleClass(active ? "green" : "red");
+		return this.getModelProperty(active ? "CAMPAIGN_STATUS_ACTIVE" : "CAMPAIGN_STATUS_INACTIVE");
 	},
-	getDateObject : function(date,format){
+
+	getDateObject : function(date, format) {
+		var parsedDate = new Date(parseInt(date.substr(6)));
+		var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
+			pattern : "dd/MM/yyyy"
+		});
+		var TZOffsetMs = new Date(0).getTimezoneOffset() * 60 * 1000;
+		var dateStr = dateFormat.format(new Date(parsedDate.getTime() + TZOffsetMs));
 		var dateObject = formatter.getDateInstance({
 			style : "full",
-			pattern : "yyyy-MM-dd\'T\'HH:mm:ss\'Z\'"
-		}).parse(date);
+			pattern : "dd/MM/yyyy"
+		}).parse(dateStr);
 		return formatter.getDateInstance({
 			style : "full",
 			pattern : format
@@ -48,7 +49,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	},
 	formatDate : function(date) {
 		if (date) {
-			return this.getDateObject(date,"MMM d, y");
+			return this.getDateObject(date, "MMM d, y");
 		} else {
 			var notSetMsg = this.getModelProperty("NOT_SET_MSG");
 			return notSetMsg;
@@ -56,35 +57,32 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	},
 	formatDateTxt : function(date) {
 		if (date) {
-			return this.getDateObject(date,"dd.MM.yy");
+			return this.getDateObject(date, "dd.MM.yy");
 		} else {
 			return undefined;
 		}
 	},
-	formatBenefitPoints : function(points){
-		var message = sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_ENTITLEMENT_VALUE").formatPropertyMessage(points);
+	formatBenefitPoints : function(points) {
+		var message = sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_ENTITLEMENT_VALUE").formatPropertyMessage(
+				points);
 		return message;
-		
+
 	},
 	startStopButtonPressed : function(evt) {
-		if (evt.getSource().state === 'stop') {
-			this._requestStopCampaign();
-		} else {
-			this._startCampaign();
-		}
+		evt.getSource().state === 'stop' ? this._requestStopCampaign() : this._startCampaign();
 	},
 	changeDatesButtonPressed : function(evt) {
 		if (!this.editCampaignDialog) {
 			this.editCampaignDialog = sap.ui.xmlfragment("editCampaignDialog", "view.campaigns.editCampaignDialog", this);
 		}
-		var startDate = this.byId("inputForm").getBindingContext().getObject().startDate;
-		var endDate = this.byId("inputForm").getBindingContext().getObject().endDate;
+		var startDate = this.byId("inputForm").getBindingContext().getObject().StartDate;
+		var endDate = this.byId("inputForm").getBindingContext().getObject().EndDate;
 		sap.ui.getCore().byId("editCampaignDialog--startDateCtr").setValue(this.formatDateTxt(startDate));
 		sap.ui.getCore().byId("editCampaignDialog--endDateCtr").setValue(this.formatDateTxt(endDate));
 		sap.ui.getCore().getEventBus().publish("nav", "virtual");
 		this.editCampaignDialog.open();
 	},
-	cancelButtonPressed : function(){
+	cancelButtonPressed : function() {
 		this.editCampaignDialog.close();
 	},
 	fireModelChanged : function(action) {
@@ -96,14 +94,15 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	closeDateTimeSelectors : function() {
 		sap.ui.getCore().byId("editCampaignDialog--startDateCtr").close();
 		sap.ui.getCore().byId("editCampaignDialog--endDateCtr").close();
+		sap.ui.getCore().byId("editCampaignDialog--startDateCtr").focus();
 	},
-	hideLogout : function(){
+	hideLogout : function() {
 		this.byId("logoutButton").setVisible(appController._hasLogoutButton());
-	},	
+	},
 	logoutButtonPressed : function(evt) {
 		sap.ui.getApplication().onLogout();
 	},
-	getModelProperty : function(msgId){
+	getModelProperty : function(msgId) {
 		var message = sap.ui.getCore().getModel("b_i18n").getProperty(msgId);
 		return message;
 	},
@@ -121,22 +120,19 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 			var ctx = this.byId("inputForm").getBindingContext().getObject();
 			var dateFormat = sap.ui.core.format.DateFormat.getDateInstance({
 				style : "full",
-				pattern : "yyyy-MM-dd'T'HH:mm:ss'Z'"
+				pattern : "yyyy-MM-dd'T'HH:mm:ss"
 			});
+			var StartDate = dateFormat.format(sap.ui.getCore().byId("editCampaignDialog--startDateCtr").getDateValue());
+			var EndDate = dateFormat.format(sap.ui.getCore().byId("editCampaignDialog--endDateCtr").getDateValue());
 			jQuery.ajax({
-				url : 'api/campaigns/edit/' + ctx.id,
+				url : 'OData.svc/editCampaign?startDate=datetime\'' + StartDate + '\'&endDate=datetime\'' + EndDate
+						+ '\'&campaignid=' + ctx.Id,
 				type : 'post',
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {
 					sap.m.MessageToast.show(this.getModelProperty("DATA_SAVED_MSG"));
 					this.fireModelChanged("edit");
 				}, this),
-				contentType : "application/json; charset=utf-8",
-				data : JSON.stringify({
-					id : ctx.id,
-					startDate : dateFormat.format(sap.ui.getCore().byId("editCampaignDialog--startDateCtr").getDateValue()),
-					endDate : dateFormat.format(sap.ui.getCore().byId("editCampaignDialog--endDateCtr").getDateValue())
-				}),
 				statusCode : {
 					400 : function(xhr, error) {
 						sap.m.MessageToast.show(xhr.responseText);
@@ -145,30 +141,23 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 			});
 		} else {
 			$(".errorContainer").removeClass("displayNone");
-			if (!startDate || !endDate) {
-				sap.ui.getCore().byId("editCampaignDialog--errorStatusText").setText(this.getModelProperty("INVALID_DATES_MSG"));
-			} else {
-				sap.ui.getCore().byId("editCampaignDialog--errorStatusText").setText(this.getModelProperty("INVALID_PERIOD_MSG"));
-			}
+			var message = this.getModelProperty(!startDate || !endDate ? "INVALID_DATES_MSG" : "INVALID_PERIOD_MSG");
+			sap.ui.getCore().byId("editCampaignDialog--errorStatusText").setText(message);
 		}
 	},
 	_isValidDatePeriod : function(startDate, endDate) {
-		if (startDate && endDate && startDate.getTime() < endDate.getTime()) {
-			return true;
-		} else {
-			return false;
-		}
+		return startDate && endDate && startDate.getTime() < endDate.getTime();
 	},
 	_deleteCampaignBtnPressed : function(evt) {
-		var campaignId = this.byId("inputForm").getBindingContext().getObject().id;
-		var campaignName = this.byId("inputForm").getBindingContext().getObject().name;
-		var message = sap.ui.getCore().getModel("b_i18n").getProperty("DELETE_CAMPAIGN_MSG").formatPropertyMessage(campaignName);
-		sap.m.MessageBox.confirm(message, jQuery.proxy(function(
-				action) {
+		var campaignId = this.byId("inputForm").getBindingContext().getObject().Id;
+		var campaignName = this.byId("inputForm").getBindingContext().getObject().Name;
+		var message = sap.ui.getCore().getModel("b_i18n").getProperty("DELETE_CAMPAIGN_MSG").formatPropertyMessage(
+				campaignName);
+		sap.m.MessageBox.confirm(message, jQuery.proxy(function(action) {
 			if (action === sap.m.MessageBox.Action.OK) {
 				this.getView().setBusy(true);
 				jQuery.ajax({
-					url : 'api/campaigns/' + campaignId,
+					url : 'OData.svc/deleteCampaign?campaignId=' + campaignId,
 					type : 'delete',
 					success : jQuery.proxy(function(data) {
 						this.fireModelChanged("delete");
@@ -182,7 +171,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	},
 	_refreshStartStopBtnState : function() {
 		var startStopBtn = this.byId("startStopBtn");
-		var isCampaignStarted = this.getView().getBindingContext().getObject().active;
+		var isCampaignStarted = this.getView().getBindingContext().getObject().Active;
 		if (isCampaignStarted) {
 			startStopBtn.setText(this.getModelProperty("STOP_BTN_NAME"));
 			startStopBtn.setIcon("sap-icon://decline");
@@ -194,41 +183,43 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 		}
 	},
 	_startCampaign : function(evt) {
-		if (this._validateCampaignDataExist()) {
-			appController.setAppBusy(true);
-			var ctx = this.byId("inputForm").getBindingContext().getObject();
-			jQuery.ajax({
-				url : 'api/campaigns/start-possible/' + ctx.id,
-				type : 'get',
-				dataType : 'json',
-				success : jQuery.proxy(function(data) {
-					if (data.canBeStarted) {
-						this._requestStartCampaign();
-					} else {
-						var message = sap.ui.getCore().getModel("b_i18n").getProperty("UNABLE_START_MORE_CAMPAIGNS_MSG").formatPropertyMessage(data.startedCampaignName);
-						this._showErrorMessageBox(message);
-					}
-				}, this),
-				complete : function() {
-					appController.setAppBusy(false);
-				},
-				contentType : "application/json; charset=utf-8",
-			});
-		} else {
+		if (!this._validateCampaignDataExist()) {
 			this._showErrorMessageBox(this.getModelProperty("UNABLE_START_CAMPAIGN_MSG"));
+			return;
 		}
-	},
-	_validateCampaignDataExist : function() {
-		var campData = this.byId("inputForm").getBindingContext().getObject();
-		if (campData.name && campData.startDate && campData.endDate && campData.points) {
-			return true;
-		}
-		return false;
-	},
-	_requestStopCampaign : function() {
+
+		appController.setAppBusy(true);
 		var ctx = this.byId("inputForm").getBindingContext().getObject();
 		jQuery.ajax({
-			url : 'api/campaigns/stop/' + ctx.id,
+			url : 'OData.svc/canStartCampaign?campaignId=' + ctx.Id,
+			type : 'get',
+			dataType : 'json',
+			success : jQuery.proxy(function(data) {
+				if (!data.d.canStartCampaign.canBeStarted) {
+					var message = sap.ui.getCore().getModel("b_i18n").getProperty("UNABLE_START_MORE_CAMPAIGNS_MSG")
+							.formatPropertyMessage(data.d.canStartCampaign.startedCampaignName);
+					this._showErrorMessageBox(message);
+					return;
+				}
+
+				this._requestStartCampaign();
+			}, this),
+			complete : function() {
+				appController.setAppBusy(false);
+			},
+			contentType : "application/json; charset=utf-8"
+		});
+	},
+	
+	_validateCampaignDataExist : function() {
+		var campData = this.byId("inputForm").getBindingContext().getObject();
+		return campData.Name && campData.StartDate && campData.EndDate && campData.Points;
+	},
+	_requestStopCampaign : function() {
+		appController.setAppBusy(true);
+		var ctx = this.byId("inputForm").getBindingContext().getObject();
+		jQuery.ajax({
+			url : 'OData.svc/stopCampaign?campaignId=' + ctx.Id,
 			type : 'post',
 			dataType : 'json',
 			success : jQuery.proxy(function(data) {
@@ -236,13 +227,16 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 				this.fireModelChanged("stop");
 				this._refreshStartStopBtnState();
 			}, this),
+			complete : function() {
+				appController.setAppBusy(false);
+			},
 			contentType : "application/json; charset=utf-8"
 		});
 	},
 	_requestStartCampaign : function() {
 		var ctx = this.byId("inputForm").getBindingContext().getObject();
 		jQuery.ajax({
-			url : 'api/campaigns/start/' + ctx.id,
+			url : 'OData.svc/startCampaign?campaignId=' + ctx.Id,
 			type : 'post',
 			dataType : 'json',
 			success : jQuery.proxy(function(data) {
@@ -255,6 +249,6 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	},
 	_showErrorMessageBox : function(message) {
 		sap.m.MessageBox.show(message, sap.m.MessageBox.Icon.ERROR, null, [sap.m.MessageBox.Action.OK]);
-	},
-	
+	}
+
 });

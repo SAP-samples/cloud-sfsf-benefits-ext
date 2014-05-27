@@ -7,17 +7,17 @@
 		</headerContent>
 		
 		<content>
-			<ObjectHeader title="{name}">
+			<ObjectHeader title="{Name}">
 				<attributes>
 					<ObjectAttribute text="{description}" />
-					<ObjectAttribute text="{b_i18n>MORE_INFORMATION_LINK}" active="true"
-						press="linkPressed" />
+					<ObjectAttribute id="moreInfoLink" text="{b_i18n>MORE_INFORMATION_LINK}" active="true"
+						press="linkPressed"/>
 				</attributes>
 			</ObjectHeader>
-			<List items="{benefitTypes}" inset="true" class="benefitList" headerText="{b_i18n>BENEFITS_LIST_HEADER}">
+			<List items="{BenefitTypeDetails/results}" inset="true" class="benefitList" headerText="{b_i18n>BENEFITS_LIST_HEADER}">
 				<items>
-					<StandardListItem title="{b_i18n>VALUE_LABEL}:" description="{name}"
-						info="{path:'value' , formatter:'.formatValue'}"  />
+					<StandardListItem title="{b_i18n>VALUE_LABEL}:" description="{Name}"
+						info="{path:'Value' , formatter:'.formatValue'}"  />
 				</items>
 			</List>
 		</content>

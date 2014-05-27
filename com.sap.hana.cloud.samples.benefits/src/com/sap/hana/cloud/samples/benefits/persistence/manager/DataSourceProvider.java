@@ -1,4 +1,4 @@
-package com.sap.hana.cloud.samples.benefits.persistence.manager.impl;
+package com.sap.hana.cloud.samples.benefits.persistence.manager;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;

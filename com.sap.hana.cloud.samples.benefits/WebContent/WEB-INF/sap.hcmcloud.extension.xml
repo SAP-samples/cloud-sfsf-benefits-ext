@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extensionDefinition xmlns="http://www.sap.com/hana-cloud/extension">
+	<id>benefits</id>
+	<provider>sap</provider>
+	<dependencies>
+		<!--  Declares dependencie to SFSF Modules -->
+	    <module provider="sap" id="EMPLOYEE_CENTRAL" use="required">
+	        <!--  Declares dependencies to Module Features -->   
+			<feature name="sap_hcmcloud_core_odata" use="required"></feature>  
+			<feature name="RBP" use="required"></feature>
+	    </module>
+	    <module provider="sap" id="JAM" use="optional">
+	    </module>
+	</dependencies>
+</extensionDefinition>

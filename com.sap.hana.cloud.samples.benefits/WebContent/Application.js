@@ -25,7 +25,7 @@ sap.ui.app.Application.extend("Application", {
 				"com.sap.hana.cloud.samples.benefits.view.DefaultDetails"));
 		var tileContainer = new sap.m.TileContainer("HomePage");
 
-		var configData = this.getConfig().getData();
+		var configData = this.getConfig().getData().d.uiConfig;
 
 		if (configData.showEmployeesTile) {
 			this._showEmployeeTile(splitApp, tileContainer);
@@ -185,24 +185,7 @@ sap.ui.app.Application.extend("Application", {
 		splitApp.toDetail(sap.ui.getCore().byId(pageId), "show", data);
 	},
 	_hasLogoutButton : function() {
-		var hasLogout = this._getUrlParameter("hasLogout");
-		if (hasLogout == "true") {
-			return true;
-		}
-		return false;
-	},
-	_getUrlParameter : function(param) {
-		var urlParams = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-
-		for (var i = 0; i < urlParams.length; i++) {
-			if (urlParams[i].split('=')[0] == undefined) {
-				return false;
-			}
-			if (urlParams[i].split('=')[0] == param) {
-				return urlParams[i].split('=')[1];
-			}
-		}
-		return false;
+		return jQuery.sap.getUriParameters().get("hasLogout") === "true";
 	},
 	onLogout : function() {
 

@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.sap.hana.cloud.samples.benefits.api.bean.UserBean;
 import com.sap.hana.cloud.samples.benefits.api.util.GsonFactory;
+import com.sap.hana.cloud.samples.benefits.commons.UserInfo;
 
 public class CoreODataParser {
 
@@ -29,14 +29,13 @@ public class CoreODataParser {
         closeJsonReader(reader);
         return sfuser;
     }
-    
-    public UserBean loadUserBeanProfileFromJsom(String json) throws IOException {
-        JsonReader reader = getJsonReader(json);
-        UserBean ubuser = gson.fromJson(reader, UserBean.class);
+    public UserInfo loadUserInfoFromJson(String json) throws IOException {
+    	JsonReader reader = getJsonReader(json);
+        UserInfo uInfo = gson.fromJson(reader, UserInfo.class);
         closeJsonReader(reader);
-        return ubuser;
+        return uInfo;
     }
-
+    
     public List<SFUser> loadSFUserProfileListFromJsom(String json) throws IOException {
         if (json == null) {
             return Collections.emptyList();

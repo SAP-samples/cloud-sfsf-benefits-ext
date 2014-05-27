@@ -3,13 +3,13 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 	<Page id="EmployeesMasterPage" title="{b_i18n>EMPLOYEES_MASTER_PAGE_NAME}" scrollToLoad="false" showNavButton="true" navButtonTap="onNavPressed">
 		<content>
-			<GrowingList id="employeesList" threshold="6" items="{/}"
+			<GrowingList id="employeesList" threshold="6" items="{/d/results/}"
 				includeItemInSelection="true" mode="SingleSelectMaster" select="onItemSelected">
 				<items>
-					<ObjectListItem title="{firstName} {lastName}"
-						number="{activeCampaignBalance/availablePoints}" numberUnit="{b_i18n>UNUSED_POINTS}" class="listItem">
+					<ObjectListItem title="{FirstName} {LastName}"
+						number="{parts:[{path:'UserPointsDetails/results/'}], formatter:'.getAvailablePoints'}" numberUnit="{b_i18n>UNUSED_POINTS}" class="itemFocus listItem">
 						<attributes>
-							<ObjectAttribute text="{email}" />
+							<ObjectAttribute text="{Email}" />
 						</attributes>
 					</ObjectListItem>
 				</items>

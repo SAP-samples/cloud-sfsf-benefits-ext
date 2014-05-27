@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
-import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProvider;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Order;
@@ -14,7 +14,7 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 public class OrderDAO extends BasicDAO<Order> {
 
     public OrderDAO() {
-        super(PersistenceManager.getInstance().getEntityManagerProvider());
+        super(EntityManagerProvider.getInstance());
     }
 
     public Order createOrderForUser(User user, Campaign campaign) {

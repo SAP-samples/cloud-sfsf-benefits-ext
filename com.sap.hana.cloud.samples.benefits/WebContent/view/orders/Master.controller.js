@@ -6,17 +6,17 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
 		if (!this.getView().getModel()) {
 			this.getView().setModel(new sap.ui.model.json.JSONModel());
 		}
-		this.getView().getModel().loadData("api/user/campaigns", null, false);
+		this.getView().getModel().loadData("OData.svc/userCampaigns", null, false);
 	},
 	onBeforeRendering : function() {
 		this.loadModel();
-		this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("active", true));
+		this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("Active", true));
 	},
 	onAfterRendering : function() {
 		var list = this.byId("campaignsList");
 		if (!list.getItems()) {
 			sap.ui.getCore().getEventBus().publish("nav", "to", {
-				id : views.DEFAULT_DETAILS_VIEW_ID,
+				id : views.DEFAULT_DETAILS_VIEW_ID
 			});
 		} else {
 			var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
@@ -27,18 +27,19 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
 		return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
 	},
 	onItemSelected : function(evt) {
-		var employee = jQuery.sap.syncGetJSON("api/user/profile").data;
-		var campaignId = evt.getParameter("listItem").getBindingContext().getObject().id;
-
+		var employee = jQuery.sap.syncGetJSON("OData.svc/profile").data.d;
+		var activeCampaign = evt.getParameter("listItem").getBindingContext().getObject();
+		var campaignId = activeCampaign.Id;
 		sap.ui.getCore().getEventBus().publish("app", "ordersDetailsRefresh", {
 			context : {
 				employee : employee,
-				campaignId : campaignId
+				campaignId : campaignId,
+				activeCampaign : activeCampaign
 			}
 		});
 
 		sap.ui.getCore().getEventBus().publish("nav", "to", {
-			id : views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID,
+			id : views.EMPLOYEE_ORDERS_DETAILS_VIEW_ID
 		});
 	},
 	onNavPressed : function() {

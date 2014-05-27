@@ -4,12 +4,12 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 	<Page id="CampaignMasterPage" title="{b_i18n>CAMPAIGNS_MASTER_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
 		<content>
-			<List id="campaignsList" items="{/}" includeItemInSelection="true" mode="SingleSelectMaster" delete="onDeleteItem" select="onItemSelect">
+			<List id="campaignsList" items="{/d/results/}" includeItemInSelection="true" mode="SingleSelectMaster" delete="onDeleteItem" select="onItemSelect">
 				<items>
-					<ObjectListItem title="{name}">
+					<ObjectListItem title="{Name}" class="itemFocus">
 						<firstStatus>
-							<ObjectStatus state="{parts:['active'], formatter: '.setState' }"
-								text="{parts:['active'], formatter: '.setStateText' }" class="labelHeight listItem" />
+							<ObjectStatus state="{parts:['Active'], formatter: '.setState' }"
+								text="{parts:['Active'], formatter: '.setStateText' }" class="labelHeight listItem" />
 						</firstStatus>
 					</ObjectListItem>
 				</items>

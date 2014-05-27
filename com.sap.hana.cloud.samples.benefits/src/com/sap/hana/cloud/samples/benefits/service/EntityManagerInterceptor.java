@@ -9,16 +9,16 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProvider;
 
 public class EntityManagerInterceptor implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         try {
-            PersistenceManager.getInstance().initEntityManagerProvider();
+        	EntityManagerProvider.getInstance().initEntityManagerProvider();
             chain.doFilter(request, response);
         } finally {
-            PersistenceManager.getInstance().closeEntityManager();
+            EntityManagerProvider.getInstance().closeEntityManager();
         }
     }
 
@@ -26,6 +26,5 @@ public class EntityManagerInterceptor implements Filter {
     }
 
     public void destroy() {
-        PersistenceManager.getInstance().closeAll();
     }
 }

@@ -1,7 +1,7 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -32,8 +32,8 @@ public class Benefit implements IDBEntity {
     @Basic
     private String link;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "benefit", fetch = FetchType.LAZY, targetEntity = BenefitType.class)
-    private Collection<BenefitType> types;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "benefit", fetch = FetchType.EAGER, targetEntity = BenefitType.class)
+    private List<BenefitType> types;
 
     @Override
     public Long getId() {
@@ -68,7 +68,7 @@ public class Benefit implements IDBEntity {
         this.link = link;
     }
 
-    public Collection<BenefitType> getTypes() {
+    public List<BenefitType> getTypes() {
         if (this.types == null) {
             this.types = new ArrayList<>();
         }
@@ -82,7 +82,7 @@ public class Benefit implements IDBEntity {
         }
     }
 
-    public void setTypes(Collection<BenefitType> types) {
+    public void setTypes(List<BenefitType> types) {
         this.types = types;
     }
 }

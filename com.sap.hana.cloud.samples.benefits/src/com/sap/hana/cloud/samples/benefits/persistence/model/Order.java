@@ -4,7 +4,7 @@ import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GE
 import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_USER_ORDERS_FOR_CAMPAIGN;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -38,13 +38,19 @@ public class Order implements IDBEntity {
     @ManyToOne
     @JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
     private Campaign campaign;
+    
+    @Column(name = "CAMPAIGN_ID", insertable = false, updatable = false) 
+    private Long campaignId;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
     private User user;
+    
+    @Column(name = "USER_ID", insertable = false, updatable = false) 
+    private Long userId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.LAZY, targetEntity = OrderDetails.class)
-    private Collection<OrderDetails> orderDetails;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.EAGER, targetEntity = OrderDetails.class)
+    private List<OrderDetails> orderDetails;
 
     @Override
     public Long getId() {
@@ -81,7 +87,7 @@ public class Order implements IDBEntity {
         }
     }
 
-    public Collection<OrderDetails> getOrderDetails() {
+    public List<OrderDetails> getOrderDetails() {
         if (this.orderDetails == null) {
             this.orderDetails = new ArrayList<>();
         }
@@ -106,8 +112,24 @@ public class Order implements IDBEntity {
         this.total -= orderTotal;
     }
 
-    public void setOrderDetails(Collection<OrderDetails> orderDetails) {
+    public void setOrderDetails(List<OrderDetails> orderDetails) {
         this.orderDetails = orderDetails;
     }
+    
+    public Long getCampaignId() {
+		return campaignId;
+	}
+
+	public void setCampaignId(Long campaignId) {
+		this.campaignId = campaignId;
+	}
+	
+	public Long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
 
 }

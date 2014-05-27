@@ -14,8 +14,11 @@
 
 	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<groupId>com.sap.hana.clould.samples.benefits</groupId>
-	<version>1.0.1</version>
+		<version>1.1.0</version>
 	<packaging>war</packaging>
+	<name>SAP Employee Benefits Management Sample Application</name>
+	<description>The SAP HANA Cloud Platform extension package makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.</description>
+	<url>https://github.com/SAP/cloud-sfsf-benefits-ext</url>
 
 	<organization>
 		<name>SAP AG</name>
@@ -43,9 +46,9 @@
 	<properties>
 		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<local.eclipse.path>${ECLIPSE_HOME}</local.eclipse.path>
-		<sap.ui5.version>${SAP_UI5_VERSION}</sap.ui5.version>
-		<apache.cxf.version>2.7.3</apache.cxf.version>
+		<apache.cxf.version>2.7.0</apache.cxf.version>
+		<!-- Properties needed to reference sap OData/Olingo -->
+
 	</properties>
 
 	<repositories>
@@ -68,20 +71,15 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.googlecode.jcsv</groupId>
-			<artifactId>jcsv</artifactId>
-			<version>1.4.0</version>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-web-api</artifactId>
 			<version>6.0</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.eclipse.persistence</groupId>
-			<artifactId>javax.persistence</artifactId>
-			<version>2.0.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
@@ -94,7 +92,6 @@
 			<version>1.7.2</version>
 			<scope>provided</scope>
 		</dependency>
-
 		<!-- CXF Resful services -->
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -120,26 +117,60 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.2.4</version>
+			<version>2.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>com.sap.cloud</groupId>
 			<artifactId>neo-java-web-api</artifactId>
 			<version>1.43.20.3</version>
 			<scope>provided</scope>
+			<exclusions>
+				<exclusion>
+					<artifactId>httpclient</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+				<exclusion>
+					<artifactId>httpcore</artifactId>
+					<groupId>org.apache.httpcomponents</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.2.4</version>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.10</version>
+			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.sap.ui5</groupId>
-			<artifactId>resource</artifactId>
-			<version>${sap.ui5.version}</version>
-			<scope>system</scope>
-			<systemPath>${local.eclipse.path}/plugins/com.sap.ui5.resource_${sap.ui5.version}.jar</systemPath>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-api-incubating</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-core-incubating</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-jpa-processor-api-incubating</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-api-annotation-incubating</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-jpa-processor-core-incubating</artifactId>
+			<version>1.1.0</version>
 		</dependency>
 	</dependencies>
 
@@ -246,39 +277,6 @@
 									<version>[3.0.3, 4.0.0)</version>
 								</requireMavenVersion>
 							</rules>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-clean-plugin</artifactId>
-				<version>2.5</version>
-				<configuration>
-					<filesets>
-						<fileset>
-							<directory>${project.basedir}/WebContent/WEB-INF/lib</directory>
-							<includes>
-								<include>resource*.jar</include>
-							</includes>
-						</fileset>
-					</filesets>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-dependency-plugin</artifactId>
-				<version>2.4</version>
-				<executions>
-					<execution>
-						<id>copy-dependencies</id>
-						<goals>
-							<goal>copy-dependencies</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.basedir}/WebContent/WEB-INF/lib</outputDirectory>
-							<includeGroupIds>
-								com.sap.ui5
-							</includeGroupIds>
 						</configuration>
 					</execution>
 				</executions>
@@ -407,9 +405,5 @@
 				</plugins>
 			</build>
 		</profile>
-
 	</profiles>
-	<name>SAP Employee Benefits Management Sample Application</name>
-	<description>The SAP HANA Cloud Platform extension package makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.</description>
-	<url>https://github.com/SAP/cloud-sfsf-benefits-ext</url>
 </project>

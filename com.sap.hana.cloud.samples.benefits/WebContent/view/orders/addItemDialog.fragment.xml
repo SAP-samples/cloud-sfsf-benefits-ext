@@ -1,6 +1,6 @@
 <Dialog xmlns="sap.m" xmlns:form="sap.ui.commons.form"
 	xmlns:core="sap.ui.core" id="addItemDialog" title="{b_i18n>ADD_ORDER_BTN_NAME}"
-	afterOpen="handleDialogOpen">
+	afterOpen="handleDialogOpen" beforeOpen="resetDialog">
 
 	<content>
 		<form:SimpleForm id="inputForm" minWidth="1024"
@@ -8,31 +8,31 @@
 			<form:content>
 				<Label text="{b_i18n>BENEFIT}" />
 
-				<Select id="benefitTypeSelect" items="{benefitsModel>/}"
-					change="onBenefitSelect">
+				<Select id="benefitTypeSelect" items="{benefitsModel>/d/results/}"
+					change="onBenefitSelect" class="itemFocus">
 					<items>
-						<core:Item key="{benefitsModel>id}" text="{benefitsModel>name}" />
+						<core:Item key="{benefitsModel>Id}" text="{benefitsModel>Name}" />
 					</items>
 				</Select>
 
 				<Label text="{b_i18n>TYPE_OF_BENEFIT}" />
-				<Select id="quantityTypeSelect" items="{benefitTypes}"
-					change="onQuantityTypeSelect">
+				<Select id="quantityTypeSelect" items="{BenefitTypeDetails/results}"
+					change="onQuantityTypeSelect" class="itemFocus">
 					<items>
-						<core:Item key="{id}" text="{name}" />
+						<core:Item key="{Id}" text="{Name}" />
 					</items>
 				</Select>
 
 				<Label text="{b_i18n>PRICE}" />
-				<Input id="priceTypeTxt" type="Number" value="{value}" width="40%"
+				<Input id="priceTypeTxt" type="Number" value="{Value}" width="100%"
 					enabled="false"></Input>
 
 				<Label text="{b_i18n>QUANTITY}" />
-				<Input id="quantityTypeTxt" type="Number" placeholder="Enter amount"
-					width="40%" change="onValueSelect"></Input>
+				<Input id="quantityTypeTxt" type="Number" placeholder="{b_i18n>AMOUNT_PLACEHOLDER}"
+					width="100%" change="onValueSelect"></Input>
 
 				<Label text="{b_i18n>TOTAL}" />
-				<Input id="totalTypeTxt" type="Number" value="" width="40%"
+				<Input id="totalTypeTxt" type="Number" value="" width="100%"
 					enabled="false"></Input>
 			</form:content>
 		</form:SimpleForm>

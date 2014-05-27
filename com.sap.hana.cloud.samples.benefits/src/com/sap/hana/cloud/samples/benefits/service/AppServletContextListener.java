@@ -10,7 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import com.sap.hana.cloud.samples.benefits.csv.dataimport.BenefitsDataImporter;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitDAO;
-import com.sap.hana.cloud.samples.benefits.persistence.manager.PersistenceManager;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerFactoryProvider;
+import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProvider;
 
 public class AppServletContextListener implements ServletContextListener {
 
@@ -18,15 +19,16 @@ public class AppServletContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent arg0) {
+    	EntityManagerFactoryProvider.getInstance().close();
     }
 
     @Override
     public void contextInitialized(ServletContextEvent servletContext) {
         try {
-            PersistenceManager.getInstance().initEntityManagerProvider();
+            EntityManagerProvider.getInstance().initEntityManagerProvider();
             initBenefits();
         } finally {
-            PersistenceManager.getInstance().closeAll();
+            EntityManagerProvider.getInstance().closeEntityManager();
         }
     }
 
@@ -35,9 +37,9 @@ public class AppServletContextListener implements ServletContextListener {
         if (benefitDAO.getAll().size() == 0) {
             final BenefitsDataImporter benefitImporter = new BenefitsDataImporter();
             try {
-                benefitImporter.importData("/benefits.csv");
+                benefitImporter.importDataFromCSV("/benefits.csv");
             } catch (IOException e) {
-                logger.error("Could not insert beneits data into DB", e);
+                logger.error("Could not insert benefits data into DB", e);
             }
         }
 

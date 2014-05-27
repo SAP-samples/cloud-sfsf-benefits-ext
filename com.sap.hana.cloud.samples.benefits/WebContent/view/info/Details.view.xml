@@ -9,20 +9,17 @@
 	
 		<content>
 
-			<ObjectHeader title="{/firstName} {/lastName}">
+			<ObjectHeader title="{/d/results/0/firstName} {/d/results/0/lastName}">
 				<attributes>
-					<ObjectAttribute text="{/title}, {/department}, {/division}" />
-					<ObjectAttribute text="{/location}" />
-					<ObjectAttribute text="{/email}" class="emailIcon" />
-					<ObjectAttribute text="{/businessPhone}" class="phoneIcon" />
-					<ObjectAttribute text="{/cellPhone}" class="mobilePhoneIcon" />
+					<ObjectAttribute text="{/d/results/0/title}, {/d/results/0/department}, {/d/results/0/division}" />
+					<ObjectAttribute text="{/d/results/0/location}" />
+					<ObjectAttribute text="{/d/results/0/businessPhone}" class="phoneIcon" />
 				</attributes>
 			</ObjectHeader>
-			<ObjectHeader title="{b_i18n>HR_MANAGER_HEADER}">
+			<ObjectHeader id="hrObjectHeader" title="{b_i18n>HR_MANAGER_HEADER}">
 				<attributes>
-					<ObjectAttribute text="{/hr/firstName} {/hr/lastName}" class="personIcon" />
-					<ObjectAttribute text="{/hr/email}" class="emailIcon" />
-					<ObjectAttribute text="{/hr/businessPhone}" class="phoneIcon" />
+					<ObjectAttribute text="{/d/results/1/firstName} {/d/results/1/lastName}" class="personIcon" />
+					<ObjectAttribute text="{/d/results/1/businessPhone}" class="phoneIcon" />
 				</attributes>
 			</ObjectHeader>
 

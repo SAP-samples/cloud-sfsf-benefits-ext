@@ -1,52 +1,78 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>com.sap.hana.cloud.samples.benefits</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
+  <error-page>
+    <error-code>500</error-code>
+    <location>/error500.html</location>
+  </error-page>
+  <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error500.html</location>
+  </error-page>
+  <listener>
+    <listener-class>com.sap.hana.cloud.samples.benefits.service.AppServletContextListener</listener-class>
+  </listener>
+  <listener>
+    <description>sessionListener</description>
+    <listener-class>
+        com.sap.hana.cloud.samples.benefits.service.SessionListener
+    </listener-class>
+  </listener>
+  <filter>
+    <filter-name>EntityManagerInterseptor</filter-name>
+    <filter-class>com.sap.hana.cloud.samples.benefits.service.EntityManagerInterceptor</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EntityManagerInterseptor</filter-name>
+    <url-pattern>/OData.svc/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <display-name>ApplicationFilter</display-name>
+    <filter-name>ApplicationFilter</filter-name>
+    <filter-class>com.sap.hana.cloud.samples.benefits.service.ApplicationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ApplicationFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <display-name>SessionCreateFilter</display-name>
+    <filter-name>SessionCreateFilter</filter-name>
+    <filter-class>com.sap.hana.cloud.samples.benefits.service.SessionCreateFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>SessionCreateFilter</filter-name>
+    <url-pattern>/OData.svc/*</url-pattern>
+  </filter-mapping>
+  <filter>
+    <display-name>ODataContextFilter</display-name>
+    <filter-name>ODataContextFilter</filter-name>
+    <filter-class>com.sap.hana.cloud.samples.benefits.odata.cfg.ODataContextFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>ODataContextFilter</filter-name>
+    <url-pattern>/OData.svc/*</url-pattern>
+  </filter-mapping>
   <servlet>
-    <display-name>CXF Servlet</display-name>
-    <servlet-name>CXFServlet</servlet-name>
+    <servlet-name>ODataServlet</servlet-name>
     <servlet-class>org.apache.cxf.jaxrs.servlet.CXFNonSpringJaxrsServlet</servlet-class>
     <init-param>
       <param-name>javax.ws.rs.Application</param-name>
-      <param-value>com.sap.hana.cloud.samples.benefits.service.ApplicationConfig</param-value>
+      <param-value>org.apache.olingo.odata2.core.rest.app.ODataApplication</param-value>
+    </init-param>
+    <init-param>
+      <param-name>org.apache.olingo.odata2.service.factory</param-name>
+      <param-value>com.sap.hana.cloud.samples.benefits.odata.cfg.ODataServiceFactory</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
   <servlet-mapping>
-    <servlet-name>CXFServlet</servlet-name>
-    <url-pattern>/api/*</url-pattern>
+    <servlet-name>ODataServlet</servlet-name>
+    <url-pattern>/OData.svc/*</url-pattern>
   </servlet-mapping>
-  <filter>
-  <filter-name>EntityManagerInterseptor</filter-name>
-  <filter-class>com.sap.hana.cloud.samples.benefits.service.EntityManagerInterceptor</filter-class>
-</filter>
-
-<filter-mapping>
-  <filter-name>EntityManagerInterseptor</filter-name>
-  <url-pattern>/api/*</url-pattern>
-</filter-mapping>
-  <context-param>
-    <param-name>com.sap.ui5.resource.USE_CACHE</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
-    <param-value>https://sapui5.hana.ondemand.com</param-value>
-    <!-- <param-value>http://veui5infra.dhcp.wdf.sap.corp:8080/sapui5-sdk-dist/</param-value>  --> 
-  </context-param>
-  <context-param>
-   <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
-   <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
-    <param-value>true</param-value>
-  </context-param>    
-  <!-- ============================================================ -->
-  <!-- SAPUI5 resource servlet used to handle application resources  -->
-  <!-- ============================================================ -->
   <servlet>
     <servlet-name>ResourceServlet</servlet-name>
     <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
@@ -64,26 +90,36 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
-  <filter>
-    <display-name>SessionCreateFilter</display-name>
-    <filter-name>SessionCreateFilter</filter-name>
-    <filter-class>com.sap.hana.cloud.samples.benefits.service.SessionCreateFilter</filter-class>
-  </filter> 
-  <filter-mapping>
-    <filter-name>SessionCreateFilter</filter-name>
-    <url-pattern>/api/*</url-pattern>
-  </filter-mapping>
-  <listener>
-    <listener-class>com.sap.hana.cloud.samples.benefits.service.AppServletContextListener</listener-class>
-  </listener>
-  <listener>
-    <description>sessionListener</description>
-    <listener-class>
-        com.sap.hana.cloud.samples.benefits.service.SessionListener
-    </listener-class>
-  </listener>
+  <context-param>
+    <param-name>com.sap.ui5.resource.USE_CACHE</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
+    <param-value>https://sapui5.hana.ondemand.com</param-value>
+  </context-param>
+  <context-param>
+    <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <context-param>
+    <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <resource-ref>
+    <res-ref-name>jdbc/DefaultDB</res-ref-name>
+    <res-type>javax.sql.DataSource</res-type>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>connectivity/DestinationFactory</res-ref-name>
+    <res-type>com.sap.core.connectivity.api.DestinationFactory</res-type>
+  </resource-ref>
+  <resource-ref>
+    <res-ref-name>sap_hcmcloud_core_odata</res-ref-name>
+    <res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
+  </resource-ref>
   <login-config>
-    <auth-method>SAML2</auth-method>
+    <auth-method>FORM</auth-method>
   </login-config>
   <security-constraint>
     <web-resource-collection>
@@ -100,75 +136,62 @@
       <web-resource-name>Admin area</web-resource-name>
       <url-pattern>/view/campaigns/*</url-pattern>
       <url-pattern>/view/employees/*</url-pattern>
+      <url-pattern>/OData.svc/*</url-pattern>
+      <url-pattern>/OData.svc/hrCampaigns</url-pattern>
+      <url-pattern>/OData.svc/startCampaign</url-pattern>
+      <url-pattern>/OData.svc/stopCampaign</url-pattern>
+      <url-pattern>/OData.svc/addCampaign</url-pattern>
+      <url-pattern>/OData.svc/deleteCampaign</url-pattern>
+      <url-pattern>/OData.svc/canStartCampaign</url-pattern>
+      <url-pattern>/OData.svc/editCampaign</url-pattern>
+      <url-pattern>/OData.svc/checkNameAvailability</url-pattern>
+      <url-pattern>/OData.svc/resetDB</url-pattern>
+      <url-pattern>/OData.svc/managed</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>Administrator</role-name>
     </auth-constraint>
   </security-constraint>
-    <security-constraint>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>Open OData</web-resource-name>
+      <url-pattern>/OData.svc/userCampaigns</url-pattern>
+      <url-pattern>/OData.svc/addOrder</url-pattern>
+      <url-pattern>/OData.svc/deleteOrder</url-pattern>
+      <url-pattern>/OData.svc/uiConfig</url-pattern>
+      <url-pattern>/OData.svc/userInfo</url-pattern>
+      <url-pattern>/OData.svc/profile</url-pattern>
+      <url-pattern>/OData.svc/Benefits</url-pattern>
+      <url-pattern>/OData.svc/Orders</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>Everyone</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <security-constraint>
     <web-resource-collection>
       <web-resource-name>Unsecured open social widgets for portal integration</web-resource-name>
       <url-pattern>/benefits.spec.xml</url-pattern>
       <url-pattern>/resources/*</url-pattern>
     </web-resource-collection>
-  </security-constraint>
-  <security-constraint>   
     <web-resource-collection>
       <web-resource-name>Logout</web-resource-name>
       <description>Logout</description>
-      <url-pattern>/logout.jsp</url-pattern>      
-      <url-pattern>/logout</url-pattern>   
+      <url-pattern>/logout.jsp</url-pattern>
+      <url-pattern>/logout</url-pattern>
     </web-resource-collection>
   </security-constraint>
   <security-constraint>
-        <web-resource-collection>
-            <web-resource-name>Static Content</web-resource-name>            
-            <url-pattern>/img/*</url-pattern>           
-        </web-resource-collection>
-        <user-data-constraint>
-            <transport-guarantee>NONE</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-  
+    <web-resource-collection>
+      <web-resource-name>Static Content</web-resource-name>
+      <url-pattern>/img/*</url-pattern>
+    </web-resource-collection>
+    <user-data-constraint>
+      <transport-guarantee>NONE</transport-guarantee>
+    </user-data-constraint>
+  </security-constraint>
   <security-role>
     <description>HR Administrator</description>
     <role-name>Administrator</role-name>
   </security-role>
-  <resource-ref>
-    <res-ref-name>jdbc/DefaultDB</res-ref-name>
-    <res-type>javax.sql.DataSource</res-type>
-  </resource-ref>
-  <resource-ref>
-    <res-ref-name>connectivity/DestinationFactory</res-ref-name>
-    <res-type>com.sap.core.connectivity.api.DestinationFactory</res-type>
-  </resource-ref>
-  <resource-ref>
-    <res-ref-name>sap_hcmcloud_core_odata</res-ref-name>
-    <res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
-  </resource-ref>
-  <filter>
-    <display-name>APIFilter</display-name>
-    <filter-name>APIFilter</filter-name>
-    <filter-class>com.sap.hana.cloud.samples.benefits.service.AuthorizationFilter</filter-class>
-    <init-param>
-      <param-name>auth.constraints</param-name>
-      <param-value>[
-    		{path: &quot;/api/benefits/&quot;, roles: [&quot;Everyone&quot;]},
-    		{path: &quot;/api/campaigns/&quot;, roles: [&quot;Administrator&quot;]},
-    		{path: &quot;/api/orders/add/&quot;, roles: [&quot;Everyone&quot;]},
-    		{path: &quot;/api/orders/for-user/&quot;, roles: [&quot;Everyone&quot;]},
-    		{path: &quot;/api/system/reset-db&quot;, roles: [&quot;Administrator&quot;]},
-    		{path: &quot;/api/system/ui-config&quot;, roles: [&quot;Everyone&quot;]},
-    		{path: &quot;/api/user/managed/&quot;, roles: [&quot;Administrator&quot;]},
-    		{path: &quot;/api/user/orders/&quot;, roles: [&quot;Everyone&quot;]},
-    		{path: &quot;/api/user/campaigns/&quot;, roles: [&quot;Everyone&quot;]}
-    	]
-    	</param-value>
-    </init-param>
-  </filter>
-  <filter-mapping>
-    <filter-name>APIFilter</filter-name>
-    <url-pattern>/api/*</url-pattern>
-  </filter-mapping>
-  
 </web-app>

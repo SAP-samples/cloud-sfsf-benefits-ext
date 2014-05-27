@@ -1,32 +1,33 @@
 package com.sap.hana.cloud.samples.benefits.logout;
 
-import java.io.IOException;
-
 import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.sap.security.auth.login.LoginContextFactory;
 
 public class LogoutServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	private final Logger logger = LoggerFactory.getLogger(getClass());
+	
 	@Override
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		if (request.getRemoteUser() != null) {
-			try {
+	protected void service(HttpServletRequest request, HttpServletResponse response) {
+		try{
+		    if (request.getRemoteUser() != null) {
 				logout(request);
-				response.sendRedirect("logout.jsp"); //$NON-NLS-1$
-			} catch (LoginException e) {
-				response.getWriter().println("Logout failed. Reason: " + e.getMessage()); //$NON-NLS-1$
-				response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			}
-		} else {			
-			response.sendRedirect("logout.jsp"); //$NON-NLS-1$
-		}
+		    }
+		    response.sendRedirect("logout.jsp"); //$NON-NLS-1$
+		    
+		} catch (Exception e) {
+                    logger.error("Logout failed", e);
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		}   
 	}
 
 	private void logout(HttpServletRequest request) throws LoginException {

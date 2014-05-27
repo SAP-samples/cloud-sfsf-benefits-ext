@@ -3,13 +3,12 @@
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 	<Page id="EmployeeOrdersMasterPage" title="{b_i18n>ORDERS_MASTER_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
 		<content>
-			<List id="campaignsList" items="{/}" includeItemInSelection="true"
+			<List id="campaignsList" items="{/d/results/}" includeItemInSelection="true"
 				mode="SingleSelectMaster" select="onItemSelected">
 				<items>
-					<ObjectListItem title="{name}" number="{employeesModel>points}"
-						class="listItem">
+					<ObjectListItem title="{Name}" class="itemFocus listItem">
 						<firstStatus>
-							<ObjectStatus state="{parts:['active'], formatter: '.setState' }" text="{parts:[{path:'active'}], formatter:'.isActiveCampaign'}" />
+							<ObjectStatus state="{parts:['Active'], formatter: '.setState' }" text="{parts:[{path:'Active'}], formatter:'.isActiveCampaign'}" />
 						</firstStatus>
 					</ObjectListItem>
 				</items>

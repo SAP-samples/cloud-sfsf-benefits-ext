@@ -1,38 +1,68 @@
 package com.sap.hana.cloud.samples.benefits.csv.dataimport;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.googlecode.jcsv.CSVStrategy;
-import com.googlecode.jcsv.reader.CSVReader;
-import com.googlecode.jcsv.reader.internal.CSVReaderBuilder;
+import au.com.bytecode.opencsv.CSVReader;
+
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Benefit;
+import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType;
 
 public class BenefitsDataImporter {
 
-    public void importData(String filepath) throws IOException {
-        final InputStream resourceAsStream = this.getClass().getClassLoader().getResourceAsStream(filepath);
-        final Reader csvFile = new InputStreamReader(resourceAsStream, Charset.forName("UTF-8"));
+	public void importDataFromCSV(String filepath) throws IOException {
+		ClassLoader classLoader = this.getClass().getClassLoader();
+		if (classLoader == null) {
+			throw new IllegalStateException("Cannot import data - null classloader");
+		}
+		Reader fileReader = new InputStreamReader(classLoader.getResourceAsStream(filepath), Charset.forName("UTF-8"));
 
-        CSVStrategy strategy = new CSVStrategy(',', '"', '#', true, true);
-        final CSVReader<Benefit> personReader = new CSVReaderBuilder<Benefit>(csvFile).entryParser(new BenefitParser()).strategy(strategy).build();
-        final List<Benefit> benefits = personReader.readAll();
+		try (CSVReader csvFile = new CSVReader(fileReader)) {
+			final List<Benefit> benefits = readBenefits(csvFile);
+			persistBenefits(benefits);
+		}
 
-        persistBenefits(benefits);
-    }
+	}
 
-    private void persistBenefits(List<Benefit> benefits) {
-        final BenefitDAO dao = new BenefitDAO();
-        dao.deleteAll();
+	private List<Benefit> readBenefits(CSVReader reader) throws NumberFormatException, IOException {
+		final List<Benefit> benefits = new ArrayList<Benefit>();
+		String[] nextLine;
+		reader.readNext();
 
-        for (Benefit benefit : benefits) {
-            dao.save(benefit);
-        }
-    }
+		while ((nextLine = reader.readNext()) != null) {
 
+			if (nextLine.length != 6) {
+				throw new IllegalArgumentException("data is not a valid benefit record");
+			}
+
+			final Benefit benefit = new Benefit();
+			benefit.setName(nextLine[0]);
+			benefit.setDescription(nextLine[1]);
+			benefit.setLink(nextLine[2]);
+
+			final BenefitType type = new BenefitType();
+			type.setName(nextLine[3]);
+			type.setValue(Long.parseLong(nextLine[4]));
+			type.setActive(Boolean.parseBoolean(nextLine[5]));
+
+			benefit.addType(type);
+			benefits.add(benefit);
+		}
+
+		return benefits;
+	}
+
+	private void persistBenefits(List<Benefit> benefits) {
+		final BenefitDAO dao = new BenefitDAO();
+		dao.deleteAll();
+
+		for (Benefit benefit : benefits) {
+			dao.save(benefit);
+		}
+	}
 }
