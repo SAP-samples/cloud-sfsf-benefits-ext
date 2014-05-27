@@ -37,10 +37,10 @@ The SAP Employee Benefits Management extension application is split into two mai
 
 The backend is implemented in the following packages:
 
-  - *com.sap.hana.cloud.sample.benefits.api.** - REST backend services and model for the user interface
-  - *com.sap.hana.cloud.sample.benefits.connectivity.** - OData connectivity to SuccessFactors  
-  - *com.sap.hana.cloud.sample.benefits.persistence.** - contains JPA entities and DAO objects.
-  - *com.sap.hana.cloud.sample.benefits.services.** - web integration logic
+  - *com.sap.hana.cloud.samples.benefits.odata.** - OData backend services and model for the user interface
+  - *com.sap.hana.cloud.samples.benefits.connectivity.** - OData connectivity to SuccessFactors  
+  - *com.sap.hana.cloud.samples.benefits.persistence.** - contains JPA entities and DAO objects.
+  - *com.sap.hana.cloud.samples.benefits.services.** - web integration logic
 
 The frontend is located in WebContent folder. The structure is the following:
 
@@ -64,15 +64,6 @@ SAP Employee Benefits Management application can be run either locally or on *SA
 
   * Access to *SAP HANA Cloud Platform extension package* or *SAP HANA Cloud Platform trial* account
   * *SAP HANA Cloud Platform* development environment [Details](https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
-  
-2. Configure the project build
-
- You need to set the following environment variables in order to configure the local project build.
-
- * *ECLIPSE_HOME* - defines the path to eclipse installation folder.
- * *SAP_UI5_VERSION* - defines the SAP UI5 version installed in the *SAP HANA Cloud Platform* development environment. You can see the installed version in *Eclipse>Help>About Eclipse>SAP UI5* button
-
- To define the environment variable in MS Windows go to your *Computer>Properties>Advanced System Settings>Environment variables* and create a new user variable e.g. *ECLIPSE_HOME* and enter the path to the directory where is the Eclipse IDE. The other variables are defined in similar way.
 
 Run on Local Server
 -------------------
@@ -160,7 +151,7 @@ Access the Application
 
 After deployment, the application is accessible on the following URL:
 
-`http://host:port/com.sap.hana.cloud.sample.benefits/index.html`
+`http://host:port/com.sap.hana.cloud.samples.benefits/index.html`
 
 Based on the role of the user with which you are logged in, you will see a page designed for HR manager or for a regular employee(user).
 
