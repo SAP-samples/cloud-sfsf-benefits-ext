@@ -20,6 +20,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	},
 	onAfterRendering : function() {
 	},
+
 	onBeforeRendering : function() {
 		this.hideLogout();
 	},
@@ -74,6 +75,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	changeDatesButtonPressed : function(evt) {
 		if (!this.editCampaignDialog) {
 			this.editCampaignDialog = sap.ui.xmlfragment("editCampaignDialog", "view.campaigns.editCampaignDialog", this);
+			this._attachSelectionOnKeyDown("editCampaignDialog--startDateCtr");
+			this._attachSelectionOnKeyDown("editCampaignDialog--endDateCtr");
 		}
 		var startDate = this.byId("inputForm").getBindingContext().getObject().StartDate;
 		var endDate = this.byId("inputForm").getBindingContext().getObject().EndDate;
@@ -85,6 +88,16 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 	cancelButtonPressed : function() {
 		this.editCampaignDialog.close();
 	},
+
+	_attachSelectionOnKeyDown : function(sId) {
+		var input = sap.ui.getCore().byId(sId);
+		input.attachBrowserEvent("keydown", function(e) {
+			if (e.keyCode === 40) {
+				input.onsapshow(e);
+			}
+		});
+	},
+
 	fireModelChanged : function(action) {
 		sap.ui.getCore().getEventBus().publish("refresh", "campaigns", {
 			sourceId : this.getView().getId(),
@@ -210,7 +223,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 			contentType : "application/json; charset=utf-8"
 		});
 	},
-	
+
 	_validateCampaignDataExist : function() {
 		var campData = this.byId("inputForm").getBindingContext().getObject();
 		return campData.Name && campData.StartDate && campData.EndDate && campData.Points;
