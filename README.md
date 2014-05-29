@@ -127,7 +127,8 @@ Run the Application on the SAP HANA Cloud Platform Trial Account
 
 It is possible to deploy and run the application on *SAP HANA Cloud Platfrom Trial* account. You need to follow the following steps:
 
- 1. Deploy the application in your *SAP HANA Cloud Platfrom Trial* account.
+ 1. Deploy the application in your *SAP HANA Cloud Platfrom Trial* account. 
+    **Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly.
  2. Import the *SuccessFactors OData API* destination *sap_hcmcloud_core_odata* from **/resources** application folder in the application destinations tab. 
  Follow the procedure: [here](https://help.hana.ondemand.com/help/frameset.htm?a2550c3fcf2b430f94f99072677bf9ec.html).
  3. Fill your *SAP HANA Cloud Platform* user and password in the destination user/password fields.
