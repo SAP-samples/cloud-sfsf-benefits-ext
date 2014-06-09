@@ -127,7 +127,8 @@ Run the Application on the SAP HANA Cloud Platform Trial Account
 
 It is possible to deploy and run the application on *SAP HANA Cloud Platfrom Trial* account. You need to follow the following steps:
 
- 1. Deploy the application in your *SAP HANA Cloud Platfrom Trial* account.
+ 1. Deploy the application in your *SAP HANA Cloud Platfrom Trial* account. 
+    **Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly.
  2. Import the *SuccessFactors OData API* destination *sap_hcmcloud_core_odata* from **/resources** application folder in the application destinations tab. 
  Follow the procedure: [here](https://help.hana.ondemand.com/help/frameset.htm?a2550c3fcf2b430f94f99072677bf9ec.html).
  3. Fill your *SAP HANA Cloud Platform* user and password in the destination user/password fields.
@@ -185,6 +186,17 @@ As an *HR manager*, you can manage benefits from three panes:
 As an *employee*, you can edit your active campaign benefit orders and view your past orders. Also you can see a list of available benefits.
 
 By default, the application has a benefits list that is hard-coded and no campaigns are added. We recommend that you first log in to the application with the HR Administrator user first and to add a benefits campaign. Next, log in as an employee so you can view and add benefits to your order.  
+
+Autodiscovery
+-------------------
+
+***benefits.spec.xml*** file is used to provide the ***"Benefits Widget"*** OpenSocial widget for the portal. It defines required dependencies and enables the rendering of the widget by Shindig (the OpenSocial container).  The file is located at the project root directory.
+You can find more information about the OpenSocial widgets [here](https://help.hana.ondemand.com/cloud_portal/frameset.htm?d9f9f0bfbc594dbdbb01a0753d522d60.html). 
+
+The ***BenefitsSite.site.zip*** describes the **SAP Corporate Benefits site**, which is automatically discovered by the SAP HANA Cloud Portal and imported into it, when the **benefits** extension is deployed.
+The site is previously created in the portal, exported as a zip and placed into the project root directory.
+More information [here](https://help.hana.ondemand.com/cloud_portal/frameset.htm?bcd487ecfe4d4dbb9e4a5cf168e62d71.html).
+
 
 Authors
 -------
