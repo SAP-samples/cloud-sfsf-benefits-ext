@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Module>
 
-	<ModulePrefs title="Benefits Widget" description="Benefits application widget">
+	<ModulePrefs title="SAP Corporate Benefits" description="Benefits application widget">
 		<Require feature="sap-xhrwrapper" />
 		<Require feature="sap-theme" />
 	</ModulePrefs>
