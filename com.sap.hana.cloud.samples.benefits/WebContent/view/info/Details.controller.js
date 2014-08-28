@@ -11,6 +11,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 	loadModel : function() {
 		if (!this.getView().getModel()) {
 			this._initModel("OData.svc/userInfo");
+			var employeeUserId = this.getView().getModel().getData().d.results[0].userId;
+			this._initModel("OData.svc/BenefitsAmount?userId='" + employeeUserId + "'", "benefitsAmount");
 			this._initModel("OData.svc/userPhoto?photoType=1", "empPhoto");
 			this._initModel("OData.svc/hrPhoto?photoType=3", "hrPhoto");
 		}

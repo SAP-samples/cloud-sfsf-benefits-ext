@@ -126,9 +126,17 @@
 	margin-bottom:0.6rem;
 }
 
-#InfoDetails--empJobInfoLayout,
-#InfoDetails--empJobInfoLayout > .sapUiHLayoutChildWrapper{
+#InfoDetails--empJobInfoLayout{
 	width:100%;
+}
+
+#InfoDetails--empJobInfoLayout > div:first-child{
+	width: 65%;
+	padding-right: 5%;
+}
+
+#InfoDetails--empJobInfoLayout > div:last-child{
+	width: 30%;
 }
 
 #InfoDetails--benefitPoints{

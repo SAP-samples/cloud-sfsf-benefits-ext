@@ -164,6 +164,8 @@
       <url-pattern>/OData.svc/BenefitInfos</url-pattern>
       <url-pattern>/OData.svc/Orders</url-pattern>
       <url-pattern>/OData.svc/Orders</url-pattern>
+      <url-pattern>/OData.svc/BenefitsAmount</url-pattern>
+      <url-pattern>/OData.svc/benefitTargetPoints</url-pattern>
       <url-pattern>/OData.svc/userPhoto</url-pattern>
       <url-pattern>/OData.svc/userPoints</url-pattern>
       <url-pattern>/OData.svc/hrPhoto</url-pattern>
