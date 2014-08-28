@@ -4,8 +4,6 @@
 		<VBox>
 			<items>
 				<Input id="nameCtr" type="Text" placeholder="{b_i18n>CAMPAIGN_NAME_PLACEHOLDER}" change="validateNewCampaignName"/>
-				<Input id="pointsCtr" type="Text"
-					placeholder="{b_i18n>CAMPAIGN_POINTS_PLACEHOLDER}" liveChange="validateNewCampaignPoints" />
 			</items>
 		</VBox>
 	</content>

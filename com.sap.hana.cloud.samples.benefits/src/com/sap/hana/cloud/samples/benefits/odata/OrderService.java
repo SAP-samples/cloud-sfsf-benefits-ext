@@ -1,5 +1,13 @@
 package com.sap.hana.cloud.samples.benefits.odata;
 
+import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.BENEFIT_TYPE_ID;
+import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.CAMPAIGN_ID;
+import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.ORDER_ID;
+import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.QUANTITY;
+import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.USER_ID;
+import static org.apache.olingo.odata2.api.annotation.edm.EdmType.INT64;
+import static org.apache.olingo.odata2.api.annotation.edm.EdmType.STRING;
+
 import java.util.Collection;
 
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
@@ -7,12 +15,11 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.HttpMethod;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType.Type;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 import org.apache.olingo.odata2.api.exception.ODataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.hana.cloud.samples.benefits.commons.UserManager;
+import com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitTypeDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.OrderDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.OrderDetailDAO;
@@ -24,17 +31,17 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 import com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints;
 
-public class OrderFunctionImport extends ODataService {
+public class OrderService extends ODataService {
 	private static final String ORDER_DETAIL_NOT_VALID_MESSAGE = "The order value exceedes the available unused points, so is not valid. The order is not persisted"; //$NON-NLS-1$
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
 	private UserPointsDAO userPointsDAO = new UserPointsDAO();
 
-	@EdmFunctionImport(name = "addOrder", returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
-	public boolean addOrder(@EdmFunctionImportParameter(name = "campaignId", type = EdmType.INT64) Long campaignId,
-			@EdmFunctionImportParameter(name = "userId", type = EdmType.STRING) String userId,
-			@EdmFunctionImportParameter(name = "quantity", type = EdmType.INT64) Long quantity,
-			@EdmFunctionImportParameter(name = "benefitTypeId", type = EdmType.INT64) Long benefitTypeId) throws ODataException {
+	@EdmFunctionImport(name = FunctionImportNames.ADD_ORDER, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
+	public boolean addOrder(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = INT64) Long campaignId,
+			@EdmFunctionImportParameter(name = USER_ID, type = STRING) String userId,
+			@EdmFunctionImportParameter(name = QUANTITY, type = INT64) Long quantity,
+			@EdmFunctionImportParameter(name = BENEFIT_TYPE_ID, type = INT64) Long benefitTypeId) throws ODataException {
 		final User loggedInUser = getLoggedInUser();
 		if (loggedInUser.getUserId().equals(userId) || UserManager.getIsUserAdmin()) {
 			final User user = userDAO.getByUserId(userId);
@@ -71,8 +78,8 @@ public class OrderFunctionImport extends ODataService {
 		}
 	}
 
-	@EdmFunctionImport(name = "deleteOrder", returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.DELETE)
-	public boolean deleteOrderDetail(@EdmFunctionImportParameter(name = "orderId", type = EdmType.INT64) Long orderId) throws ODataException {
+	@EdmFunctionImport(name = FunctionImportNames.DELETE_ORDER, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.DELETE)
+	public boolean deleteOrderDetail(@EdmFunctionImportParameter(name = ORDER_ID, type = INT64) Long orderId) throws ODataException {
 		final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
 		final Order order = orderDetailDAO.getOrderByOrderDetailsId(orderId);
 		final OrderDetails details = orderDetailDAO.getById(orderId);

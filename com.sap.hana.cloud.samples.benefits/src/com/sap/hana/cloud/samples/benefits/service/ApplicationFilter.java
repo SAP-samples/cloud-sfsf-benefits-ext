@@ -11,7 +11,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import com.sap.hana.cloud.samples.benefits.commons.UserManager;
+import com.sap.hana.cloud.samples.benefits.odata.UserManager;
 
 public class ApplicationFilter implements Filter {
 

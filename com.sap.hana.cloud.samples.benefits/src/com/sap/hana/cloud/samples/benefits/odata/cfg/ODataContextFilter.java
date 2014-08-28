@@ -20,7 +20,7 @@ public class ODataContextFilter implements Filter {
 		try {
 			chain.doFilter(request, response);
 		} finally {
-			ODataServiceFactory.unsetContextInThreadLocal();
+			BenefitsODataServiceFactory.unsetContextInThreadLocal();
 		}
 	}
 

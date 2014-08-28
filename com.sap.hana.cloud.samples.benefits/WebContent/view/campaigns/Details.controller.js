@@ -63,12 +63,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 			return undefined;
 		}
 	},
-	formatBenefitPoints : function(points) {
-		var message = sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_ENTITLEMENT_VALUE").formatPropertyMessage(
-				points);
-		return message;
 
-	},
 	startStopButtonPressed : function(evt) {
 		evt.getSource().state === 'stop' ? this._requestStopCampaign() : this._startCampaign();
 	},
@@ -226,7 +221,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 
 	_validateCampaignDataExist : function() {
 		var campData = this.byId("inputForm").getBindingContext().getObject();
-		return campData.Name && campData.StartDate && campData.EndDate && campData.Points;
+		return campData.Name && campData.StartDate && campData.EndDate;
 	},
 	_requestStopCampaign : function() {
 		appController.setAppBusy(true);

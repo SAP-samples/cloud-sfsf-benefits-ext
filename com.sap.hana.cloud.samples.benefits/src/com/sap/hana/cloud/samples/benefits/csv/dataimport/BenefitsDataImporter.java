@@ -10,7 +10,7 @@ import java.util.List;
 import au.com.bytecode.opencsv.CSVReader;
 
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitDAO;
-import com.sap.hana.cloud.samples.benefits.persistence.model.Benefit;
+import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitInfo;
 import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType;
 
 public class BenefitsDataImporter {
@@ -23,14 +23,14 @@ public class BenefitsDataImporter {
 		Reader fileReader = new InputStreamReader(classLoader.getResourceAsStream(filepath), Charset.forName("UTF-8"));
 
 		try (CSVReader csvFile = new CSVReader(fileReader)) {
-			final List<Benefit> benefits = readBenefits(csvFile);
-			persistBenefits(benefits);
+			final List<BenefitInfo> benefitsInfo = readBenefitsInfo(csvFile);
+			persistBenefitsInfo(benefitsInfo);
 		}
 
 	}
 
-	private List<Benefit> readBenefits(CSVReader reader) throws NumberFormatException, IOException {
-		final List<Benefit> benefits = new ArrayList<Benefit>();
+	private List<BenefitInfo> readBenefitsInfo(CSVReader reader) throws NumberFormatException, IOException {
+		final List<BenefitInfo> benefitsInfo = new ArrayList<BenefitInfo>();
 		String[] nextLine;
 		reader.readNext();
 
@@ -40,29 +40,29 @@ public class BenefitsDataImporter {
 				throw new IllegalArgumentException("data is not a valid benefit record");
 			}
 
-			final Benefit benefit = new Benefit();
-			benefit.setName(nextLine[0]);
-			benefit.setDescription(nextLine[1]);
-			benefit.setLink(nextLine[2]);
+			final BenefitInfo benefitInfo = new BenefitInfo();
+			benefitInfo.setName(nextLine[0]);
+			benefitInfo.setDescription(nextLine[1]);
+			benefitInfo.setLink(nextLine[2]);
 
 			final BenefitType type = new BenefitType();
 			type.setName(nextLine[3]);
 			type.setValue(Long.parseLong(nextLine[4]));
 			type.setActive(Boolean.parseBoolean(nextLine[5]));
 
-			benefit.addType(type);
-			benefits.add(benefit);
+			benefitInfo.addType(type);
+			benefitsInfo.add(benefitInfo);
 		}
 
-		return benefits;
+		return benefitsInfo;
 	}
 
-	private void persistBenefits(List<Benefit> benefits) {
+	private void persistBenefitsInfo(List<BenefitInfo> benefits) {
 		final BenefitDAO dao = new BenefitDAO();
 		dao.deleteAll();
 
-		for (Benefit benefit : benefits) {
-			dao.save(benefit);
+		for (BenefitInfo benefitInfo : benefits) {
+			dao.save(benefitInfo);
 		}
 	}
 }

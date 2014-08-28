@@ -5,10 +5,11 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-import com.sap.hana.cloud.samples.benefits.commons.UserInfo;
 import com.sap.hana.cloud.samples.benefits.connectivity.base.ODataConnector;
 import com.sap.hana.cloud.samples.benefits.connectivity.helper.CoreODataParser;
 import com.sap.hana.cloud.samples.benefits.connectivity.helper.SFUser;
+import com.sap.hana.cloud.samples.benefits.odata.beans.BenefitsAmount;
+import com.sap.hana.cloud.samples.benefits.odata.beans.UserInfo;
 
 @SuppressWarnings("nls")
 public class CoreODataConnector extends ODataConnector {
@@ -17,7 +18,10 @@ public class CoreODataConnector extends ODataConnector {
 	private static CoreODataConnector INSTANCE = null;
 	private static final String MANAGED_EMPLOYEES_QUERY = "User?$select=userId,firstName,lastName,email&$filter=hr/userId%20eq%20'#'";
 	private static final String PROFILE_QUERY = "User('#')?$select=userId,firstName,lastName,email,hr/userId,hr/firstName,hr/lastName,hr/email&$expand=hr";
-	private static final String INFO_QUERY = "User('#')?$select=firstName,lastName,location,businessPhone,division,title,department,hr/firstName,hr/lastName,hr/businessPhone&$expand=hr";
+	private static final String INFO_QUERY = "User('#')?$select=userId,firstName,lastName,location,businessPhone,division,title,department,email,hr/firstName,hr/lastName,hr/businessPhone&$expand=hr";
+	private static final String USER_PHOTO_QUERY = "Photo(photoType=#1,userId='#2')?$select=photo";
+
+	private CoreODataParser coreODataParser;
 
 	// ,hr/firstName,hr/lastName,hr/email,hr/businessPhone
 	public static synchronized CoreODataConnector getInstance() {
@@ -29,40 +33,55 @@ public class CoreODataConnector extends ODataConnector {
 
 	private CoreODataConnector() {
 		super("java:comp/env/sap_hcmcloud_core_odata");
+		this.coreODataParser = CoreODataParser.getInstance();
 	}
 
-	private String getMangedEmployeesQuery(String hrSFUserName) throws UnsupportedEncodingException {
+	private String getMangedEmployeesQuery(String hrSFUserName) {
 		return MANAGED_EMPLOYEES_QUERY.replace("#", urlEncode(hrSFUserName));
 	}
 
-	private String getProfileQuery(String userName) throws UnsupportedEncodingException {
+	private String getProfileQuery(String userName) {
 		return PROFILE_QUERY.replace("#", urlEncode(userName));
 	}
 
-	private String getInfoQuery(String userName) throws UnsupportedEncodingException {
+	private String getInfoQuery(String userName) {
 		return INFO_QUERY.replace("#", urlEncode(userName));
 	}
 
-	private String urlEncode(String text) throws UnsupportedEncodingException {
-		return URLEncoder.encode(text, UTF_8);
+	private String urlEncode(String text) {
+		try {
+			return URLEncoder.encode(text, UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			String errMsg = String.format("Fail to encode text [%s]. Unsupported encoding [%s]", text, UTF_8);
+			throw new IllegalArgumentException(errMsg, e);
+		}
 	}
 
 	public List<SFUser> getManagedEmployees(String hrSFUserName) throws IOException {
 		String userListJson = getODataResponse(getMangedEmployeesQuery(hrSFUserName));
-		CoreODataParser parser = CoreODataParser.getInstance();
-		return parser.loadSFUserProfileListFromJsom(userListJson);
+		return coreODataParser.loadSFUserProfileListFromJsom(userListJson);
 	}
 
 	public SFUser getUserProfile(String userName) throws IOException {
 		String userJson = getODataResponse(getProfileQuery(userName));
-		CoreODataParser parser = CoreODataParser.getInstance();
-		return parser.loadSFUserProfileFromJsom(userJson);
+		return coreODataParser.loadSFUserProfileFromJsom(userJson);
 	}
 
 	public UserInfo getUserInfoProfile(String userName) throws IOException {
 		String userJson = getODataResponse(getInfoQuery(userName));
-		CoreODataParser parser = CoreODataParser.getInstance();
-		return parser.loadUserInfoFromJson(userJson);
+		return coreODataParser.loadUserInfoFromJson(userJson);
 	}
 
+	public BenefitsAmount getUserBenefitsAmount(String userId) throws IOException {
+	    return BenefitsAmount.defaultBenefitsAmount(userId);
+	}
+
+	public String getUserPhoto(String userId, Integer photoType) throws IOException {
+		String userPhotoJSON = getODataResponse(getUserPhotoQuery(userId, photoType));
+		return coreODataParser.loadUserPhoto(userPhotoJSON);
+	}
+
+	private String getUserPhotoQuery(String userId, Integer photoType) {
+		return USER_PHOTO_QUERY.replace("#1", String.valueOf(photoType)).replace("#2", urlEncode(userId));
+	}
 }

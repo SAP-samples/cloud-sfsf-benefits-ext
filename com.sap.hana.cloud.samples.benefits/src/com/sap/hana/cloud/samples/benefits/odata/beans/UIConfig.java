@@ -1,23 +1,17 @@
-package com.sap.hana.cloud.samples.benefits.commons;
+package com.sap.hana.cloud.samples.benefits.odata.beans;
 
-import com.google.gson.annotations.Expose;
 
 public class UIConfig {
 
-	@Expose
 	public boolean showEmployeesTile;
-
-	@Expose
 	public boolean showBenefitsTile;
-
-	@Expose
 	public boolean showCampaignTile;
-
-	@Expose
 	public boolean showOrderTile;
-
-	@Expose
 	public boolean showInfoTile;
+
+	public UIConfig() {
+
+	}
 
 	public void initAdminConfiguration() {
 		init(true, true, true, true, true);

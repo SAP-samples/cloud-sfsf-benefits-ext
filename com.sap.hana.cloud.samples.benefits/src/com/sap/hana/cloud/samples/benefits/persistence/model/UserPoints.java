@@ -16,7 +16,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "USER_POINTS")
-@NamedQueries({ @NamedQuery(name = GET_USER_POINTS, query = "select u from UserPoints u where u.user = :user and u.campaign = :campaign")})
+@NamedQueries({ @NamedQuery(name = GET_USER_POINTS, query = "select u from UserPoints u where u.user.userId = :userId and u.campaign.id = :campaignId") })
 public class UserPoints implements IDBEntity {
 
 	@Id
@@ -27,16 +27,16 @@ public class UserPoints implements IDBEntity {
 	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
 	private User user;
-	
-	@Column(name = "USER_ID", insertable = false, updatable = false) 
-    private Long userId;
+
+	@Column(name = "USER_ID", insertable = false, updatable = false)
+	private Long userId;
 
 	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
 	private Campaign campaign;
 
-	@Column(name = "CAMPAIGN_ID", insertable = false, updatable = false) 
-    private Long campaignId;
+	@Column(name = "CAMPAIGN_ID", insertable = false, updatable = false)
+	private Long campaignId;
 
 	@Basic
 	@Column(name = "AVAILABLE_POINTS")
@@ -91,7 +91,7 @@ public class UserPoints implements IDBEntity {
 		}
 		this.availablePoints -= points;
 	}
-	
+
 	public Long getUserId() {
 		return userId;
 	}
@@ -99,7 +99,7 @@ public class UserPoints implements IDBEntity {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	
+
 	public Long getCampaignId() {
 		return campaignId;
 	}

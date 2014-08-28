@@ -5,26 +5,31 @@ import java.util.Date;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class GsonFactory {
+public final class GsonFactory {
 
-    private static final GsonFactory INSTANCE = new GsonFactory();
+	private static final GsonFactory INSTANCE = new GsonFactory();
 
-    public static GsonFactory getInstance() {
-        return INSTANCE;
-    }
+	public static GsonFactory getInstance() {
+		return INSTANCE;
+	}
 
-    private final Gson gson;
+	private GsonFactory() {
+	}
 
-    private GsonFactory() {
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Date.class, new DateTimeAdapter());
-        gsonBuilder.setPrettyPrinting();
-        gsonBuilder.excludeFieldsWithoutExposeAnnotation();
-        this.gson = gsonBuilder.create();
-    }
+	public Gson createDefaultGson() {
+		return createaDefaultJsonBuilder().create();
+	}
 
-    public Gson getGson() {
-        return this.gson;
-    }
+	public Gson createAnnotatedGson() {
+		GsonBuilder gb = createaDefaultJsonBuilder();
+		return gb.excludeFieldsWithoutExposeAnnotation().create();
+	}
+
+	private GsonBuilder createaDefaultJsonBuilder() {
+		GsonBuilder gsonBuilder = new GsonBuilder();
+		gsonBuilder.registerTypeAdapter(Date.class, new DateTimeAdapter());
+		gsonBuilder.setPrettyPrinting();
+		return gsonBuilder;
+	}
 
 }

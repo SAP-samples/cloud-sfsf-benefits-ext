@@ -45,7 +45,7 @@ public class User implements IDBEntity {
 	private String email;
 
 	@ManyToOne
-	@JoinColumn(name =  "HR_USER_ID", referencedColumnName = "ID")
+	@JoinColumn(name = "HR_USER_ID", referencedColumnName = "ID")
 	private User hrManager;
 
 	@Column(name = "HR_USER_ID", insertable = false, updatable = false)
@@ -198,5 +198,4 @@ public class User implements IDBEntity {
 	public void setHrId(Long hrId) {
 		this.hrId = hrId;
 	}
-
 }

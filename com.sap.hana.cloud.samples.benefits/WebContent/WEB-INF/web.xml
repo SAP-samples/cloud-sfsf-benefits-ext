@@ -65,7 +65,7 @@
     </init-param>
     <init-param>
       <param-name>org.apache.olingo.odata2.service.factory</param-name>
-      <param-value>com.sap.hana.cloud.samples.benefits.odata.cfg.ODataServiceFactory</param-value>
+      <param-value>com.sap.hana.cloud.samples.benefits.odata.cfg.BenefitsODataServiceFactory</param-value>
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
@@ -161,8 +161,12 @@
       <url-pattern>/OData.svc/uiConfig</url-pattern>
       <url-pattern>/OData.svc/userInfo</url-pattern>
       <url-pattern>/OData.svc/profile</url-pattern>
-      <url-pattern>/OData.svc/Benefits</url-pattern>
+      <url-pattern>/OData.svc/BenefitInfos</url-pattern>
       <url-pattern>/OData.svc/Orders</url-pattern>
+      <url-pattern>/OData.svc/Orders</url-pattern>
+      <url-pattern>/OData.svc/userPhoto</url-pattern>
+      <url-pattern>/OData.svc/userPoints</url-pattern>
+      <url-pattern>/OData.svc/hrPhoto</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>Everyone</role-name>

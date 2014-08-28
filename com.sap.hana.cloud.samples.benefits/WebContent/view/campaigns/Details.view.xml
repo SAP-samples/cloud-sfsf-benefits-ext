@@ -18,8 +18,6 @@
 					<Text id="startDateTextCtr" text="{path:'StartDate', formatter:'.formatDate'}" class="labelHeight" />
 					<Label text="{b_i18n>CAMPAIGN_END_DATE}" class="labelHeight" />
 					<Text id="endDateTextCtr" text="{path:'EndDate', formatter:'.formatDate'}" class="labelHeight" />
-					<Label text="{b_i18n>CAMPAIGN_ENTITLEMENT}" class="labelHeight" />
-					<Text id="pointsCtr" text="{path:'Points', formatter:'.formatBenefitPoints'}" class="labelHeight" />
 					<Label text="{b_i18n>CAMPAIGN_STATUS}" class="labelHeight" />
 					<Text id="stateCtr" text="{path:'Active', formatter: '.formatStateText' }" class="labelHeight" />
 				</form:content>

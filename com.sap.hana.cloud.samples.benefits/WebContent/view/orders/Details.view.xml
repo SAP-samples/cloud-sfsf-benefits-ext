@@ -20,7 +20,7 @@
 					<ObjectAttribute
 						text="{parts: [{path:'/activeCampaign/Points'},{path:'/currentOrder/d/results/0/Total'}], formatter:'.formatAvailablePoints'}" />
 					<ObjectAttribute
-						text="{path:'/activeCampaign/Points', formatter:'.formatBenefitPointsEntitlement'}" />
+						text="{path:'/employee/targetPoints', formatter:'.formatBenefitPointsEntitlement'}" />
 				</attributes>
 			</ObjectHeader>
 			<List inset="true">
@@ -28,7 +28,7 @@
 					<CustomListItem>
 						<content>
 							<List id="orderItemsList"
-								items="{path:'/currentOrder/d/results/0/OrderDetailsDetails/results', sorter: {path:'BenefitTypeDetails/BenefitDetails/Name' ,descending: false, group: true}}"
+								items="{path:'/currentOrder/d/results/0/OrderDetailsDetails/results', sorter: {path:'BenefitTypeDetails/BenefitInfoDetails/Name' ,descending: false, group: true}}"
 								inset="true" class="benefitList" headerText="{b_i18n>ORDERS_LIST_HEADER}"
 								mode="Delete" delete="onDelete">
 								

@@ -1,6 +1,5 @@
 package com.sap.hana.cloud.samples.benefits.odata;
 
-import com.sap.hana.cloud.samples.benefits.commons.UserManager;
 import com.sap.hana.cloud.samples.benefits.persistence.CampaignDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.UserDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;

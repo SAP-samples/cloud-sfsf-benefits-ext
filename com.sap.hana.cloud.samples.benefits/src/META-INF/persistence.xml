@@ -4,7 +4,7 @@
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.User</class>
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType</class>
-        <class>com.sap.hana.cloud.samples.benefits.persistence.model.Benefit</class>
+        <class>com.sap.hana.cloud.samples.benefits.persistence.model.BenefitInfo</class>
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.Campaign</class> 
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.Order</class>
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails</class>

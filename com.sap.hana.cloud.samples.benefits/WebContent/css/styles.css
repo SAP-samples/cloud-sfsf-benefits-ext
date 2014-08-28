@@ -59,26 +59,107 @@
 	height: 100%;
 }
 
-.emailIcon > span:first-child > span:before {
+.emailIcon:before {
        content: '\e037';
        padding-right: 0.5rem;
        font-family: 'SAP-icons';
+       color:rgb(95, 98, 99);
 }
 
-.phoneIcon > span:first-child > span:before {
+.phoneIcon:before {
        content: '\e018';
        padding-right: 0.5rem;
        font-family: 'SAP-icons';
+       color:rgb(95, 98, 99);
+}
+
+.locationIcon:before {
+       content: '\e185';
+       padding-right: 0.5rem;
+       font-family: 'SAP-icons';
+       color:rgb(95, 98, 99);
 }
 
 .mobilePhoneIcon > span:first-child > span:before {
        content: '\e15b';
        padding-right: 0.5rem;
        font-family: 'SAP-icons';
+       color:rgb(95, 98, 99);
 }
 
 .itemFocus:focus {
 	outline-width: thin;
 	outline-style: dotted;
 	outline-color: black;
+}
+
+#InfoDetails--infoMainLayout{
+	width: 40%;
+	padding: 0% 30%;
+	margin-top:1rem;
+}
+
+#InfoDetails--infoMainLayout > div{
+	width:100%;
+}
+
+.bigText{
+	font-size:1.5rem;
+}
+
+.mediumText{
+	font-size:1rem;
+	line-height:1.5rem;
+}
+
+#InfoDetails--infoMainLayout .sapMPanelBG{
+	background:rgba(255, 255, 255, 0.7);
+	border-bottom:none;
+}
+
+#InfoDetails--empProfileHLayout > div:first-child,
+#InfoDetails--hrProfileHLayout > div:first-child{
+	margin-right: 2rem;
+}
+
+.headElement{
+	margin-bottom:0.6rem;
+}
+
+#InfoDetails--empJobInfoLayout,
+#InfoDetails--empJobInfoLayout > .sapUiHLayoutChildWrapper{
+	width:100%;
+}
+
+#InfoDetails--benefitPoints{
+	font-size: 4rem;
+	font-weight:bold;
+	color: rgb(77, 76, 76);
+}
+
+#InfoDetails--hrProfilePanel{
+	margin-top: 2.5rem;
+	padding-top: 1rem;	
+	border-top: 1px solid rgba(0,73,144,0.33);
+}
+
+#InfoDetails--empJobInfoLayout .sapMPanelBG{
+	height:4rem;
+}
+
+#InfoDetails--hrProfilePanel .sapMPanelBG{
+	background: rgba(255, 255, 255, 0.3);
+}
+
+#InfoDetails--empBenefitsPanel > div:last-child{
+	text-align:center;
+}
+
+#InfoDetails--empProfileHLayout img{
+	height: 7rem;
+}
+
+.rowTitle{
+	width:7rem;
+	color:rgb(95, 98, 99);
 }

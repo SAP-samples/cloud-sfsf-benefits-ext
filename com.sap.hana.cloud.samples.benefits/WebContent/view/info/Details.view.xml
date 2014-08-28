@@ -1,29 +1,117 @@
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.info.Details"
+	xmlns:l="sap.ui.layout"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
 
-	<Page title="{b_i18n>INFO_PAGE_NAME}" showNavButton="true" navButtonTap="onNavPressed">
+	<Page title="{b_i18n>INFO_PAGE_NAME}" showNavButton="true"
+		navButtonTap="onNavPressed">
 		<headerContent>
-			<Button id="logoutButton" press="logoutButtonPressed" icon="sap-icon://log" text="{b_i18n>LOGOUT}" />
+			<Button id="logoutButton" press="logoutButtonPressed" icon="sap-icon://log"
+				text="{b_i18n>LOGOUT}" />
 		</headerContent>
-	
+
 		<content>
 
-			<ObjectHeader title="{/d/results/0/firstName} {/d/results/0/lastName}">
-				<attributes>
-					<ObjectAttribute text="{/d/results/0/title}, {/d/results/0/department}, {/d/results/0/division}" />
-					<ObjectAttribute text="{/d/results/0/location}" />
-					<ObjectAttribute text="{/d/results/0/businessPhone}" class="phoneIcon" />
-				</attributes>
-			</ObjectHeader>
-			<ObjectHeader id="hrObjectHeader" title="{b_i18n>HR_MANAGER_HEADER}">
-				<attributes>
-					<ObjectAttribute text="{/d/results/1/firstName} {/d/results/1/lastName}" class="personIcon" />
-					<ObjectAttribute text="{/d/results/1/businessPhone}" class="phoneIcon" />
-				</attributes>
-			</ObjectHeader>
+			<l:VerticalLayout id="infoMainLayout">
+    			<l:content>
+    				
+    				 <Panel width="100%" id="empProfilePanel">
+        				<headerToolbar>
+          					<Toolbar>
+            					<Label text="Employee Profile" />
+          					</Toolbar>
+        				</headerToolbar>
 
+    					<l:HorizontalLayout id="empProfileHLayout">
+    						<l:content>
+    						
+    							<Image src="img/img_anon.jpg" id="empImage"></Image>
+							
+								<l:VerticalLayout>
+	    							<l:content>
+										<Text text="{/d/results/0/firstName} {/d/results/0/lastName}" data-text-align="Left" class="bigText headElement"/>
+										<Text text="{/d/results/0/email}" data-text-align="Left" class="emailIcon mediumText"/>
+										<Text text="{/d/results/0/businessPhone}" data-text-align="Left" class="phoneIcon mediumText"/>
+										<Text text="{/d/results/0/location}" data-text-align="Left" class="locationIcon mediumText"/>
+		    						</l:content>
+	    						</l:VerticalLayout>
+    					
+    						</l:content>
+    					</l:HorizontalLayout>
+    				
+    				</Panel>
+    				
+    				<l:HorizontalLayout id="empJobInfoLayout">
+    					<l:content>
+    					
+    						<Panel width="100%" id="empJobInfoPanel">
+        						<headerToolbar>
+          							<Toolbar>
+            							<Label text="Employment Info" />
+          							</Toolbar>
+        						</headerToolbar>
+
+							
+								<l:VerticalLayout>
+	    							<l:content>
+										
+										<l:HorizontalLayout>
+	    									<l:content>
+	    										<Text text="Job Title:" data-text-align="Left" class="mediumText rowTitle"/>
+	    										<Text text="{/d/results/0/title}" data-text-align="Left" class="mediumText"/>
+	    									</l:content>
+	    								</l:HorizontalLayout>
+	    								<l:HorizontalLayout>
+	    									<l:content>
+	    										<Text text="Department:" data-text-align="Left" class="mediumText rowTitle"/>
+	    										<Text text="{/d/results/0/department}" data-text-align="Left" class="mediumText"/>
+	    									</l:content>
+	    								</l:HorizontalLayout>
+	    								<l:HorizontalLayout>
+	    									<l:content>
+	    										<Text text="Division:" data-text-align="Left" class="mediumText rowTitle"/>
+	    										<Text text="{/d/results/0/division}" data-text-align="Left" class="mediumText"/>
+	    									</l:content>
+	    								</l:HorizontalLayout>
+										
+		    						</l:content>
+	    						</l:VerticalLayout>
+		    				</Panel>
+		    				
+    					</l:content>
+    				</l:HorizontalLayout>
+					
+					
+					<Panel width="100%" id="hrProfilePanel">
+        				<headerToolbar>
+          					<Toolbar>
+            					<Label text="Employee's HR Info" />
+          					</Toolbar>
+        				</headerToolbar>
+
+    					<l:HorizontalLayout id="hrProfileHLayout">
+    						<l:content>
+    						
+    							<Image src="img/img_anon.jpg" id="hrImage"></Image>
+							
+								<l:VerticalLayout>
+	    							<l:content>
+										<Text text="{/d/results/1/firstName} {/d/results/1/lastName}" data-text-align="Left" class="bigText headElement"/>
+										<Text text="{/d/results/1/email}" data-text-align="Left" class="emailIcon mediumText"/>
+										<Text text="{/d/results/1/businessPhone}" data-text-align="Left" class="phoneIcon mediumText"/>
+										<Text text="{/d/results/1/location}" data-text-align="Left" class="locationIcon mediumText"/>
+		    						</l:content>
+	    						</l:VerticalLayout>
+    					
+    						</l:content>
+    					</l:HorizontalLayout>
+    				
+    				</Panel>
+					
+				</l:content>
+			</l:VerticalLayout>
+			
 		</content>
 	</Page>
-	
+
 </core:View>

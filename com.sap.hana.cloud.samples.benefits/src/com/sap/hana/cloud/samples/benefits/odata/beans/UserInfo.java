@@ -1,22 +1,19 @@
-package com.sap.hana.cloud.samples.benefits.commons;
-
-import com.google.gson.annotations.Expose;
+package com.sap.hana.cloud.samples.benefits.odata.beans;
 
 public class UserInfo {
-	@Expose
+
+	private String userId;
 	public String firstName;
-	@Expose
 	public String lastName;
-	@Expose
 	public String title;
-	@Expose
 	public String department;
-	@Expose
 	public String division;
-	@Expose
 	public String location;
-	@Expose
 	public String businessPhone;
+	public String email;
+
+	public UserInfo() {
+	}
 
 	public String getFirstName() {
 		return firstName;
@@ -74,4 +71,19 @@ public class UserInfo {
 		this.businessPhone = businessPhone;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 }

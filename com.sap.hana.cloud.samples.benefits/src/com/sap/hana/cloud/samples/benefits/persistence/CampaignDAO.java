@@ -1,6 +1,5 @@
 package com.sap.hana.cloud.samples.benefits.persistence;
 
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -15,7 +14,6 @@ import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProv
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
-import com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints;
 
 public class CampaignDAO extends BasicDAO<Campaign> {
 
@@ -75,20 +73,4 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		}
 	}
 
-	public void setPointsToUsers(Campaign campaign) {
-		final UserPointsDAO userPointsDAO = new UserPointsDAO();
-		if (campaign.getOwner() != null) {
-			final Collection<User> employees = campaign.getOwner().getEmployees();
-			for (User user : employees) {
-				UserPoints points = userPointsDAO.getUserPoints(user, campaign);
-				if (points == null) {
-					points = new UserPoints();
-					points.setCampaign(campaign);
-					points.setUser(user);
-					points.setAvailablePoints(campaign.getPoints());
-					userPointsDAO.saveNew(points);
-				}
-			}
-		}
-	}
 }

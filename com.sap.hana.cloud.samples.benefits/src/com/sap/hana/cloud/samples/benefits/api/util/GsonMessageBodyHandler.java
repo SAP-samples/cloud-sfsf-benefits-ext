@@ -61,7 +61,7 @@ public class GsonMessageBodyHandler<T> implements MessageBodyWriter<T>, MessageB
             targetType = type;
         }
 
-        Gson gson = GsonFactory.getInstance().getGson();
+        Gson gson = GsonFactory.getInstance().createDefaultGson();
         return gson.fromJson(entityReader, targetType);
     }
 
@@ -71,7 +71,7 @@ public class GsonMessageBodyHandler<T> implements MessageBodyWriter<T>, MessageB
 
         try {
             if (!String.class.isAssignableFrom(type)) {
-                Gson gson = GsonFactory.getInstance().getGson();
+                Gson gson = GsonFactory.getInstance().createDefaultGson();
                 entityStream.write(gson.toJson(t).getBytes("UTF-8"));
             } else {
                 // Do not convert strings.

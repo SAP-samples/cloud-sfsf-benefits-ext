@@ -17,71 +17,71 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "BENEFIT_TYPE", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "BENEFIT_ID" }) })
+@Table(name = "BENEFIT_TYPE", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "BENEFIT_INFO_ID" }) })
 public class BenefitType implements IDBEntity {
-    @Id
-    @GeneratedValue
-    @Column(name = "TYPE_ID")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "TYPE_ID")
+	private Long id;
 
-    @Basic
-    private String name;
- 
-    @Basic
-    @Column 
-    private long value;   
+	@Basic
+	private String name;
 
-    @Basic
-    private boolean active;
- 
-    @ManyToOne 
-    @JoinColumn(name = "BENEFIT_ID", referencedColumnName = "BENEFIT_ID")
-    private Benefit benefit;
-    
-    @Column(name = "BENEFIT_ID", insertable = false, updatable = false) 
-    private Long benefitId;
+	@Basic
+	@Column
+	private long value;
 
-    @OneToMany(cascade = CascadeType.REFRESH, mappedBy = "benefitType", fetch = FetchType.EAGER, targetEntity = OrderDetails.class)
-    private List<OrderDetails> orders;
+	@Basic
+	private boolean active;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@ManyToOne
+	@JoinColumn(name = "BENEFIT_INFO_ID", referencedColumnName = "BENEFIT_INFO_ID")
+	private BenefitInfo benefitInfo;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@Column(name = "BENEFIT_INFO_ID", insertable = false, updatable = false)
+	private Long benefitId;
 
-    public String getName() {
-        return name;
-    }
+	@OneToMany(cascade = CascadeType.REFRESH, mappedBy = "benefitType", fetch = FetchType.EAGER, targetEntity = OrderDetails.class)
+	private List<OrderDetails> orders;
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public long getValue() {
-        return value;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public void setValue(long value) {
-        this.value = value;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public boolean getActive() {
-        return active;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
+	public long getValue() {
+		return value;
+	}
 
-    public Benefit getBenefit() {
-        return benefit;
-    }
-    
-    public Long getBenefitId() {
+	public void setValue(long value) {
+		this.value = value;
+	}
+
+	public boolean getActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public BenefitInfo getBenefitInfo() {
+		return benefitInfo;
+	}
+
+	public Long getBenefitId() {
 		return benefitId;
 	}
 
@@ -89,28 +89,28 @@ public class BenefitType implements IDBEntity {
 		this.benefitId = benefitId;
 	}
 
-	public void setBenefit(Benefit benefit) {
-        this.benefit = benefit;
-        if (!benefit.getTypes().contains(this)) {
-            benefit.addType(this);
-        }
-    }
+	public void setBenefitInfo(BenefitInfo benefitInfo) {
+		this.benefitInfo = benefitInfo;
+		if (!benefitInfo.getTypes().contains(this)) {
+			benefitInfo.addType(this);
+		}
+	}
 
-    public List<OrderDetails> getOrders() {
-        if (this.orders == null) {
-            this.orders = new ArrayList<>();
-        }
-        return orders;
-    }
+	public List<OrderDetails> getOrders() {
+		if (this.orders == null) {
+			this.orders = new ArrayList<>();
+		}
+		return orders;
+	}
 
-    public void addOrder(OrderDetails order) {
-        getOrders().add(order);
-        if (order.getBenefitType() != this) {
-            order.setBenefitType(this);
-        }
-    }
+	public void addOrder(OrderDetails order) {
+		getOrders().add(order);
+		if (order.getBenefitType() != this) {
+			order.setBenefitType(this);
+		}
+	}
 
-    public void setOrders(List<OrderDetails> orders) {
-        this.orders = orders;
-    }
+	public void setOrders(List<OrderDetails> orders) {
+		this.orders = orders;
+	}
 }

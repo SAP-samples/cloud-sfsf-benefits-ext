@@ -1,4 +1,7 @@
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
+
+	anonymousPhoto : "img/img_anon.jpg",
+
 	onBeforeRendering : function() {
 		this.loadModel();
 		this.hideLogout();
@@ -7,10 +10,15 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 
 	loadModel : function() {
 		if (!this.getView().getModel()) {
-			this.getView().setModel(new sap.ui.model.json.JSONModel());
-			this.getView().getModel().loadData("OData.svc/userInfo", null, false);
+			this._initModel("OData.svc/userInfo");
+			this._initModel("OData.svc/userPhoto?photoType=1", "empPhoto");
+			this._initModel("OData.svc/hrPhoto?photoType=3", "hrPhoto");
 		}
+	},
 
+	onAfterRendering : function() {
+		this._setPhoto("InfoDetails--empImage", "empPhoto", "userPhoto");
+		this._setPhoto("InfoDetails--hrImage", "hrPhoto", "hrPhoto");
 	},
 
 	onNavPressed : function() {
@@ -29,6 +37,22 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 
 	logoutButtonPressed : function(evt) {
 		sap.ui.getApplication().onLogout();
+	},
+
+	_initModel : function(modelUrl, modelName) {
+		var model = new sap.ui.model.json.JSONModel();
+		model.loadData(modelUrl, null, false);
+
+		var view = this.getView();
+		modelName ? view.setModel(model, modelName) : view.setModel(model);
+	},
+
+	_setPhoto : function(imgEl, modelName, propName) {
+		var userPhotoEl = $("#" + imgEl);
+		var photoData = this.getView().getModel(modelName).getData().d[propName];
+		var src = photoData ? "data:image/png;base64," + photoData : this.anonymousPhoto;
+
+		userPhotoEl.attr("src", src);
 	}
 
 });

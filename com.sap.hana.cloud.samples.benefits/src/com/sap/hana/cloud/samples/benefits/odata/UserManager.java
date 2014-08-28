@@ -1,6 +1,7 @@
-package com.sap.hana.cloud.samples.benefits.commons;
+package com.sap.hana.cloud.samples.benefits.odata;
 
 public class UserManager {
+
 	private static final ThreadLocal<String> userId = new ThreadLocal<>();
 	private static final ThreadLocal<Boolean> isUserAdmin = new ThreadLocal<>();
 

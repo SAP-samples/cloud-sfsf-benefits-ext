@@ -1,17 +1,15 @@
-package com.sap.hana.cloud.samples.benefits.commons;
+package com.sap.hana.cloud.samples.benefits.odata.beans;
 
-import com.google.gson.annotations.Expose;
 
 public class StartCampaignDetails {
 
-	@Expose
 	private boolean canBeStarted;
-
-	@Expose
 	private long campaignId;
-
-	@Expose
 	private String startedCampaignName;
+
+	public StartCampaignDetails() {
+
+	}
 
 	public boolean getCanBeStarted() {
 		return canBeStarted;

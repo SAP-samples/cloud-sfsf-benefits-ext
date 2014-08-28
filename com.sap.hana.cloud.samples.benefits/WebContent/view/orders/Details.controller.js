@@ -16,8 +16,10 @@ sap.ui
 							}
 						});
 					},
+
 					onBeforeRendering : function() {
 						this.loadBenefitsModel();
+
 						this.hideLogout();
 					},
 					initEmployeeDetailsModel : function(employeeProfile, campaignId, activeCampaign) {
@@ -25,10 +27,12 @@ sap.ui
 						this.campaignId = campaignId;
 						this.activeCampaign = activeCampaign;
 						this.loadOrderDetails();
-
+						this._loadAvailablePointsToModel(campaignId, employeeProfile.UserId);
+						this._loadEntitlementPointsToModel(campaignId, employeeProfile.UserId);
 					},
+
 					loadOrderDetails : function() {
-						var requestUrl = "OData.svc/Orders?$expand=OrderDetailsDetails/BenefitTypeDetails/BenefitDetails,CampaignDetails&$filter=CampaignId%20eq%20"
+						var requestUrl = "OData.svc/Orders?$expand=OrderDetailsDetails/BenefitTypeDetails/BenefitInfoDetails,CampaignDetails&$filter=CampaignId%20eq%20"
 								+ this.campaignId + "%20and%20UserId%20eq%20" + this.employeeProfile.Id;
 						var orderDetails = jQuery.sap.syncGetJSON(requestUrl).data;
 
@@ -39,13 +43,68 @@ sap.ui
 						});
 						this.byId("addButton").setEnabled(this.activeCampaign.Active);
 					},
+
+					_loadAvailablePointsToModel : function(campaignId, userId) {
+						var availablePoints = this._loadUserAvailablePoints(campaignId, userId);
+						this.getView().getModel().setProperty("/activeCampaign/Points", availablePoints);
+					},
+
+					_loadUserAvailablePoints : function(campaignId, userId) {
+						var result = {
+							points : null
+						};
+						var successFunc = function(result) {
+							return function(data, textStatus, jqXHR) {
+								result.points = data.d.AvailablePoints;
+							};
+						};
+						this.getView().setBusy(true);
+
+						jQuery.ajax({
+							async : false,
+							url : "OData.svc/userPoints?userId='" + userId + "'&campaignId=" + campaignId,
+							type : 'GET',
+							dataType : 'json',
+							success : successFunc(result),
+							error : function(xhr, error) {
+								var alertMsg = sap.ui.getCore().getModel("b_i18n").getProperty("FAILED_USER_POINT_QUERY");
+								sap.m.MessageBox.alert(alertMsg);
+							},
+							complete : jQuery.proxy(function() {
+								this.getView().setBusy(false);
+							}, this)
+						});
+						return result.points;
+					},
+
+					_loadEntitlementPointsToModel : function(campaignId, userId) {
+						var targetPoints = this._loadUserTargetPoints(campaignId, userId);
+						this.getView().getModel().setProperty("/employee/targetPoints", targetPoints);
+					},
+
+					_loadUserTargetPoints : function(campaignId, userId) {
+						this.getView().setBusy(true);
+
+						var path = "OData.svc/BenefitsAmount?userId='" + userId + "'";
+						var resultData = com.sap.hana.cloud.samples.benefits.util.Helper.synchGetJSON(path, function(xhr, error) {
+						}, function(xhr, error) {
+							var alertMsg = sap.ui.getCore().getModel("b_i18n").getProperty("FAILED_USER_POINT_QUERY");
+							sap.m.MessageBox.alert(alertMsg);
+						}, jQuery.proxy(function() {
+							this.getView().setBusy(false);
+						}, this));
+
+						return resultData.d.BenefitsAmount.targetPoints;
+					},
+
 					loadBenefitsModel : function() {
 						if (!this.getView().getModel("benefitsModel")) {
 							this.getView().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
 						}
-						this.getView().getModel("benefitsModel").loadData("OData.svc/Benefits?$expand=BenefitTypeDetails", null,
-								false);
+						this.getView().getModel("benefitsModel").loadData("OData.svc/BenefitInfos?$expand=BenefitTypeDetails",
+								null, false);
 					},
+
 					addItem : function() {
 						jQuery.sap.require("sap.m.MessageToast");
 						if (!this.addItemDialog) {
@@ -54,7 +113,7 @@ sap.ui
 						if (!this.addItemDialog.getModel("benefitsModel")) {
 							this.addItemDialog.setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
 						}
-						this.addItemDialog.getModel("benefitsModel").loadData("OData.svc/Benefits?$expand=BenefitTypeDetails",
+						this.addItemDialog.getModel("benefitsModel").loadData("OData.svc/BenefitInfos?$expand=BenefitTypeDetails",
 								null, false);
 
 						this.addItemDialog.open();

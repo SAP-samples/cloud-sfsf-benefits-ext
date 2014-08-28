@@ -1,5 +1,8 @@
 package com.sap.hana.cloud.samples.benefits.odata;
 
+import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.RESET_DB;
+import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.UI_CONFIG;
+
 import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,10 +15,9 @@ import org.apache.olingo.odata2.api.processor.ODataContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sap.hana.cloud.samples.benefits.commons.UIConfig;
-import com.sap.hana.cloud.samples.benefits.commons.UserManager;
 import com.sap.hana.cloud.samples.benefits.csv.dataimport.BenefitsDataImporter;
-import com.sap.hana.cloud.samples.benefits.odata.cfg.ODataServiceFactory;
+import com.sap.hana.cloud.samples.benefits.odata.beans.UIConfig;
+import com.sap.hana.cloud.samples.benefits.odata.cfg.BenefitsODataServiceFactory;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.BenefitTypeDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.OrderDAO;
@@ -23,11 +25,11 @@ import com.sap.hana.cloud.samples.benefits.persistence.OrderDetailDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.UserPointsDAO;
 import com.sap.hana.cloud.samples.benefits.service.SessionListener;
 
-public class SystemFunctionImport extends ODataService {
+public class AdministrationService extends ODataService {
 	private static final String BENEFITS_CSV_PATH = "/benefits.csv"; //$NON-NLS-1$
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@EdmFunctionImport(name = "resetDB", returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
+	@EdmFunctionImport(name = RESET_DB, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
 	public boolean resetDatabase() {
 		cleanDB();
 		forceSubsequentInitialization();
@@ -60,12 +62,12 @@ public class SystemFunctionImport extends ODataService {
 	}
 
 	private void forceSubsequentInitialization() {
-		ODataContext ctx = ODataServiceFactory.getContextInThreadLocal();
+		ODataContext ctx = BenefitsODataServiceFactory.getContextInThreadLocal();
 		HttpServletRequest httpServlReq = (HttpServletRequest) ctx.getParameter(ODataContext.HTTP_SERVLET_REQUEST_OBJECT);
 		httpServlReq.getSession().setAttribute(SessionListener.INITIAL_FLAG, "true");
 	}
 
-	@EdmFunctionImport(name = "uiConfig", returnType = @ReturnType(type = Type.COMPLEX, isCollection = false), httpMethod = HttpMethod.GET)
+	@EdmFunctionImport(name = UI_CONFIG, returnType = @ReturnType(type = Type.COMPLEX, isCollection = false), httpMethod = HttpMethod.GET)
 	public UIConfig getUIConfigurationData() {
 		final UIConfig config = new UIConfig();
 		if (UserManager.getIsUserAdmin()) {
