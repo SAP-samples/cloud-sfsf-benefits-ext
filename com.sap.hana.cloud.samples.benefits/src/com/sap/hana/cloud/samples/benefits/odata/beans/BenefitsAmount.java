@@ -6,13 +6,13 @@ import com.google.gson.annotations.SerializedName;
 public class BenefitsAmount {
 
 	@Expose
-	@SerializedName("targetPoints")
+	@SerializedName("cust_targetPoints")
 	private long targetPoints;
 
 	@Expose
 	@SerializedName("externalCode")
 	private String userId;
-
+	
 	private static final long DEFAULT_TARGET_POINTS = 300;
 
 	public BenefitsAmount() {
@@ -38,9 +38,9 @@ public class BenefitsAmount {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
-	public static BenefitsAmount defaultBenefitsAmount(String userId) {
-		return new BenefitsAmount(userId, DEFAULT_TARGET_POINTS);
+	
+	public static BenefitsAmount defaultBenefitsAmount(String userId){
+	    return new BenefitsAmount(userId, DEFAULT_TARGET_POINTS);
 	}
 
 }
