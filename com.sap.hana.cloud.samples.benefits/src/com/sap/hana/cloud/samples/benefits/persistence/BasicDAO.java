@@ -2,13 +2,14 @@ package com.sap.hana.cloud.samples.benefits.persistence;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
-import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +34,11 @@ public class BasicDAO<T extends IDBEntity> {
 
 	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
+		final List<T> result = new ArrayList<>();
 		final EntityManager em = emProvider.get();
-		TypedQuery<? extends Type> query = em.createQuery("select t from " + getTableName() + " t", //$NON-NLS-1$ //$NON-NLS-2$
-				this.getClass().getGenericSuperclass().getClass());
-		return (List<T>) query.getResultList();
+		result.addAll((Collection<? extends T>) em.createQuery("select t from " + getTableName() + " t",
+				this.getClass().getGenericSuperclass().getClass()).getResultList());
+		return result;
 	}
 
 	public T save(T entity) {

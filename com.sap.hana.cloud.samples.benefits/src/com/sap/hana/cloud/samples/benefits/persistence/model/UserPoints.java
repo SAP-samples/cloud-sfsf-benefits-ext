@@ -39,6 +39,10 @@ public class UserPoints implements IDBEntity {
 	private Long campaignId;
 
 	@Basic
+	@Column(name = "ENTITLEMENT_POINTS")
+	private Long entitlementPoints;
+
+	@Basic
 	@Column(name = "AVAILABLE_POINTS")
 	private Long availablePoints;
 
@@ -106,5 +110,13 @@ public class UserPoints implements IDBEntity {
 
 	public void setCampaignId(Long campaignId) {
 		this.campaignId = campaignId;
+	}
+
+	public Long getEntitlementPoints() {
+		return entitlementPoints;
+	}
+
+	public void setEntitlementPoints(Long entitlementPoints) {
+		this.entitlementPoints = entitlementPoints;
 	}
 }

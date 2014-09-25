@@ -22,6 +22,14 @@
     </listener-class>
   </listener>
   <filter>
+    <filter-name>AuthenticationFilter</filter-name>
+    <filter-class>com.sap.hana.cloud.samples.benefits.auth.AuthenticationFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AuthenticationFilter</filter-name>
+    <url-pattern>/OData.svc/*</url-pattern>
+  </filter-mapping>
+  <filter>
     <filter-name>EntityManagerInterseptor</filter-name>
     <filter-class>com.sap.hana.cloud.samples.benefits.service.EntityManagerInterceptor</filter-class>
   </filter>
@@ -136,7 +144,6 @@
       <web-resource-name>Admin area</web-resource-name>
       <url-pattern>/view/campaigns/*</url-pattern>
       <url-pattern>/view/employees/*</url-pattern>
-      <url-pattern>/OData.svc/*</url-pattern>
       <url-pattern>/OData.svc/hrCampaigns</url-pattern>
       <url-pattern>/OData.svc/startCampaign</url-pattern>
       <url-pattern>/OData.svc/stopCampaign</url-pattern>
@@ -197,5 +204,9 @@
   <security-role>
     <description>HR Administrator</description>
     <role-name>Administrator</role-name>
+  </security-role>
+  <security-role>
+    <description>Data Analyzer</description>
+    <role-name>Analyzer</role-name>
   </security-role>
 </web-app>
