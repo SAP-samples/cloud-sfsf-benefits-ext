@@ -69,15 +69,15 @@ public class UserService extends ODataService {
 	public String getUserPhoto(@EdmFunctionImportParameter(name = PHOTO_TYPE, type = EdmType.INT32) Integer photoType) {
 		return getUserPhoto(getLoggedInUser().getUserId(), photoType);
 	}
-	
+
 	@EdmFunctionImport(name = FunctionImportNames.HR_PHOTO, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.GET)
-    public String getHrManagerPhoto(@EdmFunctionImportParameter(name = PHOTO_TYPE, type = EdmType.INT32) Integer photoType) {
-        User hrManager = getLoggedInUser().getHrManager();
-        if (hrManager == null){
-            return "";
-        }
-        return getUserPhoto(hrManager.getUserId(), photoType);
-    }
+	public String getHrManagerPhoto(@EdmFunctionImportParameter(name = PHOTO_TYPE, type = EdmType.INT32) Integer photoType) {
+		User hrManager = getLoggedInUser().getHrManager();
+		if (hrManager == null) {
+			return ""; //$NON-NLS-1$
+		}
+		return getUserPhoto(hrManager.getUserId(), photoType);
+	}
 
 	@EdmFunctionImport(name = FunctionImportNames.USER_POINTS, entitySet = FunctionImportEntitySets.USER_POINTS, returnType = @ReturnType(type = Type.ENTITY), httpMethod = HttpMethod.GET)
 	public UserPoints getCampaignUserPoints(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = EdmType.INT64) Long campaignId,
@@ -86,16 +86,16 @@ public class UserService extends ODataService {
 		if (UserManager.getIsUserAdmin() || currentUser.getUserId().equals(userId)) {
 			return new UserPointsDAO().getUserPoints(userId, campaignId);
 		}
-		throw new IllegalArgumentException("Missing user points for campaign wit id " + campaignId);
+		throw new IllegalArgumentException("Missing user points for campaign wit id " + campaignId); //$NON-NLS-1$
 	}
-	
-	private String getUserPhoto(String userId, int photoType){
-	    try {
-            return CoreODataConnector.getInstance().getUserPhoto(userId, photoType);
-        } catch (IOException ex) {
-            String errMsg = String.format("Failed to get photo for user with id %s", userId); //$NON-NLS-1$
-            LOGGER.error(errMsg, ex);
-            throw new ODataRuntimeException(errMsg, ex);
-        } 
+
+	private String getUserPhoto(String userId, int photoType) {
+		try {
+			return CoreODataConnector.getInstance().getUserPhoto(userId, photoType);
+		} catch (IOException ex) {
+			String errMsg = String.format("Failed to get photo for user with id %s", userId); //$NON-NLS-1$
+			LOGGER.error(errMsg, ex);
+			throw new ODataRuntimeException(errMsg, ex);
+		}
 	}
 }

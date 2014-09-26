@@ -36,7 +36,7 @@ public class BasicDAO<T extends IDBEntity> {
 	public List<T> getAll() {
 		final List<T> result = new ArrayList<>();
 		final EntityManager em = emProvider.get();
-		result.addAll((Collection<? extends T>) em.createQuery("select t from " + getTableName() + " t",
+		result.addAll((Collection<? extends T>) em.createQuery("select t from " + getTableName() + " t", //$NON-NLS-1$ //$NON-NLS-2$
 				this.getClass().getGenericSuperclass().getClass()).getResultList());
 		return result;
 	}

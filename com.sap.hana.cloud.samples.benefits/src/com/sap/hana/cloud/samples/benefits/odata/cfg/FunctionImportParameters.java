@@ -1,5 +1,6 @@
 package com.sap.hana.cloud.samples.benefits.odata.cfg;
 
+@SuppressWarnings("nls")
 public final class FunctionImportParameters {
 
 	public static final String NAME = "name";

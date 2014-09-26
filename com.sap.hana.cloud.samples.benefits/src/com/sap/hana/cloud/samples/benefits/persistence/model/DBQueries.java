@@ -1,5 +1,6 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
+@SuppressWarnings("nls")
 public class DBQueries {
 
 	public static final String GET_USER_BY_USER_ID = "getUserByUserId";

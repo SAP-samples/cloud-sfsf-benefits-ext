@@ -23,107 +23,107 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "ORDERS")
 @NamedQueries({ @NamedQuery(name = GET_USER_ORDERS_FOR_CAMPAIGN, query = "select o from Order o where o.user = :user and o.campaign = :campaign"),
-        @NamedQuery(name = GET_USER_ALL_ORDERS, query = "select o from Order o where o.user = :user") })
+		@NamedQuery(name = GET_USER_ALL_ORDERS, query = "select o from Order o where o.user = :user") })
 public class Order implements IDBEntity {
 
-    @Id
-    @GeneratedValue
-    @Column(name = "ORDER_ID")
-    private Long id;
+	@Id
+	@GeneratedValue
+	@Column(name = "ORDER_ID")
+	private Long id;
 
-    @Basic
-    @Column
-    private long total;
+	@Basic
+	@Column
+	private long total;
 
-    @ManyToOne
-    @JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
-    private Campaign campaign;
-    
-    @Column(name = "CAMPAIGN_ID", insertable = false, updatable = false) 
-    private Long campaignId;
+	@ManyToOne
+	@JoinColumn(name = "CAMPAIGN_ID", referencedColumnName = "CAMPAIGN_ID")
+	private Campaign campaign;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
-    private User user;
-    
-    @Column(name = "USER_ID", insertable = false, updatable = false) 
-    private Long userId;
+	@Column(name = "CAMPAIGN_ID", insertable = false, updatable = false)
+	private Long campaignId;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.EAGER, targetEntity = OrderDetails.class)
-    private List<OrderDetails> orderDetails;
+	@ManyToOne
+	@JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+	private User user;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
+	@Column(name = "USER_ID", insertable = false, updatable = false)
+	private Long userId;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "order", fetch = FetchType.EAGER, targetEntity = OrderDetails.class)
+	private List<OrderDetails> orderDetails;
 
-    public long getTotal() {
-        return total;
-    }
+	@Override
+	public Long getId() {
+		return id;
+	}
 
-    public void setCampaign(Campaign campaign) {
-        this.campaign = campaign;
-        if (!campaign.getOrders().contains(this)) {
-            campaign.getOrders().add(this);
-        }
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public Campaign getCampaign() {
-        return campaign;
-    }
+	public long getTotal() {
+		return total;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public void setCampaign(Campaign campaign) {
+		this.campaign = campaign;
+		if (!campaign.getOrders().contains(this)) {
+			campaign.getOrders().add(this);
+		}
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-        if (!user.getOrders().contains(this)) {
-            user.addOrder(this);
-        }
-    }
+	public Campaign getCampaign() {
+		return campaign;
+	}
 
-    public List<OrderDetails> getOrderDetails() {
-        if (this.orderDetails == null) {
-            this.orderDetails = new ArrayList<>();
-        }
-        return orderDetails;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public void addOrderDetails(OrderDetails details) {
-        getOrderDetails().add(details);
-        this.total += details.getQuantity() * details.getBenefitType().getValue();
+	public void setUser(User user) {
+		this.user = user;
+		if (!user.getOrders().contains(this)) {
+			user.addOrder(this);
+		}
+	}
 
-        if (details.getOrder() != this) {
-            details.setOrder(this);
-        }
-    }
+	public List<OrderDetails> getOrderDetails() {
+		if (this.orderDetails == null) {
+			this.orderDetails = new ArrayList<>();
+		}
+		return orderDetails;
+	}
 
-    public void removeOrderDetails(OrderDetails details) {
-        final long orderTotal = details.getQuantity() * details.getBenefitType().getValue();
-        if ((this.total - orderTotal) < 0) {
-            throw new IllegalArgumentException("Order total value can not be less than zero");
-        }
-        getOrderDetails().remove(details);
-        this.total -= orderTotal;
-    }
+	public void addOrderDetails(OrderDetails details) {
+		getOrderDetails().add(details);
+		this.total += details.getQuantity() * details.getBenefitType().getValue();
 
-    public void setOrderDetails(List<OrderDetails> orderDetails) {
-        this.orderDetails = orderDetails;
-    }
-    
-    public Long getCampaignId() {
+		if (details.getOrder() != this) {
+			details.setOrder(this);
+		}
+	}
+
+	public void removeOrderDetails(OrderDetails details) {
+		final long orderTotal = details.getQuantity() * details.getBenefitType().getValue();
+		if ((this.total - orderTotal) < 0) {
+			throw new IllegalArgumentException("Order total value can not be less than zero"); //$NON-NLS-1$
+		}
+		getOrderDetails().remove(details);
+		this.total -= orderTotal;
+	}
+
+	public void setOrderDetails(List<OrderDetails> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public Long getCampaignId() {
 		return campaignId;
 	}
 
 	public void setCampaignId(Long campaignId) {
 		this.campaignId = campaignId;
 	}
-	
+
 	public Long getUserId() {
 		return userId;
 	}

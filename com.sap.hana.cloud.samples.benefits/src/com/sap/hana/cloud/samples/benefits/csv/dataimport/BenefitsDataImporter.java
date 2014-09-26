@@ -18,9 +18,9 @@ public class BenefitsDataImporter {
 	public void importDataFromCSV(String filepath) throws IOException {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		if (classLoader == null) {
-			throw new IllegalStateException("Cannot import data - null classloader");
+			throw new IllegalStateException("Cannot import data - null classloader"); //$NON-NLS-1$
 		}
-		Reader fileReader = new InputStreamReader(classLoader.getResourceAsStream(filepath), Charset.forName("UTF-8"));
+		Reader fileReader = new InputStreamReader(classLoader.getResourceAsStream(filepath), Charset.forName("UTF-8")); //$NON-NLS-1$
 
 		try (CSVReader csvFile = new CSVReader(fileReader)) {
 			final List<BenefitInfo> benefitsInfo = readBenefitsInfo(csvFile);
@@ -30,14 +30,14 @@ public class BenefitsDataImporter {
 	}
 
 	private List<BenefitInfo> readBenefitsInfo(CSVReader reader) throws NumberFormatException, IOException {
-		final List<BenefitInfo> benefitsInfo = new ArrayList<BenefitInfo>();
+		final List<BenefitInfo> benefitsInfo = new ArrayList<>();
 		String[] nextLine;
 		reader.readNext();
 
 		while ((nextLine = reader.readNext()) != null) {
 
 			if (nextLine.length != 6) {
-				throw new IllegalArgumentException("data is not a valid benefit record");
+				throw new IllegalArgumentException("data is not a valid benefit record"); //$NON-NLS-1$
 			}
 
 			final BenefitInfo benefitInfo = new BenefitInfo();

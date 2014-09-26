@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <JPAEDMMappingModel
 	xmlns="http://www.sap.com/core/odata/processor/api/jpa/model/mapping">
 	<PersistenceUnit name="com.sap.hana.cloud.samples.benefits">

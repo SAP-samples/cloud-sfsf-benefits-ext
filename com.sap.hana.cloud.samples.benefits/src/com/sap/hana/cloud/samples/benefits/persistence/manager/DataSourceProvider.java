@@ -24,9 +24,9 @@ public class DataSourceProvider {
 	private DataSourceProvider() {
 		try {
 			final InitialContext ctx = new InitialContext();
-			dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB");
+			dataSource = (DataSource) ctx.lookup("java:comp/env/jdbc/DefaultDB"); //$NON-NLS-1$
 		} catch (NamingException e) {
-			logger.error("Could not lookup the default datasource", e);
+			logger.error("Could not lookup the default datasource", e); //$NON-NLS-1$
 			throw new RuntimeException(e);
 		}
 	}

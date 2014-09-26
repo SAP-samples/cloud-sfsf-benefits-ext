@@ -18,7 +18,6 @@ public class BeanDescriber {
 		this.beanObject = beanObject;
 	}
 
-	@SuppressWarnings("unchecked")
 	public Map<String, Object> describe() throws SecurityException, IllegalArgumentException, IllegalAccessException, NoSuchFieldException,
 			IntrospectionException {
 		List<String> propertyNames = getPropertyNames();

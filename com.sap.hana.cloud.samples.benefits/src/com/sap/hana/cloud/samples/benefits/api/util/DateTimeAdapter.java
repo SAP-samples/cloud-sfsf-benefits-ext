@@ -23,31 +23,31 @@ import com.google.gson.JsonSerializer;
  */
 public class DateTimeAdapter implements JsonSerializer<Date>, JsonDeserializer<Date> {
 
-    private static final String UTC_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+	private static final String UTC_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'"; //$NON-NLS-1$
 
-    private final DateFormat dateFormat;
+	private final DateFormat dateFormat;
 
-    public DateTimeAdapter() {
-        dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT, Locale.US);
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
-    }
+	public DateTimeAdapter() {
+		dateFormat = new SimpleDateFormat(UTC_DATE_FORMAT, Locale.US);
+		dateFormat.setTimeZone(TimeZone.getTimeZone("UTC")); //$NON-NLS-1$
+	}
 
-    @Override
-    public JsonElement serialize(Date date, Type type, JsonSerializationContext jsonSerializationContext) {
-        synchronized (dateFormat) {
-            return new JsonPrimitive(dateFormat.format(date));
-        }
-    }
+	@Override
+	public JsonElement serialize(Date date, Type type, JsonSerializationContext jsonSerializationContext) {
+		synchronized (dateFormat) {
+			return new JsonPrimitive(dateFormat.format(date));
+		}
+	}
 
-    @Override
-    public Date deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
-        try {
-            synchronized (dateFormat) {
-                return dateFormat.parse(jsonElement.getAsString());
-            }
-        } catch (ParseException e) {
-            throw new JsonParseException(e);
-        }
-    }
+	@Override
+	public Date deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) {
+		try {
+			synchronized (dateFormat) {
+				return dateFormat.parse(jsonElement.getAsString());
+			}
+		} catch (ParseException e) {
+			throw new JsonParseException(e);
+		}
+	}
 
 }

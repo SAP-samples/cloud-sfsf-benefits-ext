@@ -29,12 +29,10 @@ import com.sap.hana.cloud.samples.benefits.odata.beans.UserInfo;
 
 public class ProcessingExtension implements JPAEdmExtension {
 
-	@SuppressWarnings("rawtypes")
-	private static final Class[] SERVICES = { UserService.class, CampaignService.class, AdministrationService.class, OrderService.class,
+	private static final Class<?>[] SERVICES = { UserService.class, CampaignService.class, AdministrationService.class, OrderService.class,
 			BenefitAmountService.class };
 
-	@SuppressWarnings("rawtypes")
-	private static final Map<Class, String> ODATA_TYPES = new HashMap<>();
+	private static final Map<Class<?>, String> ODATA_TYPES = new HashMap<>();
 
 	static {
 		ODATA_TYPES.put(StartCampaignDetails.class, "StartCampaignDetails"); //$NON-NLS-1$
@@ -43,21 +41,19 @@ public class ProcessingExtension implements JPAEdmExtension {
 		ODATA_TYPES.put(BenefitsAmount.class, FunctionImportEntitySets.BENEFITS_AMOUNT);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void extendWithOperation(final JPAEdmSchemaView arg0) {
-		for (Class service : SERVICES) {
+		for (Class<?> service : SERVICES) {
 			arg0.registerOperations(service, null);
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void extendJPAEdmSchema(final JPAEdmSchemaView arg0) {
 		Schema edmSchema = arg0.getEdmSchema();
 
 		List<ComplexType> types = new ArrayList<>();
-		for (Entry<Class, String> odataType : ODATA_TYPES.entrySet()) {
+		for (Entry<Class<?>, String> odataType : ODATA_TYPES.entrySet()) {
 			try {
 				types.add(describeType(odataType.getKey(), odataType.getValue()));
 			} catch (SecurityException | IllegalArgumentException | InstantiationException | IllegalAccessException | NoSuchFieldException
@@ -68,7 +64,7 @@ public class ProcessingExtension implements JPAEdmExtension {
 		edmSchema.setComplexTypes(types);
 	}
 
-	private ComplexType describeType(Class odataType, String name) throws SecurityException, IllegalArgumentException, InstantiationException,
+	private ComplexType describeType(Class<?> odataType, String name) throws SecurityException, IllegalArgumentException, InstantiationException,
 			IllegalAccessException, IntrospectionException, NoSuchFieldException {
 		List<Field> fields = getTypeFields(odataType);
 
@@ -84,8 +80,8 @@ public class ProcessingExtension implements JPAEdmExtension {
 		return complexType;
 	}
 
-	private List<Field> getTypeFields(Class odataType) throws InstantiationException, IllegalAccessException, IntrospectionException,
-			NoSuchFieldException {
+	private List<Field> getTypeFields(Class<?> odataType) throws InstantiationException, IllegalAccessException,
+			IntrospectionException, NoSuchFieldException {
 		BeanDescriber beanDescriber = new BeanDescriber(odataType.newInstance());
 		List<String> propertyNames = beanDescriber.getPropertyNames();
 

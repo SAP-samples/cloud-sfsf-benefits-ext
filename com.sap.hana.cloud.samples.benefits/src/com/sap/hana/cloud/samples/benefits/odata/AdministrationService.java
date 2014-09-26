@@ -26,6 +26,7 @@ import com.sap.hana.cloud.samples.benefits.persistence.UserPointsDAO;
 import com.sap.hana.cloud.samples.benefits.service.SessionListener;
 
 public class AdministrationService extends ODataService {
+	private static final String TRUE_STR = "true"; //$NON-NLS-1$
 	private static final String BENEFITS_CSV_PATH = "/benefits.csv"; //$NON-NLS-1$
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -64,7 +65,7 @@ public class AdministrationService extends ODataService {
 	private void forceSubsequentInitialization() {
 		ODataContext ctx = BenefitsODataServiceFactory.getContextInThreadLocal();
 		HttpServletRequest httpServlReq = (HttpServletRequest) ctx.getParameter(ODataContext.HTTP_SERVLET_REQUEST_OBJECT);
-		httpServlReq.getSession().setAttribute(SessionListener.INITIAL_FLAG, "true");
+		httpServlReq.getSession().setAttribute(SessionListener.INITIAL_FLAG, TRUE_STR);
 	}
 
 	@EdmFunctionImport(name = UI_CONFIG, returnType = @ReturnType(type = Type.COMPLEX, isCollection = false), httpMethod = HttpMethod.GET)

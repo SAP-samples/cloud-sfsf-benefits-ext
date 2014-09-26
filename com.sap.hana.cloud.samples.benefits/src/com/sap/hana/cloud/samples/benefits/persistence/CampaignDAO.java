@@ -15,6 +15,7 @@ import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 
+@SuppressWarnings("nls")
 public class CampaignDAO extends BasicDAO<Campaign> {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,9 +45,8 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		final Campaign activeCampaign = getActiveCampaign(user);
 		if (activeCampaign != null && !activeCampaign.getId().equals(campaignId)) {
 			return false;
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	public void delete(long id) {
@@ -68,9 +68,8 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		List<Campaign> result = query.getResultList();
 		if (result.size() == 1) {
 			return result.get(0);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 }

@@ -72,8 +72,8 @@ public class CoreODataConnector extends ODataConnector {
 		return coreODataParser.loadUserInfoFromJson(userJson);
 	}
 
-	public BenefitsAmount getUserBenefitsAmount(String userId) throws IOException {
-	    return BenefitsAmount.defaultBenefitsAmount(userId);
+	public BenefitsAmount getUserBenefitsAmount(String userId) {
+		return BenefitsAmount.defaultBenefitsAmount(userId);
 	}
 
 	public String getUserPhoto(String userId, Integer photoType) throws IOException {

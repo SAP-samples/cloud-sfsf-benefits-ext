@@ -1,5 +1,6 @@
 package com.sap.hana.cloud.samples.benefits.odata.cfg;
 
+@SuppressWarnings("nls")
 public final class FunctionImportNames {
 
 	public static final String MANAGED_USER_NAMES = "managed";

@@ -47,6 +47,7 @@ public class CoreODataParser {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public List<SFUser> loadSFUserProfileListFromJsom(String json) throws IOException {
 		if (json == null) {
 			return Collections.emptyList();
@@ -61,6 +62,7 @@ public class CoreODataParser {
 		}
 	}
 
+	@SuppressWarnings("resource")
 	public BenefitsAmount loadUserBenefitAmount(String json) throws IOException {
 		JsonReader reader = createJsonReader(json);
 		try {
@@ -100,7 +102,7 @@ public class CoreODataParser {
 		}
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings({ "resource", "synthetic-access" })
 	public List<BenefitsAmount> loadUsersBenefitsAmount(String json) throws IOException {
 		JsonReader reader = createJsonReader(json);
 		try {

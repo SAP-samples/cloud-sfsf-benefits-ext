@@ -1,6 +1,5 @@
 package com.sap.hana.cloud.samples.benefits.persistence;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class UserPointsDAO extends BasicDAO<UserPoints> {
 		return result;
 	}
 
-	public void createCampaignUserPoints(Campaign campaign) throws IOException {
+	public void createCampaignUserPoints(Campaign campaign) {
 		if (campaign.getOwner() != null) {
 			List<User> employees = campaign.getOwner().getEmployees();
 			Map<String, BenefitsAmount> mapping = createBenefitsAmountMapping(employees);

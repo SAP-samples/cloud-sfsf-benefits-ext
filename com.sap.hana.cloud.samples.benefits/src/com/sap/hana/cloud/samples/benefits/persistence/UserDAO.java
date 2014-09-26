@@ -24,13 +24,13 @@ public class UserDAO extends BasicDAO<User> {
 		final EntityManager em = emProvider.get();
 		try {
 			final TypedQuery<User> query = em.createNamedQuery(DBQueries.GET_USER_BY_USER_ID, User.class);
-			query.setParameter("userId", userId);
+			query.setParameter("userId", userId); //$NON-NLS-1$
 			User user = query.getSingleResult();
 			return user;
 		} catch (NoResultException x) {
-			logger.warn("Could not retrieve entity for userId {} from table {}. Maybe the user doesn't exist yet.", userId, "User");
+			logger.warn("Could not retrieve entity for userId {} from table {}. Maybe the user doesn't exist yet.", userId, "User"); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (NonUniqueResultException e) {
-			logger.error("More than one entity for userId {} from table {}.", userId, "User");
+			logger.error("More than one entity for userId {} from table {}.", userId, "User"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		return null;

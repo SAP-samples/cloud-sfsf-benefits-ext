@@ -1,3 +1,4 @@
+<!DOCTYPE xml>
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" xmlns:form="sap.ui.commons.form" xmlns:common="sap.ui.commons"
 	controllerName="com.sap.hana.cloud.samples.benefits.view.campaigns.Details"

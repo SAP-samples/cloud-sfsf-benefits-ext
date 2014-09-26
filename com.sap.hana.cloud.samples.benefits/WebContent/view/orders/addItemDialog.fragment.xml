@@ -1,3 +1,4 @@
+<!DOCTYPE xml>
 <Dialog xmlns="sap.m" xmlns:form="sap.ui.commons.form"
 	xmlns:core="sap.ui.core" id="addItemDialog" title="{b_i18n>ADD_ORDER_BTN_NAME}"
 	afterOpen="handleDialogOpen" beforeOpen="resetDialog">

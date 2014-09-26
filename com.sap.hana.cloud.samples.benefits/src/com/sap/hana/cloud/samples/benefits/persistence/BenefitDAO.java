@@ -14,6 +14,7 @@ import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProv
 import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitInfo;
 import com.sap.hana.cloud.samples.benefits.persistence.model.BenefitType;
 
+@SuppressWarnings("nls")
 public class BenefitDAO extends BasicDAO<BenefitInfo> {
 
 	private final Logger logger = LoggerFactory.getLogger(BenefitDAO.class);

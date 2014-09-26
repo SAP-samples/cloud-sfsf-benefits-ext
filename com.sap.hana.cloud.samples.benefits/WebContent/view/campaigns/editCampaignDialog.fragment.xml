@@ -1,3 +1,4 @@
+<!DOCTYPE xml>
 <Dialog xmlns="sap.m" id="editCampaignDialog" title="{b_i18n>EDIT_DIALOG_TITLE}"
 	afterOpen="closeDateTimeSelectors">
 	<content>

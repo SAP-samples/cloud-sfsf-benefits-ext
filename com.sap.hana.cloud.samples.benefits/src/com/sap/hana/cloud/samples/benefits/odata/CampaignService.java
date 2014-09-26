@@ -17,7 +17,6 @@ import static org.apache.olingo.odata2.api.annotation.edm.EdmType.DATE_TIME;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.INT64;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.STRING;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -95,7 +94,7 @@ public class CampaignService extends ODataService {
 	}
 
 	@EdmFunctionImport(name = ADD_CAMPAIGN, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
-	public boolean addCampaign(@EdmFunctionImportParameter(name = NAME, type = STRING) String campaignName) throws ODataException, IOException {
+	public boolean addCampaign(@EdmFunctionImportParameter(name = NAME, type = STRING) String campaignName) throws ODataException {
 		final User user = getLoggedInUser();
 		if (campaignDAO.getByCaseInsensitiveName(campaignName, user) != null) {
 			throw new ODataException("Campaign with this name already exist"); //$NON-NLS-1$
@@ -105,12 +104,7 @@ public class CampaignService extends ODataService {
 		newCampaign.setName(campaignName);
 		newCampaign.setOwner(user);
 		campaignDAO.saveNew(newCampaign);
-		try {
-			new UserPointsDAO().createCampaignUserPoints(newCampaign);
-		} catch (IOException ex) {
-			campaignDAO.delete(newCampaign.getId());
-			throw new ODataException("Failed to create user points", ex); //$NON-NLS-1$
-		}
+		new UserPointsDAO().createCampaignUserPoints(newCampaign);
 		return true;
 	}
 

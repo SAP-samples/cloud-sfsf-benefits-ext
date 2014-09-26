@@ -1,3 +1,4 @@
+<!DOCTYPE xml>
 <core:View xmlns:core="sap.ui.core" xmlns:mvc="sap.ui.core.mvc"
 	xmlns="sap.m" controllerName="com.sap.hana.cloud.samples.benefits.view.benefits.Details"
 	xmlns:html="http://www.w3.org/1999/xhtml" setDisplayBlock="true">
