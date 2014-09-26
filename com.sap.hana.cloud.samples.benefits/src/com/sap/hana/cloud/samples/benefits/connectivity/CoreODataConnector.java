@@ -19,6 +19,8 @@ public class CoreODataConnector extends ODataConnector {
 	private static final String MANAGED_EMPLOYEES_QUERY = "User?$select=userId,firstName,lastName,email&$filter=hr/userId%20eq%20'#'";
 	private static final String PROFILE_QUERY = "User('#')?$select=userId,firstName,lastName,email,hr/userId,hr/firstName,hr/lastName,hr/email&$expand=hr";
 	private static final String INFO_QUERY = "User('#')?$select=userId,firstName,lastName,location,businessPhone,division,title,department,email,hr/firstName,hr/lastName,hr/businessPhone&$expand=hr";
+	private static final String USER_BENEFITS_AMOUNT_QUERY = "cust_BenefitsAmount('#')";
+	private static final String EMPLOYEES_BENEFITS_AMOUNT_QUERY = "cust_BenefitsAmount?$select=externalCode,cust_targetPoints&$filter=externalCodeNav/hr/userId%20eq%20'#'";
 	private static final String USER_PHOTO_QUERY = "Photo(photoType=#1,userId='#2')?$select=photo";
 
 	private CoreODataParser coreODataParser;
@@ -72,13 +74,28 @@ public class CoreODataConnector extends ODataConnector {
 		return coreODataParser.loadUserInfoFromJson(userJson);
 	}
 
-	public BenefitsAmount getUserBenefitsAmount(String userId) {
-		return BenefitsAmount.defaultBenefitsAmount(userId);
+	public BenefitsAmount getUserBenefitsAmount(String userId) throws IOException {
+		String userBenefitsAmountJson = getODataResponse(getUserBenefitsAmountQuery(userId));
+		return coreODataParser.loadUserBenefitAmount(userBenefitsAmountJson);
+	}
+
+	private String getUserBenefitsAmountQuery(String userId) {
+		return USER_BENEFITS_AMOUNT_QUERY.replace("#", urlEncode(userId));
+	}
+
+	public List<BenefitsAmount> getEmployeesBenefitsAmount(String hrUserId) throws IOException {
+		String userBenefitsAmountJson = getODataResponse(getEmployeesBenefitsAmountQuery(hrUserId));
+		return coreODataParser.loadUsersBenefitsAmount(userBenefitsAmountJson);
+	}
+
+	private String getEmployeesBenefitsAmountQuery(String hrUserId) {
+		return EMPLOYEES_BENEFITS_AMOUNT_QUERY.replace("#", urlEncode(hrUserId));
 	}
 
 	public String getUserPhoto(String userId, Integer photoType) throws IOException {
 		String userPhotoJSON = getODataResponse(getUserPhotoQuery(userId, photoType));
 		return coreODataParser.loadUserPhoto(userPhotoJSON);
+
 	}
 
 	private String getUserPhotoQuery(String userId, Integer photoType) {

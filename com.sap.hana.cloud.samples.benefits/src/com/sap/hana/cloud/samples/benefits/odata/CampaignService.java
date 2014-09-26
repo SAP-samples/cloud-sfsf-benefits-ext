@@ -17,6 +17,7 @@ import static org.apache.olingo.odata2.api.annotation.edm.EdmType.DATE_TIME;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.INT64;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.STRING;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -104,7 +105,12 @@ public class CampaignService extends ODataService {
 		newCampaign.setName(campaignName);
 		newCampaign.setOwner(user);
 		campaignDAO.saveNew(newCampaign);
-		new UserPointsDAO().createCampaignUserPoints(newCampaign);
+		try {
+			new UserPointsDAO().createCampaignUserPoints(newCampaign);
+		} catch (IOException ex) {
+			campaignDAO.delete(newCampaign.getId());
+			throw new ODataException("Failed to create user points", ex); //$NON-NLS-1$
+		}
 		return true;
 	}
 
