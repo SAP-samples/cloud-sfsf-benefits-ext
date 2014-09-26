@@ -5,7 +5,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 	onBeforeRendering : function() {
 		this.loadModel();
 		this.hideLogout();
-		this.hideHrObjectHeader();
+		this.hideHrProfilePanel();
 	},
 
 	loadModel : function() {
@@ -29,9 +29,9 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 		this.byId("logoutButton").setVisible(appController._hasLogoutButton());
 	},
 
-	hideHrObjectHeader : function() {
+	hideHrProfilePanel : function() {
 		if (this.getView().getModel().getData().d.results[1] === undefined) {
-			this.byId("hrObjectHeader").setVisible(false);
+			this.byId("hrProfilePanel").setVisible(false);
 		}
 	},
 

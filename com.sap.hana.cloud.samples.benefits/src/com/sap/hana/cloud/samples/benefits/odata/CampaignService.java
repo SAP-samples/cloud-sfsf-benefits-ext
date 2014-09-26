@@ -25,7 +25,6 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.HttpMethod;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType.Type;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
-import org.apache.olingo.odata2.api.exception.ODataException;
 
 import com.sap.hana.cloud.samples.benefits.odata.beans.StartCampaignDetails;
 import com.sap.hana.cloud.samples.benefits.persistence.UserPointsDAO;
@@ -81,10 +80,10 @@ public class CampaignService extends ODataService {
 	}
 
 	@EdmFunctionImport(name = STOP_CAMPAIGN, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
-	public boolean stopCampaign(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = INT64) Long campaignId) throws ODataException {
+	public boolean stopCampaign(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = INT64) Long campaignId) throws AppODataException {
 		final Campaign campaign = campaignDAO.getById(campaignId);
 		if (campaign == null) {
-			throw new ODataException("Campaign with this name does not exist"); //$NON-NLS-1$
+			throw new AppODataException("Campaign with this name does not exist"); //$NON-NLS-1$
 		}
 
 		campaign.setActive(false);
@@ -94,10 +93,10 @@ public class CampaignService extends ODataService {
 	}
 
 	@EdmFunctionImport(name = ADD_CAMPAIGN, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
-	public boolean addCampaign(@EdmFunctionImportParameter(name = NAME, type = STRING) String campaignName) throws ODataException {
+	public boolean addCampaign(@EdmFunctionImportParameter(name = NAME, type = STRING) String campaignName) throws AppODataException {
 		final User user = getLoggedInUser();
 		if (campaignDAO.getByCaseInsensitiveName(campaignName, user) != null) {
-			throw new ODataException("Campaign with this name already exist"); //$NON-NLS-1$
+			throw new AppODataException("Campaign with this name already exist"); //$NON-NLS-1$
 		}
 
 		final Campaign newCampaign = new Campaign();
@@ -109,12 +108,12 @@ public class CampaignService extends ODataService {
 	}
 
 	@EdmFunctionImport(name = DELETE_CAMPAIGN, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.DELETE)
-	public boolean deleteCampaign(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = INT64) Long campaignId) throws ODataException {
+	public boolean deleteCampaign(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = INT64) Long campaignId) throws AppODataException {
 		try {
 			campaignDAO.delete(campaignId);
 			return true;
 		} catch (IllegalArgumentException ex) {
-			throw new ODataException("Error occur while deleting campaign", ex); //$NON-NLS-1$
+			throw new AppODataException("Error occur while deleting campaign", ex); //$NON-NLS-1$
 		}
 	}
 
@@ -132,12 +131,12 @@ public class CampaignService extends ODataService {
 	@EdmFunctionImport(name = EDIT_CAMPAIGN, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
 	public boolean editCampaign(@EdmFunctionImportParameter(name = START_DATE, type = DATE_TIME) Date startDate,
 			@EdmFunctionImportParameter(name = "endDate", type = DATE_TIME) Date endDate,
-			@EdmFunctionImportParameter(name = "campaignid", type = INT64) Long campaignId) throws ODataException {
+			@EdmFunctionImportParameter(name = "campaignid", type = INT64) Long campaignId) throws AppODataException {
 		final Campaign selectedCampaign = campaignDAO.getById(campaignId);
 		if (selectedCampaign == null) {
-			throw new ODataException("Campaign does not exist"); //$NON-NLS-1$
+			throw new AppODataException("Campaign does not exist"); //$NON-NLS-1$
 		} else if (startDate == null || endDate == null || startDate.compareTo(endDate) >= 0) {
-			throw new ODataException("Incorrect campaign dates"); //$NON-NLS-1$
+			throw new AppODataException("Incorrect campaign dates"); //$NON-NLS-1$
 		}
 
 		selectedCampaign.setStartDate(startDate);

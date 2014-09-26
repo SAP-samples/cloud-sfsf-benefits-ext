@@ -89,7 +89,7 @@ public class BasicDAO<T extends IDBEntity> {
 		} catch (NoResultException e) {
 			logger.error("Could not retrieve entity {} from table {}.", id, getTableName()); //$NON-NLS-1$
 		} catch (NonUniqueResultException e) {
-			logger.error("More than one entity {} from table {}.", id, getTableName()); //$NON-NLS-1$
+			throw new IllegalStateException(String.format("More than one entity %s from table %s.", id, getTableName())); //$NON-NLS-1$
 		}
 
 		return t;
@@ -106,7 +106,6 @@ public class BasicDAO<T extends IDBEntity> {
 	private String getTableName() {
 		String actualType = getActualType().toString();
 		return actualType.substring(actualType.lastIndexOf('.') + 1);
-
 	}
 
 }

@@ -15,7 +15,6 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.HttpMethod;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType.Type;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
-import org.apache.olingo.odata2.api.exception.ODataException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,19 +40,19 @@ public class OrderService extends ODataService {
 	public boolean addOrder(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = INT64) Long campaignId,
 			@EdmFunctionImportParameter(name = USER_ID, type = STRING) String userId,
 			@EdmFunctionImportParameter(name = QUANTITY, type = INT64) Long quantity,
-			@EdmFunctionImportParameter(name = BENEFIT_TYPE_ID, type = INT64) Long benefitTypeId) throws ODataException {
+			@EdmFunctionImportParameter(name = BENEFIT_TYPE_ID, type = INT64) Long benefitTypeId) throws AppODataException {
 		final User loggedInUser = getLoggedInUser();
 		if (!(loggedInUser.getUserId().equals(userId) || UserManager.getIsUserAdmin())) {
-			throw new ODataException("Unauthorized"); //$NON-NLS-1$
+			throw new AppODataException("Unauthorized"); //$NON-NLS-1$
 		}
 		final User user = userDAO.getByUserId(userId);
 		final Campaign campaign = campaignDAO.getById(campaignId);
 
 		if (campaign == null) {
-			throw new ODataException("Incorrect campaign id"); //$NON-NLS-1$
+			throw new AppODataException("Incorrect campaign id"); //$NON-NLS-1$
 		}
 		if (!campaign.getActive()) {
-			throw new ODataException("The campaign with id " + campaignId + " is not active"); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new AppODataException("The campaign with id " + campaignId + " is not active"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		final OrderDAO orderDAO = new OrderDAO();
@@ -61,14 +60,14 @@ public class OrderService extends ODataService {
 		final BenefitTypeDAO benefitTypeDAO = new BenefitTypeDAO();
 		final BenefitType benefitType = benefitTypeDAO.getById(benefitTypeId);
 		if (benefitType == null) {
-			throw new ODataException("Incorrect benefit type id"); //$NON-NLS-1$
+			throw new AppODataException("Incorrect benefit type id"); //$NON-NLS-1$
 		}
 		final OrderDetails orderDetails = createOrderDetails(quantity, benefitType);
 		final UserPoints userPoints = getUserPoints(userOrder);
 		final long orderDetailsTotal = calcPointsToAdd(orderDetails);
 
 		if (userPoints.getAvailablePoints() < orderDetailsTotal) {
-			throw new ODataException(ORDER_DETAIL_NOT_VALID_MESSAGE);
+			throw new AppODataException(ORDER_DETAIL_NOT_VALID_MESSAGE);
 		}
 
 		userOrder.addOrderDetails(orderDetails);
@@ -79,7 +78,7 @@ public class OrderService extends ODataService {
 	}
 
 	@EdmFunctionImport(name = FunctionImportNames.DELETE_ORDER, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.DELETE)
-	public boolean deleteOrderDetail(@EdmFunctionImportParameter(name = ORDER_ID, type = INT64) Long orderId) throws ODataException {
+	public boolean deleteOrderDetail(@EdmFunctionImportParameter(name = ORDER_ID, type = INT64) Long orderId) throws AppODataException {
 		final OrderDetailDAO orderDetailDAO = new OrderDetailDAO();
 		final Order order = orderDetailDAO.getOrderByOrderDetailsId(orderId);
 		final OrderDetails details = orderDetailDAO.getById(orderId);
@@ -92,7 +91,7 @@ public class OrderService extends ODataService {
 			return true;
 		} catch (IllegalArgumentException ex) {
 			logger.error("Error occur while deleting order with id:{}", orderId, ex); //$NON-NLS-1$
-			throw new ODataException("Error occur while deleting order", ex); //$NON-NLS-1$
+			throw new AppODataException("Error occur while deleting order", ex); //$NON-NLS-1$
 		}
 	}
 

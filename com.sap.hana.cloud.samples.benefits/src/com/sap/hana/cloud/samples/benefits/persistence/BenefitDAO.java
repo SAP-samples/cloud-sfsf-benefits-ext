@@ -34,7 +34,7 @@ public class BenefitDAO extends BasicDAO<BenefitInfo> {
 		} catch (NoResultException e) {
 			logger.warn("Could not retrieve entity {} from table {}.  Maybe the benefit info doesn't exist yet.", name, "Benefits info");
 		} catch (NonUniqueResultException e) {
-			logger.error("More than one entity {} from table {}.", name, "Benefits info");
+			throw new IllegalStateException(String.format("More than one entity %s from table Benefits info.", name)); //$NON-NLS-1$
 		}
 
 		return benefitInfo;

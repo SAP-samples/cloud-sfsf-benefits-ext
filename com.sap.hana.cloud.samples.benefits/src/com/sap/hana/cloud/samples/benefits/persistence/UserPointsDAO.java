@@ -43,7 +43,7 @@ public class UserPointsDAO extends BasicDAO<UserPoints> {
 		} catch (NoResultException x) {
 			logger.debug("Could not retrieve user points for userId {} from table {}.", userId, "User"); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (NonUniqueResultException e) {
-			logger.debug("More than one entity for userId {} from table {}.", userId, "User"); //$NON-NLS-1$ //$NON-NLS-2$
+			throw new IllegalStateException(String.format("More than one entity for userId %s from table User.", userId)); //$NON-NLS-1$
 		}
 		return result;
 	}
@@ -68,8 +68,7 @@ public class UserPointsDAO extends BasicDAO<UserPoints> {
 		for (User employee : employees) {
 			BenefitsAmount emplBenefitsAmount = mapping.get(employee.getUserId());
 			if (emplBenefitsAmount == null) {
-				String errMsg = "Missing benefits amount for the campaign employee " + employee; //$NON-NLS-1$
-				logger.error(errMsg);
+				String errMsg = "Missing benefits amount for the campaign employee " + employee.getUserId(); //$NON-NLS-1$
 				throw new IllegalStateException(errMsg);
 			}
 			saveNewUserPoints(campaign, employee, emplBenefitsAmount.getTargetPoints());

@@ -9,13 +9,12 @@
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.Order</class>
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.OrderDetails</class>
         <class>com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints</class>
-        <!-- <class>com.sap.hana.cloud.samples.benefits.persistence.model.Info</class> -->
 		<properties>
 			<property name="eclipselink.deploy-on-startup" value="True" />
 			<property name="eclipselink.ddl-generation" value="create-or-extend-tables" />
 			<property name="eclipselink.logging.level" value="SEVERE" />
 			<property name="eclipselink.jpql.parser" value="org.eclipse.persistence.queries.ANTLRQueryBuilder" />
-			<property name="eclipselink.cache.shared.default" value="false"/>
+<!-- 			<property name="eclipselink.cache.shared.default" value="false"/> -->
 		</properties>
 	</persistence-unit>
 </persistence>

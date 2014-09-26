@@ -10,6 +10,7 @@ import com.sap.hana.cloud.samples.benefits.connectivity.helper.CoreODataParser;
 import com.sap.hana.cloud.samples.benefits.connectivity.helper.SFUser;
 import com.sap.hana.cloud.samples.benefits.odata.beans.BenefitsAmount;
 import com.sap.hana.cloud.samples.benefits.odata.beans.UserInfo;
+import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseException;
 
 @SuppressWarnings("nls")
 public class CoreODataConnector extends ODataConnector {
@@ -57,17 +58,17 @@ public class CoreODataConnector extends ODataConnector {
 		}
 	}
 
-	public List<SFUser> getManagedEmployees(String hrSFUserName) throws IOException {
+	public List<SFUser> getManagedEmployees(String hrSFUserName) throws IOException, InvalidResponseException {
 		String userListJson = getODataResponse(getMangedEmployeesQuery(hrSFUserName));
 		return coreODataParser.loadSFUserProfileListFromJsom(userListJson);
 	}
 
-	public SFUser getUserProfile(String userName) throws IOException {
+	public SFUser getUserProfile(String userName) throws IOException, InvalidResponseException {
 		String userJson = getODataResponse(getProfileQuery(userName));
 		return coreODataParser.loadSFUserProfileFromJsom(userJson);
 	}
 
-	public UserInfo getUserInfoProfile(String userName) throws IOException {
+	public UserInfo getUserInfoProfile(String userName) throws IOException, InvalidResponseException {
 		String userJson = getODataResponse(getInfoQuery(userName));
 		return coreODataParser.loadUserInfoFromJson(userJson);
 	}
@@ -76,9 +77,10 @@ public class CoreODataConnector extends ODataConnector {
 		return BenefitsAmount.defaultBenefitsAmount(userId);
 	}
 
-	public String getUserPhoto(String userId, Integer photoType) throws IOException {
+	public String getUserPhoto(String userId, Integer photoType) throws IOException, InvalidResponseException {
 		String userPhotoJSON = getODataResponse(getUserPhotoQuery(userId, photoType));
 		return coreODataParser.loadUserPhoto(userPhotoJSON);
+
 	}
 
 	private String getUserPhotoQuery(String userId, Integer photoType) {

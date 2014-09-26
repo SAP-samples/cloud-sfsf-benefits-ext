@@ -13,18 +13,18 @@ import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerFact
 public class BenefitsODataServiceFactory extends ODataJPAServiceFactory {
 	private static final String PERSISTENCE_UNIT_NAME = "com.sap.hana.cloud.samples.benefits"; //$NON-NLS-1$
 
-	private static final ThreadLocal<ODataContext> oDataContextThreadLocal = new ThreadLocal<>();
+	private static final ThreadLocal<ODataContext> ODATA_CONTEXT_THREAD_LOCAL = new ThreadLocal<>();
 
 	private static void setContextInThreadLocal(final ODataContext ctx) {
-		oDataContextThreadLocal.set(ctx);
+		ODATA_CONTEXT_THREAD_LOCAL.set(ctx);
 	}
 
 	public static void unsetContextInThreadLocal() {
-		oDataContextThreadLocal.remove();
+		ODATA_CONTEXT_THREAD_LOCAL.remove();
 	}
 
 	public static ODataContext getContextInThreadLocal() {
-		return oDataContextThreadLocal.get();
+		return ODATA_CONTEXT_THREAD_LOCAL.get();
 	}
 
 	@Override

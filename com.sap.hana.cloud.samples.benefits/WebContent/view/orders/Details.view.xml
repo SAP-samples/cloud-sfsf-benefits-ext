@@ -19,7 +19,7 @@
 				numberUnit="{b_i18n>USED_POINTS}">
 				<attributes>
 					<ObjectAttribute
-						text="{parts: [{path:'/activeCampaign/Points'},{path:'/currentOrder/d/results/0/Total'}], formatter:'.formatAvailablePoints'}" />
+						text="{parts: [{path:'/employee/targetPoints'},{path:'/currentOrder/d/results/0/Total'}], formatter:'.formatAvailablePoints'}" />
 					<ObjectAttribute
 						text="{path:'/employee/targetPoints', formatter:'.formatBenefitPointsEntitlement'}" />
 				</attributes>

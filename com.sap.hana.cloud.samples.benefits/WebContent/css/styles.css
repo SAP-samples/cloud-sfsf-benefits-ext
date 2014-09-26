@@ -15,7 +15,7 @@
 }
 
 .labelHeight {
-	line-height: 3rem;
+	line-height: 3rem !important;
 }
 
 .bold {
@@ -94,8 +94,8 @@
 }
 
 #InfoDetails--infoMainLayout{
-	width: 40%;
-	padding: 0% 30%;
+	width: 58%;
+	padding: 0% 21%;
 	margin-top:1rem;
 }
 
@@ -132,7 +132,7 @@
 }
 
 #InfoDetails--benefitPoints{
-	font-size: 4rem;
+	font-size: 3rem;
 	font-weight:bold;
 	color: rgb(77, 76, 76);
 }
@@ -162,4 +162,20 @@
 .rowTitle{
 	width:7rem;
 	color:rgb(95, 98, 99);
+}
+
+#InfoDetails--empProfilePanel span {
+color: black !important;
+}
+
+#InfoDetails--empJobInfoPanel span {
+color: black !important;
+}
+
+#InfoDetails--hrProfilePanel span {
+color: black !important;
+}
+
+.sapMTB-Transparent-CTX.sapMTB{
+	padding-left: 0.45rem !important;
 }

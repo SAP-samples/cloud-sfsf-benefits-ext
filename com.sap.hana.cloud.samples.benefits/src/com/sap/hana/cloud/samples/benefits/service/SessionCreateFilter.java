@@ -18,10 +18,12 @@ import com.sap.hana.cloud.samples.benefits.connectivity.CoreODataConnector;
 import com.sap.hana.cloud.samples.benefits.connectivity.helper.SFUser;
 import com.sap.hana.cloud.samples.benefits.persistence.UserDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
+import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseException;
 
 @SuppressWarnings("nls")
 public class SessionCreateFilter implements Filter {
 
+	private static final String CLEAR_USER_ID = "-----------------";
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
@@ -75,8 +77,8 @@ public class SessionCreateFilter implements Filter {
 					userDAO.save(appUser);
 				}
 			}
-		} catch (IOException e) {
-			logger.error("User '{}' managed users could not be obtained from Success Factors.", hrUser.getUserId(), e);
+		} catch (IOException | InvalidResponseException ex) {
+			logger.error("User '{}' managed users could not be obtained from Success Factors.", hrUser.getUserId(), ex);
 		}
 
 	}
@@ -86,31 +88,60 @@ public class SessionCreateFilter implements Filter {
 	}
 
 	private User initSingleUserProfile(String userName, UserDAO userDAO) {
-		User user = userDAO.getOrCreateUser(userName);
+		User user = userDAO.getByUserId(userName);
+		if (user != null) {
+			user.setUserId(CLEAR_USER_ID);
+			user = userDAO.save(user);
+		}
 
 		try {
 			SFUser sfUser = CoreODataConnector.getInstance().getUserProfile(userName);
-			sfUser.write(user);
-			if (sfUser.hr != null) {
-				User hrManager = userDAO.getByUserId(sfUser.hr.userId);
-				if (hrManager == null) {
-					hrManager = new User();
-					SFUser sfManager = CoreODataConnector.getInstance().getUserProfile(sfUser.hr.userId);
-					sfManager.write(hrManager);
-					hrManager = userDAO.saveNew(hrManager);
+			User foundUser = userDAO.findByEmail(sfUser.email);
+			if (foundUser != null) {
+				user = updateUserId(foundUser, userName, userDAO);
+			} else {
+				user = createNewUser(sfUser, userDAO);
+			}
+
+			boolean userHasHR = sfUser.hr != null;
+			if (userHasHR) {
+				User foundHrManager = userDAO.findByEmail(sfUser.hr.email);
+				if (foundHrManager != null) {
+					foundHrManager = updateUserId(foundHrManager, sfUser.hr.userId, userDAO);
+				} else {
+					foundHrManager = createNewUser(sfUser.hr, userDAO);
 				}
-				user.setHrManager(hrManager);
+				user.setHrManager(foundHrManager);
 			}
 			userDAO.save(user);
 			logger.info("User '{}' updated in database.", userName);
-		} catch (IOException e) {
-			logger.info("User '{}' could not be extracted from backend.", userName, e);
+		} catch (IOException | InvalidResponseException ex) {
+			logger.warn("User '{}' could not be extracted from backend. The user will be initialized simply.", userName, ex);
+			return createUser(userName, userDAO);
 		}
 		return user;
 	}
 
+	private User updateUserId(User user, String newUserId, UserDAO userDAO) {
+		user.setUserId(newUserId);
+		return userDAO.save(user);
+	}
+
+	private User createNewUser(SFUser sourceSfUser, UserDAO userDAO) {
+		User newUser = new User();
+		sourceSfUser.write(newUser);
+		userDAO.saveNew(newUser);
+		return newUser;
+	}
+
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
+	}
+
+	private User createUser(String userName, UserDAO userDAO) {
+		User newUser = new User(userName);
+		userDAO.saveNew(newUser);
+		return newUser;
 	}
 
 }

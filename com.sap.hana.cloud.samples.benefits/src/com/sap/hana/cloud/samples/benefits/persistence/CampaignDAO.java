@@ -35,7 +35,8 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 			logger.warn("Could not retrieve entity {} for userId {} from table {}.  Maybe the user doesn't exist yet.", name, user.getUserId(),
 					"Campaign");
 		} catch (NonUniqueResultException e) {
-			logger.error("More than one entity {} for userId {} from table {}.", name, user.getUserId(), "Campaign");
+			throw new IllegalStateException(String.format(
+					"More than one campaign with name %s for userId %s from table Campaign.", name, user.getUserId())); //$NON-NLS-1$
 		}
 
 		return null;

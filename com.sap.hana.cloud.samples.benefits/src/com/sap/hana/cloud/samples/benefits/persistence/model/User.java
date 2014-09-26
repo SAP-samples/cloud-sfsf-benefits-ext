@@ -1,5 +1,6 @@
 package com.sap.hana.cloud.samples.benefits.persistence.model;
 
+import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_USER_BY_EMAIL;
 import static com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries.GET_USER_BY_USER_ID;
 
 import java.util.ArrayList;
@@ -22,7 +23,8 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "USERS", uniqueConstraints = { @UniqueConstraint(columnNames = { "USER_ID" }) })
-@NamedQueries({ @NamedQuery(name = GET_USER_BY_USER_ID, query = "select u from User u where u.userId = :userId") })
+@NamedQueries({ @NamedQuery(name = GET_USER_BY_USER_ID, query = "select u from User u where u.userId = :userId"),
+		@NamedQuery(name = GET_USER_BY_EMAIL, query = "select u from User u where u.email = :email") })
 public class User implements IDBEntity {
 	@Id
 	@GeneratedValue
@@ -62,6 +64,14 @@ public class User implements IDBEntity {
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.EAGER, targetEntity = Campaign.class)
 	private List<Campaign> campaigns;
+
+	public User() {
+
+	}
+
+	public User(String userId) {
+		this.userId = userId;
+	}
 
 	@Override
 	public Long getId() {

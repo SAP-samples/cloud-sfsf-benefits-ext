@@ -131,9 +131,9 @@ sap.ui
 								.formatPropertyMessage(firstName, lastName);
 						return pageTitleMsg;
 					},
-					formatAvailablePoints : function(campaignPoints, orderPrice) {
+					formatAvailablePoints : function(targetPoints, orderPrice) {
 						var avPointsMsgTemplate = sap.ui.getCore().getModel("b_i18n").getProperty("LEFT_TO_USE_POINTS");
-						return avPointsMsgTemplate.formatPropertyMessage(campaignPoints
+						return avPointsMsgTemplate.formatPropertyMessage(targetPoints
 								- (jQuery.isNumeric(orderPrice) ? orderPrice : 0));
 					},
 					formatUsedPoints : function(usedPoints) {
@@ -233,10 +233,9 @@ sap.ui
 					_addItem : function() {
 						jQuery.sap.require("sap.m.MessageBox");
 
-						var activeCampaign = this.getView().getModel().getProperty("/activeCampaign");
+						var userEntitlementPoints = this.getView().getModel().getProperty("/employee").targetPoints;
 						var currentOrder = this.getView().getModel().getProperty("/currentOrder").d.results[0];
-						var campaignPoints = activeCampaign.Points;
-						var availablePoints = campaignPoints - (currentOrder ? currentOrder.Total : 0);
+						var availablePoints = userEntitlementPoints - (currentOrder ? currentOrder.Total : 0);
 						var dialog = this.addItemDialog;
 						var selItemVal = sap.ui.getCore().byId("addItemDialog--quantityTypeSelect").getSelectedItem()
 								.getBindingContext().getObject().Value;

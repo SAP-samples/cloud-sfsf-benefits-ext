@@ -27,49 +27,50 @@ public class CoreODataParser {
 	private CoreODataParser() {
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings("synthetic-access")
 	public SFUser loadSFUserProfileFromJsom(String json) throws IOException {
-		JsonReader reader = createJsonReader(json);
-		try {
-			return defaultGson.fromJson(reader, SFUser.class);
-		} finally {
-			closeJsonReader(reader);
-		}
+		return load(json, new JsonLoadingJob<SFUser>() {
+			@Override
+			public SFUser loadFromJson(JsonReader reader) {
+				return defaultGson.fromJson(reader, SFUser.class);
+			}
+
+		});
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings("synthetic-access")
 	public UserInfo loadUserInfoFromJson(String json) throws IOException {
-		JsonReader reader = createJsonReader(json);
-		try {
-			return defaultGson.fromJson(reader, UserInfo.class);
-		} finally {
-			closeJsonReader(reader);
-		}
+		return load(json, new JsonLoadingJob<UserInfo>() {
+			@Override
+			public UserInfo loadFromJson(JsonReader reader) {
+				return defaultGson.fromJson(reader, UserInfo.class);
+			}
+		});
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings("synthetic-access")
 	public List<SFUser> loadSFUserProfileListFromJsom(String json) throws IOException {
 		if (json == null) {
 			return Collections.emptyList();
 		}
 
-		JsonReader reader = createJsonReader(json);
-		try {
-			SFUserList sfUserList = defaultGson.fromJson(reader, SFUserList.class);
-			return sfUserList.results;
-		} finally {
-			closeJsonReader(reader);
-		}
+		return load(json, new JsonLoadingJob<List<SFUser>>() {
+			@Override
+			public List<SFUser> loadFromJson(JsonReader reader) {
+				SFUserList sfUserList = defaultGson.fromJson(reader, SFUserList.class);
+				return sfUserList.results;
+			}
+		});
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings("synthetic-access")
 	public BenefitsAmount loadUserBenefitAmount(String json) throws IOException {
-		JsonReader reader = createJsonReader(json);
-		try {
-			return defaultGson.fromJson(reader, BenefitsAmount.class);
-		} finally {
-			closeJsonReader(reader);
-		}
+		return load(json, new JsonLoadingJob<BenefitsAmount>() {
+			@Override
+			public BenefitsAmount loadFromJson(JsonReader reader) {
+				return defaultGson.fromJson(reader, BenefitsAmount.class);
+			}
+		});
 	}
 
 	@SuppressWarnings("resource")
@@ -91,30 +92,44 @@ public class CoreODataParser {
 		return reader;
 	}
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings("synthetic-access")
 	public String loadUserPhoto(String json) throws IOException {
-		JsonReader reader = createJsonReader(json);
-		try {
-			UserPhoto userPhoto = defaultGson.fromJson(reader, UserPhoto.class);
-			return userPhoto.getPhoto();
-		} finally {
-			closeJsonReader(reader);
-		}
+		return load(json, new JsonLoadingJob<String>() {
+			@Override
+			public String loadFromJson(JsonReader reader) {
+				UserPhoto userPhoto = defaultGson.fromJson(reader, UserPhoto.class);
+				return userPhoto.getPhoto();
+			}
+		});
 	}
 
-	@SuppressWarnings({ "resource", "synthetic-access" })
+	@SuppressWarnings("synthetic-access")
 	public List<BenefitsAmount> loadUsersBenefitsAmount(String json) throws IOException {
-		JsonReader reader = createJsonReader(json);
-		try {
-			BenefitsAmountList result = annotatedGson.fromJson(reader, BenefitsAmountList.class);
-			return result.results;
-		} finally {
-			closeJsonReader(reader);
-		}
+		return load(json, new JsonLoadingJob<List<BenefitsAmount>>() {
+			@Override
+			public List<BenefitsAmount> loadFromJson(JsonReader reader) {
+				BenefitsAmountList result = annotatedGson.fromJson(reader, BenefitsAmountList.class);
+				return result.results;
+			}
+		});
 	}
 
 	private class BenefitsAmountList {
 		@Expose
 		private List<BenefitsAmount> results;
+	}
+
+	@SuppressWarnings("resource")
+	private <T> T load(String json, JsonLoadingJob<T> job) throws IOException {
+		JsonReader reader = createJsonReader(json);
+		try {
+			return job.loadFromJson(reader);
+		} finally {
+			closeJsonReader(reader);
+		}
+	}
+
+	private interface JsonLoadingJob<T> {
+		T loadFromJson(JsonReader reader);
 	}
 }
