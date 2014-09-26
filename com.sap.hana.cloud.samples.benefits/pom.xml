@@ -48,8 +48,6 @@
 		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<apache.cxf.version>2.7.0</apache.cxf.version>
-		<!-- Properties needed to reference sap OData/Olingo -->
-
 	</properties>
 
 	<repositories>
@@ -176,7 +174,6 @@
 	</dependencies>
 
 	<build>
-		<!-- Map the Eclipse file system layout to the Maven plug-ins -->
 		<sourceDirectory>${project.basedir}/src</sourceDirectory>
 		<testSourceDirectory>${project.basedir}/test</testSourceDirectory>
 		<outputDirectory>${project.basedir}/war/WEB-INF/classes</outputDirectory>
@@ -214,7 +211,6 @@
 		</testResources>
 
 		<plugins>
-			<!-- Map the Eclipse file system layout to the Maven plug-ins -->
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.1.1</version>
@@ -228,13 +224,6 @@
 					<attachClasses>true</attachClasses>
 				</configuration>
 			</plugin>
-
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-jar-plugin</artifactId> 
-				<version>2.4</version> <configuration> <archive> <manifest> <mainClass>com.sap.hana.cloud.samples.benefits</mainClass> 
-				</manifest> </archive> </configuration> </plugin> -->
-
-			<!-- Set compiler to officially supported JDK version for the given SAP 
-				HANA Cloud SDK -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
@@ -245,9 +234,6 @@
 					<showWarnings>true</showWarnings>
 				</configuration>
 			</plugin>
-
-			<!-- Include only unit tests for maven-surefire-plugin that is run in 
-				test phase -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.17</version>
@@ -259,153 +245,5 @@
 				</configuration>
 			</plugin>
 		</plugins>
-
-		<pluginManagement>
-			<plugins>
-				<!-- Force m2e to ignore plugin goal that it doesn't support naturally -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-enforcer-plugin
-										</artifactId>
-										<versionRange>
-											[0.0.1,)
-										</versionRange>
-										<goals>
-											<goal>enforce</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											org.apache.maven.plugins
-										</groupId>
-										<artifactId>
-											maven-dependency-plugin
-										</artifactId>
-										<versionRange>[2.4,)</versionRange>
-										<goals>
-											<goal>copy-dependencies</goal>
-											<goal>unpack-dependencies</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<execute>
-											<runOnIncremental>false</runOnIncremental>
-										</execute>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-checkstyle-plugin</artifactId>
-					<version>2.10</version>
-					<configuration>
-						<configLocation>checkstyle/checkstyleRules.xml</configLocation>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-pmd-plugin</artifactId>
-					<version>2.7.1</version>
-					<configuration>
-						<rulesets>
-							<ruleset>checkstyle/pmd-rules.xml</ruleset>
-						</rulesets>
-					</configuration>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>findbugs-maven-plugin</artifactId>
-					<version>2.5.2</version>
-					<configuration>
-						<includeFilterFile><![CDATA[http://ldisonarci.wdf.sap.corp:8080/sonar/profiles/export?format=findbugs&language=java]]></includeFilterFile>
-						<excludeFilterFile>checkstyle/findbugs-exclude-filter.xml</excludeFilterFile>
-						<findbugsXmlOutput>true</findbugsXmlOutput>
-						<findbugsXmlWithMessages>true</findbugsXmlWithMessages>
-						<xmlOutput>true</xmlOutput>
-						<encoding>${project.build.sourceEncoding}</encoding>
-					</configuration>
-				</plugin>
-				
-			<!-- Enforce officially supported JDK and validated Maven version for 
-				the given SAP HANA Cloud SDK or higher -->
-				<plugin>
-					<artifactId>maven-enforcer-plugin</artifactId>
-					<version>1.0.1</version>
-					<executions>
-						<execution>
-							<id>enforce-maven</id>
-							<goals>
-								<goal>enforce</goal>
-							</goals>
-							<configuration>
-								<rules>
-									<requireJavaVersion>
-										<version>[${sap.cloud.jdk.version},2.0)</version>
-									</requireJavaVersion>
-									<requireMavenVersion>
-										<version>[3.0.3, 4.0.0)</version>
-									</requireMavenVersion>
-								</rules>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 	</build>
-
-	<profiles>
-		<!-- Activate compiler warnings when matching JDK is present (compiler 
-			then doesn't generate bootstrap warnings) -->
-		<profile>
-			<id>compiler-warnings</id>
-			<activation>
-				<activeByDefault>false</activeByDefault>
-				<jdk>1.6</jdk>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-compiler-plugin</artifactId>
-						<version>2.5.1</version>
-						<configuration>
-							<compilerArguments>
-								<Werror />
-							</compilerArguments>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
 </project>
