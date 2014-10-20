@@ -69,7 +69,7 @@ The frontend is located in WebContent folder. The structure is the following:
 * *view* - UI logic implemented using SAP UI5 XML views following MVC pattern
 * *css* - application theming
 * *img* - images
-* 
+
 The application supports three roles:
 
 * **Administrator** - the company HR manager that administers and manages employees benefits and benefits' campaigns
@@ -79,6 +79,7 @@ The application supports three roles:
 When configuring application security, assign the appropriate role to the users accessing the application.
 
 The following diagram provides an overview of the SAP Employee Benefits Management architecture:
+![alt tag](https://github.com/SAP/cloud-sfsf-benefits-ext/blob/master/com.sap.hana.cloud.samples.benefits/diagrams/application_architecture.png)
 
  
 Project Setup
@@ -113,6 +114,7 @@ the response will contain results for the *nnnn* SFSF API test system user.
 If you specify an SFSF API test system user different than *mbarista1* or *nnnn*, the user will be mapped to *nnnn*.
 The following diagram provides an overview of the process flow for the user mapping described above:
  
+ ![alt tag](https://github.com/SAP/cloud-sfsf-benefits-ext/blob/master/com.sap.hana.cloud.samples.benefits/diagrams/mapping_architecture.png)
 
 In SAP Employee Benefits Management application, the *X-Proxy-User-Mapping* header is used to map the logged-in user to one of the two predefined SFSF OData API test system users. Depending on whether the role of the logged-in user is assigned the Administrator role or not, the value of the header is as follows:
 * For the Administrator role: *<logged_in_user_ID>|mbarista1*
@@ -165,23 +167,26 @@ Deploy and run the application on the local server. You should be able to login 
 
 Run the Application on the SAP HANA Cloud Platform Extension Package Account
 ----------------------------------------------------------------------------
-1. Deploy the application on your SAP HANA Cloud extension package account: [Details](https://help.hana.ondemand.com/help/frameset.htm?e5dfbc6cbb5710149279f67fb43d4e5d.html)
 
-**Note!** If you deploy with the console client, make sure to specify the **--java-version** parameter with value **7**.
-**Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly. 
-2.	Configure the application role assignments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html)
+ 1. Deploy the application on your SAP HANA Cloud extension package account: [Details](https://help.hana.ondemand.com/help/frameset.htm?e5dfbc6cbb5710149279f67fb43d4e5d.html)
+ 2. Configure the application role assignments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html)
 	
+**Note!** If you deploy with the console client, make sure to specify the **--java-version** parameter with value **7**.
+
+**Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly.
+
 Run the Application on the SAP HANA Cloud Platform Trial Account
 ----------------------------------------------------------------
 
 It is possible to deploy and run the application on *SAP HANA Cloud Platfrom Trial* account. You need to follow the following steps:
-1. Deploy the application in your *SAP HANA Cloud Platfrom Trial* account. 
+
+ 1. Deploy the application in your *SAP HANA Cloud Platfrom Trial* account.
 **Note!** If you deploy with the console client, make sure to specify the **--java-version** parameter with value **7**.
-**Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly. 
-2. Import the *SuccessFactors OData API* destination *sap_hcmcloud_core_odata* from **/resources** application folder in the application destinations tab. Follow the procedure: [here](https://help.hana.ondemand.com/help/frameset.htm?a2550c3fcf2b430f94f99072677bf9ec.html).
-3. Fill your SAP HANA Cloud Platform user and password in the destination user/password fields.
-4. Configure the application role assignments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html). You basically can add "Administrator" Role to your SAP HANA Cloud Platform user.
-5. 
+**Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly.
+ 2. Import the *SuccessFactors OData API* destination *sap_hcmcloud_core_odata* from **/resources** application folder in the application destinations tab. Follow the procedure: [here](https://help.hana.ondemand.com/help/frameset.htm?a2550c3fcf2b430f94f99072677bf9ec.html).
+ 3. Fill your SAP HANA Cloud Platform user and password in the destination user/password fields.
+ 4. Configure the application role assignments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html). You basically can add "Administrator" Role to your SAP HANA Cloud Platform user.
+
 Now that you have *SuccessFactors OData API* connectivity configured you should be able to login to the application, with your *SAP HANA Cloud Platform* user and password.
 
 Access the Application
