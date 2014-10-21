@@ -34,14 +34,35 @@ sap.ui
 					loadOrderDetails : function() {
 						var requestUrl = "OData.svc/Orders?$expand=OrderDetailsDetails/BenefitTypeDetails/BenefitInfoDetails,CampaignDetails&$filter=CampaignId%20eq%20"
 								+ this.campaignId + "%20and%20UserId%20eq%20" + this.employeeProfile.Id;
-						var orderDetails = jQuery.sap.syncGetJSON(requestUrl).data;
+						var orderDetailsResponse = jQuery.sap.syncGetJSON(requestUrl);
+						if (orderDetailsResponse.statusCode == 200) {
+							if (!orderDetailsResponse.data.d.results[0]) {
+								orderDetailsResponse.data.d.results[0] = {
+									"Total" : 0
+								};
+							}
 
-						this.getView().getModel().setData({
-							employee : this.employeeProfile,
-							currentOrder : orderDetails,
-							activeCampaign : this.activeCampaign
-						});
-						this.byId("addButton").setEnabled(this.activeCampaign.Active);
+							this.getView().getModel().setData({
+								employee : this.employeeProfile,
+								currentOrder : orderDetailsResponse.data,
+								activeCampaign : this.activeCampaign
+							});
+						} else {
+							sap.m.MessageBox.show(sap.ui.getCore().getModel("b_i18n").getProperty("EMPLOYEE_ORDERS_FAILED")
+									.formatPropertyMessage(this.employeeProfile.UserId), sap.m.MessageBox.Icon.ERROR,
+									"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
+						}
+						this._determineAddButtonState();
+					},
+
+					_determineAddButtonState : function() {
+						this.enableAddBtn(!!(this.employeeProfile && this.employeeProfile.targetPoints)
+								&& !!(this.activeCampaign && this.activeCampaign.Active && this.activeCampaign.Points)
+								&& jQuery.isNumeric(this.getView().getModel().getData().currentOrder.d.results[0].Total));
+					},
+
+					enableAddBtn : function(bValue) {
+						this.byId("addButton").setEnabled(bValue);
 					},
 
 					_loadAvailablePointsToModel : function(campaignId, userId) {
@@ -67,8 +88,7 @@ sap.ui
 							dataType : 'json',
 							success : successFunc(result),
 							error : function(xhr, error) {
-								var alertMsg = sap.ui.getCore().getModel("b_i18n").getProperty("FAILED_USER_POINT_QUERY");
-								sap.m.MessageBox.alert(alertMsg);
+								sap.m.MessageBox.alert("{b_i18n>FAILED_USER_POINT_QUERY}");
 							},
 							complete : jQuery.proxy(function() {
 								this.getView().setBusy(false);
@@ -88,18 +108,25 @@ sap.ui
 						var path = "OData.svc/BenefitsAmount?userId='" + userId + "'";
 						var resultData = com.sap.hana.cloud.samples.benefits.util.Helper.synchGetJSON(path, function(xhr, error) {
 						}, function(xhr, error) {
-							var alertMsg = sap.ui.getCore().getModel("b_i18n").getProperty("FAILED_USER_POINT_QUERY");
-							sap.m.MessageBox.alert(alertMsg);
+							sap.m.MessageBox.alert("{b_i18n>FAILED_USER_TARGET_POINTS_QUERY}");
 						}, jQuery.proxy(function() {
 							this.getView().setBusy(false);
 						}, this));
 
-						return resultData.d.BenefitsAmount.targetPoints;
+						return resultData && resultData.d && resultData.d.BenefitsAmount.targetPoints;
 					},
 
 					loadBenefitsModel : function() {
 						if (!this.getView().getModel("benefitsModel")) {
-							this.getView().setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
+							var oModel = new sap.ui.model.json.JSONModel();
+							var oController = this;
+							oModel.attachRequestFailed(function() {
+								sap.m.MessageBox.show("{b_i18n>BENEFITS_DETAILS_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
+										"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
+											oController.enableAddBtn(false);
+										});
+							});
+							this.getView().setModel(oModel, "benefitsModel");
 						}
 						this.getView().getModel("benefitsModel").loadData("OData.svc/BenefitInfos?$expand=BenefitTypeDetails",
 								null, false);
@@ -133,16 +160,16 @@ sap.ui
 					},
 					formatAvailablePoints : function(targetPoints, orderPrice) {
 						var avPointsMsgTemplate = sap.ui.getCore().getModel("b_i18n").getProperty("LEFT_TO_USE_POINTS");
-						return avPointsMsgTemplate.formatPropertyMessage(targetPoints
-								- (jQuery.isNumeric(orderPrice) ? orderPrice : 0));
+						var hasValidValues = !!(targetPoints && jQuery.isNumeric(orderPrice));
+						this._determineAddButtonState();
+						return avPointsMsgTemplate.formatPropertyMessage(hasValidValues ? (targetPoints - orderPrice) : "");
 					},
 					formatUsedPoints : function(usedPoints) {
-						return usedPoints ? usedPoints : 0;
+						return usedPoints ? usedPoints : "";
 					},
 					formatBenefitPointsEntitlement : function(points) {
-						var entitlementMsg = sap.ui.getCore().getModel("b_i18n").getProperty("ALL_BENEFIT_POINTS")
-								.formatPropertyMessage(points);
-						return entitlementMsg;
+						return sap.ui.getCore().getModel("b_i18n").getProperty("ALL_BENEFIT_POINTS").formatPropertyMessage(
+								points ? points : "");
 					},
 					formatItemValue : function(value) {
 						var itemValueMsg = sap.ui.getCore().getModel("b_i18n").getProperty("ITEM_VALUE").formatPropertyMessage(
@@ -260,7 +287,8 @@ sap.ui
 									this.loadOrderDetails();
 								}, this),
 								error : function(xhr, error) {
-									sap.m.MessageToast.show(xhr.responseText);
+									sap.m.MessageBox.show("{b_i18n>ORDER_CREATION_FAILED}", sap.m.MessageBox.Icon.ERROR,
+											"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
 								}
 							});
 						} else {
@@ -279,7 +307,11 @@ sap.ui
 							}, this),
 							complete : jQuery.proxy(function() {
 								appController.setAppBusy(false);
-							}, this)
+							}, this),
+							error : function() {
+								sap.m.MessageBox.show("{b_i18n>ORDER_DELETION_FAILED}", sap.m.MessageBox.Icon.ERROR,
+										"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
+							}
 						});
 					},
 					_setControlBindCtx : function(control, ctx) {

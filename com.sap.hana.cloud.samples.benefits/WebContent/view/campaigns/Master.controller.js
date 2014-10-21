@@ -7,17 +7,30 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		this.listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
 		// subscribe to event bus
 		sap.ui.getCore().getEventBus().subscribe("refresh", "campaigns", this._handleModelChanged, this);
+		this.initModel();
 	},
+
+	initModel : function() {
+		var oModel = new sap.ui.model.json.JSONModel();
+		oModel.attachRequestFailed(function() {
+			sap.m.MessageBox.show("{b_i18n>HR_CAMPAIGNS_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
+					"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
+						sap.ui.getCore().getEventBus().publish("nav", "home");
+					});
+		});
+		this.getView().setModel(oModel);
+	},
+
 	onBeforeRendering : function() {
-		this.loadModel();
+		this.loadModel(false);
 		this.checkToShowDefaultPage();
 		this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("Name", false));
 	},
-	loadModel : function() {
-		if (!this.getView().getModel()) {
-			this.getView().setModel(new sap.ui.model.json.JSONModel());
+	loadModel : function(hasNewChanges) {
+		var oModel = this.getView().getModel();
+		if (Object.keys(oModel.getData()).length === 0 || hasNewChanges) {
+			oModel.loadData("OData.svc/hrCampaigns", null, false);
 		}
-		this.getView().getModel().loadData("OData.svc/hrCampaigns", null, false);
 	},
 	onAfterRendering : function() {
 		var list = this.byId("campaignsList");
@@ -87,7 +100,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 				type : 'post',
 				dataType : 'json',
 				success : jQuery.proxy(function(data) {
-					this.loadModel();
+					this.loadModel(true);
 					this._selectCampaignByName(newCampaignName);
 				}, this),
 				contentType : "application/json; charset=utf-8",
@@ -125,7 +138,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 		var list = this.byId("campaignsList");
 		var selectedItemId = list.getSelectedItem().getBindingContext().getObject().Id;
 		if (selectedItemId) {
-			this.loadModel();
+			this.loadModel(true);
 			var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
 			var items = list.getItems();
 			for (var i = 0; i < items.length; i++) {
@@ -137,36 +150,39 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Master", {
 
 			listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
 		} else {
-			this.loadModel();
+			this.loadModel(true);
 		}
 	},
 	validateNewCampaignName : function() {
 		var nameCtr = sap.ui.getCore().byId("newCampDialog--nameCtr");
 		var name = nameCtr.getValue();
 		if (name.length > 0) {
-			this.newCampDialog.setBusy(true);
-			jQuery.ajax({
-				url : 'OData.svc/checkNameAvailability?campaignName=\'' + jQuery.sap.encodeURL(name) + '\'',
-				type : 'get',
-				dataType : 'json',
-				success : jQuery.proxy(function(data) {
-					if (!data.d.checkNameAvailability) {
-						nameCtr.setValueStateText(sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_EXIST_MSG"));
-						nameCtr.setValueState(sap.ui.core.ValueState.Error);
-					} else {
-						nameCtr.setValueState(sap.ui.core.ValueState.None);
-					}
-				}, this),
-				complete : jQuery.proxy(function() {
-					this.newCampDialog.setBusy(false);
-				}, this),
-				contentType : "application/json; charset=utf-8"
-			});
+			if (this._isNewCampaignNameAlreadyExists(name)) {
+				nameCtr.setValueStateText(sap.ui.getCore().getModel("b_i18n").getProperty("CAMPAIGN_EXIST_MSG"));
+				nameCtr.setValueState(sap.ui.core.ValueState.Error);
+			} else {
+				nameCtr.setValueState(sap.ui.core.ValueState.None);
+			}
 		} else {
 			nameCtr.setValueStateText(sap.ui.getCore().getModel("b_i18n").getProperty("INVALID_CAMPAIGN_NAME_MSG"));
 			nameCtr.setValueState(sap.ui.core.ValueState.Error);
 			this._changeOkButtonState(false);
 		}
+	},
+
+	_isNewCampaignNameAlreadyExists : function(sNewCampaignName) {
+		var oModelData = this.getView().getModel().getData();
+		var aCampaigns = oModelData.d && oModelData.d.results;
+
+		if (!aCampaigns) {
+			sap.m.MessageBox.show("{b_i18n>MISSING_CAMPAIGNS_DATA}", sap.m.MessageBox.Icon.ERROR, "{b_i18n>ERROR_TITLE}",
+					[sap.m.MessageBox.Action.OK]);
+			return true;
+		}
+
+		return aCampaigns.some(function(campaign) {
+			return campaign.Name === sNewCampaignName;
+		});
 	},
 
 	_changeOkButtonState : function(enabled) {

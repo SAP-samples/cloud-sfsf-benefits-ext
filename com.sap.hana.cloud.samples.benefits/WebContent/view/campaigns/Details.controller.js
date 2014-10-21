@@ -172,7 +172,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.campaigns.Details", 
 					}, this),
 					complete : jQuery.proxy(function() {
 						this.getView().setBusy(false);
-					}, this)
+					}, this),
+					error : jQuery.proxy(function() {
+						sap.m.MessageBox.show("{b_i18n>CAMPAIGN_DELETION_FAILD}", sap.m.MessageBox.Icon.ERROR,
+								"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
+					}, this),
 				});
 			}
 		}, this));

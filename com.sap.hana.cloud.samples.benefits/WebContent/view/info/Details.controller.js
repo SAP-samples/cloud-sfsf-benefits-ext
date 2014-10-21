@@ -1,3 +1,4 @@
+jQuery.sap.require("sap.m.MessageBox");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 
 	anonymousPhoto : "img/img_anon.jpg",
@@ -10,10 +11,28 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 
 	loadModel : function() {
 		if (!this.getView().getModel()) {
-			this._initModel("OData.svc/userInfo");
-			this._initModel("OData.svc/userPhoto?photoType=1", "empPhoto");
-			this._initModel("OData.svc/hrPhoto?photoType=3", "hrPhoto");
+			this._initModelSync("OData.svc/userInfo").fail(
+					function(jqXHR, textStatus, errorThrown) {
+						sap.m.MessageBox.show("{b_i18n>ERROR_GETTING_USER_DETAILS}", sap.m.MessageBox.Icon.ERROR,
+								"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
+									sap.ui.getCore().getEventBus().publish("nav", "home");
+								});
+					});
+
+			this._initModelSync("OData.svc/userPhoto?photoType=1", "empPhoto");
+			this._initModelSync("OData.svc/hrPhoto?photoType=3", "hrPhoto");
 		}
+	},
+
+	_initModelSync : function(url, modelName) {
+		return jQuery.ajax({
+			url : url,
+			async : false,
+			context : this,
+			dataType : "json",
+		}).done(function(data, textStatus, jqXHR) {
+			this.getView().setModel(new sap.ui.model.json.JSONModel(data), modelName);
+		});
 	},
 
 	onAfterRendering : function() {
@@ -30,7 +49,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 	},
 
 	hideHrProfilePanel : function() {
-		if (this.getView().getModel().getData().d.results[1] === undefined) {
+		var model = this.getView().getModel();
+		if (model && !model.getData().d.results[1]) {
 			this.byId("hrProfilePanel").setVisible(false);
 		}
 	},
@@ -39,17 +59,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 		sap.ui.getApplication().onLogout();
 	},
 
-	_initModel : function(modelUrl, modelName) {
-		var model = new sap.ui.model.json.JSONModel();
-		model.loadData(modelUrl, null, false);
-
-		var view = this.getView();
-		modelName ? view.setModel(model, modelName) : view.setModel(model);
-	},
-
 	_setPhoto : function(imgEl, modelName, propName) {
 		var userPhotoEl = $("#" + imgEl);
-		var photoData = this.getView().getModel(modelName).getData().d[propName];
+		var model = this.getView().getModel(modelName);
+		var photoData = model && model.getData().d[propName];
 		var src = photoData ? "data:image/png;base64," + photoData : this.anonymousPhoto;
 
 		userPhotoEl.attr("src", src);

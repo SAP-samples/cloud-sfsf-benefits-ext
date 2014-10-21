@@ -1,8 +1,22 @@
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.SearchFilter");
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
+jQuery.sap.require("sap.m.MessageBox");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 	onInit : function() {
+		this._initModel();
 		sap.ui.getCore().getEventBus().subscribe("refresh", "orders", this.loadModel, this);
+
+	},
+
+	_initModel : function() {
+		var oModel = new sap.ui.model.json.JSONModel();
+		oModel.attachRequestFailed(function() {
+			sap.m.MessageBox.show("{b_i18n>MANAGED_EMPLOYEES_DATA_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
+					"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
+						sap.ui.getCore().getEventBus().publish("nav", "home");
+					});
+		});
+		this.getView().setModel(oModel);
 	},
 	onBeforeRendering : function() {
 		this.loadModel();
@@ -20,7 +34,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 		var employeePointsDetails = employee.UserPointsDetails.results;
 		var campaignId = undefined;
 		var activeCampaign = this.getActiveCampaign(employeePointsDetails);
-		
+
 		if (activeCampaign) {
 			campaignId = activeCampaign.Id;
 
@@ -55,9 +69,6 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 		searchFilter.applySearch(employeesList, searchField, "FullName", views.DEFAULT_DETAILS_VIEW_ID);
 	},
 	loadModel : function() {
-		if (!this.getView().getModel()) {
-			this.getView().setModel(new sap.ui.model.json.JSONModel());
-		}
 		this.getView().getModel().loadData("OData.svc/managed?$expand=UserPointsDetails/CampaignDetails", null, false);
 		this.handleSearch();
 	},
@@ -81,4 +92,3 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 
 	}
 });
-

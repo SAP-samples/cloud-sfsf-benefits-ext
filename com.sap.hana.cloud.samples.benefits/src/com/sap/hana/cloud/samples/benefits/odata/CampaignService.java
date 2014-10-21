@@ -10,7 +10,6 @@ import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.STOP_CAMPAIGN;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.USER_CAMPAIGNS;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.CAMPAIGN_ID;
-import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.CAMPAIGN_NAME;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.NAME;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.START_DATE;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.DATE_TIME;
@@ -145,11 +144,4 @@ public class CampaignService extends ODataService {
 		campaignDAO.save(selectedCampaign);
 		return true;
 	}
-
-	@EdmFunctionImport(name = "checkNameAvailability", returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.GET)
-	public boolean checkNameAvailability(@EdmFunctionImportParameter(name = CAMPAIGN_NAME, type = STRING) String campaignName) {
-		final Campaign campaign = campaignDAO.getByCaseInsensitiveName(campaignName, getLoggedInUser());
-		return campaign == null;
-	}
-
 }

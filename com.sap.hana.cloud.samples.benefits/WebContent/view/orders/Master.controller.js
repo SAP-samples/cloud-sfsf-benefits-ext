@@ -1,15 +1,17 @@
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
 	onInit : function() {
-	},
-	loadModel : function() {
-		if (!this.getView().getModel()) {
-			this.getView().setModel(new sap.ui.model.json.JSONModel());
-		}
-		this.getView().getModel().loadData("OData.svc/userCampaigns", null, false);
+		var oModel = new sap.ui.model.json.JSONModel();
+		oModel.attachRequestFailed(function() {
+			sap.m.MessageBox.show("{b_i18n>USER_CAMPAIGNS_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
+					"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
+						sap.ui.getCore().getEventBus().publish("nav", "home");
+					});
+		});
+		this.getView().setModel(oModel, "userCamp");
 	},
 	onBeforeRendering : function() {
-		this.loadModel();
+		this.getView().getModel("userCamp").loadData("OData.svc/userCampaigns", null, false);
 		this.byId("campaignsList").getBinding("items").sort(new sap.ui.model.Sorter("Active", true));
 	},
 	onAfterRendering : function() {
@@ -27,8 +29,17 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.orders.Master", {
 		return active ? sap.ui.core.ValueState.Success : sap.ui.core.ValueState.Error;
 	},
 	onItemSelected : function(evt) {
-		var employee = jQuery.sap.syncGetJSON("OData.svc/profile").data.d;
-		var activeCampaign = evt.getParameter("listItem").getBindingContext().getObject();
+		var result = jQuery.sap.syncGetJSON("OData.svc/profile");
+		if (result.statusCode == 200) {
+			var employee = result.data.d;
+		} else {
+			sap.m.MessageBox.show("{b_i18n>USER_PROFILE_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
+					"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
+						sap.ui.getCore().getEventBus().publish("nav", "home");
+					});
+			return;
+		}
+		var activeCampaign = evt.getParameter("listItem").getBindingContext("userCamp").getObject();
 		var campaignId = activeCampaign.Id;
 		sap.ui.getCore().getEventBus().publish("app", "ordersDetailsRefresh", {
 			context : {

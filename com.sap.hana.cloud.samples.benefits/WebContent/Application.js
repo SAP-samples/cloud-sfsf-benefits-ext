@@ -1,5 +1,6 @@
 jQuery.sap.declare("Application");
 jQuery.sap.require("sap.ui.app.Application");
+jQuery.sap.require("sap.m.MessageBox");
 
 sap.ui.app.Application.extend("Application", {
 	init : function() {
@@ -203,5 +204,14 @@ sap.ui.app.Application.extend("Application", {
 
 	okLogoutButtonPressed : function() {
 		window.location.assign("logout");
-	}
+	},
+
+	onError : function(sMessage, sFile, iLine) {
+		if (sMessage.indexOf(this._CONFIG_ERR_MSG) != -1) {
+			sap.m.MessageBox.show("{b_i18n>APP_CFG_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR, "{b_i18n>ERROR_TITLE}",
+					[sap.m.MessageBox.Action.OK]);
+		}
+	},
+
+	_CONFIG_ERR_MSG : "Could not load config",
 });
