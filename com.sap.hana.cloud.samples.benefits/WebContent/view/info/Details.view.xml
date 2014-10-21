@@ -79,6 +79,16 @@
 	    						</l:VerticalLayout>
 		    				</Panel>
 		    				
+		    				<Panel width="100%" id="empBenefitsPanel">
+        						<headerToolbar>
+          							<Toolbar>
+            							<Label text="Benefits Points Entitlement" />
+          							</Toolbar>
+        						</headerToolbar>
+							
+										<Text text="{benefitsAmount>/d/BenefitsAmount/targetPoints}" data-text-align="Left" id="benefitPoints"/>
+		    				</Panel>
+    							
     					</l:content>
     				</l:HorizontalLayout>
 					

@@ -18,7 +18,8 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 									sap.ui.getCore().getEventBus().publish("nav", "home");
 								});
 					});
-
+			var employeeUserId = this.getView().getModel().getData().d.results[0].userId;
+			this._initModelSync("OData.svc/BenefitsAmount?userId='" + employeeUserId + "'", "benefitsAmount");
 			this._initModelSync("OData.svc/userPhoto?photoType=1", "empPhoto");
 			this._initModelSync("OData.svc/hrPhoto?photoType=3", "hrPhoto");
 		}

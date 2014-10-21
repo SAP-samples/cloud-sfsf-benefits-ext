@@ -165,6 +165,8 @@
       <url-pattern>/OData.svc/addOrder</url-pattern>
       <url-pattern>/OData.svc/deleteOrder</url-pattern>
       <url-pattern>/OData.svc/uiConfig</url-pattern>
+      <url-pattern>/OData.svc/BenefitsAmount</url-pattern>
+      <url-pattern>/OData.svc/benefitTargetPoints</url-pattern>
       <url-pattern>/OData.svc/userInfo</url-pattern>
       <url-pattern>/OData.svc/profile</url-pattern>
       <url-pattern>/OData.svc/BenefitInfos</url-pattern>

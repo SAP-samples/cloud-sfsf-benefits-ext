@@ -1,5 +1,6 @@
 package com.sap.hana.cloud.samples.benefits.persistence;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,12 +13,14 @@ import javax.persistence.TypedQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.sap.hana.cloud.samples.benefits.connectivity.CoreODataConnector;
 import com.sap.hana.cloud.samples.benefits.odata.beans.BenefitsAmount;
 import com.sap.hana.cloud.samples.benefits.persistence.manager.EntityManagerProvider;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
 import com.sap.hana.cloud.samples.benefits.persistence.model.DBQueries;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
 import com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints;
+import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseException;
 
 public class UserPointsDAO extends BasicDAO<UserPoints> {
 
@@ -48,18 +51,24 @@ public class UserPointsDAO extends BasicDAO<UserPoints> {
 		return result;
 	}
 
-	public void createCampaignUserPoints(Campaign campaign) {
+	public void createCampaignUserPoints(Campaign campaign) throws IOException, InvalidResponseException {
 		if (campaign.getOwner() != null) {
 			List<User> employees = campaign.getOwner().getEmployees();
-			Map<String, BenefitsAmount> mapping = createBenefitsAmountMapping(employees);
+			List<BenefitsAmount> employeesBenefitsAmount = obtainEmployeesBenefitsAmount(campaign.getOwner().getUserId());
+			Map<String, BenefitsAmount> mapping = createBenefitsAmountMapping(employeesBenefitsAmount);
 			updateUserPoints(campaign, employees, mapping);
 		}
 	}
 
-	private Map<String, BenefitsAmount> createBenefitsAmountMapping(List<User> employees) {
+	private List<BenefitsAmount> obtainEmployeesBenefitsAmount(String hrUserId) throws IOException, InvalidResponseException {
+		CoreODataConnector oDataConnector = CoreODataConnector.getInstance();
+		return oDataConnector.getEmployeesBenefitsAmount(hrUserId);
+	}
+
+	private Map<String, BenefitsAmount> createBenefitsAmountMapping(List<BenefitsAmount> employeesBenefitsAmount) {
 		Map<String, BenefitsAmount> mapping = new HashMap<>();
-		for (User employee : employees) {
-			mapping.put(employee.getUserId(), BenefitsAmount.defaultBenefitsAmount(employee.getUserId()));
+		for (BenefitsAmount benefAmnt : employeesBenefitsAmount) {
+			mapping.put(benefAmnt.getUserId(), benefAmnt);
 		}
 		return mapping;
 	}
