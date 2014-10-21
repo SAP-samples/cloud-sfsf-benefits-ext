@@ -90,10 +90,10 @@ SAP Employee Benefits Management application can be run either locally or on SAP
 **Prerequisites**
 * Access to SAP HANA Cloud Platform extension package or SAP HANA Cloud Platform trial account
 * SAP HANA Cloud Platform development environment:
-- SAP HANA Cloud Platform Tools 
-- SAP JVM version 7.x or JDK 7
-- SAP HANA Cloud Platform SDK for Java Web
-- 
+ - SAP HANA Cloud Platform Tools 
+ - SAP JVM version 7.x or JDK 7
+ - SAP HANA Cloud Platform SDK for Java Web
+
 You can access the SAP HANA Cloud Platform development environment download page, at: [https://tools.hana.ondemand.com/#cloud](https://tools.hana.ondemand.com/#cloud)
 For more information about installing the Java Tools and SDK, see: [Details] (https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
 
