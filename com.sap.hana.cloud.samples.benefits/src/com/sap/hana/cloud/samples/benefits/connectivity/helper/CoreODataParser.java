@@ -6,10 +6,8 @@ import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
 import com.google.gson.stream.JsonReader;
 import com.sap.hana.cloud.samples.benefits.api.util.GsonFactory;
-import com.sap.hana.cloud.samples.benefits.odata.beans.BenefitsAmount;
 import com.sap.hana.cloud.samples.benefits.odata.beans.UserInfo;
 import com.sap.hana.cloud.samples.benefits.odata.beans.UserPhoto;
 
@@ -22,7 +20,6 @@ public class CoreODataParser {
 	}
 
 	private final Gson defaultGson = GsonFactory.getInstance().createDefaultGson();
-	private final Gson annotatedGson = GsonFactory.getInstance().createAnnotatedGson();
 
 	private CoreODataParser() {
 	}
@@ -63,17 +60,6 @@ public class CoreODataParser {
 		});
 	}
 
-	@SuppressWarnings("synthetic-access")
-	public BenefitsAmount loadUserBenefitAmount(String json) throws IOException {
-		return load(json, new JsonLoadingJob<BenefitsAmount>() {
-			@Override
-			public BenefitsAmount loadFromJson(JsonReader reader) {
-				return defaultGson.fromJson(reader, BenefitsAmount.class);
-			}
-		});
-	}
-
-	@SuppressWarnings("resource")
 	private JsonReader createJsonReader(String json) throws IOException {
 		JsonReader reader = new JsonReader(new StringReader(json));
 		return openJsonReader(reader);
@@ -103,23 +89,6 @@ public class CoreODataParser {
 		});
 	}
 
-	@SuppressWarnings("synthetic-access")
-	public List<BenefitsAmount> loadUsersBenefitsAmount(String json) throws IOException {
-		return load(json, new JsonLoadingJob<List<BenefitsAmount>>() {
-			@Override
-			public List<BenefitsAmount> loadFromJson(JsonReader reader) {
-				BenefitsAmountList result = annotatedGson.fromJson(reader, BenefitsAmountList.class);
-				return result.results;
-			}
-		});
-	}
-
-	private class BenefitsAmountList {
-		@Expose
-		private List<BenefitsAmount> results;
-	}
-
-	@SuppressWarnings("resource")
 	private <T> T load(String json, JsonLoadingJob<T> job) throws IOException {
 		JsonReader reader = createJsonReader(json);
 		try {

@@ -1,10 +1,14 @@
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.util.AjaxUtil");
+
 sap.ui
 		.controller(
 				"com.sap.hana.cloud.samples.benefits.view.orders.Details",
 				{
 					onInit : function() {
 						this.getView().setModel(new sap.ui.model.json.JSONModel());
+
 						sap.ui.getCore().getEventBus().subscribe("app", "ordersDetailsRefresh", this._refreshHandler, this);
+						sap.ui.getCore().getEventBus().subscribe("dataLoad", "benefitInfo", this.selectFirstBenefit, this);
 
 						var orderItemsList = this.getView().byId("orderItemsList");
 
@@ -16,47 +20,66 @@ sap.ui
 							}
 						});
 					},
-
 					onBeforeRendering : function() {
-						this.loadBenefitsModel();
-
 						this.hideLogout();
 					},
 					initEmployeeDetailsModel : function(employeeProfile, campaignId, activeCampaign) {
+						this.getView().getModel().setData(null);
 						this.employeeProfile = employeeProfile;
 						this.campaignId = campaignId;
 						this.activeCampaign = activeCampaign;
-						this.loadOrderDetails();
-						this._loadAvailablePointsToModel(campaignId, employeeProfile.UserId);
-						this._loadEntitlementPointsToModel(campaignId, employeeProfile.UserId);
+
+						var orderDeferred = this.loadOrderDetails();
+						orderDeferred.done(jQuery.proxy(function() {
+							var availablePointsDeferred = this._loadUserAvailablePoints(campaignId, employeeProfile.UserId);
+							var entitlementPointsDeferred = this._loadUserTargetPoints(campaignId, employeeProfile.UserId);
+
+							var alwaysFunc = jQuery.proxy(function() {
+								this.getView().setBusy(false);
+								this._determineAddButtonState();
+							}, this);
+
+							jQuery.when(availablePointsDeferred, entitlementPointsDeferred).always(alwaysFunc);
+						}, this));
 					},
 
 					loadOrderDetails : function() {
-						var requestUrl = "OData.svc/Orders?$expand=OrderDetailsDetails/BenefitTypeDetails/BenefitInfoDetails,CampaignDetails&$filter=CampaignId%20eq%20"
-								+ this.campaignId + "%20and%20UserId%20eq%20" + this.employeeProfile.Id;
-						var orderDetailsResponse = jQuery.sap.syncGetJSON(requestUrl);
-						if (orderDetailsResponse.statusCode == 200) {
-							if (!orderDetailsResponse.data.d.results[0]) {
-								orderDetailsResponse.data.d.results[0] = {
+						var doneCallback = function(data, textStatus, jqXHR) {
+							if (!data.d.results[0]) {
+								data.d.results[0] = {
 									"Total" : 0
 								};
 							}
 
 							this.getView().getModel().setData({
 								employee : this.employeeProfile,
-								currentOrder : orderDetailsResponse.data,
+								currentOrder : data,
 								activeCampaign : this.activeCampaign
 							});
-						} else {
+						};
+
+						var failCallback = function() {
 							sap.m.MessageBox.show(sap.ui.getCore().getModel("b_i18n").getProperty("EMPLOYEE_ORDERS_FAILED")
 									.formatPropertyMessage(this.employeeProfile.UserId), sap.m.MessageBox.Icon.ERROR,
 									"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
-						}
-						this._determineAddButtonState();
+						};
+
+						var alwaysCallback = function() {
+							this.getView().setBusy(false);
+							this._determineAddButtonState();
+						};
+
+						this.getView().setBusy(true);
+
+						var requestUrl = "OData.svc/Orders?$expand=OrderDetailsDetails/BenefitTypeDetails/BenefitInfoDetails,CampaignDetails&$filter=CampaignId%20eq%20"
+								+ this.campaignId + "%20and%20UserId%20eq%20" + this.employeeProfile.Id;
+						return com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this, requestUrl, doneCallback,
+								failCallback, alwaysCallback);
 					},
 
 					_determineAddButtonState : function() {
-						this.enableAddBtn(!!(this.employeeProfile && this.employeeProfile.targetPoints)
+						this.enableAddBtn(!!this.getView().getModel().getData()
+								&& !!(this.employeeProfile && this.employeeProfile.targetPoints)
 								&& !!(this.activeCampaign && this.activeCampaign.Active && this.activeCampaign.Points)
 								&& jQuery.isNumeric(this.getView().getModel().getData().currentOrder.d.results[0].Total));
 					},
@@ -65,71 +88,38 @@ sap.ui
 						this.byId("addButton").setEnabled(bValue);
 					},
 
-					_loadAvailablePointsToModel : function(campaignId, userId) {
-						var availablePoints = this._loadUserAvailablePoints(campaignId, userId);
-						this.getView().getModel().setProperty("/activeCampaign/Points", availablePoints);
-					},
-
 					_loadUserAvailablePoints : function(campaignId, userId) {
-						var result = {
-							points : null
+						var doneCallback = function(data, textStatus, jqXHR) {
+							var points = data && data.d && data.d.AvailablePoints;
+							this.getView().getModel().setProperty("/activeCampaign/Points", points ? points : null);
 						};
-						var successFunc = function(result) {
-							return function(data, textStatus, jqXHR) {
-								result.points = data.d.AvailablePoints;
-							};
+
+						var failCallback = function() {
+							sap.m.MessageBox.alert("{b_i18n>FAILED_USER_POINT_QUERY}");
 						};
+
 						this.getView().setBusy(true);
 
-						jQuery.ajax({
-							async : false,
-							url : "OData.svc/userPoints?userId='" + userId + "'&campaignId=" + campaignId,
-							type : 'GET',
-							dataType : 'json',
-							success : successFunc(result),
-							error : function(xhr, error) {
-								sap.m.MessageBox.alert("{b_i18n>FAILED_USER_POINT_QUERY}");
-							},
-							complete : jQuery.proxy(function() {
-								this.getView().setBusy(false);
-							}, this)
-						});
-						return result.points;
-					},
+						var requestUrl = "OData.svc/userPoints?userId='" + userId + "'&campaignId=" + campaignId;
 
-					_loadEntitlementPointsToModel : function(campaignId, userId) {
-						var targetPoints = this._loadUserTargetPoints(campaignId, userId);
-						this.getView().getModel().setProperty("/employee/targetPoints", targetPoints);
+						return com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this, requestUrl, doneCallback,
+								failCallback);
 					},
 
 					_loadUserTargetPoints : function(campaignId, userId) {
+						var doneCallback = function(data, textStatus, jqXHR) {
+							var points = data && data.d && data.d.BenefitsAmount && data.d.BenefitsAmount.targetPoints;
+							this.getView().getModel().setProperty("/employee/targetPoints", points ? points : null);
+						};
+
+						var failCallback = function() {
+							sap.m.MessageBox.alert("{b_i18n>FAILED_USER_TARGET_POINTS_QUERY}");
+						};
+
 						this.getView().setBusy(true);
 
-						var path = "OData.svc/BenefitsAmount?userId='" + userId + "'";
-						var resultData = com.sap.hana.cloud.samples.benefits.util.Helper.synchGetJSON(path, function(xhr, error) {
-						}, function(xhr, error) {
-							sap.m.MessageBox.alert("{b_i18n>FAILED_USER_TARGET_POINTS_QUERY}");
-						}, jQuery.proxy(function() {
-							this.getView().setBusy(false);
-						}, this));
-
-						return resultData && resultData.d && resultData.d.BenefitsAmount.targetPoints;
-					},
-
-					loadBenefitsModel : function() {
-						if (!this.getView().getModel("benefitsModel")) {
-							var oModel = new sap.ui.model.json.JSONModel();
-							var oController = this;
-							oModel.attachRequestFailed(function() {
-								sap.m.MessageBox.show("{b_i18n>BENEFITS_DETAILS_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
-										"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
-											oController.enableAddBtn(false);
-										});
-							});
-							this.getView().setModel(oModel, "benefitsModel");
-						}
-						this.getView().getModel("benefitsModel").loadData("OData.svc/BenefitInfos?$expand=BenefitTypeDetails",
-								null, false);
+						return com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this,
+								"OData.svc/BenefitsAmount?userId='" + userId + "'", doneCallback, failCallback);
 					},
 
 					addItem : function() {
@@ -140,10 +130,33 @@ sap.ui
 						if (!this.addItemDialog.getModel("benefitsModel")) {
 							this.addItemDialog.setModel(new sap.ui.model.json.JSONModel(), "benefitsModel");
 						}
-						this.addItemDialog.getModel("benefitsModel").loadData("OData.svc/BenefitInfos?$expand=BenefitTypeDetails",
-								null, false);
+						var dialog = this.addItemDialog;
 
-						this.addItemDialog.open();
+						var doneCallback = function(data, textStatus, jqXHR) {
+							dialog.getModel("benefitsModel").setData(data);
+							window.setTimeout(function() {
+								sap.ui.getCore().getEventBus().publish("dataLoad", "benefitInfo", {
+									sourceControl : this
+								});
+							}, 0);
+						};
+
+						var failCallback = function() {
+							sap.m.MessageBox.show("{b_i18n>BENEFITS_DETAILS_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
+									"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
+										dialog.close();
+									});
+						};
+
+						var alwaysCallback = function() {
+							dialog.setBusy(false);
+						};
+
+						dialog.open();
+						dialog.setBusy(true);
+
+						com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this,
+								"OData.svc/BenefitInfos?$expand=BenefitTypeDetails", doneCallback, failCallback, alwaysCallback);
 					},
 					resetDialog : function() {
 						sap.ui.getCore().byId("addItemDialog--quantityTypeTxt").setValue(null);
@@ -161,7 +174,6 @@ sap.ui
 					formatAvailablePoints : function(targetPoints, orderPrice) {
 						var avPointsMsgTemplate = sap.ui.getCore().getModel("b_i18n").getProperty("LEFT_TO_USE_POINTS");
 						var hasValidValues = !!(targetPoints && jQuery.isNumeric(orderPrice));
-						this._determineAddButtonState();
 						return avPointsMsgTemplate.formatPropertyMessage(hasValidValues ? (targetPoints - orderPrice) : "");
 					},
 					formatUsedPoints : function(usedPoints) {
@@ -209,7 +221,7 @@ sap.ui
 						var totalValue = valueSelected * itemValue;
 						sap.ui.getCore().byId("addItemDialog--totalTypeTxt").setValue(totalValue != 0 ? totalValue : "0");
 					},
-					handleDialogOpen : function(oCtrEvt) {
+					selectFirstBenefit : function(oCtrEvt) {
 						var typeSelector = sap.ui.getCore().byId("addItemDialog--quantityTypeSelect");
 						var ctx = sap.ui.getCore().byId("addItemDialog--benefitTypeSelect").getSelectedItem().getBindingContext(
 								"benefitsModel");
@@ -276,43 +288,49 @@ sap.ui
 							var benefitTypeId = sap.ui.getCore().byId("addItemDialog--quantityTypeSelect").getSelectedItem().getKey();
 							var addServiceURL = "OData.svc/addOrder?campaignId=" + this.campaignId + "&userId='"
 									+ this.employeeProfile.UserId + "'&quantity=" + quantity + "&benefitTypeId=" + benefitTypeId;
-							jQuery.ajax({
-								url : addServiceURL,
-								type : 'post',
-								dataType : 'json',
-								success : jQuery.proxy(function(data) {
-									dialog.close();
-									sap.m.MessageToast.show(sap.ui.getCore().getModel("b_i18n").getProperty("ORDER_ACCEPTED_MSG"));
-									this.fireModelChange();
-									this.loadOrderDetails();
-								}, this),
-								error : function(xhr, error) {
-									sap.m.MessageBox.show("{b_i18n>ORDER_CREATION_FAILED}", sap.m.MessageBox.Icon.ERROR,
-											"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
-								}
-							});
+
+							var doneCallback = function() {
+								dialog.close();
+								sap.m.MessageToast.show(sap.ui.getCore().getModel("b_i18n").getProperty("ORDER_ACCEPTED_MSG"));
+								this.fireModelChange();
+								this.loadOrderDetails();
+							};
+
+							var failCallback = function() {
+								sap.m.MessageBox.show("{b_i18n>ORDER_CREATION_FAILED}", sap.m.MessageBox.Icon.ERROR,
+										"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
+							};
+
+							var alwaysCallback = function() {
+								dialog.setBusy(false);
+							};
+
+							dialog.setBusy(true);
+							com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchPostJSON(this, addServiceURL, null, doneCallback,
+									failCallback, alwaysCallback);
 						} else {
 							dialog.close();
 							sap.m.MessageBox.alert(sap.ui.getCore().getModel("b_i18n").getProperty("LIMIT_EXCEEDED_MSG"));
 						}
 					},
 					_deleteOrder : function(orderId) {
+						var doneCallback = function() {
+							this.fireModelChange();
+							this.loadOrderDetails();
+						};
+
+						var failCallback = function() {
+							sap.m.MessageBox.show("{b_i18n>ORDER_DELETION_FAILED}", sap.m.MessageBox.Icon.ERROR,
+									"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
+						};
+
+						var alwaysCallback = function() {
+							appController.setAppBusy(false);
+						};
+
 						appController.setAppBusy(true);
-						jQuery.ajax({
-							url : 'OData.svc/deleteOrder?orderId=' + orderId,
-							type : 'delete',
-							success : jQuery.proxy(function(data) {
-								this.fireModelChange();
-								this.loadOrderDetails();
-							}, this),
-							complete : jQuery.proxy(function() {
-								appController.setAppBusy(false);
-							}, this),
-							error : function() {
-								sap.m.MessageBox.show("{b_i18n>ORDER_DELETION_FAILED}", sap.m.MessageBox.Icon.ERROR,
-										"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK]);
-							}
-						});
+						com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchDelete(this, "OData.svc/deleteOrder?orderId="
+								+ orderId, doneCallback, failCallback, alwaysCallback);
 					},
 					_setControlBindCtx : function(control, ctx) {
 						control.setBindingContext(ctx);

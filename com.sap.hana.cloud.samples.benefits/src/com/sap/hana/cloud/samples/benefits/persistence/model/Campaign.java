@@ -113,14 +113,6 @@ public class Campaign implements IDBEntity {
 		return orders;
 	}
 
-	public void addOrder(Order order) {
-		getOrders().add(order);
-		if (order.getCampaign() != this) {
-			order.setCampaign(this);
-		}
-
-	}
-
 	public void setOrders(List<Order> orders) {
 		this.orders = orders;
 	}

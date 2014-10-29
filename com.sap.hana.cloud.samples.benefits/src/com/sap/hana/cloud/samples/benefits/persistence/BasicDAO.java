@@ -27,11 +27,6 @@ public class BasicDAO<T extends IDBEntity> {
 		this.emProvider = emProvider;
 	}
 
-	public void refresh(T object) {
-		final EntityManager em = emProvider.get();
-		em.refresh(object);
-	}
-
 	@SuppressWarnings("unchecked")
 	public List<T> getAll() {
 		final List<T> result = new ArrayList<>();

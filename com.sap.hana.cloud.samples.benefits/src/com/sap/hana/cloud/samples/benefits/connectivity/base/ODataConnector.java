@@ -66,7 +66,7 @@ public abstract class ODataConnector {
 		return getJsonResponse(response, path);
 	}
 
-	HttpGet createGetRequest(String path) {
+	private HttpGet createGetRequest(String path) {
 		HttpGet get = new HttpGet(path);
 		logDebugMessage("HTTP Client for OData destination requesting relative path [" + path + "]"); //$NON-NLS-1$ //$NON-NLS-2$ 
 		addGetMethodHeaders(get);

@@ -1,34 +1,49 @@
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.SearchFilter");
 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.common.ListHelper");
 jQuery.sap.require("sap.m.MessageBox");
+jQuery.sap.require("com.sap.hana.cloud.samples.benefits.util.AjaxUtil");
+
 sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 	onInit : function() {
-		this._initModel();
-		sap.ui.getCore().getEventBus().subscribe("refresh", "orders", this.loadModel, this);
-
+		this.getView().setModel(new sap.ui.model.json.JSONModel());
+		sap.ui.getCore().getEventBus().subscribe("refresh", "orders", this.loadManagedEmployeesModel, this);
 	},
 
-	_initModel : function() {
-		var oModel = new sap.ui.model.json.JSONModel();
-		oModel.attachRequestFailed(function() {
+	onBeforeRendering : function() {
+		var managedEmployeesDeferred = this.loadManagedEmployeesModel();
+
+		managedEmployeesDeferred.done(jQuery.proxy(function() {
+			var list = this.byId("employeesList");
+			var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
+			listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
+			this.getView().byId("searchField").focus();
+			$("[id$=-trigger]").attr('tabindex', 0);
+			$("[id$=-trigger]").addClass("itemFocus");
+		}), this);
+	},
+
+	loadManagedEmployeesModel : function() {
+		var doneCallback = function(data) {
+			this.getView().getModel().setData(data);
+			this.handleSearch();
+		};
+
+		var failCallback = function() {
 			sap.m.MessageBox.show("{b_i18n>MANAGED_EMPLOYEES_DATA_LOADING_FAILED}", sap.m.MessageBox.Icon.ERROR,
 					"{b_i18n>ERROR_TITLE}", [sap.m.MessageBox.Action.OK], function(oAction) {
 						sap.ui.getCore().getEventBus().publish("nav", "home");
 					});
-		});
-		this.getView().setModel(oModel);
+		};
+
+		var alwaysCallback = function() {
+			this.getView().setBusy(false);
+		};
+
+		this.getView().setBusy(true);
+		return com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this,
+				"OData.svc/managed?$expand=UserPointsDetails/CampaignDetails", doneCallback, failCallback, alwaysCallback);
 	},
-	onBeforeRendering : function() {
-		this.loadModel();
-	},
-	onAfterRendering : function() {
-		var list = this.byId("employeesList");
-		var listHelper = new com.sap.hana.cloud.samples.benefits.common.ListHelper();
-		listHelper.selectListItem(list, 0, views.DEFAULT_DETAILS_VIEW_ID);
-		this.getView().byId("searchField").focus();
-		$("[id$=-trigger]").attr('tabindex', 0);
-		$("[id$=-trigger]").addClass("itemFocus");
-	},
+
 	onItemSelected : function(evt) {
 		var employee = evt.getParameter('listItem').getBindingContext().getObject();
 		var employeePointsDetails = employee.UserPointsDetails.results;
@@ -55,9 +70,11 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 			});
 		}
 	},
+
 	onNavPressed : function() {
 		sap.ui.getCore().getEventBus().publish("nav", "home");
 	},
+
 	handleSearch : function() {
 		var employeesList = this.getView().byId("employeesList");
 		var employeeArray = employeesList.getBinding("items").oList;
@@ -68,10 +85,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 		var searchFilter = new com.sap.hana.cloud.samples.benefits.common.SearchFilter();
 		searchFilter.applySearch(employeesList, searchField, "FullName", views.DEFAULT_DETAILS_VIEW_ID);
 	},
-	loadModel : function() {
-		this.getView().getModel().loadData("OData.svc/managed?$expand=UserPointsDetails/CampaignDetails", null, false);
-		this.handleSearch();
-	},
+
 	getAvailablePoints : function(userPointsDetails) {
 		var i = 0;
 		for (i; i < userPointsDetails.length; i++) {
@@ -81,6 +95,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.employees.Master", {
 		}
 		return null;
 	},
+
 	getActiveCampaign : function(userPointsDetails) {
 		var i = 0;
 		for (i; i < userPointsDetails.length; i++) {

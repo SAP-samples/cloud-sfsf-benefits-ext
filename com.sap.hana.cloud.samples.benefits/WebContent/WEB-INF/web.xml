@@ -149,7 +149,6 @@
       <url-pattern>/OData.svc/stopCampaign</url-pattern>
       <url-pattern>/OData.svc/addCampaign</url-pattern>
       <url-pattern>/OData.svc/deleteCampaign</url-pattern>
-      <url-pattern>/OData.svc/canStartCampaign</url-pattern>
       <url-pattern>/OData.svc/editCampaign</url-pattern>
       <url-pattern>/OData.svc/resetDB</url-pattern>
       <url-pattern>/OData.svc/managed</url-pattern>

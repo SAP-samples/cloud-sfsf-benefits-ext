@@ -1,6 +1,7 @@
 package com.sap.hana.cloud.samples.benefits.odata.cfg;
 
 import java.beans.IntrospectionException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -124,5 +125,10 @@ public class ProcessingExtension implements JPAEdmExtension {
 		property.setType(propertyType);
 		return property;
 	}
+
+    @Override
+    public InputStream getJPAEdmMappingModelStream() {
+        return null;
+    }
 
 }

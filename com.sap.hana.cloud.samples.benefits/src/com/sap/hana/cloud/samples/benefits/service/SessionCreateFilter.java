@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseE
 @SuppressWarnings("nls")
 public class SessionCreateFilter implements Filter {
 
-	private static final String CLEAR_USER_ID = "-----------------";
+	public static final String SF_USER_ID_ATTR_NAME = "sfUserId";
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override
@@ -50,7 +51,7 @@ public class SessionCreateFilter implements Filter {
 			if (initialFlag != null) {
 				logger.info("User '{}' session is initialized.", loggedInUser);
 				UserDAO userDAO = getUserDAO();
-				User user = initSingleUserProfile(loggedInUser, userDAO);
+				User user = initSingleUserProfile(loggedInUser, userDAO, request.getSession());
 				if (request.isUserInRole("Administrator") && user != null) {
 					initManagedUsers(user, userDAO);
 				}
@@ -87,44 +88,32 @@ public class SessionCreateFilter implements Filter {
 		return new UserDAO();
 	}
 
-	private User initSingleUserProfile(String userName, UserDAO userDAO) {
-		User user = userDAO.getByUserId(userName);
-		if (user != null) {
-			user.setUserId(CLEAR_USER_ID);
-			user = userDAO.save(user);
-		}
-
+	private User initSingleUserProfile(String userName, UserDAO userDAO, HttpSession session) {
 		try {
 			SFUser sfUser = CoreODataConnector.getInstance().getUserProfile(userName);
-			User foundUser = userDAO.findByEmail(sfUser.email);
-			if (foundUser != null) {
-				user = updateUserId(foundUser, userName, userDAO);
-			} else {
+			session.setAttribute(SF_USER_ID_ATTR_NAME, sfUser.userId);
+
+			User user = userDAO.getByUserId(sfUser.userId);
+			if (user == null) {
 				user = createNewUser(sfUser, userDAO);
 			}
 
 			boolean userHasHR = sfUser.hr != null;
 			if (userHasHR) {
-				User foundHrManager = userDAO.findByEmail(sfUser.hr.email);
-				if (foundHrManager != null) {
-					foundHrManager = updateUserId(foundHrManager, sfUser.hr.userId, userDAO);
-				} else {
-					foundHrManager = createNewUser(sfUser.hr, userDAO);
+				User hrManager = userDAO.getByUserId(sfUser.hr.userId);
+				if (hrManager == null) {
+					hrManager = createNewUser(sfUser.hr, userDAO);
 				}
-				user.setHrManager(foundHrManager);
+				user.setHrManager(hrManager);
 			}
 			userDAO.save(user);
 			logger.info("User '{}' updated in database.", userName);
+
+			return user;
 		} catch (IOException | InvalidResponseException ex) {
 			logger.warn("User '{}' could not be extracted from backend. The user will be initialized simply.", userName, ex);
 			return createUser(userName, userDAO);
 		}
-		return user;
-	}
-
-	private User updateUserId(User user, String newUserId, UserDAO userDAO) {
-		user.setUserId(newUserId);
-		return userDAO.save(user);
 	}
 
 	private User createNewUser(SFUser sourceSfUser, UserDAO userDAO) {

@@ -2,7 +2,6 @@ package com.sap.hana.cloud.samples.benefits.odata;
 
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportEntitySets.CAMPAIGNS;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.ADD_CAMPAIGN;
-import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.CAN_START_CAMPAIGN;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.DELETE_CAMPAIGN;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.EDIT_CAMPAIGN;
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames.HR_CAMPAIGNS;
@@ -34,13 +33,13 @@ public class CampaignService extends ODataService {
 
 	@EdmFunctionImport(name = USER_CAMPAIGNS, entitySet = CAMPAIGNS, returnType = @ReturnType(type = Type.ENTITY, isCollection = true))
 	public List<Campaign> getUserCampaigns() {
-		final User currentUser = getLoggedInUser();
+		final User currentUser = getLoggedInSfUser();
 		return currentUser.getHrManager().getCampaigns();
 	}
 
 	@EdmFunctionImport(name = HR_CAMPAIGNS, entitySet = CAMPAIGNS, returnType = @ReturnType(type = Type.ENTITY, isCollection = true))
 	public List<Campaign> getHrCampaigns() {
-		final User currentUser = getLoggedInUser();
+		final User currentUser = getLoggedInSfUser();
 		return currentUser.getCampaigns();
 	}
 
@@ -56,15 +55,14 @@ public class CampaignService extends ODataService {
 		return false;
 	}
 
-	@EdmFunctionImport(name = CAN_START_CAMPAIGN, returnType = @ReturnType(type = Type.COMPLEX, isCollection = false), httpMethod = HttpMethod.GET)
-	public StartCampaignDetails canStartCampaign(@EdmFunctionImportParameter(name = CAMPAIGN_ID, type = INT64) Long campaignId) {
+	private StartCampaignDetails canStartCampaign(Long campaignId) {
 		final StartCampaignDetails response = new StartCampaignDetails();
 		response.setCampaignId(campaignId);
 
 		Campaign compaign = campaignDAO.getById(campaignId);
 		final boolean isValidCampaign = this.isValidCampaign(compaign);
 
-		final Campaign activeCampaign = campaignDAO.getActiveCampaign(getLoggedInUser());
+		final Campaign activeCampaign = campaignDAO.getActiveCampaign(getLoggedInSfUser());
 		final boolean canBeStarted = activeCampaign == null || activeCampaign.getId().equals(campaignId);
 		if (isValidCampaign && canBeStarted) {
 			response.setCanBeStarted(true);
@@ -93,7 +91,7 @@ public class CampaignService extends ODataService {
 
 	@EdmFunctionImport(name = ADD_CAMPAIGN, returnType = @ReturnType(type = Type.SIMPLE, isCollection = false), httpMethod = HttpMethod.POST)
 	public boolean addCampaign(@EdmFunctionImportParameter(name = NAME, type = STRING) String campaignName) throws AppODataException {
-		final User user = getLoggedInUser();
+		final User user = getLoggedInSfUser();
 		if (campaignDAO.getByCaseInsensitiveName(campaignName, user) != null) {
 			throw new AppODataException("Campaign with this name already exist"); //$NON-NLS-1$
 		}

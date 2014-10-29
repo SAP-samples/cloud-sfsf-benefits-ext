@@ -16,7 +16,6 @@ public final class FunctionImportNames {
 	public static final String USER_CAMPAIGNS = "userCampaigns";
 	public static final String HR_CAMPAIGNS = "hrCampaigns";
 	public static final String START_CAMPAIGN = "startCampaign";
-	public static final String CAN_START_CAMPAIGN = "canStartCampaign";
 	public static final String STOP_CAMPAIGN = "stopCampaign";
 	public static final String ADD_CAMPAIGN = "addCampaign";
 	public static final String DELETE_CAMPAIGN = "deleteCampaign";

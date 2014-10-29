@@ -41,7 +41,7 @@ public class OrderService extends ODataService {
 			@EdmFunctionImportParameter(name = USER_ID, type = STRING) String userId,
 			@EdmFunctionImportParameter(name = QUANTITY, type = INT64) Long quantity,
 			@EdmFunctionImportParameter(name = BENEFIT_TYPE_ID, type = INT64) Long benefitTypeId) throws AppODataException {
-		final User loggedInUser = getLoggedInUser();
+		final User loggedInUser = getLoggedInSfUser();
 		if (!(loggedInUser.getUserId().equals(userId) || UserManager.getIsUserAdmin())) {
 			throw new AppODataException("Unauthorized"); //$NON-NLS-1$
 		}

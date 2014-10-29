@@ -42,14 +42,6 @@ public class CampaignDAO extends BasicDAO<Campaign> {
 		return null;
 	}
 
-	public boolean canBeActive(Long campaignId, User user) {
-		final Campaign activeCampaign = getActiveCampaign(user);
-		if (activeCampaign != null && !activeCampaign.getId().equals(campaignId)) {
-			return false;
-		}
-		return true;
-	}
-
 	public void delete(long id) {
 		final EntityManager em = emProvider.get();
 		final Campaign campaign = em.find(Campaign.class, id);

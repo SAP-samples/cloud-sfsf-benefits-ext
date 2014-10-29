@@ -26,7 +26,7 @@
     					<l:HorizontalLayout id="empProfileHLayout">
     						<l:content>
     						
-    							<Image src="img/img_anon.jpg" id="empImage"></Image>
+    							<Image src="{path:'empPhoto>/d/userPhoto', formatter:'.setPhoto'}" id="empImage"></Image>
 							
 								<l:VerticalLayout>
 	    							<l:content>
@@ -93,7 +93,7 @@
     					<l:HorizontalLayout id="hrProfileHLayout">
     						<l:content>
     						
-    							<Image src="img/img_anon.jpg" id="hrImage"></Image>
+    							<Image src="{path:'hrPhoto>/d/hrPhoto', formatter:'.setPhoto'}" id="hrImage"></Image>
 							
 								<l:VerticalLayout>
 	    							<l:content>

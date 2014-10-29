@@ -18,7 +18,7 @@ public class BenefitsAmount {
 	public BenefitsAmount() {
 	};
 
-	public BenefitsAmount(String userId, long targetPoints) {
+	private BenefitsAmount(String userId, long targetPoints) {
 		this.targetPoints = targetPoints;
 		this.userId = userId;
 	}
