@@ -67,6 +67,11 @@
 			<name>OSS Sonatype Staging</name>
 			<url>https://oss.sonatype.org/content/groups/staging</url>
 		</repository>
+		<repository>
+			<id>repo.apache.org</id>
+			<name>Apache Snapshots Repository</name>
+			<url>https://repository.apache.org/content/groups/snapshots/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
