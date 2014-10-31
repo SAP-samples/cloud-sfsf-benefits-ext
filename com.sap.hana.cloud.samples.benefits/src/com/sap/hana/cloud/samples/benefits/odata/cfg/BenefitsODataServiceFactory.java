@@ -33,7 +33,7 @@ public class BenefitsODataServiceFactory extends ODataJPAServiceFactory {
 		try {
 			oDataJPAContext.setEntityManagerFactory(EntityManagerFactoryProvider.getInstance().getEntityManagerFactory());
 			oDataJPAContext.setPersistenceUnitName(PERSISTENCE_UNIT_NAME);
-			oDataJPAContext.setJPAEdmExtension(new ProcessingExtension());
+			oDataJPAContext.setJPAEdmExtension(new BenefitsJPAEdmExtension());
 
 			setContextInThreadLocal(oDataJPAContext.getODataContext());
 			return oDataJPAContext;
