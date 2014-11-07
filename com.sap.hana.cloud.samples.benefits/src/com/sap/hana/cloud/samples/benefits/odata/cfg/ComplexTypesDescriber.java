@@ -19,9 +19,9 @@ import com.sap.hana.cloud.samples.benefits.odata.beans.StartCampaignDetails;
 import com.sap.hana.cloud.samples.benefits.odata.beans.UIConfig;
 import com.sap.hana.cloud.samples.benefits.odata.beans.UserInfo;
 
-public final class ComeplexTypesDescriber {
+public final class ComplexTypesDescriber {
 
-	private static ComeplexTypesDescriber INTANCE;
+	private static ComplexTypesDescriber INTANCE;
 
 	private static final Map<Class<?>, String> CLASS_TYPES = new HashMap<>();
 
@@ -34,13 +34,13 @@ public final class ComeplexTypesDescriber {
 
 	private final List<ComplexType> edmComplexTypes;
 
-	private ComeplexTypesDescriber() {
+	private ComplexTypesDescriber() {
 		this.edmComplexTypes = describeTypes();
 	}
 
-	public static ComeplexTypesDescriber getInstance() {
+	public static ComplexTypesDescriber getInstance() {
 		if (INTANCE == null) {
-			INTANCE = new ComeplexTypesDescriber();
+			INTANCE = new ComplexTypesDescriber();
 		}
 		return INTANCE;
 	}

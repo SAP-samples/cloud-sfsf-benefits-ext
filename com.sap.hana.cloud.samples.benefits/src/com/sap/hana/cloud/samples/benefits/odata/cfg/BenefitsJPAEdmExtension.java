@@ -27,7 +27,7 @@ public class BenefitsJPAEdmExtension implements JPAEdmExtension {
 	@Override
 	public void extendJPAEdmSchema(final JPAEdmSchemaView view) {
 		Schema edmSchema = view.getEdmSchema();
-		edmSchema.setComplexTypes(ComeplexTypesDescriber.getInstance().getEdmComplexTypes());
+		edmSchema.setComplexTypes(ComplexTypesDescriber.getInstance().getEdmComplexTypes());
 	}
 
 	@Override

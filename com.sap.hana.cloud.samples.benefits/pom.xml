@@ -12,9 +12,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-
-	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<groupId>com.sap.hana.clould.samples.benefits</groupId>
+	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<version>1.1.0</version>
 	<packaging>war</packaging>
 	<name>SAP Employee Benefits Management Sample Application</name>
@@ -48,7 +47,7 @@
 		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<apache.cxf.version>2.7.0</apache.cxf.version>
-		<olingo.version>2.0.1-SNAPSHOT</olingo.version>
+		<olingo.version>2.0.1</olingo.version>
 	</properties>
 
 	<repositories>
@@ -119,6 +118,7 @@
 			<version>4.2.4</version>
 			<scope>provided</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpcore</artifactId>
