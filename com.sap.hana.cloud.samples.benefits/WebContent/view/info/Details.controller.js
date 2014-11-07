@@ -7,6 +7,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 		this.getView().setModel(new sap.ui.model.json.JSONModel());
 		this.getView().setModel(new sap.ui.model.json.JSONModel(), "empPhoto");
 		this.getView().setModel(new sap.ui.model.json.JSONModel(), "hrPhoto");
+		this.getView().setModel(new sap.ui.model.json.JSONModel(), "benefitsAmount");
 	},
 	
 	onBeforeRendering : function() {
@@ -23,16 +24,10 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 			return;
 		}
 		
-		function createDoneCallback(model) {
-			return function(data, textStatus, jqXHR) {
-				model.setData(data);
-			};
-		};
-
-		var hideHrPanelIfHrInfoMissing = function() {
+		var hideHrPanelIfHrInfoMissing = function(data, textStatus, jqXHR) {
 			this.byId("hrProfilePanel").setVisible(!!empModel.getProperty("/d/results/1"));
 		};
-
+		
 		var failCallback = function(jqXHR, textStatus, errorThrown) {
 			sap.m.MessageBox.show("{b_i18n>ERROR_GETTING_USER_DETAILS}", sap.m.MessageBox.Icon.ERROR, "{b_i18n>ERROR_TITLE}",
 					[sap.m.MessageBox.Action.OK], function(oAction) {
@@ -46,13 +41,36 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.info.Details", {
 
 		this.byId("infoMainLayout").setBusy(true);
 		com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this, "OData.svc/userInfo",
-				createDoneCallback(empModel), failCallback, alwaysCallback).always(hideHrPanelIfHrInfoMissing);
+				this.createDoneCallback(empModel), failCallback, alwaysCallback).done(this._loadBenefitPoints).always(hideHrPanelIfHrInfoMissing);
 
 		com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this, "OData.svc/userPhoto?photoType=1",
-				createDoneCallback(empPhotoModel));
+				this.createDoneCallback(empPhotoModel));
 
 		com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this, "OData.svc/hrPhoto?photoType=3",
-				createDoneCallback(hrPhotoModel));
+				this.createDoneCallback(hrPhotoModel));
+	},
+	
+	createDoneCallback : function(model) {
+		return function(data, textStatus, jqXHR) {
+			model.setData(data);
+		};
+	},
+	
+	_loadBenefitPoints : function(data, textStatus, jqXHR) {
+		var employeeUserId = data.d.results[0].userId;
+		var benefitsAmountModel = this.getView().getModel("benefitsAmount");
+		var path = "OData.svc/BenefitsAmount?userId='" + employeeUserId + "'";
+		
+		var failCallback = function(jqXHR, textStatus, errorThrown) {
+			sap.m.MessageBox.show("{b_i18n>FAILED_USER_TARGET_POINTS_QUERY}", sap.m.MessageBox.Icon.ERROR, "{b_i18n>ERROR_TITLE}");
+		};
+		
+		var alwaysCallback = function(data, textStatus, jqXHR) {
+			this.byId("empBenefitsPanel").setBusy(false);
+		};
+		
+		this.byId("empBenefitsPanel").setBusy(true);
+		com.sap.hana.cloud.samples.benefits.util.AjaxUtil.asynchGetJSON(this, path,	this.createDoneCallback(benefitsAmountModel), failCallback, alwaysCallback);
 	},
 
 	onNavPressed : function() {

@@ -2,6 +2,8 @@ package com.sap.hana.cloud.samples.benefits.odata;
 
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.USER_ID;
 
+import java.io.IOException;
+
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType.Type;
@@ -11,6 +13,7 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 import com.sap.hana.cloud.samples.benefits.connectivity.CoreODataConnector;
 import com.sap.hana.cloud.samples.benefits.odata.beans.BenefitsAmount;
 import com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames;
+import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseException;
 
 public class BenefitAmountService extends ODataService {
 
@@ -21,7 +24,12 @@ public class BenefitAmountService extends ODataService {
 	}
 
 	@EdmFunctionImport(name = FunctionImportNames.BENEFIT_AMOUNT, returnType = @ReturnType(type = Type.COMPLEX))
-	public BenefitsAmount obtainUserBenefitsAmount(@EdmFunctionImportParameter(name = USER_ID, type = EdmType.STRING) String userId) {
-		return odataConnector.getUserBenefitsAmount(userId);
+	public BenefitsAmount obtainUserBenefitsAmount(@EdmFunctionImportParameter(name = USER_ID, type = EdmType.STRING) String userId)
+			throws AppODataException {
+		try {
+			return odataConnector.getUserBenefitsAmount(userId);
+		} catch (IOException | InvalidResponseException ex) {
+			throw new AppODataException("Failed to get user's benefit target points.", ex); //$NON-NLS-1$
+		}
 	}
 }
