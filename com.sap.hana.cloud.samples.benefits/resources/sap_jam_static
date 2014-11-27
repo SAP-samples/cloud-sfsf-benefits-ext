@@ -1,0 +1,8 @@
+Name=sap_jam_static
+URL=https\://developer.sapjam.com
+ProxyType=Internet
+Type=HTTP
+CloudConnectorVersion=2
+Authentication=NoAuthentication
+TrustAll=true
+Description=SAP JAM Static JavaScript resources

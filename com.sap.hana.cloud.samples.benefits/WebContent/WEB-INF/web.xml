@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
   <display-name>com.sap.hana.cloud.samples.benefits</display-name>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
@@ -82,14 +82,6 @@
     <url-pattern>/OData.svc/*</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>ResourceServlet</servlet-name>
-    <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResourceServlet</servlet-name>
-    <url-pattern>/resources/*</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <display-name>LogoutServlet</display-name>
     <servlet-name>LogoutServlet</servlet-name>
     <servlet-class>com.sap.hana.cloud.samples.benefits.logout.LogoutServlet</servlet-class>
@@ -98,22 +90,17 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
-  <context-param>
-    <param-name>com.sap.ui5.resource.USE_CACHE</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
-    <param-value>https://sapui5.hana.ondemand.com</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
-    <param-value>true</param-value>
-  </context-param>
+  <servlet>
+  	<display-name>JamProxy</display-name>
+  	<servlet-name>JamProxy</servlet-name>
+  	<servlet-class>com.sap.hana.cloud.samples.benefits.jam.JamProxyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>JamProxy</servlet-name>
+  	<url-pattern>/jam_proxy/sap_jam_odata/*</url-pattern>
+  	<url-pattern>/jam_proxy/sap_jam_static/*</url-pattern>
+  	<url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>  
   <resource-ref>
     <res-ref-name>jdbc/DefaultDB</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
@@ -126,6 +113,14 @@
     <res-ref-name>sap_hcmcloud_core_odata</res-ref-name>
     <res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
   </resource-ref>
+  <resource-ref>
+    <res-ref-name>sap_jam_odata</res-ref-name>
+    <res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
+  </resource-ref>  
+  <resource-ref>
+    <res-ref-name>sap_jam_static</res-ref-name>
+    <res-type>com.sap.core.connectivity.api.http.HttpDestination</res-type>
+  </resource-ref>   
   <login-config>
     <auth-method>FORM</auth-method>
   </login-config>

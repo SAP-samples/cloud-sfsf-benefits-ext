@@ -1,0 +1,10 @@
+Name=sap_jam_odata
+URL=https\://sfsfbizxtrial.hana.ondemand.com/api/v1/OData/
+ProxyType=Internet
+Type=HTTP
+CloudConnectorVersion=2
+Authentication=BasicAuthentication
+Description=SAP JAM OData API End-point
+TrustAll=true
+Password=<Your password>
+User=<Your username>

@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:Reference>
+        <edmx:Include Alias="UI" Namespace="com.sap.vocabularies.UI.v1"/>
+    </edmx:Reference>
+    <edmx:Reference>
+        <edmx:Include Alias="Communication" Namespace="com.sap.vocabularies.Communication.v1"/>
+    </edmx:Reference>
+    <edmx:Reference Uri="http://docs.oasis-open.org/odata/odata/v4.0/cs01/vocabularies/Org.OData.Measures.V1.xml">
+        <edmx:Include Alias="Measures" Namespace="Org.OData.Measures.V1"/>
+    </edmx:Reference>
+    <edmx:Reference>
+        <edmx:Include Alias="Benefits" Namespace="com.sap.hana.cloud.samples.benefits"/>
+    </edmx:Reference>
+    <edmx:DataServices>
+        <Schema Alias="BenefitAnnotation" Namespace="com.sap.hana.cloud.samples.benefits.Annotation" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <Annotations Target="Benefits.BenefitInfo">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Benefit Category"/>
+                        <PropertyValue Property="TypeNamePlural" String="Benefit Categories"/>
+                        <PropertyValue Property="ImageUrl" String="/images/exobj/order/order_grey_48.png"/>
+                        <PropertyValue Property="Title">
+                            <Record>
+                                <PropertyValue Property="Value" Path="Name"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name"/>
+                            <PropertyValue Property="Value" Path="Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Active"/>
+                            <PropertyValue Property="Value" Path="Active"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Desc"/>
+                            <PropertyValue Property="Value" Path="Description"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Icon"/>
+                            <PropertyValue Path="@UI.HeaderInfo/ImageUrl" Property="Value">
+                                <Annotation Term="UI.IsImageURL"/>
+                            </PropertyValue>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name"/>
+                            <PropertyValue Property="Value" Path="Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Desc"/>
+                            <PropertyValue Property="Value" Path="Description"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Benefit Options"/>
+                            <PropertyValue Property="Target" AnnotationPath="BenefitTypeDetails/@UI.LineItem"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="Benefits.BenefitType">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Benefit Option"/>
+                        <PropertyValue Property="TypeNamePlural" String="Benefit Options"/>
+                        <PropertyValue Property="Title">
+                            <Record>
+                                <PropertyValue Property="Value" Path="Name"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name"/>
+                            <PropertyValue Property="Value" Path="Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Category"/>
+                            <PropertyValue Property="Value" Path="BenefitInfoDetails/Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Value"/>
+                            <PropertyValue Property="Value" Path="Value"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name"/>
+                            <PropertyValue Property="Value" Path="Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Value"/>
+                            <PropertyValue Property="Value" Path="Value"/>
+                        </Record>
+                        <Record Type="UI.DataFieldWithNavigationPath">
+                            <PropertyValue Property="Label" String="Category"/>
+                            <PropertyValue Property="Target" NavigationPropertyPath="BenefitInfoDetails"/>
+                            <PropertyValue Property="Value" Path="BenefitInfoDetails/Name"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="Benefits.Campaign">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Campaign"/>
+                        <PropertyValue Property="TypeNamePlural" String="Campaigns"/>
+                        <PropertyValue Property="Title">
+                            <Record>
+                                <PropertyValue Property="Value" Path="Name"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.Identification">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name"/>
+                            <PropertyValue Property="Value" Path="Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Active"/>
+                            <PropertyValue Property="Value" Path="Active"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Begins"/>
+                            <PropertyValue Property="Value" Path="StartDate"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Ends"/>
+                            <PropertyValue Property="Value" Path="EndDate"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Name"/>
+                            <PropertyValue Property="Value" Path="Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Begins"/>
+                            <PropertyValue Property="Value" Path="StartDate"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Ends"/>
+                            <PropertyValue Property="Value" Path="EndDate"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+                <Annotation Term="UI.Facets">
+                    <Collection>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="Orders"/>
+                            <PropertyValue Property="Target" AnnotationPath="OrderDetails/@UI.LineItem"/>
+                        </Record>
+                        <Record Type="UI.ReferenceFacet">
+                            <PropertyValue Property="Label" String="User Points"/>
+                            <PropertyValue Property="Target" AnnotationPath="UserPointsDetails/@UI.LineItem"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="Benefits.UserPoints">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="User Point Total"/>
+                        <PropertyValue Property="TypeNamePlural" String="User Point Totals"/>
+                        <PropertyValue Property="Title">
+                            <Record>
+                                <PropertyValue Property="Value" Path="Id"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="User e-mail"/>
+                            <PropertyValue Property="Value" Path="UserDetails/Email"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Points"/>
+                            <PropertyValue Property="Value" Path="AvailablePoints"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+            <Annotations Target="Benefits.Order">
+                <Annotation Term="UI.HeaderInfo">
+                    <Record>
+                        <PropertyValue Property="TypeName" String="Order"/>
+                        <PropertyValue Property="TypeNamePlural" String="Orders"/>
+                        <PropertyValue Property="Title">
+                            <Record>
+                                <PropertyValue Property="Value" Path="Id"/>
+                            </Record>
+                        </PropertyValue>
+                    </Record>
+                </Annotation>
+                <Annotation Term="UI.LineItem">
+                    <Collection>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Order Number"/>
+                            <PropertyValue Property="Value" Path="Id"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="User e-mail"/>
+                            <PropertyValue Property="Value" Path="UserDetails/Email"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Benefit"/>
+                            <PropertyValue Property="Value" Path="OrderDetailsDetails/BenefitTypeDetails/Name"/>
+                        </Record>
+                        <Record Type="UI.DataField">
+                            <PropertyValue Property="Label" String="Total"/>
+                            <PropertyValue Property="Value" Path="Total"/>
+                        </Record>
+                    </Collection>
+                </Annotation>
+            </Annotations>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
