@@ -46,7 +46,7 @@
 	<properties>
 		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<apache.cxf.version>2.7.0</apache.cxf.version>
+		<apache.cxf.version>2.7.13</apache.cxf.version>
 		<olingo.version>2.0.1</olingo.version>
 	</properties>
 
