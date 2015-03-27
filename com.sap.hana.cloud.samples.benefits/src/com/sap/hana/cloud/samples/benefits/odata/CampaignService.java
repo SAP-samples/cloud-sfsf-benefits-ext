@@ -15,6 +15,7 @@ import static org.apache.olingo.odata2.api.annotation.edm.EdmType.DATE_TIME;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.INT64;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.STRING;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -34,7 +35,8 @@ public class CampaignService extends ODataService {
 	@EdmFunctionImport(name = USER_CAMPAIGNS, entitySet = CAMPAIGNS, returnType = @ReturnType(type = Type.ENTITY, isCollection = true))
 	public List<Campaign> getUserCampaigns() {
 		final User currentUser = getLoggedInSfUser();
-		return currentUser.getHrManager().getCampaigns();
+		User hr = currentUser.getHrManager();
+		return hr != null ? hr.getCampaigns() : Collections.<Campaign> emptyList();
 	}
 
 	@EdmFunctionImport(name = HR_CAMPAIGNS, entitySet = CAMPAIGNS, returnType = @ReturnType(type = Type.ENTITY, isCollection = true))
