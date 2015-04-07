@@ -11,6 +11,11 @@
         </script>
         <link rel="stylesheet" type="text/css" href="css/styles.css">
         <script>
+        
+        var nonadmin_user = "nnnn";
+    	
+    	var userModel = new sap.ui.model.json.JSONModel();
+    	userModel.loadData("OData.svc/profile", {}, false)
 		    
         var fakeResponses = {
         	       
@@ -76,23 +81,51 @@
         	              }
         	       },
         	       
-        	       uiConfig : {
-        	                  "d": {
-        	                      "uiConfig": {
-        	                          "__metadata": {
-        	                              "type": "com.sap.hana.cloud.samples.benefits.UIConfig"
-        	                          },
-        	                          "showBenefitsTile": true,
-        	                          "showCampaignTile": true,
-        	                          "showEmployeesTile": true,
-        	                          "showInfoTile": true,
-        	                          "showOrderTile": true
-        	                      }
-        	                  }
-        	       }
-        	       
+        	       uiConfig : getUIConfig() 	       
         	       
         	};
+    	
+    	
+    	function getUIConfig() {
+    		var loggedInUserId = userModel.getData().d.UserId;
+    		return loggedInUserId === nonadmin_user ? getNonadminUIConfig() : getAdminUIConfig();
+    	}
+    	
+    	function getNonadminUIConfig() {
+    		return {
+    			"d" : {
+    				"uiConfig" : {
+    					"__metadata" : {
+    						"type" : "com.sap.hana.cloud.samples.benefits.UIConfig"
+    					},
+    					"showBenefitsTile" : true,
+    					"showCampaignTile" : false,
+    					"showEmployeesTile" : false,
+    					"showInfoTile" : true,
+    					"showOrderTile" : true
+    				}
+    			}
+    		};
+    	}
+    	
+    	function getAdminUIConfig() {
+    		return {
+    			"d" : {
+    				"uiConfig" : {
+    					"__metadata" : {
+    						"type" : "com.sap.hana.cloud.samples.benefits.UIConfig"
+    					},
+    					"showBenefitsTile" : true,
+    					"showCampaignTile" : true,
+    					"showEmployeesTile" : true,
+    					"showInfoTile" : true,
+    					"showOrderTile" : true
+    				}
+    			}
+    		};
+    	}
+    	
+    	
         jQuery.sap.require("sap.ui.app.MockServer");
         var mockedRequests = [
               {     method: "GET", 
@@ -162,7 +195,6 @@
                 jQuery.sap.registerModulePath('Application', './Application');
                 jQuery.sap.registerModulePath("com.sap.hana.cloud.samples.benefits", "./");
                 jQuery.sap.require("com.sap.hana.cloud.samples.benefits.view.Views");
-                jQuery.sap.require("com.sap.hana.cloud.samples.benefits.util.Helper");
                 views = new com.sap.hana.cloud.samples.benefits.view.Views();
                 // launch application
                 jQuery.sap.require("Application");
