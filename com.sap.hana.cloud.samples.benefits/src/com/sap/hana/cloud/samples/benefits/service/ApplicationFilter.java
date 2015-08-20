@@ -29,16 +29,15 @@ public class ApplicationFilter implements Filter {
 		String userId = null;
 		try {
 			HttpServletRequest httpRequest = (HttpServletRequest) request;
-			boolean isAdminUser = httpRequest.isUserInRole(ADMINISTRATOR_ROLE);
 			Principal userPrincipal = httpRequest.getUserPrincipal();
 			if (userPrincipal != null) {
 				userId = userPrincipal.getName();
+				boolean isAdminUser = httpRequest.isUserInRole(ADMINISTRATOR_ROLE);								
+				UserManager.setUserId(userId);
+				UserManager.setIsUserAdmin(isAdminUser);
+				// pass the request along the filter chain
+				chain.doFilter(request, response);
 			}
-			UserManager.setUserId(userId);
-			UserManager.setIsUserAdmin(isAdminUser);
-
-			// pass the request along the filter chain
-			chain.doFilter(request, response);
 		} finally {
 			UserManager.cleanUp();
 		}

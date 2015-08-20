@@ -8,16 +8,16 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType.
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
 import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 
-import com.sap.hana.cloud.samples.benefits.connectivity.CoreODataConnector;
+import com.sap.hana.cloud.samples.benefits.connectivity.ECAPIConnector;
 import com.sap.hana.cloud.samples.benefits.odata.beans.BenefitsAmount;
 import com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames;
 
 public class BenefitAmountService extends ODataService {
 
-	private CoreODataConnector odataConnector;
+	private ECAPIConnector odataConnector;
 
 	public BenefitAmountService() {
-		this.odataConnector = CoreODataConnector.getInstance();
+		this.odataConnector = ECAPIConnector.getInstance();
 	}
 
 	@EdmFunctionImport(name = FunctionImportNames.BENEFIT_AMOUNT, returnType = @ReturnType(type = Type.COMPLEX))

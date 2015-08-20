@@ -21,8 +21,9 @@ public class LogoutServlet extends HttpServlet {
 		try {
 			if (request.getRemoteUser() != null) {
 				logout();
+			} else {
+				response.sendRedirect("logout.jsp"); //$NON-NLS-1$
 			}
-			response.sendRedirect("logout.jsp"); //$NON-NLS-1$
 
 		} catch (Exception e) {
 			logger.error("Logout failed", e); //$NON-NLS-1$
