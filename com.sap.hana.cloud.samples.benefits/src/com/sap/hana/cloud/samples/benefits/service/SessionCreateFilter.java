@@ -3,23 +3,16 @@ package com.sap.hana.cloud.samples.benefits.service;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.Filter;
-import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 
-import com.sap.hana.cloud.samples.benefits.connectivity.CoreODataConnector;
+import com.sap.hana.cloud.samples.benefits.connectivity.ECAPIConnector;
 import com.sap.hana.cloud.samples.benefits.connectivity.helper.SFUser;
+import com.sap.hana.cloud.samples.benefits.connectivity.http.InvalidResponseException;
 import com.sap.hana.cloud.samples.benefits.persistence.UserDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.User;
-import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseException;
 
 @SuppressWarnings("nls")
 public class SessionCreateFilter implements Filter {
@@ -62,7 +55,7 @@ public class SessionCreateFilter implements Filter {
 
 	private void initManagedUsers(User hrUser, UserDAO userDAO) {
 		try {
-			List<SFUser> managedSFUsers = CoreODataConnector.getInstance().getManagedEmployees(hrUser.getUserId());
+			List<SFUser> managedSFUsers = ECAPIConnector.getInstance().getManagedEmployees(hrUser.getUserId());
 			// Check if users exists in database and create their profiles if it
 			// does not
 			for (SFUser managedSFUser : managedSFUsers) {
@@ -90,7 +83,7 @@ public class SessionCreateFilter implements Filter {
 
 	private User initSingleUserProfile(String userName, UserDAO userDAO, HttpSession session) {
 		try {
-			SFUser sfUser = CoreODataConnector.getInstance().getUserProfile(userName);
+			SFUser sfUser = ECAPIConnector.getInstance().getUserProfile(userName);
 			session.setAttribute(SF_USER_ID_ATTR_NAME, sfUser.userId);
 
 			User user = userDAO.getByUserId(sfUser.userId);
@@ -111,7 +104,7 @@ public class SessionCreateFilter implements Filter {
 
 			return user;
 		} catch (IOException | InvalidResponseException ex) {
-			logger.warn("User '{}' could not be extracted from backend. The user will be initialized simply.", userName, ex);
+			logger.error("User '{}' could not be extracted from backend. The user will be initialized simply.", userName, ex);			
 			return createUser(userName, userDAO);
 		}
 	}
@@ -128,9 +121,14 @@ public class SessionCreateFilter implements Filter {
 	}
 
 	private User createUser(String userName, UserDAO userDAO) {
-		User newUser = new User(userName);
-		userDAO.saveNew(newUser);
-		return newUser;
+		User user = userDAO.getByUserId(userName);
+		if (user == null) {
+			User newUser = new User(userName);
+			userDAO.saveNew(newUser);
+			return newUser;
+		} else {
+			return user;
+		}
 	}
 
 }

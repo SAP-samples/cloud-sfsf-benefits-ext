@@ -5,24 +5,19 @@ import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParame
 import static com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportParameters.USER_ID;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport;
+import org.apache.olingo.odata2.api.annotation.edm.*;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.HttpMethod;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType.Type;
-import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
-import org.apache.olingo.odata2.api.annotation.edm.EdmType;
 
-import com.sap.hana.cloud.samples.benefits.connectivity.CoreODataConnector;
+import com.sap.hana.cloud.samples.benefits.connectivity.ECAPIConnector;
+import com.sap.hana.cloud.samples.benefits.connectivity.http.InvalidResponseException;
 import com.sap.hana.cloud.samples.benefits.odata.beans.UserInfo;
-import com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportEntitySets;
-import com.sap.hana.cloud.samples.benefits.odata.cfg.FunctionImportNames;
+import com.sap.hana.cloud.samples.benefits.odata.cfg.*;
 import com.sap.hana.cloud.samples.benefits.persistence.UserPointsDAO;
-import com.sap.hana.cloud.samples.benefits.persistence.model.User;
-import com.sap.hana.cloud.samples.benefits.persistence.model.UserPoints;
-import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseException;
+import com.sap.hana.cloud.samples.benefits.persistence.model.*;
 
 public class UserService extends ODataService {
 
@@ -40,10 +35,10 @@ public class UserService extends ODataService {
 		List<UserInfo> users = new ArrayList<>();
 
 		try {
-			userInfo = CoreODataConnector.getInstance().getUserInfoProfile(currentUser.getUserId());
+			userInfo = ECAPIConnector.getInstance().getUserInfoProfile(currentUser.getUserId());
 			users.add(userInfo);
 			if (currentUser.getHrManager() != null) {
-				hrInfo = CoreODataConnector.getInstance().getUserInfoProfile(currentUser.getHrManager().getUserId());
+				hrInfo = ECAPIConnector.getInstance().getUserInfoProfile(currentUser.getHrManager().getUserId());
 				users.add(hrInfo);
 			}
 		} catch (IOException | InvalidResponseException ex) {
@@ -85,7 +80,7 @@ public class UserService extends ODataService {
 
 	private String getUserPhoto(String userId, int photoType) throws AppODataException {
 		try {
-			return CoreODataConnector.getInstance().getUserPhoto(userId, photoType);
+			return ECAPIConnector.getInstance().getUserPhoto(userId, photoType);
 		} catch (IOException | InvalidResponseException ex) {
 			throw new AppODataException(String.format("Failed to get photo for user with id %s", userId), ex); //$NON-NLS-1$
 		}

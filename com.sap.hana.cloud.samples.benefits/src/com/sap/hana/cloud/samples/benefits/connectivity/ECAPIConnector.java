@@ -1,39 +1,38 @@
 package com.sap.hana.cloud.samples.benefits.connectivity;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-import com.sap.hana.cloud.samples.benefits.connectivity.base.ODataConnector;
-import com.sap.hana.cloud.samples.benefits.connectivity.helper.CoreODataParser;
-import com.sap.hana.cloud.samples.benefits.connectivity.helper.SFUser;
-import com.sap.hana.cloud.samples.benefits.odata.beans.BenefitsAmount;
-import com.sap.hana.cloud.samples.benefits.odata.beans.UserInfo;
-import com.sap.hana.cloud.samples.benefits.validation.exception.InvalidResponseException;
+import com.sap.hana.cloud.samples.benefits.connectivity.helper.*;
+import com.sap.hana.cloud.samples.benefits.connectivity.http.*;
+import com.sap.hana.cloud.samples.benefits.odata.beans.*;
 
 @SuppressWarnings("nls")
-public class CoreODataConnector extends ODataConnector {
+public class ECAPIConnector {
 
-	private static final String UTF_8 = "UTF-8";
-	private static CoreODataConnector INSTANCE = null;
+	private static final String ECAPI_DESTINATION_NAME = "sap_hcmcloud_core_odata";
+    private static ECAPIConnector INSTANCE = null;
 	private static final String MANAGED_EMPLOYEES_QUERY = "User?$select=userId,firstName,lastName,email&$filter=hr/userId%20eq%20'#'";
 	private static final String PROFILE_QUERY = "User('#')?$select=userId,firstName,lastName,email,hr/userId,hr/firstName,hr/lastName,hr/email&$expand=hr";
 	private static final String INFO_QUERY = "User('#')?$select=userId,firstName,lastName,location,businessPhone,division,title,department,email,hr/firstName,hr/lastName,hr/businessPhone&$expand=hr";
 	private static final String USER_PHOTO_QUERY = "Photo(photoType=#1,userId='#2')?$select=photo";
 
-	private CoreODataParser coreODataParser;
+	private final CoreODataParser coreODataParser;
+	private final HTTPConnector httpConnector;	
 
 	// ,hr/firstName,hr/lastName,hr/email,hr/businessPhone
-	public static synchronized CoreODataConnector getInstance() {
+	public static synchronized ECAPIConnector getInstance() {
 		if (INSTANCE == null) {
-			INSTANCE = new CoreODataConnector();
+			INSTANCE = new ECAPIConnector();
 		}
 		return INSTANCE;
 	}
 
-	private CoreODataConnector() {
-		super("java:comp/env/sap_hcmcloud_core_odata");
+	private ECAPIConnector() {
+	    
+		this.httpConnector = new HTTPConnector(ECAPI_DESTINATION_NAME);
 		this.coreODataParser = CoreODataParser.getInstance();
 	}
 
@@ -51,25 +50,25 @@ public class CoreODataConnector extends ODataConnector {
 
 	private String urlEncode(String text) {
 		try {
-			return URLEncoder.encode(text, UTF_8);
+			return URLEncoder.encode(text, StandardCharsets.UTF_8.toString());
 		} catch (UnsupportedEncodingException e) {
-			String errMsg = String.format("Fail to encode text [%s]. Unsupported encoding [%s]", text, UTF_8);
+			String errMsg = String.format("Fail to encode text [%s]. Unsupported encoding [%s]", text, StandardCharsets.UTF_8.toString());
 			throw new IllegalArgumentException(errMsg, e);
 		}
 	}
 
 	public List<SFUser> getManagedEmployees(String hrSFUserName) throws IOException, InvalidResponseException {
-		String userListJson = getODataResponse(getMangedEmployeesQuery(hrSFUserName));
+		String userListJson = executeGET(getMangedEmployeesQuery(hrSFUserName));
 		return coreODataParser.loadSFUserProfileListFromJsom(userListJson);
 	}
 
 	public SFUser getUserProfile(String userName) throws IOException, InvalidResponseException {
-		String userJson = getODataResponse(getProfileQuery(userName));
+		String userJson = executeGET(getProfileQuery(userName));
 		return coreODataParser.loadSFUserProfileFromJsom(userJson);
 	}
 
 	public UserInfo getUserInfoProfile(String userName) throws IOException, InvalidResponseException {
-		String userJson = getODataResponse(getInfoQuery(userName));
+		String userJson = executeGET(getInfoQuery(userName));
 		return coreODataParser.loadUserInfoFromJson(userJson);
 	}
 
@@ -78,9 +77,12 @@ public class CoreODataConnector extends ODataConnector {
 	}
 
 	public String getUserPhoto(String userId, Integer photoType) throws IOException, InvalidResponseException {
-		String userPhotoJSON = getODataResponse(getUserPhotoQuery(userId, photoType));
+		String userPhotoJSON = executeGET(getUserPhotoQuery(userId, photoType));
 		return coreODataParser.loadUserPhoto(userPhotoJSON);
-
+	}
+	
+	private String executeGET(String query) throws InvalidResponseException, IOException {
+	    return this.httpConnector.executeGET(query).getContent();
 	}
 
 	private String getUserPhotoQuery(String userId, Integer photoType) {
