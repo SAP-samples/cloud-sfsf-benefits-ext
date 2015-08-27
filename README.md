@@ -63,7 +63,6 @@ The backend is implemented in the following packages:
 * *com.sap.hana.cloud.samples.benefits.connectivity.** - OData connectivity to SuccessFactors
 * *com.sap.hana.cloud.samples.benefits.persistence.** - contains JPA entities and DAO objects.
 * *com.sap.hana.cloud.samples.benefits.services.** - web integration logic
-* *com.sap.hana.cloud.samples.benefits.odata.** - contains the SAP Employee Benefits Management application OData API
 
 The frontend is located in WebContent folder. The structure is the following:
 * *view* - UI logic implemented using SAP UI5 XML views following MVC pattern
@@ -117,8 +116,8 @@ The following diagram provides an overview of the process flow for the user mapp
  ![alt tag](https://github.com/SAP/cloud-sfsf-benefits-ext/blob/master/com.sap.hana.cloud.samples.benefits/diagrams/mapping_architecture.png)
 
 In SAP Employee Benefits Management application, the *X-Proxy-User-Mapping* header is used to map the logged-in user to one of the two predefined SFSF OData API test system users. Depending on whether the role of the logged-in user is assigned the Administrator role or not, the value of the header is as follows:
-* For the Administrator role: *<logged_in_user_ID>|mbarista1*
-* For non-administrators: *<logged_in_user_ID>|nnnn*
+* For the Administrator role: *&lt;logged_in_user_ID&gt;|mbarista1*
+* For non-administrators: *&lt;logged_in_user_ID>&gt;|nnnn*
 
 This allows you to use one and the same user for testing all the available features by changing the Benefits application user roles of the user with which you are logging in. 
 
