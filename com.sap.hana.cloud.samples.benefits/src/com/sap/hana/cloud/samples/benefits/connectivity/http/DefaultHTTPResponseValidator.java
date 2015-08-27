@@ -20,6 +20,9 @@ public class DefaultHTTPResponseValidator implements HTTPResponseValidator {
         if (statusCode == HttpServletResponse.SC_OK) {
             return;
         }
+        if (statusCode == HttpServletResponse.SC_CREATED) {
+            return;
+        }
 
         String errMessage;
         switch (statusCode) {
@@ -44,7 +47,7 @@ public class DefaultHTTPResponseValidator implements HTTPResponseValidator {
         if (StringUtils.isEmpty(httpResponse.getContentType())) {
             throw new InvalidResponseException(String.format("Response content type not found when requesting path [%s]", httpResponse.getRequestPath()));
         }
-        if (!httpResponse.getContentType().contains(MediaType.APPLICATION_JSON)) {
+        if (!httpResponse.getContentType().contains(MediaType.APPLICATION_JSON) && !httpResponse.getContentType().contains(MediaType.APPLICATION_XML)) {
             throw new InvalidResponseException(String.format("Invalid response content type [%s] when requesting path [%s]",
                     httpResponse.getContentType(), httpResponse.getRequestPath()));
         }

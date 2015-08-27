@@ -21,6 +21,7 @@
 						info="{path:'Value' , formatter:'.formatValue'}"  />
 				</items>
 			</List>
+			<html:div id="feed_widget_container"></html:div>
 		</content>
 	</Page>
 

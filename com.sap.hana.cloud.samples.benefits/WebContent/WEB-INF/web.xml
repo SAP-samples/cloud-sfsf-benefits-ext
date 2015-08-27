@@ -117,7 +117,7 @@
   <resource-ref>
     <res-ref-name>jdbc/DefaultDB</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
-  </resource-ref>    
+  </resource-ref>
   <resource-ref>
     <res-ref-name>connectivityConfiguration</res-ref-name>
     <res-type>com.sap.core.connectivity.api.configuration.ConnectivityConfiguration</res-type>

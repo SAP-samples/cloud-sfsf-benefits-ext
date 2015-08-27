@@ -1,7 +1,8 @@
 package com.sap.hana.cloud.samples.benefits.connectivity.http;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import javax.naming.*;
@@ -21,6 +22,7 @@ public class HTTPConnector {
     private static final String PATH_SUFFIX = "/";
     private static final String ACCEPT_HEADER = "Accept";
     private static final String GET_METHOD = "GET";
+    private static final String POST_METHOD = "POST";
     private static final String DESTINATION_URL = "URL";
 
     private static final Logger logger = LoggerFactory.getLogger(HTTPConnector.class);
@@ -43,7 +45,41 @@ public class HTTPConnector {
         logger.info("HTTP GET request to URL {}", requestURL.toString());
         HttpURLConnection urlConnection = (HttpURLConnection) requestURL.openConnection();
         injectAuthenticationHeaders(urlConnection, destinationConfiguration);
+        urlConnection.addRequestProperty(ACCEPT_HEADER, MediaType.APPLICATION_JSON);
         SimpleHttpResponse httpResponse = executeGET(urlConnection);
+        return httpResponse;
+    }
+
+    public SimpleHttpResponse executePOST(String path, String data, String contentType) throws IOException, InvalidResponseException {
+        DestinationConfiguration destinationConfiguration = lookupDestinationConfiguration();
+        URL requestURL = getRequestURL(destinationConfiguration, path);
+        logger.info("HTTP POST request to URL {}", requestURL.toString());
+        HttpURLConnection urlConnection = (HttpURLConnection) requestURL.openConnection();
+        injectAuthenticationHeaders(urlConnection, destinationConfiguration);
+        SimpleHttpResponse httpResponse = executePOST(urlConnection, data, contentType);
+        return httpResponse;
+    }
+
+    private SimpleHttpResponse executePOST(HttpURLConnection connection, String data, String contentType) throws IOException,
+            com.sap.hana.cloud.samples.benefits.connectivity.http.InvalidResponseException {        
+        connection.setRequestMethod(POST_METHOD);
+        
+        if (!StringUtils.isEmpty(contentType)) {
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", contentType);
+            connection.setRequestProperty( "charset", StandardCharsets.UTF_8.toString());
+            byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8.toString());
+            connection.setRequestProperty("Content-Length", dataBytes.toString());
+            OutputStream output = connection.getOutputStream();
+            output.write(dataBytes);
+            output.close();
+        }
+        int responseCode = connection.getResponseCode();
+        SimpleHttpResponse httpResponse = new SimpleHttpResponse(connection.getURL().toString(), responseCode, connection.getResponseMessage());
+        httpResponse.setContentType(connection.getContentType());
+        httpResponse.setContent(IOUtils.toString(connection.getInputStream()));
+        logResponse(httpResponse);
+        validateResponse(httpResponse);
         return httpResponse;
     }
 
@@ -74,7 +110,6 @@ public class HTTPConnector {
     }
 
     private void injectAuthenticationHeaders(HttpURLConnection urlConnection, DestinationConfiguration destinationConfiguration) throws IOException {
-        urlConnection.addRequestProperty(ACCEPT_HEADER, MediaType.APPLICATION_JSON);
         List<AuthenticationHeader> authenticationHeaders = getAuthenticationHeaders(destinationConfiguration);
         authenticationHeaders.add(this.proxyUserHeaderProvider.createMappingHeader()); // User Mapping Header required for Mock API Endpoint
         for (AuthenticationHeader authenticationHeader : authenticationHeaders) {
@@ -90,11 +125,11 @@ public class HTTPConnector {
             throwConfigurationError(errorMessage);
         }
         if (!requestBaseURL.endsWith(PATH_SUFFIX)) {
-            requestBaseURL += PATH_SUFFIX;
+            requestBaseURL = requestBaseURL + PATH_SUFFIX;
         }
-        logger.info("HTTP Request from destination {} with base URL {} and relative path {}", this.destinationName, requestBaseURL, path);
         URL baseURL = new URL(requestBaseURL);
         URL fullURL = new URL(baseURL, path);
+        logger.info("HTTP Request from destination {} with base URL {} and relative path {} resolved to {}", this.destinationName, requestBaseURL, path, fullURL.toString());
         return fullURL;
     }
 
