@@ -14,9 +14,6 @@
         
         var nonadmin_user = "nnnn";
     	
-    	var userModel = new sap.ui.model.json.JSONModel();
-    	userModel.loadData("OData.svc/profile", {}, false)
-		    
         var fakeResponses = {
         	       
         	       userInfo : {
@@ -81,49 +78,22 @@
         	              }
         	       },
         	       
-        	       uiConfig : getUIConfig() 	       
+        	       uiConfig : {
+		           			"d" : {
+		        				"uiConfig" : {
+		        					"__metadata" : {
+		        						"type" : "com.sap.hana.cloud.samples.benefits.UIConfig"
+		        					},
+		        					"showBenefitsTile" : true,
+		        					"showCampaignTile" : true,
+		        					"showEmployeesTile" : true,
+		        					"showInfoTile" : true,
+		        					"showOrderTile" : true
+		        				}
+		        			}
+	        	   } 	       
         	       
         	};
-    	
-    	
-    	function getUIConfig() {
-    		var loggedInUserId = userModel.getData().d.UserId;
-    		return loggedInUserId === nonadmin_user ? getNonadminUIConfig() : getAdminUIConfig();
-    	}
-    	
-    	function getNonadminUIConfig() {
-    		return {
-    			"d" : {
-    				"uiConfig" : {
-    					"__metadata" : {
-    						"type" : "com.sap.hana.cloud.samples.benefits.UIConfig"
-    					},
-    					"showBenefitsTile" : true,
-    					"showCampaignTile" : false,
-    					"showEmployeesTile" : false,
-    					"showInfoTile" : true,
-    					"showOrderTile" : true
-    				}
-    			}
-    		};
-    	}
-    	
-    	function getAdminUIConfig() {
-    		return {
-    			"d" : {
-    				"uiConfig" : {
-    					"__metadata" : {
-    						"type" : "com.sap.hana.cloud.samples.benefits.UIConfig"
-    					},
-    					"showBenefitsTile" : true,
-    					"showCampaignTile" : true,
-    					"showEmployeesTile" : true,
-    					"showInfoTile" : true,
-    					"showOrderTile" : true
-    				}
-    			}
-    		};
-    	}
     	
     	
         jQuery.sap.require("sap.ui.app.MockServer");
