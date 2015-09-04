@@ -15,6 +15,7 @@ import static org.apache.olingo.odata2.api.annotation.edm.EdmType.DATE_TIME;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.INT64;
 import static org.apache.olingo.odata2.api.annotation.edm.EdmType.STRING;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImport.ReturnType.Type;
 import org.apache.olingo.odata2.api.annotation.edm.EdmFunctionImportParameter;
 
+import com.sap.hana.cloud.samples.benefits.connectivity.http.InvalidResponseException;
 import com.sap.hana.cloud.samples.benefits.odata.beans.StartCampaignDetails;
 import com.sap.hana.cloud.samples.benefits.persistence.UserPointsDAO;
 import com.sap.hana.cloud.samples.benefits.persistence.model.Campaign;
@@ -102,7 +104,12 @@ public class CampaignService extends ODataService {
 		newCampaign.setName(campaignName);
 		newCampaign.setOwner(user);
 		campaignDAO.saveNew(newCampaign);
+		try {
 		new UserPointsDAO().createCampaignUserPoints(newCampaign);
+        } catch (IOException | InvalidResponseException ex) {
+            campaignDAO.delete(newCampaign.getId());
+            throw new AppODataException("Failed to create user points", ex); //$NON-NLS-1$
+        }
 		return true;
 	}
 
