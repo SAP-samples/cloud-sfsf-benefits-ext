@@ -15,8 +15,6 @@ import com.sap.hana.cloud.samples.benefits.odata.UserManager;
 
 public class ApplicationFilter implements Filter {
 
-	private static final String ADMINISTRATOR_ROLE = "Administrator"; //$NON-NLS-1$
-
 	public ApplicationFilter() {
 	}
 
@@ -32,7 +30,7 @@ public class ApplicationFilter implements Filter {
 			Principal userPrincipal = httpRequest.getUserPrincipal();
 			if (userPrincipal != null) {
 				userId = userPrincipal.getName();
-				boolean isAdminUser = httpRequest.isUserInRole(ADMINISTRATOR_ROLE);								
+				boolean isAdminUser = httpRequest.isUserInRole(ApplicationRoles.ADMINISTRATOR_ROLE);								
 				UserManager.setUserId(userId);
 				UserManager.setIsUserAdmin(isAdminUser);
 				// pass the request along the filter chain
