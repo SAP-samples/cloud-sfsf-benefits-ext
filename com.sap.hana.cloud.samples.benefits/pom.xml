@@ -155,7 +155,6 @@
 				</excludes>
 			</testResource>
 		</testResources>
-
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
@@ -182,4 +181,46 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>customization</id>
+			<activation>
+				<property>
+					<name>benefits.id</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<phase>prepare-package</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<replace file="${project.basedir}/WebContent/WEB-INF/web.xml"
+											token="&gt;Administrator&lt;" value="&gt;SAP Corporate Benefits Admin ${benefits.id}&lt;" />
+										<replace file="${project.basedir}/src/com/sap/hana/cloud/samples/benefits/service/ApplicationRoles.java"
+											token="public static final String ADMINISTRATOR_ROLE = &quot;Administrator&quot;" value="public static final String ADMINISTRATOR_ROLE = &quot;SAP Corporate Benefits Admin ${benefits.id}&quot;" />
+										<unzip src="${project.basedir}/WebContent/BenefitsSite.site.zip"
+											dest="${project.basedir}/WebContent/tmp" />
+										<replace file="${project.basedir}/WebContent/tmp/Details.json"
+											token="https:\/\/benefits" value="https:\/\/benefits${benefits.id}" />
+										<zip basedir="${project.basedir}/WebContent/tmp"
+											destfile="${project.basedir}/WebContent/BenefitsSite.site.zip" />
+										<delete dir="${project.basedir}/WebContent/tmp" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>
