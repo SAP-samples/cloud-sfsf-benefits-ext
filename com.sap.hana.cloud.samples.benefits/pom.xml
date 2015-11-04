@@ -214,15 +214,17 @@
 										<replace file="${project.basedir}/resources/tilestmp/tiles.json"
 											token="&lt;your station number&gt;" value="${benefits.id};" />
 										<zip basedir="${project.basedir}/resources/tilestmp" includes="tiles.json"
-											destfile="${project.basedir}/resources/tiles.zip" />
+											destfile="${project.basedir}/resources/tiles${benefits.id}.zip" />
 										<delete dir="${project.basedir}/resources/tilestmp" />
+										<delete file="${project.basedir}/resources/tiles.zip" />
 										<unzip src="${project.basedir}/resources/roles.zip"
 											dest="${project.basedir}/resources/rolestmp" />
 										<replace file="${project.basedir}/resources/rolestmp/roles.json"
 											token="&lt;your station number&gt;" value="${benefits.id};" />
 										<zip basedir="${project.basedir}/resources/rolestmp" includes="roles.json"
-											destfile="${project.basedir}/resources/roles.zip" />
+											destfile="${project.basedir}/resources/roles${benefits.id}.zip" />
 										<delete dir="${project.basedir}/resources/rolestmp" />
+										<delete file="${project.basedir}/resources/roles.zip" />
 										<unzip src="${project.basedir}/WebContent/BenefitsSite.site.zip"
 											dest="${project.basedir}/WebContent/tmp" />
 										<replace file="${project.basedir}/WebContent/tmp/Details.json"
