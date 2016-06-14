@@ -209,22 +209,12 @@
 											file="${project.basedir}/src/com/sap/hana/cloud/samples/benefits/service/ApplicationRoles.java"
 											token="public static final String ADMINISTRATOR_ROLE = &quot;Administrator&quot;"
 											value="public static final String ADMINISTRATOR_ROLE = &quot;SAP Corporate Benefits Admin ${benefits.id}&quot;" />
-										<unzip src="${project.basedir}/resources/tiles.zip"
-											dest="${project.basedir}/resources/tilestmp" />
-										<replace file="${project.basedir}/resources/tilestmp/tiles.json"
+										<replace dir="${project.basedir}/resources" includes="tiles.json,roles.json"
 											token="&lt;your station number&gt;" value="${benefits.id}" />
-										<zip basedir="${project.basedir}/resources/tilestmp" includes="tiles.json"
-											destfile="${project.basedir}/resources/tiles${benefits.id}.zip" />
-										<delete dir="${project.basedir}/resources/tilestmp" />
-										<delete file="${project.basedir}/resources/tiles.zip" />
-										<unzip src="${project.basedir}/resources/roles.zip"
-											dest="${project.basedir}/resources/rolestmp" />
-										<replace file="${project.basedir}/resources/rolestmp/roles.json"
-											token="&lt;your station number&gt;" value="${benefits.id}" />
-										<zip basedir="${project.basedir}/resources/rolestmp" includes="roles.json"
-											destfile="${project.basedir}/resources/roles${benefits.id}.zip" />
-										<delete dir="${project.basedir}/resources/rolestmp" />
-										<delete file="${project.basedir}/resources/roles.zip" />
+										<move file="${project.basedir}/resources/tiles.json" 
+											tofile="${project.basedir}/resources/tiles${benefits.id}.json" failonerror="false" />
+										<move file="${project.basedir}/resources/roles.json" 
+											tofile="${project.basedir}/resources/roles${benefits.id}.json" failonerror="false" />
 										<unzip src="${project.basedir}/WebContent/BenefitsSite.site.zip"
 											dest="${project.basedir}/WebContent/tmp" />
 										<replace file="${project.basedir}/WebContent/tmp/Details.json"
