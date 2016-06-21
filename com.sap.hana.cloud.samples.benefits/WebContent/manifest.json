@@ -1,0 +1,153 @@
+{
+  "_version": "1.3.0",
+  "sap.app": {
+    "_version": "1.3.0",
+    "id": "com.sap.hana.cloud.samples.benefits",
+    "title": "SAP Employee Benefits Management Sample Application",
+    "description": "SAP Employee Benefits Management is a sample extension application for SuccessFactors Employee Central. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.",
+    "dataSources": {
+      "tilesDataSource": {
+        "uri": "data/tiles.json",
+        "type": "JSON"
+      },
+      "empPhotoDataSource": {
+        "uri": "data/empPhoto.json",
+        "type": "JSON"
+      },
+      "hrPhotoDataSource": {
+        "uri": "data/hrPhoto.json",
+        "type": "JSON"
+      },
+      "hrCampaignsDataSource": {
+        "uri": "data/hrCampaigns.json",
+        "type": "JSON"
+      },
+      "userInfoDataSource": {
+        "uri": "data/userInfo.json",
+        "type": "JSON"
+      },
+      "benefitInfosDataSource": {
+        "uri": "data/benefitInfos.json",
+        "type": "JSON"
+      }
+    }
+  },
+  "sap.platform.hcp": {
+    "_version": "1.2.0",
+    "appName": "javaui5helium",
+    "uri": "/com.sap.hana.cloud.samples.benefits"
+  },
+  "sap.cloud.portal": {
+    "show.portal.settings":"true",
+    "settings": {}
+  },
+  "sap.flp": {
+    "config": {}
+  },
+  "sap.ui": {
+    "_version": "1.3.0",
+    "technology": "UI5"
+  },
+  "sap.ui5": {
+    "_version": "1.2.0",
+    "componentName": "com.sap.hana.cloud.samples.benefits",
+    "rootView": "com.sap.hana.cloud.samples.benefits.view.Main",
+    "models": {
+      "tilesModel": {
+        "dataSource": "tilesDataSource"
+      },
+      "empPhoto": {
+        "dataSource": "empPhotoDataSource"
+      },
+      "hrPhoto": {
+        "dataSource": "hrPhotoDataSource"
+      },
+      "hrCampaigns": {
+        "dataSource": "hrCampaignsDataSource"
+      },
+      "userInfo": {
+        "dataSource": "userInfoDataSource"
+      },
+      "benefitInfos": {
+        "dataSource": "benefitInfosDataSource"
+      },
+      "b_i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "uri": "i18n/i18n.properties"
+      }
+    },
+    "resources": {
+      "css": [{
+        "uri": "./css/styles.css"
+      }]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "com.sap.hana.cloud.samples.benefits.view",
+        "controlId": "navContainer",
+        "controlAggregation": "pages"
+      },
+      "routes": [{
+        "pattern": "",
+        "name": "tiles",
+        "target": "tiles"
+      }, {
+        "pattern": "employees",
+        "name": "employees",
+        "target": "employees"
+      }, {
+        "pattern": "benefits",
+        "name": "benefits",
+        "target": "benefits"
+      }, {
+        "pattern": "benefits/{id}",
+        "name": "benefit",
+        "target": "benefits"
+      }, {
+        "pattern": "campaign",
+        "name": "campaigns",
+        "target": "campaign"
+      }, {
+        "pattern": "campaign/{id}",
+        "name": "campaign",
+        "target": "campaign"
+      }, {
+        "pattern": "orders",
+        "name": "orders",
+        "target": "orders"
+      }, {
+        "pattern": "info",
+        "name": "info",
+        "target": "info"
+      }],
+      "targets": {
+        "tiles": {
+          "viewName": "Tiles",
+          "viewLevel": 1
+        },
+        "employees": {
+          "viewName": "Employees",
+          "viewLevel": 2
+        },
+        "benefits": {
+          "viewName": "Benefits",
+          "viewLevel": 2
+        },
+        "campaign": {
+          "viewName": "Campaign",
+          "viewLevel": 2
+        },
+        "orders": {
+          "viewName": "Orders",
+          "viewLevel": 2
+        },
+        "info": {
+          "viewName": "Info",
+          "viewLevel": 2
+        }
+      }
+    }
+  }
+}

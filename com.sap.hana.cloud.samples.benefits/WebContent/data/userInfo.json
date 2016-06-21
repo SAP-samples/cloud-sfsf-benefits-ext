@@ -1,0 +1,37 @@
+{
+  "d": {
+    "__metadata": {
+      "type": "Collection(com.sap.hana.cloud.samples.benefits.UserInfo)"
+    },
+    "results": [
+      {
+        "__metadata": {
+          "type": "com.sap.hana.cloud.samples.benefits.UserInfo"
+        },
+        "businessPhone": "650 645 2000",
+        "department": "Talent Management (TALENT)",
+        "division": "Industries (IND)",
+        "email": "NNash@ACECompany.com",
+        "firstName": "Nancy",
+        "lastName": "Nash",
+        "location": "San Mateo (US_SFO)",
+        "title": "Business Partnership Manager, IND",
+        "userId": "P1940100669"
+      },
+      {
+        "__metadata": {
+          "type": "com.sap.hana.cloud.samples.benefits.UserInfo"
+        },
+        "businessPhone": "+1-650 451 2991",
+        "department": "Talent Management (TALENT)",
+        "division": "Industries (IND)",
+        "email": "MBarista@ACECompany.com",
+        "firstName": "Marcia",
+        "lastName": "Barista",
+        "location": "San Mateo (US_SFO)",
+        "title": "VP, Talent",
+        "userId": "mbarista1"
+      }
+    ]
+  }
+}
