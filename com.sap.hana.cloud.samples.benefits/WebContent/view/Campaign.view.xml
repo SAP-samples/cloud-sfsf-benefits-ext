@@ -1,0 +1,80 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+          xmlns:form="sap.ui.commons.form"
+          xmlns="sap.m"
+          controllerName="com.sap.hana.cloud.samples.benefits.controller.Campaign"
+          height="100%">
+    <SplitContainer>
+        <masterPages>
+            <Page title="{b_i18n>CAMPAIGNS_MASTER_PAGE_NAME}" showNavButton="true" navButtonTap="onBackPress">
+                <content>
+                    <List items="{/d/results/}"
+                          includeItemInSelection="true"
+                          mode="SingleSelectMaster"
+                          delete="onDeleteItem"
+                          select="onItemSelected">
+                        <items>
+                            <ObjectListItem title="{Name}" class="itemFocus">
+                                <firstStatus>
+                                    <ObjectStatus state="{path:'Active', formatter: '.formatState' }"
+                                                  text="{path:'Active', formatter: '.formatStateText' }" class="labelHeight listItem" />
+                                </firstStatus>
+                            </ObjectListItem>
+                        </items>
+                    </List>
+                </content>
+                <footer>
+                    <Bar>
+                        <contentRight>
+                            <Button text="{b_i18n>ADD_BTN_NAME}" press="onAddButtonPressed" icon="sap-icon://add" />
+                        </contentRight>
+                    </Bar>
+                </footer>
+                <subHeader>
+                    <Bar enableFlexBox="true">
+                        <contentMiddle>
+                            <SearchField search="onSearch" liveChange="onSearch" width="100%" placeholder="{b_i18n>SEARCH_BAR_PLACEHOLDER}"
+                                         showRefreshButton="false">
+                                <layoutData>
+                                    <FlexItemData growFactor="1" />
+                                </layoutData>
+                            </SearchField>
+                        </contentMiddle>
+                    </Bar>
+                </subHeader>
+            </Page>
+        </masterPages>
+        <detailPages>
+            <Page title="{b_i18n>CAMPAIGN_DETAILS_PAGE_NAME}" showNavButton="false">
+                <headerContent>
+                    <Button press="logoutButtonPressed" icon="sap-icon://log" text="{b_i18n>LOGOUT}" />
+                </headerContent>
+
+                <content>
+                    <form:SimpleForm minWidth="1024" maxContainerCols="2" editable="false">
+                        <form:content>
+                            <Label text="{b_i18n>CAMPAIGN_NAME}" class="labelHeight" />
+                            <Text class="labelHeight" text="{Name}" />
+                            <Label text="{b_i18n>CAMPAIGN_START_DATE}" class="labelHeight" />
+                            <Text text="{path:'StartDate', formatter:'.formatDate'}" class="labelHeight" />
+                            <Label text="{b_i18n>CAMPAIGN_END_DATE}" class="labelHeight" />
+                            <Text text="{path:'EndDate', formatter:'.formatDate'}" class="labelHeight" />
+                            <Label text="{b_i18n>CAMPAIGN_STATUS}" class="labelHeight" />
+                            <Text text="{path:'Active', formatter: '.formatStateText' }" class="labelHeight" />
+                        </form:content>
+                    </form:SimpleForm>
+                </content>
+                <footer>
+                    <Bar>
+                        <contentRight>
+                            <Button press="startStopButtonPressed" />
+                            <Button text="{b_i18n>CHANGE_DATES_BTN_NAME}" press="changeDatesButtonPressed"
+                                    icon="sap-icon://edit" />
+                            <Button text="{b_i18n>DELETE_BTN_NAME}" press="_deleteCampaignBtnPressed"
+                                    icon="sap-icon://delete" />
+                        </contentRight>
+                    </Bar>
+                </footer>
+            </Page>
+        </detailPages>
+    </SplitContainer>
+</mvc:View>

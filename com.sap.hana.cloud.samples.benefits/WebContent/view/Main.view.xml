@@ -1,0 +1,6 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          controllerName="com.sap.hana.cloud.samples.benefits.controller.Main"
+          height="100%">
+    <NavContainer id="navContainer"></NavContainer>
+</mvc:View>

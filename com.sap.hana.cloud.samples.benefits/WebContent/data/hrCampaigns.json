@@ -1,0 +1,64 @@
+{
+  "d": {
+    "results": [
+      {
+        "__metadata": {
+          "id": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(365L)",
+          "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(365L)",
+          "type": "com.sap.hana.cloud.samples.benefits.Campaign"
+        },
+        "Active": true,
+        "EndDate": "\/Date(1426464000000)\/",
+        "Id": "365",
+        "Name": "Back to School Fun",
+        "Owner": "102",
+        "OwnerId": "102",
+        "StartDate": "\/Date(1425859200000)\/",
+        "OrderDetails": {
+          "__deferred": {
+            "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(365L)/OrderDetails"
+          }
+        },
+        "UserDetails": {
+          "__deferred": {
+            "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(365L)/UserDetails"
+          }
+        },
+        "UserPointsDetails": {
+          "__deferred": {
+            "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(365L)/UserPointsDetails"
+          }
+        }
+      },
+      {
+        "__metadata": {
+          "id": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(618L)",
+          "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(618L)",
+          "type": "com.sap.hana.cloud.samples.benefits.Campaign"
+        },
+        "Active": false,
+        "EndDate": null,
+        "Id": "618",
+        "Name": "TestSapphire",
+        "Owner": "102",
+        "OwnerId": "102",
+        "StartDate": null,
+        "OrderDetails": {
+          "__deferred": {
+            "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(618L)/OrderDetails"
+          }
+        },
+        "UserDetails": {
+          "__deferred": {
+            "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(618L)/UserDetails"
+          }
+        },
+        "UserPointsDetails": {
+          "__deferred": {
+            "uri": "https://benefitsdemo1.hana.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/Campaigns(618L)/UserPointsDetails"
+          }
+        }
+      }
+    ]
+  }
+}

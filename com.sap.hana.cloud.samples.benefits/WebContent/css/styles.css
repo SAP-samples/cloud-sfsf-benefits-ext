@@ -93,13 +93,13 @@
 	outline-color: black;
 }
 
-#InfoDetails--infoMainLayout{
+[id$="--infoMainLayout"] {
 	width: 58%;
 	padding: 0% 21%;
 	margin-top:1rem;
 }
 
-#InfoDetails--infoMainLayout > div{
+[id$="--infoMainLayout"] > div{
 	width:100%;
 }
 
@@ -112,13 +112,13 @@
 	line-height:1.5rem;
 }
 
-#InfoDetails--infoMainLayout .sapMPanelBG{
+[id$="--infoMainLayout"] .sapMPanelBG{
 	background:rgba(255, 255, 255, 0.7);
 	border-bottom:none;
 }
 
-#InfoDetails--empProfileHLayout > div:first-child,
-#InfoDetails--hrProfileHLayout > div:first-child{
+[id$="--empProfileHLayout"] > div:first-child,
+[id$="--hrProfileHLayout"] > div:first-child{
 	margin-right: 2rem;
 }
 
@@ -126,36 +126,36 @@
 	margin-bottom:0.6rem;
 }
 
-#InfoDetails--empJobInfoLayout,
-#InfoDetails--empJobInfoLayout > .sapUiHLayoutChildWrapper{
+[id$="--empJobInfoLayout"],
+[id$="--empJobInfoLayout"] > .sapUiHLayoutChildWrapper{
 	width:100%;
 }
 
-#InfoDetails--benefitPoints{
+[id$="--benefitPoints"] {
 	font-size: 3rem;
 	font-weight:bold;
 	color: rgb(77, 76, 76);
 }
 
-#InfoDetails--hrProfilePanel{
+[id$="--hrProfilePanel"] {
 	margin-top: 2.5rem;
-	padding-top: 1rem;	
+	padding-top: 1rem;
 	border-top: 1px solid rgba(0,73,144,0.33);
 }
 
-#InfoDetails--empJobInfoLayout .sapMPanelBG{
+[id$="--empJobInfoLayout"] .sapMPanelBG{
 	height:4rem;
 }
 
-#InfoDetails--hrProfilePanel .sapMPanelBG{
+[id$="--hrProfilePanel"] .sapMPanelBG{
 	background: rgba(255, 255, 255, 0.3);
 }
 
-#InfoDetails--empBenefitsPanel > div:last-child{
+[id$="--empBenefitsPanel"] > div:last-child{
 	text-align:center;
 }
 
-#InfoDetails--empProfileHLayout img{
+[id$="--empProfileHLayout"] img{
 	height: 7rem;
 }
 
@@ -164,15 +164,15 @@
 	color:rgb(95, 98, 99);
 }
 
-#InfoDetails--empProfilePanel span {
+[id$="--empProfilePanel"] span {
 color: black !important;
 }
 
-#InfoDetails--empJobInfoPanel span {
+[id$="--empJobInfoPanel"] span {
 color: black !important;
 }
 
-#InfoDetails--hrProfilePanel span {
+[id$="--hrProfilePanel"] span {
 color: black !important;
 }
 

@@ -1,0 +1,319 @@
+{
+  "d": {
+    "results": [
+      {
+        "__metadata": {
+          "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(1L)",
+          "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(1L)",
+          "type": "com.sap.hana.cloud.samples.benefits.BenefitInfo"
+        },
+        "Description": "Amazon.com Gift Cards are redeemable for millions of items storewide, have no fees, and never expire.",
+        "Id": "1",
+        "Link": "http://www.amazon.com/",
+        "Name": "Amazon Gift Voucher",
+        "BenefitTypeDetails": {
+          "results": [
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(2L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(2L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "1",
+              "BenefitInfo": "1",
+              "Id": "2",
+              "Name": "$20 ",
+              "Value": "20",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(2L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(2L)/OrderDetailsDetails"
+                }
+              }
+            },
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(3L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(3L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "1",
+              "BenefitInfo": "1",
+              "Id": "3",
+              "Name": "$40 ",
+              "Value": "40",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(3L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(3L)/OrderDetailsDetails"
+                }
+              }
+            },
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(4L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(4L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "1",
+              "BenefitInfo": "1",
+              "Id": "4",
+              "Name": "$50 ",
+              "Value": "50",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(4L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(4L)/OrderDetailsDetails"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "__metadata": {
+          "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(5L)",
+          "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(5L)",
+          "type": "com.sap.hana.cloud.samples.benefits.BenefitInfo"
+        },
+        "Description": "",
+        "Id": "5",
+        "Link": "",
+        "Name": "Charity Donations ",
+        "BenefitTypeDetails": {
+          "results": [
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(6L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(6L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "5",
+              "BenefitInfo": "5",
+              "Id": "6",
+              "Name": "Church construction",
+              "Value": "10",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(6L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(6L)/OrderDetailsDetails"
+                }
+              }
+            },
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(7L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(7L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "5",
+              "BenefitInfo": "5",
+              "Id": "7",
+              "Name": "Sofia University St. Kl. Ohridski",
+              "Value": "10",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(7L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(7L)/OrderDetailsDetails"
+                }
+              }
+            },
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(8L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(8L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "5",
+              "BenefitInfo": "5",
+              "Id": "8",
+              "Name": "Community Hospitals",
+              "Value": "10",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(8L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(8L)/OrderDetailsDetails"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "__metadata": {
+          "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(9L)",
+          "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(9L)",
+          "type": "com.sap.hana.cloud.samples.benefits.BenefitInfo"
+        },
+        "Description": "Buy tickets for liverpool FC matches",
+        "Id": "9",
+        "Link": "http://www.liverpoolfc.com/tickets/latest-ticket-news",
+        "Name": "Liverpool FC",
+        "BenefitTypeDetails": {
+          "results": [
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(10L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(10L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "9",
+              "BenefitInfo": "9",
+              "Id": "10",
+              "Name": "Liverpool V Fulham",
+              "Value": "150",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(10L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(10L)/OrderDetailsDetails"
+                }
+              }
+            },
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(11L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(11L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "9",
+              "BenefitInfo": "9",
+              "Id": "11",
+              "Name": "Arsenal V Liverpool",
+              "Value": "200",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(11L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(11L)/OrderDetailsDetails"
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "__metadata": {
+          "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(12L)",
+          "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitInfos(12L)",
+          "type": "com.sap.hana.cloud.samples.benefits.BenefitInfo"
+        },
+        "Description": "",
+        "Id": "12",
+        "Link": "http://www.cpliverpool.com/",
+        "Name": "Health Center ",
+        "BenefitTypeDetails": {
+          "results": [
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(13L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(13L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "12",
+              "BenefitInfo": "12",
+              "Id": "13",
+              "Name": "Fitness card",
+              "Value": "50",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(13L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(13L)/OrderDetailsDetails"
+                }
+              }
+            },
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(14L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(14L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "12",
+              "BenefitInfo": "12",
+              "Id": "14",
+              "Name": "Swimming card",
+              "Value": "50",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(14L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(14L)/OrderDetailsDetails"
+                }
+              }
+            },
+            {
+              "__metadata": {
+                "id": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(15L)",
+                "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(15L)",
+                "type": "com.sap.hana.cloud.samples.benefits.BenefitType"
+              },
+              "Active": true,
+              "BenefitId": "12",
+              "BenefitInfo": "12",
+              "Id": "15",
+              "Name": "Massage",
+              "Value": "50",
+              "BenefitInfoDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(15L)/BenefitInfoDetails"
+                }
+              },
+              "OrderDetailsDetails": {
+                "__deferred": {
+                  "uri": "https://benefitsx3135f093.neo.ondemand.com:443/com.sap.hana.cloud.samples.benefits/OData.svc/BenefitTypes(15L)/OrderDetailsDetails"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

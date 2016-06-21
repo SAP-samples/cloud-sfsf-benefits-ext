@@ -1,0 +1,57 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          controllerName="com.sap.hana.cloud.samples.benefits.controller.Benefits"
+          height="100%">
+    <SplitContainer>
+        <masterPages>
+            <Page title="{b_i18n>BENEFITS_MASTER_PAGE_NAME}" showNavButton="true" navButtonTap="onBackPress">
+                <content>
+                    <List items="{/d/results/}" includeItemInSelection="true"
+                          mode="SingleSelectMaster" select="onItemSelected">
+                        <items>
+                            <ObjectListItem icon="sap-icon://database" title="{Name}"
+                                            class="itemFocus benefitListItem listItem" />
+                        </items>
+                    </List>
+                </content>
+
+                <subHeader>
+                    <Bar enableFlexBox="true">
+                        <contentMiddle>
+                            <SearchField search="handleSearch"
+                                         liveChange="handleSearch" width="100%" placeholder="{b_i18n>SEARCH_BAR_PLACEHOLDER}"
+                                         showRefreshButton="false">
+                                <layoutData>
+                                    <FlexItemData growFactor="1" />
+                                </layoutData>
+                            </SearchField>
+                        </contentMiddle>
+                    </Bar>
+                </subHeader>
+            </Page>
+        </masterPages>
+        <detailPages>
+            <Page title="{b_i18n>BENEFITS_DETAILS_PAGE_NAME}" showNavButton="false">
+                <headerContent>
+                    <Button press="logoutButtonPressed" icon="sap-icon://log" text="{b_i18n>LOGOUT}" />
+                </headerContent>
+
+                <content>
+                    <ObjectHeader title="{Name}">
+                        <attributes>
+                            <ObjectAttribute text="{Description}" />
+                            <ObjectAttribute text="{b_i18n>MORE_INFORMATION_LINK}" active="true"
+                                             press="onLinkPressed"/>
+                        </attributes>
+                    </ObjectHeader>
+                    <List items="{BenefitTypeDetails/results}" inset="true" class="benefitList" headerText="{b_i18n>BENEFITS_LIST_HEADER}">
+                        <items>
+                            <StandardListItem title="{b_i18n>VALUE_LABEL}:" description="{Name}"
+                                              info="{path:'Value' , formatter:'.i18n'}"  />
+                        </items>
+                    </List>
+                </content>
+            </Page>
+        </detailPages>
+    </SplitContainer>
+</mvc:View>

@@ -1,0 +1,15 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc"
+          xmlns="sap.m"
+          controllerName="com.sap.hana.cloud.samples.benefits.controller.Tiles"
+          height="100%">
+    <TileContainer tiles="{/d/tiles}">
+        <tiles>
+            <StandardTile
+                    title="{ path: 'title', formatter: '.i18n'}"
+                    icon="sap-icon://{icon}"
+                    visible="{visible}"
+                    press=".onTilePress"
+            ></StandardTile>
+        </tiles>
+    </TileContainer>
+</mvc:View>

@@ -1,0 +1,36 @@
+{
+  "d": {
+    "tiles": [
+      {
+        "id": "BENEFITS_TILE_ID",
+        "title": "BENEFITS_TILE_NAME",
+        "icon": "competitor",
+        "visible": true
+      },
+      {
+        "id": "EMPLOYEES_TILE_ID",
+        "title": "EMPLOYEES_TILE_NAME",
+        "icon": "employee",
+        "visible": false
+      },
+      {
+        "id": "CAMPAIGNS_TILE_ID",
+        "title": "CAMPAIGN_TILE_NAME",
+        "icon": "marketing-campaign",
+        "visible": true
+      },
+      {
+        "id": "ORDERS_TILE_ID",
+        "title": "ORDERS_TILE_NAME",
+        "icon": "customer-order-entry",
+        "visible": false
+      },
+      {
+        "id": "INFO_TILE_ID",
+        "title": "INFO_TILE_NAME",
+        "icon": "account",
+        "visible": true
+      }
+    ]
+  }
+}
