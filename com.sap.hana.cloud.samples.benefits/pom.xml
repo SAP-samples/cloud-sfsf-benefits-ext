@@ -197,6 +197,7 @@
 						<version>1.8</version>
 						<executions>
 							<execution>
+								<id>Replace user number</id>
 								<phase>prepare-package</phase>
 								<goals>
 									<goal>run</goal>
@@ -227,6 +228,19 @@
 									</target>
 								</configuration>
 							</execution>
+							<execution>
+								<id>Rename assembly output</id>
+								<phase>install</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<move file="${project.build.directory}/${project.artifactId}.jar" 
+											tofile="${project.build.directory}/${project.artifactId}.mtar" failonerror="false" />
+									</target>
+								</configuration>
+							</execution>
 						</executions>
 					</plugin>
 					<plugin>
@@ -251,25 +265,6 @@
 							</execution>
 						</executions>
 				      </plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.8</version>
-						<executions>
-							<execution>
-								<phase>install</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<target>
-										<move file="${project.build.directory}/${project.artifactId}.jar" 
-											tofile="${project.build.directory}/${project.artifactId}.mtar" failonerror="false" />
-									</target>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
 				</plugins>
 			</build>
 		</profile>

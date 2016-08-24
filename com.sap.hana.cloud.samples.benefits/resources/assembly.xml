@@ -9,7 +9,7 @@
   <fileSets>
     <fileSet>
       <directory>${project.basedir}/resources</directory>
-      <outputDirectory>/resources</outputDirectory>
+      <outputDirectory>resources</outputDirectory>
       <includes>
         <include>roles*.json</include>
         <include>tiles*.json</include>
@@ -17,21 +17,21 @@
     </fileSet>
     <fileSet>
       <directory>${project.build.directory}</directory>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <includes>
         <include>*.war</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>${project.basedir}/resources</directory>
-      <outputDirectory>/</outputDirectory>
+      <outputDirectory></outputDirectory>
       <includes>
         <include>extension_descriptor.mtaext</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>${project.basedir}/resources</directory>
-      <outputDirectory>/META-INF</outputDirectory>
+      <outputDirectory>META-INF</outputDirectory>
       <includes>
         <include>mtad.yaml</include>
       </includes>
