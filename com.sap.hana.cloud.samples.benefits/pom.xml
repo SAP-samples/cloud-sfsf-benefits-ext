@@ -12,7 +12,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.sap.hana.clould.samples.benefits</groupId>
+	<groupId>com.sap.hana.cloud.samples.benefits</groupId>
 	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
 	<version>1.2.0</version>
 	<packaging>war</packaging>
@@ -211,6 +211,8 @@
 											value="public static final String ADMINISTRATOR_ROLE = &quot;SAP Corporate Benefits Admin ${benefits.id}&quot;" />
 										<replace dir="${project.basedir}/resources" includes="tiles.json,roles.json"
 											token="&lt;your station number&gt;" value="${benefits.id}" />
+										<replace dir="${project.basedir}/resources" includes="mtad.yaml,extension_descriptor.mtaext,MTA_MANIFEST.MF"
+											token="SOLUTION_ID" value="${benefits.id}" />
 										<move file="${project.basedir}/resources/tiles.json" 
 											tofile="${project.basedir}/resources/tiles${benefits.id}.json" failonerror="false" />
 										<move file="${project.basedir}/resources/roles.json" 
@@ -222,6 +224,47 @@
 										<zip basedir="${project.basedir}/WebContent/tmp"
 											destfile="${project.basedir}/WebContent/BenefitsSite.site.zip" />
 										<delete dir="${project.basedir}/WebContent/tmp" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<version>2.6</version>
+				        <configuration>
+				        	<finalName>${project.artifactId}</finalName>
+				        	<appendAssemblyId>false</appendAssemblyId>
+							<descriptors>
+								<descriptor>resources/assembly.xml</descriptor>
+							</descriptors>
+							<archive>
+								<manifestFile>${project.basedir}/resources/MTA_MANIFEST.MF</manifestFile>
+							</archive>
+						</configuration>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>single</goal>
+								</goals>
+							</execution>
+						</executions>
+				      </plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<move file="${project.build.directory}/${project.artifactId}.jar" 
+											tofile="${project.build.directory}/${project.artifactId}.mtar" failonerror="false" />
 									</target>
 								</configuration>
 							</execution>
