@@ -212,7 +212,7 @@
 											value="public static final String ADMINISTRATOR_ROLE = &quot;SAP Corporate Benefits Admin ${benefits.id}&quot;" />
 										<replace dir="${project.basedir}/resources" includes="tiles.json,roles.json"
 											token="&lt;your station number&gt;" value="${benefits.id}" />
-										<replace dir="${project.basedir}/resources" includes="mtad.yaml,extension_descriptor.mtaext,MTA_MANIFEST.MF"
+										<replace dir="${project.basedir}/resources" includes="mtad.yaml,extension_descriptor.mtaext"
 											token="SOLUTION_ID" value="${benefits.id}" />
 										<move file="${project.basedir}/resources/tiles.json" 
 											tofile="${project.basedir}/resources/tiles${benefits.id}.json" failonerror="false" />
@@ -253,7 +253,29 @@
 								<descriptor>resources/assembly.xml</descriptor>
 							</descriptors>
 							<archive>
-								<manifestFile>${project.basedir}/resources/MTA_MANIFEST.MF</manifestFile>
+								<manifestSections>
+									<manifestSection>
+										<name>com.sap.hana.cloud.samples.benefits.war</name>
+										<manifestEntries>
+											<Content-Type>application/zip</Content-Type>
+											<MTA-Module>benefits-app-${benefits.id}</MTA-Module>
+										</manifestEntries>
+									</manifestSection>
+									<manifestSection>
+										<name>resources/roles${benefits.id}.json</name>
+										<manifestEntries>
+											<Content-Type>application/json</Content-Type>
+											<MTA-Module>benefits-roles-${benefits.id}</MTA-Module>
+										</manifestEntries>
+									</manifestSection>
+									<manifestSection>
+										<name>resources/tiles${benefits.id}.json</name>
+										<manifestEntries>
+											<Content-Type>application/json</Content-Type>
+											<MTA-Module>benefits-tiles-${benefits.id}</MTA-Module>
+										</manifestEntries>
+									</manifestSection>
+								</manifestSections> 
 							</archive>
 						</configuration>
 						<executions>

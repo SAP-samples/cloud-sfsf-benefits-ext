@@ -9,6 +9,8 @@ version: 0.1.0
 modules:
   - name: benefits-app-SOLUTION_ID
     type: com.sap.java
+    requires:
+     - name: benefits-db-SOLUTION_ID
     parameters:
        name: &benefits-app-name benefitsSOLUTION_ID
        jvm-arguments: -server
@@ -42,3 +44,9 @@ modules:
       - name: benefits-roles-SOLUTION_ID
     parameters:
       application: *benefits-app-name
+
+resources:
+  - name: benefits-db-SOLUTION_ID
+    type: com.sap.hcp.persistence
+    parameters:
+      id: techeddb
