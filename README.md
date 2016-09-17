@@ -55,7 +55,7 @@ In Eclipse import as *Existing Maven Project* and point to the *pom.xml* file lo
 Get the Binaries
 -----------------
 
-Download the pre-build [MTA archive] (https://github.com/SAP/cloud-sfsf-benefits-ext/raw/SolutionInstallation/benefits_teched.mtar) and [MTA extension descriptor](https://cdn.rawgit.com/SAP/cloud-sfsf-benefits-ext/SolutionInstallation/extension_descriptor_benefits_teched_eu.mtaext).
+Download the pre-built [MTA archive] (https://github.com/SAP/cloud-sfsf-benefits-ext/raw/SolutionInstallation/benefits.mtar) and [MTA extension descriptor](https://cdn.rawgit.com/SAP/cloud-sfsf-benefits-ext/SolutionInstallation/extension_descriptor_benefits.mtaext).
 
 Architecture Overview
 -------------------
