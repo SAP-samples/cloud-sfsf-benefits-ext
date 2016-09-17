@@ -52,6 +52,11 @@ Clone the Git repository `git clone https://github.com/sap/cloud-sfsf-benefits-e
 
 In Eclipse import as *Existing Maven Project* and point to the *pom.xml* file located in *com.sap.hana.cloud.samples.benefits* folder.
 
+Get the Binaries
+-----------------
+
+Download the pre-build [MTA archive] (https://github.com/SAP/cloud-sfsf-benefits-ext/raw/SolutionInstallation/benefits_teched.mtar) and [MTA extension descriptor](https://cdn.rawgit.com/SAP/cloud-sfsf-benefits-ext/SolutionInstallation/extension_descriptor_benefits_teched_eu.mtaext).
+
 Architecture Overview
 -------------------
 
