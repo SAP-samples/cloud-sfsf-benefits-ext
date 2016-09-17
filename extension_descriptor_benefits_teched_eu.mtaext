@@ -1,0 +1,12 @@
+_schema-version: '2.1'
+ID: com.sap.hana.cloud.samples.benefits.config
+extends: com.sap.hana.cloud.samples.benefits
+
+parameters:
+  title: SAP Employee Benefits Management TechEd Demo
+  description: This is a sample extension application for SuccessFactors Employee Central. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.
+
+resources:
+  - name: database
+    parameters:
+      id: <Enter database id here>
