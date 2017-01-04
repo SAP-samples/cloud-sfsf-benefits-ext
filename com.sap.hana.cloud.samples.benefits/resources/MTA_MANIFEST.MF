@@ -2,10 +2,6 @@ Name: resources/rolesSOLUTION_ID.json
 Content-Type: application/json
 MTA-Module: benefits-roles-SOLUTION_ID
 
-Name: resources/tilesSOLUTION_ID.json
-Content-Type: application/json
-MTA-Module: benefits-tiles-SOLUTION_ID
-
 Name: com.sap.hana.cloud.samples.benefits.war
 Content-Type: application/zip
 MTA-Module: benefits-app-SOLUTION_ID

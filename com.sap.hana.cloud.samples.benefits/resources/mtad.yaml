@@ -9,8 +9,6 @@ version: 0.1.0
 modules:
   - name: benefits-app-SOLUTION_ID
     type: com.sap.java
-    requires:
-     - name: benefits-db-SOLUTION_ID
     parameters:
        name: &benefits-app-name benefitsSOLUTION_ID
        jvm-arguments: -server
@@ -18,35 +16,20 @@ modules:
        runtime: neo-java-web
        runtime-version: 1
        sfsf-idp-access: true
-
-  - name: benefits-connection-SOLUTION_ID
-    type: com.sap.hcp.sfsf-connection
+       sfsf-connections:
+         - type: default
+       role-provider: sfsf
+       sfsf-tiles:
+         resource: resources/tilesSOLUTION_ID.json
     requires:
-      - name: benefits-app-SOLUTION_ID
-    parameters:
-      application: *benefits-app-name
-
-  - name: benefits-role-provider-SOLUTION_ID
-    type: com.sap.hcp.sfsf-role-provider
-    requires:
-      - name: benefits-app-SOLUTION_ID
-      - name: benefits-connection-SOLUTION_ID
-    parameters:
-      application: *benefits-app-name
+     - name: benefits-roles-SOLUTION_ID
+     - name: benefits-db-SOLUTION_ID
 
   - name: benefits-roles-SOLUTION_ID
     type: com.sap.hcp.sfsf-roles
-
-  - name: benefits-tiles-SOLUTION_ID
-    type: com.sap.hcp.sfsf-home-page-tiles
-    requires:
-      - name: benefits-app-SOLUTION_ID
-      - name: benefits-roles-SOLUTION_ID
-    parameters:
-      application: *benefits-app-name
 
 resources:
   - name: benefits-db-SOLUTION_ID
     type: com.sap.hcp.persistence
     parameters:
-      id: techeddb
+      id:

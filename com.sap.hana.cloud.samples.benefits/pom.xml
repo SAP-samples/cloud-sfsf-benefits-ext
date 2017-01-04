@@ -268,13 +268,6 @@
 											<MTA-Module>benefits-roles-${benefits.id}</MTA-Module>
 										</manifestEntries>
 									</manifestSection>
-									<manifestSection>
-										<name>resources/tiles${benefits.id}.json</name>
-										<manifestEntries>
-											<Content-Type>application/json</Content-Type>
-											<MTA-Module>benefits-tiles-${benefits.id}</MTA-Module>
-										</manifestEntries>
-									</manifestSection>
 								</manifestSections> 
 							</archive>
 						</configuration>
