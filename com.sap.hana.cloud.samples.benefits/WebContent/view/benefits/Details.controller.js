@@ -48,7 +48,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Details", {
 	},
 	showJamWidget : function(data) {
 		var obj = data.context.getObject();
-		sapjam.feedWidget.init("https://jamsalesdemo2.sapjam.com/widget/v1/feed", "single_use_token");
+		sapjam.feedWidget.init("https://demo.sapjam.com/widget/v1/feed", "single_use_token");
 		var self =this;
 
 		$.ajax({url:"/com.sap.hana.cloud.samples.benefits/getSingleUseToken.jsp", 
