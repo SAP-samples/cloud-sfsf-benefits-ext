@@ -11,3 +11,4 @@ resources:
   - name: benefits-db-SOLUTION_ID
     parameters:
       id: techeddb
+      account: da2c336e3 
