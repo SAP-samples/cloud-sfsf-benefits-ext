@@ -10,4 +10,7 @@ parameters:
 resources:
   - name: benefits-db-SOLUTION_ID
     parameters:
-      id: techeddb
+      id: 
+      account: 
+      user-id: 
+      password: 

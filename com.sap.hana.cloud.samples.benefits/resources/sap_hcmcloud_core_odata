@@ -1,8 +1,0 @@
-Description=SuccessFactors Core OData API
-Type=HTTP
-TrustAll=true
-Authentication=BasicAuthentication
-Name=sap_hcmcloud_core_odata
-ProxyType=Internet
-URL=https\://sfsfbizxtrial.hana.ondemand.com/odata/v2
-User=<SAP ID User - P/S user typically>

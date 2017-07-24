@@ -218,13 +218,6 @@
 											tofile="${project.basedir}/resources/tiles${benefits.id}.json" failonerror="false" />
 										<move file="${project.basedir}/resources/roles.json" 
 											tofile="${project.basedir}/resources/roles${benefits.id}.json" failonerror="false" />
-										<unzip src="${project.basedir}/WebContent/BenefitsSite.site.zip"
-											dest="${project.basedir}/WebContent/tmp" />
-										<replace file="${project.basedir}/WebContent/tmp/Details.json"
-											token="https:\/\/benefits" value="https:\/\/benefits${benefits.id}" />
-										<zip basedir="${project.basedir}/WebContent/tmp"
-											destfile="${project.basedir}/WebContent/BenefitsSite.site.zip" />
-										<delete dir="${project.basedir}/WebContent/tmp" />
 									</target>
 								</configuration>
 							</execution>

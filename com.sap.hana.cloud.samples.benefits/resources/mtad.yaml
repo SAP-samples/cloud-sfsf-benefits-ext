@@ -8,13 +8,11 @@ version: 0.1.0
 
 modules:
   - name: benefits-app-SOLUTION_ID
-    type: com.sap.java
+    type: java.tomcat
     parameters:
-       name: &benefits-app-name benefitsSOLUTION_ID
-       jvm-arguments: -server
+       name: benefitsSOLUTION_ID
        java-version: JRE 7
-       runtime: neo-java-web
-       runtime-version: 1
+       runtime-version: 2
        sfsf-idp-access: true
        sfsf-connections:
          - type: default
@@ -33,3 +31,6 @@ resources:
     type: com.sap.hcp.persistence
     parameters:
       id:
+      account:
+      user-id:
+      password:
