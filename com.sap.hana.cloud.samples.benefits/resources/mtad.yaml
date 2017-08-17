@@ -31,6 +31,5 @@ resources:
     type: com.sap.hcp.persistence
     parameters:
       id:
-      account:
       user-id:
       password:
