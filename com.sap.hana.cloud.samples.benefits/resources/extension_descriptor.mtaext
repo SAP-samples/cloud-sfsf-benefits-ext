@@ -11,6 +11,5 @@ resources:
   - name: benefits-db-SOLUTION_ID
     parameters:
       id: 
-      account: 
       user-id: 
       password: 
