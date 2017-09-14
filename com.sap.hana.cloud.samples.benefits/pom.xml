@@ -198,7 +198,7 @@
 						<executions>
 							<execution>
 								<id>Replace user number</id>
-								<phase>prepare-package</phase>
+								<phase>process-resources</phase>
 								<goals>
 									<goal>run</goal>
 								</goals>
@@ -210,7 +210,7 @@
 											file="${project.basedir}/src/com/sap/hana/cloud/samples/benefits/service/ApplicationRoles.java"
 											token="public static final String ADMINISTRATOR_ROLE = &quot;Administrator&quot;"
 											value="public static final String ADMINISTRATOR_ROLE = &quot;SAP Corporate Benefits Admin ${benefits.id}&quot;" />
-										<replace dir="${project.basedir}/resources" includes="tiles.json,roles.json"
+										<replace dir="${project.basedir}/resources" includes="tiles.json,roles.json,.tiles_d"
 											token="&lt;your station number&gt;" value="${benefits.id}" />
 										<replace dir="${project.basedir}/resources" includes="mtad.yaml,extension_descriptor.mtaext"
 											token="SOLUTION_ID" value="${benefits.id}" />

@@ -1,12 +1,15 @@
 [{
-	"name" : "SAP Corporate Benefits_<your station number>",
-	"path" : "com.sap.hana.cloud.samples.benefits",
-	"size" : 3,
-	"padding" : false,
-	"roles" : ["Benefits Tile <your station number>"],
-	"metadata" : [{
-		"title" : "SAP Corporate Benefits_<your station number>",
-		"description" : "SAP Corporate Benefits home page tile",
-		"locale" : "en_US"
+	"tileVersion": "V12",
+	"tiles": [{
+		"name" : "SAP Corporate Benefits_<your station number>",
+		"path" : "com.sap.hana.cloud.samples.benefits",
+		"size" : 3,
+		"padding" : false,
+		"roles" : ["Benefits Tile <your station number>"],
+		"metadata" : [{
+			"title" : "SAP Corporate Benefits_<your station number>",
+			"description" : "SAP Corporate Benefits home page tile",
+			"locale" : "en_US"
+		}]
 	}]
 }]
