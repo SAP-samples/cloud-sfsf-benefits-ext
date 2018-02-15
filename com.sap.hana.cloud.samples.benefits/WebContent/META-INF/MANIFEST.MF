@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Web-ContextPath: /com.sap.hana.cloud.samples.benefits
-Class-Path: 
-

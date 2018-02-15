@@ -44,7 +44,7 @@ sap.ui.controller("com.sap.hana.cloud.samples.benefits.view.benefits.Details", {
 	_refreshHandler : function(channelId, eventId, data) {
 		this.getView().setBindingContext(data.context);
 		this.getView().setModel(data.context.getModel());
-		this.showJamWidget(data);
+		//this.showJamWidget(data);
 	},
 	showJamWidget : function(data) {
 		var obj = data.context.getObject();

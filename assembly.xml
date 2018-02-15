@@ -11,21 +11,15 @@
       <directory>${project.basedir}/resources</directory>
       <outputDirectory>resources</outputDirectory>
       <includes>
-        <include>roles*.json</include>
+        <include>roles.json</include>
+        <include>tiles.json</include>
       </includes>
     </fileSet>
     <fileSet>
       <directory>${project.build.directory}</directory>
       <outputDirectory></outputDirectory>
       <includes>
-        <include>*.war</include>
-      </includes>
-    </fileSet>
-    <fileSet>
-      <directory>${project.basedir}/resources</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>extension_descriptor.mtaext</include>
+        <include>ROOT.war</include>
       </includes>
     </fileSet>
     <fileSet>
@@ -36,11 +30,4 @@
       </includes>
     </fileSet>
   </fileSets>
-  <files>
-  	<file>
-  		<source>${project.basedir}/resources/.tiles_d</source>
-  		<destName>tiles${benefits.id}.json</destName>
-  		<outputDirectory>resources</outputDirectory>
-  	</file>
-  </files>
 </assembly>

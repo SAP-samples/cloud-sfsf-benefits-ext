@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+
+Name: resources/roles.json
+MTA-Module: benefits-roles
+Content-Type: application/json
+
+Name: ROOT.war
+MTA-Module: benefits-app
+Content-Type: application/zip

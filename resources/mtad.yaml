@@ -3,31 +3,31 @@ _schema-version: '2.1'
 parameters:
   hcp-deployer-version: '1.0'
 
-ID: com.sap.cloud.lm.sl.hcp.extensions.SOLUTION_ID
+ID: com.sap.cloud.lm.sl.hcp.extensions.benefits.id
 version: 0.1.0
 
 modules:
-  - name: benefits-app-SOLUTION_ID
+  - name: benefits-app
     type: java.tomcat
     parameters:
-       name: benefitsSOLUTION_ID
+       name: benefits.app
        java-version: JRE 7
        runtime-version: 2
        sfsf-idp-access: true
        sfsf-connections:
          - type: default
        role-provider: sfsf
-       sfsf-tiles:
-         resource: resources/tilesSOLUTION_ID.json
+       sfsf-home-page-tiles:
+         resource: resources/tiles.json
     requires:
-     - name: benefits-roles-SOLUTION_ID
-     - name: benefits-db-SOLUTION_ID
+     - name: benefits-roles
+     - name: benefits-db
 
-  - name: benefits-roles-SOLUTION_ID
+  - name: benefits-roles
     type: com.sap.hcp.sfsf-roles
 
 resources:
-  - name: benefits-db-SOLUTION_ID
+  - name: benefits-db
     type: com.sap.hcp.persistence
     parameters:
       id:

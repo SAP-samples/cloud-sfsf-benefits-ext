@@ -14,23 +14,22 @@
 
 	<groupId>com.sap.hana.cloud.samples.benefits</groupId>
 	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
-	<version>1.2.0</version>
+	<version>1.3.0</version>
 	<packaging>war</packaging>
 	<name>SAP Employee Benefits Management Sample Application</name>
-	<description>The SAP HANA Cloud Platform extension package makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.</description>
+	<description>The SAP Cloud Platform extension package makes it quick and easy for companies to adapt and integrate SAP SuccessFactors cloud applications to their existing business processes.</description>
 	<url>https://github.com/SAP/cloud-sfsf-benefits-ext</url>
 
 	<organization>
-		<name>SAP AG</name>
+		<name>SAP SE</name>
 		<url>http://www.sap.com</url>
 	</organization>
 
 	<developers>
 		<developer>
-			<name>SAP HANA Cloud</name>
-			<email>netweaver-cloud@sap.com</email>
-			<url>http://hana.ondemand.com</url>
-			<organization>SAP AG</organization>
+			<name>SAP Cloud Platform</name>
+			<url>https://hana.ondemand.com</url>
+			<organization>SAP SE</organization>
 			<organizationUrl>http://www.sap.com/</organizationUrl>
 		</developer>
 	</developers>
@@ -45,6 +44,7 @@
 
 	<properties>
 		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
+		<sap.cloud.sdk.version>3.46.11</sap.cloud.sdk.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<apache.cxf.version>2.7.13</apache.cxf.version>
 		<olingo.version>2.0.1</olingo.version>
@@ -80,21 +80,9 @@
 			<version>2.1</version>
 		</dependency>
 		<dependency>
-			<groupId>javax</groupId>
-			<artifactId>javaee-web-api</artifactId>
-			<version>6.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.eclipse.persistence</groupId>
 			<artifactId>eclipselink</artifactId>
 			<version>2.5.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.7.2</version>
-			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.cxf</groupId>
@@ -102,14 +90,9 @@
 			<version>${apache.cxf.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.2.2</version>
-		</dependency>
-		<dependency>
 			<groupId>com.sap.cloud</groupId>
 			<artifactId>neo-java-web-api</artifactId>
-			<version>2.31.10</version>
+			<version>${sap.cloud.sdk.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -120,55 +103,8 @@
 	</dependencies>
 
 	<build>
-		<sourceDirectory>${project.basedir}/src</sourceDirectory>
-		<testSourceDirectory>${project.basedir}/test</testSourceDirectory>
-		<outputDirectory>${project.basedir}/war/WEB-INF/classes</outputDirectory>
-		<testOutputDirectory>${project.basedir}/bin/classes</testOutputDirectory>
-		<resources>
-			<resource>
-				<directory>${project.basedir}/src</directory>
-				<includes>
-					<include>**/*</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>${project.basedir}/resources</directory>
-				<includes>
-					<include>**/*</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<directory>${project.basedir}/test</directory>
-				<includes>
-					<include>**/*</include>
-				</includes>
-				<excludes>
-					<exclude>**/*.java</exclude>
-				</excludes>
-			</testResource>
-		</testResources>
+		<finalName>ROOT</finalName>
 		<plugins>
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.1.1</version>
-				<configuration>
-					<warName>${project.artifactId}</warName>
-					<warSourceDirectory>WebContent</warSourceDirectory>
-					<webXml>WebContent\WEB-INF\web.xml</webXml>
-					<archive>
-						<manifestFile>WebContent/META-INF/MANIFEST.MF</manifestFile>
-					</archive>
-					<attachClasses>true</attachClasses>
-				</configuration>
-			</plugin>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
@@ -178,6 +114,48 @@
 					<showDeprecation>true</showDeprecation>
 					<showWarnings>true</showWarnings>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<finalName>${project.artifactId}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+					<archive>
+						<manifestFile>resources/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>Rename assembly output</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<move file="${project.build.directory}/${project.artifactId}.jar"
+									tofile="${project.build.directory}/${project.artifactId}.mtar"/>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -204,75 +182,30 @@
 								</goals>
 								<configuration>
 									<target>
-										<replace file="${project.basedir}/WebContent/WEB-INF/web.xml"
+										<replace file="${project.build.sourceDirectory}/../webapp/WEB-INF/web.xml"
 											token="&gt;Administrator&lt;" value="&gt;SAP Corporate Benefits Admin ${benefits.id}&lt;" />
 										<replace
-											file="${project.basedir}/src/com/sap/hana/cloud/samples/benefits/service/ApplicationRoles.java"
+											file="${project.build.sourceDirectory}/com/sap/hana/cloud/samples/benefits/service/ApplicationRoles.java"
 											token="public static final String ADMINISTRATOR_ROLE = &quot;Administrator&quot;"
 											value="public static final String ADMINISTRATOR_ROLE = &quot;SAP Corporate Benefits Admin ${benefits.id}&quot;" />
-										<replace dir="${project.basedir}/resources" includes="tiles.json,roles.json,.tiles_d"
-											token="&lt;your station number&gt;" value="${benefits.id}" />
+										<replace file="resources/roles.json"
+											token="SAP Corporate Benefits Admin Role" 
+											value="SAP Corporate Benefits Admin ${benefits.id}" />
+										<replace file="resources/tiles.json"
+											token="&quot;SAP Corporate Benefits&quot;" value="&quot;SAP Corporate Benefits ${benefits.id}&quot;" />
+										<replace file="resources/tiles.json"
+											token="&quot;Benefits Tile&quot;" value="&quot;Benefits Tile ${benefits.id}&quot;" />
 										<replace dir="${project.basedir}/resources" includes="mtad.yaml,extension_descriptor.mtaext"
-											token="SOLUTION_ID" value="${benefits.id}" />
-										<move file="${project.basedir}/resources/tiles.json" 
-											tofile="${project.basedir}/resources/tiles${benefits.id}.json" failonerror="false" />
-										<move file="${project.basedir}/resources/roles.json" 
-											tofile="${project.basedir}/resources/roles${benefits.id}.json" failonerror="false" />
-									</target>
-								</configuration>
-							</execution>
-							<execution>
-								<id>Rename assembly output</id>
-								<phase>install</phase>
-								<goals>
-									<goal>run</goal>
-								</goals>
-								<configuration>
-									<target>
-										<move file="${project.build.directory}/${project.artifactId}.jar" 
-											tofile="${project.build.directory}/${project.artifactId}.mtar" failonerror="false" />
+											token="benefits.id" value="benefits.${benefits.id}" />
+										<replace file="${project.basedir}/resources/mtad.yaml"
+											token="benefits.app" value="benefits${benefits.id}" />
+										<replace file="${project.basedir}/resources/extension_descriptor.mtaext"
+											token="title: SAP" value="title: ${benefits.id} SAP" />
 									</target>
 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
-					<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<version>2.6</version>
-				        <configuration>
-				        	<finalName>${project.artifactId}</finalName>
-				        	<appendAssemblyId>false</appendAssemblyId>
-							<descriptors>
-								<descriptor>resources/assembly.xml</descriptor>
-							</descriptors>
-							<archive>
-								<manifestSections>
-									<manifestSection>
-										<name>com.sap.hana.cloud.samples.benefits.war</name>
-										<manifestEntries>
-											<Content-Type>application/zip</Content-Type>
-											<MTA-Module>benefits-app-${benefits.id}</MTA-Module>
-										</manifestEntries>
-									</manifestSection>
-									<manifestSection>
-										<name>resources/roles${benefits.id}.json</name>
-										<manifestEntries>
-											<Content-Type>application/json</Content-Type>
-											<MTA-Module>benefits-roles-${benefits.id}</MTA-Module>
-										</manifestEntries>
-									</manifestSection>
-								</manifestSections> 
-							</archive>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>package</phase>
-								<goals>
-									<goal>single</goal>
-								</goals>
-							</execution>
-						</executions>
-				      </plugin>
 				</plugins>
 			</build>
 		</profile>

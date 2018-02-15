@@ -85,14 +85,6 @@
     <url-pattern>/OData.svc/*</url-pattern>
   </servlet-mapping>
   <servlet>
-    <servlet-name>ResourceServlet</servlet-name>
-    <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>ResourceServlet</servlet-name>
-    <url-pattern>/resources/*</url-pattern>
-  </servlet-mapping>
-  <servlet>
     <display-name>LogoutServlet</display-name>
     <servlet-name>LogoutServlet</servlet-name>
     <servlet-class>com.sap.hana.cloud.samples.benefits.logout.LogoutServlet</servlet-class>
@@ -101,22 +93,6 @@
     <servlet-name>LogoutServlet</servlet-name>
     <url-pattern>/logout</url-pattern>
   </servlet-mapping>
-  <context-param>
-    <param-name>com.sap.ui5.resource.USE_CACHE</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.REMOTE_LOCATION</param-name>
-    <param-value>https://sapui5.hana.ondemand.com</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.REMOTE_USE_CACHE</param-name>
-    <param-value>true</param-value>
-  </context-param>
-  <context-param>
-    <param-name>com.sap.ui5.resource.PREFER_REMOTE_LOCATION</param-name>
-    <param-value>true</param-value>
-  </context-param>
   <resource-ref>
     <res-ref-name>jdbc/DefaultDB</res-ref-name>
     <res-type>javax.sql.DataSource</res-type>
@@ -181,10 +157,6 @@
     </auth-constraint>
   </security-constraint>
   <security-constraint>
-    <web-resource-collection>
-      <web-resource-name>Unsecured open social widgets for portal integration</web-resource-name>
-      <url-pattern>/resources/*</url-pattern>
-    </web-resource-collection>
     <web-resource-collection>
       <web-resource-name>Logout</web-resource-name>
       <description>Logout</description>
