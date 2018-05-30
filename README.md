@@ -1,208 +1,152 @@
-SAP HANA Cloud Platform Extension Package
-=========================================
+# SAP Employee Benefits Management sample application
 
-SAP Employee Benefits Management Sample Application
------------------------------------------------
+*SAP Employee Benefits Management* is a sample extension application for *SAP SuccessFactors Employee Central*. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.
 
-The *SAP HANA Cloud Platform extension package* makes it quick and easy for companies to adapt and integrate SuccessFactors cloud applications to their existing business processes.
+The purpose of this sample application is to show you how to deploy and configure a Java extension application for SAP SuccessFactors on the SAP Cloud Platform.
 
-*SAP Employee Benefits Management* is a sample extension application for *SuccessFactors Employee Central*. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.
+## System requirements
 
-The purpose of the application is to showcase the advantages of *SAP HANA Cloud Platform extension package* for development and hosting of applications that extend the *SuccessFactors* capabilities.
+Before you proceed with the rest of this tutorial, be sure you have access to:
+* SAP SuccessFactors test company - you need Administrator permissions for SAP SuccessFactors
+* SAP SuccessFactors provisioning
+* SAP Cloud Platform subaccount in the Neo environment. **Note that SAP Cloud Platform _Trial is not supported_ by the extension scenario.**
 
-The sample application relies on and integrates the following SAP HANA Cloud Platform capabilities:
-* *SAP HANA Cloud Platform extension package* that provides SuccessFactors connectivity on top of the standard based OData API [Details] (http://scn.sap.com/docs/DOC-49540)
-* Persistency - JPA on top of [SAP HANA Database technology](http://www.saphana.com/welcome) 
-* User interface technology - SAPUI5 (sap.m) libraries [Details](https://sapui5.hana.ondemand.com/sdk/test-resources/sap/m/demokit/explored/index.html) 
-* Backend logic implemented using OData services (Apache OlingoTM and Google Gson for JSON serialization/deserialization)
+## Development environment requirements
 
-Abbreviations
--------------
+Your environment shall include the following:
+* JDK (Java SE Development Kit), version 7 or greater
+* [Apache Maven](https://maven.apache.org)
+* [Git](https://git-scm.com) client
+* [SAP Cloud Platform Tools](https://tools.hana.ondemand.com)
+* optionally, a recent version of [Eclipse IDE for Java EE Developers](http://www.eclipse.org/downloads/eclipse-packages/) instead of Apache Maven and Git
+* recent browser
 
-* **SFSF** - *SuccessFactors*
-* **HCP** - *SAP HANA Cloud Platform*
+## Configure integration between SAP Cloud Platform and SAP SuccessFactors
 
-Application Scenario
--------------------
+:information_source: You can skip this step if you already have a subaccount integrated with your SAP SuccessFactors company.
 
-The purpose of the SAP Employee Benefits sample application is to ease the process of benefits management, both for employees and HR managers.
+Before you proceed with the next steps, you have to integrate your SAP SuccessFactors company with a subaccount on the SAP Cloud Platform. Integration is a two steps process:
 
-Employees are rewarded with different non-monetary benefits, for example concert tickets, food vouchers, and alike. The application uses abstract "*currency*", called benefit points to evaluate the benefits' worth. In accordance with the company's policy, each employee is entitled a particular amount of benefits' points for a certain period of time. Each rewarding period is called a "*campaign*" and is characterized by specific start and end dates, as well as a particular amount of benefit points. 
+1. First you have to create an _integration token_. This thing identifies the SAP Cloud Platform subaccount that you will intregrate with your SAP SuccessFactors company. To create a token, open the SAP Cloud Platform Cockpit and select a subaccount that you want to integrate. Of course you can always create a new one. It costs nothing. Then navigate to _Integration Tokens_ and create a new _SAP SuccessFactors Token_. 
+2. Once ready, use the token to initiate the integration in SAP SuccessFactors provisioning. The whole process is described in details in the [here](https://help.sap.com/viewer/09c960bc7676452f9232eebb520066cd/1805/en-US/09bb734cf5614896a4cdb66f3e1528ec.html).
+Once integration is completed, your subaccount becomes an _extension subaccount_. The two most noticeable things about it are:
 
-The HR manager is responsible for managing the campaigns and providing the employees with the rewards they ordered for a particular campaign.
+First, the extension subaccount's Application Identity Provider (IdP) is configured to be the SuccessFactors IdP. From now on, whenever authentication is required by an application deployed in this subaccount, the end user will be redirected to the SuccessFactors IdP to authenticate himself.  Same is true when the extension subaccount is subscribed for an application running in another, regular subaccount.
 
-As an HR *manager*, you can manage benefits from three panes:
-* Employees
-View all managed employees and details about each employee’s used and total benefit points for the current campaign. In addition, you can see order history of the employee for previous campaigns.
-* Benefits
-See a list and manage all available benefits in the benefits' portfolio.
-* Campaigns
-Add and edit benefits campaigns and their details.
-* Orders
-Edit your active campaign benefit orders and view your past orders
+And the second important thing is the fact the SAP Cloud Platform has stored metadata describing the pairing. For all the subsequent operations in the extension subaccount you do not need to specify which is your SuccessFactors company. It's already known, and the SAP Cloud Platform will use this knowledge to assist you with the configuration and the lifecycle management of your extension applications.
 
-As an *employee*, you can edit your active campaign benefit orders and view your past orders. Also you can see a list of available benefits.
+## Landscape setup
+Now it might be tempting to start developing your extension directly in the extension subaccount. But it's worth to consider the following:
+* You might already have resources like database and java quotas assigned to another subaccount. Yes, SCP allows you to share or distribute those resources between your subaccounts, but as you will see that's not necessary at all.
+* The extension subaccount contains sensitive data - the Service Provider primary key used in backend API authentication flows; the connectivity configurations to your SAP SuccessFactors or third-party systems. In production, only a limited number of people should have access to these. Even the support guys shall not be able to see them.
+* If you have extensions from different providers deployed in one and the same subaccount then for maintenance and support all of them shall have access to it. Eventually they will be able to see each other's logs or even change some configurations. 
 
-By default, the application has a benefits list that is hard-coded and no campaigns are added. We recommend that you first log in to the application with the HR Administrator user first and to add a benefits campaign. Next, log in as an employee so you can view and add benefits to your order. 
+Fortunately, the SAP Cloud Platform multitenancy concept can help you tackle the above challenges even if your application is not multitenant!
+What you need to do is:
+* use the extension subaccount only as a configuration container 
+* restrict the access to it
+* deploy your applications in regular subaccounts 
+* and eventually subscribe the extension subaccount to your applications
 
-Get the Source Code
--------------------
-
-Clone the Git repository `git clone https://github.com/sap/cloud-sfsf-benefits-ext.git`, or [download the latest release](https://github.com/sap/cloud-sfsf-benefits-ext/zipball/master).
-
-In Eclipse import as *Existing Maven Project* and point to the *pom.xml* file located in *com.sap.hana.cloud.samples.benefits* folder.
-
-Architecture Overview
--------------------
-
-The SAP Employee Benefits Management extension application is split into two main components - backend and frontend.
-
-The backend is implemented in the following packages:
-
-* *com.sap.hana.cloud.samples.benefits.odata.** - OData backend services and model for the user interface
-* *com.sap.hana.cloud.samples.benefits.connectivity.** - OData connectivity to SuccessFactors
-* *com.sap.hana.cloud.samples.benefits.persistence.** - contains JPA entities and DAO objects.
-* *com.sap.hana.cloud.samples.benefits.services.** - web integration logic
-
-The frontend is located in WebContent folder. The structure is the following:
-* *view* - UI logic implemented using SAP UI5 XML views following MVC pattern
-* *css* - application theming
-* *img* - images
-
-The application supports three roles:
-
-* **Administrator** - the company HR manager that administers and manages employees benefits and benefits' campaigns
-* **Everyone** - mapped to the regular company employees. You do not have to explicitly assign this role to users
-* **Analyzer** – provides access to data for all the campaigns
-
-When configuring application security, assign the appropriate role to the users accessing the application.
-
-The following diagram provides an overview of the SAP Employee Benefits Management architecture:
-![alt tag](https://github.com/SAP/cloud-sfsf-benefits-ext/blob/master/com.sap.hana.cloud.samples.benefits/diagrams/application_architecture.png)
-
+No matter if your applications are multitenant or not, they will automatically have access to the configurations stored on subscription level. Furthermore, you will not have to share resources between subaccounts; access to sensitive configurations will be restricted and different providers will not be able to see each other's applications. 
  
-Project Setup
--------------
 
-SAP Employee Benefits Management application can be run either locally or on SAP HCP.
+To experience this model in action we will use two subaccounts to "develop" the sample extension application:
+* **dev** subaccount - a regular subaccount with a database and at least one Java VM. It will be used to deploy the application and bind it to a datasource.
+* **ext** subaccount - the extension subaccount integrated with your SAP SuccessFactors company. This subaccount will be subscribed to the application deployed in the dev subaccount. All further configurations will be executed on this subscription level. 
 
-**Prerequisites**
-* Access to SAP HANA Cloud Platform extension package or SAP HANA Cloud Platform trial account
-* SAP HANA Cloud Platform development environment:
- - SAP HANA Cloud Platform Tools 
- - SAP JVM version 7.x or JDK 7
- - SAP HANA Cloud Platform SDK for Java Web
+## Develop and run the sample application
 
-You can access the SAP HANA Cloud Platform development environment download page, at: [https://tools.hana.ondemand.com/#cloud](https://tools.hana.ondemand.com/#cloud)
-For more information about installing the Java Tools and SDK, see: [Details] (https://help.hana.ondemand.com/help/frameset.htm?e815ca4cbb5710148376c549fd74c0db.html)
+The first step is to clone this git repository and build the application.
 
-SuccessFactors OData API Test system
-------------------------------------
+```
+git clone https://github.wdf.sap.corp/i033024/cloud-sfsf-benefits-ext.git
+mvn clean install -f cloud-sfsf-benefits-ext
+```
 
-We provide a SuccessFactors OData API test system with a predefined set of users and data configured in *READ ONLY* mode. You can access the test system using the following URL:
+### Deploy and start the application
+The build process generates a web application archive `ROOT.war` under the `cloud-sfsf-benefits-ext/target` folder. Deploy this archive to your dev subaccount using a tool of your choice - SAP Cloud Platform Cockpit, SDK Tools, maven or Eclipse. The command line for the SDK tools looks like this:
 
-`https://sfsfbizxtrial.hana.ondemand.com/odata/v2`
+```
+neo deploy --account <dev_account_name> --application benefits --host <hana.ondemand.com> --user <SAP_user_id> --source cloud-sfsf-benefits-ext/target/ROOT.war 
+```
 
-That is the Root URL to OData API and it returns ServerErrorException. You need to make some valid OData query like `https://sfsfbizxtrial.hana.ondemand.com/odata/v2/User('bmays1')` to get some response. The authentication method is BASIC and you should use your SAP HANA Cloud Platform trial user and password to authenticate. The application contains pre-delivered HTTP Destination (*sap_hcmcloud_core_odata*) to the SuccessFactors OData API Test system which is stored in the /resources application folder. In SFSF Extension Package accounts the destination would be preconfigured to the corresponding SFSF live instance.
-For demo purposes, the request to the test system may contain an **X-Proxy-User-Mapping** header in the **<user|SFSF_user>** format. This header allows you to map a user to one of the following SFSF API test system users: **mbarista1** and **nnnn**. For example, if you execute the following request:
+Before you start the application, you have to bind it to a data source. You can do this via the SAP Cloud Platform Cockpit or in the console using the SDK tools:
 
-`https://sfsfbizxtrial.hana.ondemand.com/odata/v2/User('i123456')`
-with header: *X-Proxy-User-Mapping: i123456|nnnn*
-the response will contain results for the *nnnn* SFSF API test system user.
+```
+neo bind-db --account <dev_account_name> --application benefits --host <hana.ondemand.com> --id <db_id> --db-user <db_user> --db-password <db_pwd> --user <SAP_user_id>
+```
 
-If you specify an SFSF API test system user different than *mbarista1* or *nnnn*, the user will be mapped to *nnnn*.
-The following diagram provides an overview of the process flow for the user mapping described above:
- 
- ![alt tag](https://github.com/SAP/cloud-sfsf-benefits-ext/blob/master/com.sap.hana.cloud.samples.benefits/diagrams/mapping_architecture.png)
+Now you can start your application:
 
-In SAP Employee Benefits Management application, the *X-Proxy-User-Mapping* header is used to map the logged-in user to one of the two predefined SFSF OData API test system users. Depending on whether the role of the logged-in user is assigned the Administrator role or not, the value of the header is as follows:
-* For the Administrator role: *&lt;logged_in_user_ID&gt;|mbarista1*
-* For non-administrators: *&lt;logged_in_user_ID>&gt;|nnnn*
+```
+neo start --synchronous --account <dev_account_name> --application benefits --host <hana.ondemand.com> --user <SAP_user_id>
+```
 
-This allows you to use one and the same user for testing all the available features by changing the Benefits application user roles of the user with which you are logging in. 
+### Subscribe the extension subaccount to your application
+After the application is up and running you can proceed to configure it to use your SAP SuccessFactors tenant (company). 
+Since all the SuccessFactors related configurations will be stored on subscription level to your extension subaccount, the first step is to subscribe the extension subaccount to the application. You have to be `Administrator` or have the `manageSubscriptions` platform scope in both accounts in order to setup the subscription: 
 
-Each user assigned with the Administrator role is mapped to the mbarista1 SFSF OData API user. All other users are mapped to the *nnnn* SFSF OData API user.
+```
+neo subscribe --account <ext_account_name> --application <dev_account_name>:benefits --host <hana.ondemand.com> --user <SAP_user_id>
+```
 
-If the **X-Proxy-User-Mapping** header is missing in the request, the *SuccessFactors OData API* endpoint will automatically map your SAP HANA Cloud Platform user ID to the predefined user *Nancy Nash ('nnnn')* inside SuccessFactors. This would allow you to log in with your SAP HANA Cloud Platform user even though it does not exist in SuccessFactors.
+Note that the account parameter here points to your extension subaccount, and the application parameter is composed of the name of your dev subaccount, semicolon and the application name.
+In all remaining configurations, wherever the application must be referred into a command, you have to use the same pattern with dev account, semicolon and application name.
 
-**Note!** The *X-Proxy-User-Mapping* header is used for requests to the test system for demo purposes only and cannot be used in a productive environment. Furthermore, if you are using your own SFSF system, there is no mapping. The requests are processed as they are.
+### Configure Assertion Consumer Service
+As already explained, SAP SuccessFactors is configured to be the default IdP for the extension subaccount. If you now access the application, you will be redirected to SuccessFactors for authentication. Assuming you have valid user credentials, the authentication will succeed, but after that you will not be redirected back to the application, because the application is not registered as a trusted Service Provider (SP) in SuccessFactors. To register it, you have to execute the `hcmcloud-enable-application-access` command:
 
-Run on Local Server
--------------------
+```
+neo hcmcloud-enable-application-access --account <ext_account_name> --application <dev_account_name>:benefits --application-type java --host <hana.ondemand.com> --user <SAP_user_id>
+```
 
-You can run the application on local server against public SuccessFactors OData API Test system using the predefined HTTP destination *sap_hcmcloud_core_odata*. 
+### Configure backend connectivity
+The sample application uses backend connectivity to SAP SuccessFactors to fetch the logged in user details. To configure this connectivity, you use the `hcmcloud-create-connection` SDK command. The result of its execution will be a destination named `sap_hcmcloud_core_odata` on subscription level in the SAP Cloud Platform and a corresponding OAuth client in your SAP SuccessFactors tenant. The destination is configured with `OAuth2SAMLBearerAssertion` authentication and at runtime the end user will be propagated with the backend API calls to SAP SuccessFactors.
 
-**Configure Connectivity to the SFSF OData API**
+```
+neo hcmcloud-create-connection --account <ext_account_name> --application <dev_account_name>:benefits --host <hana.ondemand.com> --user <SAP_user_id>
+```
 
-1. Import the SuccessFactors OData access destination *sap_hcmcloud_core_odata* from **/resources** application folder into the local server destinations. Follow the procedure [here](https://help.hana.ondemand.com/help/frameset.htm?0334aa5dbb304deb83a30503967b6f8d.html).
-2. Fill your SAP HCP user and password in the destination configuration.
-3. Proxy server setup (optional) - if you work behind a proxy server, configure the proxy settings of the local server. [Details](https://help.hana.ondemand.com/help/frameset.htm?0334aa5dbb304deb83a30503967b6f8d.html).
+### Configure authorization
+The next step is to configure the authorization. The sample application relies on the standard Java EE security model for Web Applications - it uses declarative authorization to protect resources and programmatic authorization checks to present dynamic content to the end user according to his roles.
+By default, user roles are managed in the SAP Cloud Platform. Although this model is convenient for many use cases, it imposes some challenges when a system with its own role model like SAP SuccessFactors is being extended
+* the SAP HR administrator shall have access to the SAP Cloud Platform to manage user permissions
+* to do so, he must be trained accordingly
+* and last but probably most important - he has to double maintain those permission configurations
 
-**Create Local Users**
+To help you overcome those challenges, SAP Cloud Platform provides you the capability to configure you Java applications to use the `SAP SuccessFactors Role Provider` instead of the platform's default. Whenever an authorization check is required by your application, the underlying Java runtime uses the already configured connectivity to execute it against the SAP SuccessFactors system. Of course, there are caches in place to minimize the impact on the application's performance. This allows you to continue using SAP SuccessFactors as a single place to manage user permissions.
+Role Provider can be switched in the SAP Cloud Platform Cockpit (under the Roles section) or using the `hcmcloud-enable-role-provider` SDK command:
 
-To enable local users to access the application, you need to define user IDs in the local user store. We have already defined a pair of users and roles and pre-delivered them with the application in **/resources/neousers.json** file.
+```
+neo hcmcloud-enable-role-provider --account <ext_account_name> --application <dev_account_name>:benefits --host <hana.ondemand.com> --user <SAP_user_id>
+```
 
-Copy the *neousers.json* file into the Local Server */config_master/com.sap.security.um.provider.neo.local* folder and restart the Server in order to load them.
+Once the platform is configured to read the user roles from the SAP SuccessFactors system it is convenient to be able to provision those roles automatically so that SuccessFactors HR administrators do not need to create them manually, but instead just make the necessary user assignments. This is achieved using the `hcmcloud-import-roles` SDK command. It takes as a parameter a JSON file describing the roles required by your application and creates them in the SAP SuccessFactors tenant. There are two important things to notice about this command:
+* it does not modify any existing roles 
+* it is executed in the scope of subaccount, not application. This means roles can be shared between applications.
 
-After the user import you will have the following users defined in the system with default password 'sap':
+The sample application's JSON file with role definitions is [resources/roles.json](resources/roles.json). To create the roles defined in it you use the `hcmcloud-import-roles` SDK command:
 
-<table>
-  <tr>
-    <th>ID</th><th>Name</th><th>Role</th>
-  </tr>
-  <tr>
-    <td>mbarista</td><td>Marcia Barista</td><td>Administrator</td>
-  </tr>
-  <tr>
-    <td>nnash</td><td>Nancy Nash</td><td>Employee</td>
-  </tr> 
-</table>
+```
+neo hcmcloud-import-roles --account <ext_account_name> --host <hana.ondemand.com> --user <SAP_user_id> --location cloud-sfsf-benefits-ext/resources/roles.json
+```
 
-Each user assigned with the *Administrator* role is mapped to the SFSF user *mbarista1*. All other users are mapped to the SFSF user *nnnn*.
+### Configure UI integration
+The last step before you are able to try the application is to integrate it visually in your SAP SuccessFactors tenant. You can achieve this by creating a home page tile - rectangle in the SuccessFactors home page which links to your application or embeds it. Tile capabilities are different, depending on the version of the home page. More details you can find in the [SAP SuccessFactors home page tiles documentation](https://help.sap.com/viewer/DRAFT/59f821da545a4bdb94f1eb8fa22e4b36/LATEST/en-US/00c8674252d1461691bec004be68f425.html)
 
-The local user *mbarista* is assigned with the *Administrator* role and is mapped to the SFSF OData API test system user *mbarista1*. The local user *nnash* is assigned with the *Everyone* role and is mapped to the SFSF OData API test system user *nnnn*.
+You can define the home page tiles for your application in a JSON file and import it into the target SuccessFactors system with the `hcmcloud-register-home-page-tiles` SDK command:
 
-Deploy and run the application on the local server. You should be able to login with the listed users and explore the application.
+```
+neo hcmcloud-register-home-page-tiles --account <ext_account_name> --application <dev_account_name>:benefits --application-type java --host <hana.ondemand.com> --user <SAP_user_id> --location cloud-sfsf-benefits-ext/resources/tiles.json
+```
 
-Run the Application on the SAP HANA Cloud Platform Extension Package Account
-----------------------------------------------------------------------------
+The sample application's JSON file with tile definitions is [resources/tiles.json](resources/tiles.json). As you can see, it defines tiles for both home page versions - V12 and the new home page. In this way you can use the same JSON file no matter what is the SuccessFactors home page version.
 
- 1. Deploy the application on your SAP HANA Cloud extension package account: [Details](https://help.hana.ondemand.com/help/frameset.htm?e5dfbc6cbb5710149279f67fb43d4e5d.html)
- 2. Configure the application role assignments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html)
-	
-**Note!** If you deploy with the console client, make sure to specify the **--java-version** parameter with value **7**.
+### Open the application
 
-**Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly.
-
-Run the Application on the SAP HANA Cloud Platform Trial Account
-----------------------------------------------------------------
-
-It is possible to deploy and run the application on *SAP HANA Cloud Platfrom Trial* account. You need to follow the following steps:
-
- 1. Deploy the application in your *SAP HANA Cloud Platfrom Trial* account.
-**Note!** If you deploy with the console client, make sure to specify the **--java-version** parameter with value **7**.
-**Note!** The application name **must** be **benefits**, otherwise the site autodiscovery will not work properly.
- 2. Import the *SuccessFactors OData API* destination *sap_hcmcloud_core_odata* from **/resources** application folder in the application destinations tab. Follow the procedure: [here](https://help.hana.ondemand.com/help/frameset.htm?a2550c3fcf2b430f94f99072677bf9ec.html).
- 3. Fill your SAP HANA Cloud Platform user and password in the destination user/password fields.
- 4. Configure the application role assignments from the cockpit: [Details](https://help.hana.ondemand.com/help/frameset.htm?db8175b9d976101484e6fa303b108acd.html). You basically can add "Administrator" Role to your SAP HANA Cloud Platform user.
-
-Now that you have *SuccessFactors OData API* connectivity configured you should be able to login to the application, with your *SAP HANA Cloud Platform* user and password.
-
-Access the Application
-----------------------
-
-After deployment, the application is accessible on the following URL:
-
-`http(s)://host:port/com.sap.hana.cloud.samples.benefits/index.html`
-
-Based on the role of the user with which you are logged in, you will see a page designed for HR manager or for a regular employee (user).
-
-Autodiscovery
--------------
-
-*benefits.spec.xml* file is used to provide the *"Benefits Widget"* OpenSocial widget for the portal. It defines required dependencies and enables the rendering of the widget by Shindig (the OpenSocial container). The file is located in the project root directory. You can find more information about the OpenSocial widgets [here](https://help.hana.ondemand.com/cloud_portal/frameset.htm?d9f9f0bfbc594dbdbb01a0753d522d60.html).
-
-The *BenefitsSite.site.zip* describes the *SAP Corporate Benefits site*, which is automatically discovered by the SAP HANA Cloud Portal and imported into it, when the *benefits* extension is deployed. The site is previously created in the portal, exported as a zip and placed into the project root directory. You can find more information [here](https://help.hana.ondemand.com/cloud_portal/frameset.htm?bcd487ecfe4d4dbb9e4a5cf168e62d71.html).
+Now you are ready to open the application. 
+Login to your SAP SuccessFactors tenant and on the home page under the News section there shall be a new tile _SAP Corporate Benefits_. Click on it to open the application in a new window. If you click on the _About Me_ tile you will see the user details fetched with a backend call to SAP SuccessFactors.
 
 Important Disclaimers on Security and Legal Aspects
 ---------------------------------------------------

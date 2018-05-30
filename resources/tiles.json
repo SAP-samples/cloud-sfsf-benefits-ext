@@ -1,0 +1,47 @@
+[
+    {
+        "tileVersion": "NEW_HOME_PAGE",
+        "tiles": [
+            {
+                "name": "SAP Corporate Benefits",
+                "type": "static",
+                "metadata": [
+                    {
+                        "title": "SAP Corporate Benefits",
+                        "subTitle": "sample",
+                        "locale": "en_US"
+                    }
+                ],
+                "configuration": {
+                    "icon": "sap-icon://chain-link"
+                },
+                "navigation": {
+                    "type": "url",
+                    "configuration": {
+                        "openInNewWindow": true,
+                        "url": "index.html"
+                    }
+                }
+            }
+        ]
+    },
+    {
+        "tileVersion": "V12",
+        "tiles": [
+            {
+                "name": "SAP Corporate Benefits",
+                "path": "index.html",
+                "size": 3,
+                "padding": false,
+                "roles": ["Benefits Tile"],
+                "metadata": [
+                    {
+                        "title": "SAP Corporate Benefits",
+                        "description": "SAP Corporate Benefits home page tile",
+                        "locale": "en_US"
+                    }
+                ]
+            }
+        ]
+    }
+]

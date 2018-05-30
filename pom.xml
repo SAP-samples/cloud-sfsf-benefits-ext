@@ -1,0 +1,213 @@
+<!-- Licensed to the Apache Software Foundation (ASF) under one or more contributor 
+	license agreements. See the NOTICE file distributed with this work for additional 
+	information regarding copyright ownership. The ASF licenses this file to 
+	you under the Apache License, Version 2.0 (the "License"); you may not use 
+	this file except in compliance with the License. You may obtain a copy of 
+	the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required 
+	by applicable law or agreed to in writing, software distributed under the 
+	License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS 
+	OF ANY KIND, either express or implied. See the License for the specific 
+	language governing permissions and limitations under the License. -->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.sap.hana.cloud.samples.benefits</groupId>
+	<artifactId>com.sap.hana.cloud.samples.benefits</artifactId>
+	<version>2.0.0</version>
+	<packaging>war</packaging>
+	<name>SAP Employee Benefits Management Sample Application</name>
+	<description>The SAP Cloud Platform extension package makes it quick and easy for companies to adapt and integrate SAP SuccessFactors cloud applications to their existing business processes.</description>
+	<url>https://github.com/SAP/cloud-sfsf-benefits-ext</url>
+
+	<organization>
+		<name>SAP SE</name>
+		<url>http://www.sap.com</url>
+	</organization>
+
+	<developers>
+		<developer>
+			<name>SAP Cloud Platform</name>
+			<url>https://hana.ondemand.com</url>
+			<organization>SAP SE</organization>
+			<organizationUrl>http://www.sap.com/</organizationUrl>
+		</developer>
+	</developers>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<properties>
+		<sap.cloud.jdk.version>1.7</sap.cloud.jdk.version>
+		<sap.cloud.sdk.version>3.46.11</sap.cloud.sdk.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<apache.cxf.version>2.7.13</apache.cxf.version>
+		<olingo.version>2.0.1</olingo.version>
+	</properties>
+
+	<repositories>
+		<repository>
+			<id>java.net2</id>
+			<name>Repository hosting the jee6 artifacts</name>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+		<repository>
+			<id>maven.repo</id>
+			<name>Maven central Repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>oss.sonatype.org</id>
+			<name>OSS Sonatype Staging</name>
+			<url>https://oss.sonatype.org/content/groups/staging</url>
+		</repository>
+		<repository>
+			<id>repo.apache.org</id>
+			<name>Apache Snapshots Repository</name>
+			<url>https://repository.apache.org/content/groups/snapshots/</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.persistence</groupId>
+			<artifactId>eclipselink</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxrs</artifactId>
+			<version>${apache.cxf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sap.cloud</groupId>
+			<artifactId>neo-java-web-api</artifactId>
+			<version>${sap.cloud.sdk.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.olingo</groupId>
+			<artifactId>olingo-odata2-jpa-processor-core</artifactId>
+			<version>${olingo.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<finalName>ROOT</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<source>${sap.cloud.jdk.version}</source>
+					<target>${sap.cloud.jdk.version}</target>
+					<showDeprecation>true</showDeprecation>
+					<showWarnings>true</showWarnings>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<finalName>${project.artifactId}</finalName>
+					<appendAssemblyId>false</appendAssemblyId>
+					<descriptors>
+						<descriptor>assembly.xml</descriptor>
+					</descriptors>
+					<archive>
+						<manifestFile>resources/MANIFEST.MF</manifestFile>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.8</version>
+				<executions>
+					<execution>
+						<id>Rename assembly output</id>
+						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<move file="${project.build.directory}/${project.artifactId}.jar"
+									tofile="${project.build.directory}/${project.artifactId}.mtar"/>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<profiles>
+		<profile>
+			<id>customization</id>
+			<activation>
+				<property>
+					<name>benefits.id</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.8</version>
+						<executions>
+							<execution>
+								<id>Replace user number</id>
+								<phase>process-resources</phase>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<configuration>
+									<target>
+										<replace file="${project.build.sourceDirectory}/../webapp/WEB-INF/web.xml"
+											token="&gt;Administrator&lt;" value="&gt;SAP Corporate Benefits Admin ${benefits.id}&lt;" />
+										<replace
+											file="${project.build.sourceDirectory}/com/sap/hana/cloud/samples/benefits/service/ApplicationRoles.java"
+											token="public static final String ADMINISTRATOR_ROLE = &quot;Administrator&quot;"
+											value="public static final String ADMINISTRATOR_ROLE = &quot;SAP Corporate Benefits Admin ${benefits.id}&quot;" />
+										<replace file="resources/roles.json"
+											token="SAP Corporate Benefits Admin Role" 
+											value="SAP Corporate Benefits Admin ${benefits.id}" />
+										<replace file="resources/tiles.json"
+											token="&quot;SAP Corporate Benefits&quot;" value="&quot;SAP Corporate Benefits ${benefits.id}&quot;" />
+										<replace file="resources/tiles.json"
+											token="&quot;Benefits Tile&quot;" value="&quot;Benefits Tile ${benefits.id}&quot;" />
+										<replace dir="${project.basedir}/resources" includes="mtad.yaml,extension_descriptor.mtaext"
+											token="benefits.id" value="benefits.${benefits.id}" />
+										<replace file="${project.basedir}/resources/mtad.yaml"
+											token="benefits.app" value="benefits${benefits.id}" />
+										<replace file="${project.basedir}/resources/extension_descriptor.mtaext"
+											token="title: SAP" value="title: ${benefits.id} SAP" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

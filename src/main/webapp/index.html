@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>SAP Benefits Management Tool</title>
+		<script id="sap-ui-bootstrap"
+    			type="text/javascript"
+    			src="https://sapui5.hana.ondemand.com/resources/sap-ui-core.js"
+    			data-sap-ui-theme="sap_bluecrystal"
+    			data-sap-ui-libs="sap.m,sap.ui.commons"></script>
+        <link rel="stylesheet" type="text/css" href="css/styles.css">
+        <script>
+		    String.prototype.formatPropertyMessage = function() {
+		          var args = arguments;
+		          return this.replace(/\{(\d+)\}/g, function() {
+		              return args[arguments[1]];
+		          });
+		    };
+		      
+            var appController = null;
+            var views = null;
+
+            $(document).ready(function() {
+                // tell UI5 where to find stuff
+                sap.ui.localResources("util");
+                sap.ui.localResources("model");
+                sap.ui.localResources("common");
+                sap.ui.localResources("view");
+                sap.ui.localResources("view/employees");
+                sap.ui.localResources("view/benefits");
+                sap.ui.localResources("view/campaigns");
+                sap.ui.localResources("view/orders");
+                sap.ui.localResources("view/info");
+
+                jQuery.sap.registerModulePath('Application', '/Application');
+
+                jQuery.sap.registerModulePath("com.sap.hana.cloud.samples.benefits", "/");
+
+                jQuery.sap.require("com.sap.hana.cloud.samples.benefits.view.Views");
+                jQuery.sap.require("com.sap.hana.cloud.samples.benefits.util.AjaxUtil");
+                views = new com.sap.hana.cloud.samples.benefits.view.Views();
+
+                // launch application
+                jQuery.sap.require("Application");
+                appController = new Application({
+                    root: "sapUiBody",
+                    config: "OData.svc/uiConfig"
+              
+                });
+                // Removes the application header and side padding in order to fit a widget better
+                $('html').removeClass("sap-desktop");
+            });
+        </script>
+    </head>
+    <body id="sapUiBody" class="sapUiBody">
+    </body>
+</html>
