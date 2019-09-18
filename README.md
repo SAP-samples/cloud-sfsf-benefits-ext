@@ -60,7 +60,7 @@ To experience this model in action we will use two subaccounts to "develop" the 
 The first step is to clone this git repository and build the application.
 
 ```
-git clone https://github.wdf.sap.corp/i033024/cloud-sfsf-benefits-ext.git
+git clone https://github.com/SAP/cloud-sfsf-benefits-ext.git
 mvn clean install -f cloud-sfsf-benefits-ext
 ```
 
