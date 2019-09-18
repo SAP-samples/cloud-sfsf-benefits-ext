@@ -24,24 +24,5 @@
                 }
             }
         ]
-    },
-    {
-        "tileVersion": "V12",
-        "tiles": [
-            {
-                "name": "SAP Corporate Benefits",
-                "path": "index.html",
-                "size": 3,
-                "padding": false,
-                "roles": ["Benefits Tile"],
-                "metadata": [
-                    {
-                        "title": "SAP Corporate Benefits",
-                        "description": "SAP Corporate Benefits home page tile",
-                        "locale": "en_US"
-                    }
-                ]
-            }
-        ]
     }
 ]

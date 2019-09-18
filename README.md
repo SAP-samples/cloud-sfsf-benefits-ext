@@ -141,7 +141,7 @@ You can define the home page tiles for your application in a JSON file and impor
 neo hcmcloud-register-home-page-tiles --account <ext_account_name> --application <dev_account_name>:benefits --application-type java --host <hana.ondemand.com> --user <SAP_user_id> --location cloud-sfsf-benefits-ext/resources/tiles.json
 ```
 
-The sample application's JSON file with tile definitions is [resources/tiles.json](resources/tiles.json). As you can see, it defines tiles for both home page versions - V12 and the new home page. In this way you can use the same JSON file no matter what is the SuccessFactors home page version.
+The sample application's JSON file with tile definitions is [resources/tiles.json](resources/tiles.json).
 
 ### Open the application
 
