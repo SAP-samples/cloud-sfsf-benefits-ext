@@ -17,7 +17,7 @@ modules:
        sfsf-connections:
          - type: default
        role-provider: sfsf
-       sfsf-tiles:
+       sfsf-home-page-tiles:
          resource: resources/tilesSOLUTION_ID.json
     requires:
      - name: benefits-roles-SOLUTION_ID
