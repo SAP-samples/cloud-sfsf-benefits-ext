@@ -36,11 +36,4 @@
       </includes>
     </fileSet>
   </fileSets>
-  <files>
-  	<file>
-  		<source>${project.basedir}/resources/.tiles_d</source>
-  		<destName>tiles${benefits.id}.json</destName>
-  		<outputDirectory>resources</outputDirectory>
-  	</file>
-  </files>
 </assembly>

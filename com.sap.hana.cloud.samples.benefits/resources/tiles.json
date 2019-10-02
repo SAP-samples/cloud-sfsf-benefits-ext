@@ -1,15 +1,24 @@
 [{
-	"tileVersion": "V12",
+	"tileVersion": "NEW_HOME_PAGE",
 	"tiles": [{
 		"name" : "SAP Corporate Benefits_<your station number>",
-		"path" : "com.sap.hana.cloud.samples.benefits",
-		"size" : 3,
-		"padding" : false,
-		"roles" : ["Benefits Tile <your station number>"],
+		"section": "news",
 		"metadata" : [{
 			"title" : "SAP Corporate Benefits_<your station number>",
-			"description" : "SAP Corporate Benefits home page tile",
+			"subTitle" : "SAP Corporate Benefits home page tile",
 			"locale" : "en_US"
-		}]
+		}],
+		"type": "static",
+		"configuration": {
+			"icon": "sap-icon://add-product"
+		},
+		"navigation": {
+			"type": "url",
+			"configuration": {
+				"openInNewWindow": true,
+				"url": "com.sap.hana.cloud.samples.benefits"
+			}
+		}
+		
 	}]
 }]
