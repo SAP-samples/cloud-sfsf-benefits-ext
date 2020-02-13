@@ -1,4 +1,4 @@
-# SAP Employee Benefits Management sample application
+# SAP Employee Benefits Management Sample Application
 
 *SAP Employee Benefits Management* is a sample extension application for *SAP SuccessFactors Employee Central*. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.
 
