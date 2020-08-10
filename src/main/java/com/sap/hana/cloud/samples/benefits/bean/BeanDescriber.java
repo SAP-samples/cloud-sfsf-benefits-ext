@@ -25,5 +25,4 @@ public class BeanDescriber {
 		}
 		return names;
 	}
-
 }
