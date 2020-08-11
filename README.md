@@ -1,3 +1,6 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/cloud-sfsf-benefits-ext)](https://api.reuse.software/info/github.com/SAP-samples/cloud-sfsf-benefits-ext)
+
+
 # SAP Employee Benefits Management Sample Application
 
 *SAP Employee Benefits Management* is a sample extension application for *SAP SuccessFactors Employee Central*. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.
@@ -161,7 +164,3 @@ Your SuccessFactors system may (and most probably will) contain personal and con
 
 Any software coding and/or code lines / strings ("Code") included in this documentation are only examples and are not intended to be used in a productive system environment. The Code is only intended to better explain and visualize the syntax and phrasing rules of certain coding. SAP does not warrant the correctness and completeness of the Code given herein, and SAP shall not be liable for errors or damages caused by the usage of the Code, unless damages were caused by SAP intentionally or by SAP's gross negligence.
 
-Copyright and License
----------------------
-Copyright (c) 2013 SAP SE or an SAP affiliate company. All rights reserved. 
-This file is licensed under the Apache Software License, version 2.0 except as noted otherwise in the [LICENSE](LICENSE) file.
