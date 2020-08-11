@@ -8,9 +8,10 @@
 */Users/
 
 # Generated folders
-*/.settings/
-*/.project
-*/.classpath
+**/.settings/
+**/.project
+**/.classpath
 
 *.jar
 *.class
+/target/
