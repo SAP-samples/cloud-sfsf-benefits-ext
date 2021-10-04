@@ -12,7 +12,7 @@ The purpose of this sample application is to show you how to deploy and configur
 Before you proceed with the rest of this tutorial, be sure you have access to:
 * SAP SuccessFactors test company - you need Administrator permissions for SAP SuccessFactors
 * SAP SuccessFactors provisioning
-* SAP Cloud Platform subaccount in the Neo environment. **Note that SAP Cloud Platform _Trial is not supported_ by the extension scenario.**
+* SAP Business Technology Platform subaccount in the Neo environment. **Note that SAP Business Technology Platform _Trial is not supported_ by the extension scenario.**
 
 ## Development environment requirements
 
@@ -20,31 +20,31 @@ Your environment shall include the following:
 * JDK (Java SE Development Kit), version 7 or greater
 * [Apache Maven](https://maven.apache.org)
 * [Git](https://git-scm.com) client
-* [SAP Cloud Platform Tools](https://tools.hana.ondemand.com)
+* [SAP BTP Tools](https://tools.hana.ondemand.com)
 * optionally, a recent version of [Eclipse IDE for Java EE Developers](http://www.eclipse.org/downloads/eclipse-packages/) instead of Apache Maven and Git
 * recent browser
 
-## Configure integration between SAP Cloud Platform and SAP SuccessFactors
+## Configure integration between SAP Business Technology Platform and SAP SuccessFactors
 
 :information_source: You can skip this step if you already have a subaccount integrated with your SAP SuccessFactors company.
 
-Before you proceed with the next steps, you have to integrate your SAP SuccessFactors company with a subaccount on the SAP Cloud Platform. Integration is a two steps process:
+Before you proceed with the next steps, you have to integrate your SAP SuccessFactors company with a subaccount on the SAP Business Technology Platform. Integration is a two steps process:
 
-1. First you have to create an _integration token_. This thing identifies the SAP Cloud Platform subaccount that you will intregrate with your SAP SuccessFactors company. To create a token, open the SAP Cloud Platform Cockpit and select a subaccount that you want to integrate. Of course you can always create a new one. It costs nothing. Then navigate to _Integration Tokens_ and create a new _SAP SuccessFactors Token_. 
+1. First you have to create an _integration token_. This thing identifies the SAP Business Technology Platform subaccount that you will intregrate with your SAP SuccessFactors company. To create a token, open the SAP Business Technology Platform Cockpit and select a subaccount that you want to integrate. Of course you can always create a new one. It costs nothing. Then navigate to _Integration Tokens_ and create a new _SAP SuccessFactors Token_. 
 2. Once ready, use the token to initiate the integration in SAP SuccessFactors provisioning. The whole process is described in details in the [here](https://help.sap.com/viewer/09c960bc7676452f9232eebb520066cd/1805/en-US/09bb734cf5614896a4cdb66f3e1528ec.html).
 Once integration is completed, your subaccount becomes an _extension subaccount_. The two most noticeable things about it are:
 
 First, the extension subaccount's Application Identity Provider (IdP) is configured to be the SuccessFactors IdP. From now on, whenever authentication is required by an application deployed in this subaccount, the end user will be redirected to the SuccessFactors IdP to authenticate himself.  Same is true when the extension subaccount is subscribed for an application running in another, regular subaccount.
 
-And the second important thing is the fact the SAP Cloud Platform has stored metadata describing the pairing. For all the subsequent operations in the extension subaccount you do not need to specify which is your SuccessFactors company. It's already known, and the SAP Cloud Platform will use this knowledge to assist you with the configuration and the lifecycle management of your extension applications.
+And the second important thing is the fact the SAP Business Technology Platform has stored metadata describing the pairing. For all the subsequent operations in the extension subaccount you do not need to specify which is your SuccessFactors company. It's already known, and the SAP Business Technology Platform will use this knowledge to assist you with the configuration and the lifecycle management of your extension applications.
 
 ## Landscape setup
 Now it might be tempting to start developing your extension directly in the extension subaccount. But it's worth to consider the following:
-* You might already have resources like database and java quotas assigned to another subaccount. Yes, SCP allows you to share or distribute those resources between your subaccounts, but as you will see that's not necessary at all.
+* You might already have resources like database and java quotas assigned to another subaccount. Yes, BTP allows you to share or distribute those resources between your subaccounts, but as you will see that's not necessary at all.
 * The extension subaccount contains sensitive data - the Service Provider primary key used in backend API authentication flows; the connectivity configurations to your SAP SuccessFactors or third-party systems. In production, only a limited number of people should have access to these. Even the support guys shall not be able to see them.
 * If you have extensions from different providers deployed in one and the same subaccount then for maintenance and support all of them shall have access to it. Eventually they will be able to see each other's logs or even change some configurations. 
 
-Fortunately, the SAP Cloud Platform multitenancy concept can help you tackle the above challenges even if your application is not multitenant!
+Fortunately, the SAP Business Technology Platform multitenancy concept can help you tackle the above challenges even if your application is not multitenant!
 What you need to do is:
 * use the extension subaccount only as a configuration container 
 * restrict the access to it
@@ -68,13 +68,13 @@ mvn clean install -f cloud-sfsf-benefits-ext
 ```
 
 ### Deploy and start the application
-The build process generates a web application archive `ROOT.war` under the `cloud-sfsf-benefits-ext/target` folder. Deploy this archive to your dev subaccount using a tool of your choice - SAP Cloud Platform Cockpit, SDK Tools, maven or Eclipse. The command line for the SDK tools looks like this:
+The build process generates a web application archive `ROOT.war` under the `cloud-sfsf-benefits-ext/target` folder. Deploy this archive to your dev subaccount using a tool of your choice - SAP Business Technology Platform Cockpit, SDK Tools, maven or Eclipse. The command line for the SDK tools looks like this:
 
 ```
 neo deploy --account <dev_account_name> --application benefits --host <hana.ondemand.com> --user <SAP_user_id> --source cloud-sfsf-benefits-ext/target/ROOT.war 
 ```
 
-Before you start the application, you have to bind it to a data source. You can do this via the SAP Cloud Platform Cockpit or in the console using the SDK tools:
+Before you start the application, you have to bind it to a data source. You can do this via the SAP Business Technology Platform Cockpit or in the console using the SDK tools:
 
 ```
 neo bind-db --account <dev_account_name> --application benefits --host <hana.ondemand.com> --id <db_id> --db-user <db_user> --db-password <db_pwd> --user <SAP_user_id>
@@ -105,7 +105,7 @@ neo hcmcloud-enable-application-access --account <ext_account_name> --applicatio
 ```
 
 ### Configure backend connectivity
-The sample application uses backend connectivity to SAP SuccessFactors to fetch the logged in user details. To configure this connectivity, you use the `hcmcloud-create-connection` SDK command. The result of its execution will be a destination named `sap_hcmcloud_core_odata` on subscription level in the SAP Cloud Platform and a corresponding OAuth client in your SAP SuccessFactors tenant. The destination is configured with `OAuth2SAMLBearerAssertion` authentication and at runtime the end user will be propagated with the backend API calls to SAP SuccessFactors.
+The sample application uses backend connectivity to SAP SuccessFactors to fetch the logged in user details. To configure this connectivity, you use the `hcmcloud-create-connection` SDK command. The result of its execution will be a destination named `sap_hcmcloud_core_odata` on subscription level in the SAP Business Technology Platform and a corresponding OAuth client in your SAP SuccessFactors tenant. The destination is configured with `OAuth2SAMLBearerAssertion` authentication and at runtime the end user will be propagated with the backend API calls to SAP SuccessFactors.
 
 ```
 neo hcmcloud-create-connection --account <ext_account_name> --application <dev_account_name>:benefits --host <hana.ondemand.com> --user <SAP_user_id>
@@ -113,13 +113,13 @@ neo hcmcloud-create-connection --account <ext_account_name> --application <dev_a
 
 ### Configure authorization
 The next step is to configure the authorization. The sample application relies on the standard Java EE security model for Web Applications - it uses declarative authorization to protect resources and programmatic authorization checks to present dynamic content to the end user according to his roles.
-By default, user roles are managed in the SAP Cloud Platform. Although this model is convenient for many use cases, it imposes some challenges when a system with its own role model like SAP SuccessFactors is being extended
-* the SAP HR administrator shall have access to the SAP Cloud Platform to manage user permissions
+By default, user roles are managed in the SAP Business Technology Platform. Although this model is convenient for many use cases, it imposes some challenges when a system with its own role model like SAP SuccessFactors is being extended
+* the SAP HR administrator shall have access to the SAP Business Technology Platform to manage user permissions
 * to do so, he must be trained accordingly
 * and last but probably most important - he has to double maintain those permission configurations
 
-To help you overcome those challenges, SAP Cloud Platform provides you the capability to configure you Java applications to use the `SAP SuccessFactors Role Provider` instead of the platform's default. Whenever an authorization check is required by your application, the underlying Java runtime uses the already configured connectivity to execute it against the SAP SuccessFactors system. Of course, there are caches in place to minimize the impact on the application's performance. This allows you to continue using SAP SuccessFactors as a single place to manage user permissions.
-Role Provider can be switched in the SAP Cloud Platform Cockpit (under the Roles section) or using the `hcmcloud-enable-role-provider` SDK command:
+To help you overcome those challenges, SAP Business Technology Platform provides you the capability to configure you Java applications to use the `SAP SuccessFactors Role Provider` instead of the platform's default. Whenever an authorization check is required by your application, the underlying Java runtime uses the already configured connectivity to execute it against the SAP SuccessFactors system. Of course, there are caches in place to minimize the impact on the application's performance. This allows you to continue using SAP SuccessFactors as a single place to manage user permissions.
+Role Provider can be switched in the SAP Business Technology Platform Cockpit (under the Roles section) or using the `hcmcloud-enable-role-provider` SDK command:
 
 ```
 neo hcmcloud-enable-role-provider --account <ext_account_name> --application <dev_account_name>:benefits --host <hana.ondemand.com> --user <SAP_user_id>
