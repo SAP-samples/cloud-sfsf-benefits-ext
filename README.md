@@ -1,12 +1,13 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/cloud-sfsf-benefits-ext)](https://api.reuse.software/info/github.com/SAP-samples/cloud-sfsf-benefits-ext)
 
 
-# SAP Employee Benefits Management Sample Application
+# Description
 
-*SAP Employee Benefits Management* is a sample extension application for *SAP SuccessFactors Employee Central*. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.
+*SAP Employee Benefits Management Sample Application* is a sample extension application for *SAP SuccessFactors Employee Central*. The application can be used by employees to make orders in specific benefit campaigns and by HR managers to manage employee benefits and set up new benefit campaigns.
 
 The purpose of this sample application is to show you how to deploy and configure a Java extension application for SAP SuccessFactors on the SAP Business Technology Platform.
 
+# Requirements
 ## System requirements
 
 Before you proceed with the rest of this tutorial, be sure you have access to:
@@ -164,3 +165,11 @@ Your SuccessFactors system may (and most probably will) contain personal and con
 
 Any software coding and/or code lines / strings ("Code") included in this documentation are only examples and are not intended to be used in a productive system environment. The Code is only intended to better explain and visualize the syntax and phrasing rules of certain coding. SAP does not warrant the correctness and completeness of the Code given herein, and SAP shall not be liable for errors or damages caused by the usage of the Code, unless damages were caused by SAP intentionally or by SAP's gross negligence.
 
+# Contributing
+See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+# Code of Conduct
+See [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+# Licensing
+Copyright 2023 SAP SE or an SAP affiliate company and cloud-sfsf-benefits-ext contributors. Please see our [LICENSE](LICENSE) for copyright and license information. Detailed information including third-party components and their licensing/copyright information is available via the [REUSE tool](https://api.reuse.software/info/github.com/SAP-samples/cloud-sfsf-benefits-ext).
